@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Legalizaciones.Model
+namespace Legalizaciones.Model.ItemSolicitud
 {
     [Table("EstadoSolicitud")]
     public class EstadoSolicitud : BaseModel

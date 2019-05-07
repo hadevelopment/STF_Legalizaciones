@@ -9,7 +9,6 @@ using System.Text;
 
 namespace Legalizaciones.Model
 {
-    [Table("Empleado")]
     public class Empleado : BaseModel
     {
         [Required]

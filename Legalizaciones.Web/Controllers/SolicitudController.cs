@@ -31,7 +31,6 @@ namespace Legalizaciones.Web.Controllers
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
 
-        public readonly IEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
@@ -41,7 +40,6 @@ namespace Legalizaciones.Web.Controllers
             ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository,
             ITipoSolicitudRepository tipoSolicitudRepository,
-            IEmpleadoRepository empleadoRepository,
             IMonedaRepository monedaRepository,
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,
@@ -51,7 +49,6 @@ namespace Legalizaciones.Web.Controllers
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
             this.tipoSolicitudRepository = tipoSolicitudRepository;
-            this.empleadoRepository = empleadoRepository;
             this.monedaRepository = monedaRepository;
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
@@ -103,8 +100,8 @@ namespace Legalizaciones.Web.Controllers
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = empleadoRepository.All().Where(e => e.Cedula == cedula).ToList().FirstOrDefault();
-                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoID.ToString()));
+                    item.Empleado = objUNOEE.getEmpleadoCedula("6.845.256.666");
+                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
                 return View(solicitudes);
@@ -116,7 +113,7 @@ namespace Legalizaciones.Web.Controllers
                 foreach (var item in solicitudes)
                 {
                     item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
-                    item.EstadoSolicitud = estatusRepository.All().Where(e => e.Id == item.EstadoID).ToList().FirstOrDefault();
+                    item.EstadoSolicitud = estatusRepository.All().Where(e => e.Id == item.EstadoId).ToList().FirstOrDefault();
                 }
 
                 return View(solicitudes);
