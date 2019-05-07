@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using Legalizaciones.Data.AppDbContext;
 using System.Configuration;
 using Legalizaciones.Web.Models;
+using Legalizaciones.Web.Models.ViewModel;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -577,5 +578,6 @@ namespace Legalizaciones.Web.Controllers
                 {".csv", "text/csv"}
             };
         }
+        #endregion
     }
 }

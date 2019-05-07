@@ -205,6 +205,23 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("UnidadNegocio");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.EstadoSolicitud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadoSolicitud");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.FlujoAprobacion", b =>
                 {
                     b.Property<int>("Id")
@@ -480,6 +497,31 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Proveedor");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Ruta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CiudadID");
+
+                    b.Property<int>("Destino_ZonaID");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired();
+
+                    b.Property<int>("Origen_ZonaID");
+
+                    b.Property<float>("Tarifa");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ruta");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.ServicioDetalle", b =>
                 {
                     b.Property<int>("Id")
@@ -534,6 +576,8 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Banco");
+
                     b.Property<int>("CentroCostoId");
 
                     b.Property<int>("CentroOperacionId");
@@ -546,7 +590,12 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("EmpleadoCedula");
 
+                    b.Property<int?>("EstadoID")
+                        .IsRequired();
+
                     b.Property<int>("Estatus");
+
+                    b.Property<string>("Extracto");
 
                     b.Property<DateTime>("FechaCreacion");
 
@@ -564,6 +613,8 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<float>("Monto");
 
                     b.Property<string>("NumeroSolicitud");
+
+                    b.Property<string>("RutaArchivo");
 
                     b.Property<int>("TipoSolicitudID");
 
@@ -592,7 +643,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<string>("FechaGasto");
+                    b.Property<DateTime>("FechaGasto");
 
                     b.Property<string>("ICA");
 
