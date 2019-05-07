@@ -1,0 +1,398 @@
+﻿@model Legalizaciones.Model.Solicitud
+@{
+    ViewData["Title"] = "Solicitud";
+    double wMontoTotal = 0;
+}
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    >
+                    <a href='@Url.Action("Index","Solicitud")'> Solicitudes </a>
+                    >
+                    <strong>Editar</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*esta es la capa donde coloco la clave principal en oculto*@
+
+
+<form asp-controller="Solicitud" asp-action="Editar" method="post">
+    <div class="hidden">
+        @Html.TextBoxFor(model => model.Id, new { @class = "form-control" })
+        @Html.TextBoxFor(model => model.FechaCreacion, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.Estatus, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.NumeroSolicitud, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.FechaVencimiento, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.EmpleadoCedula, new { @class = "form-control " })
+        <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
+
+
+    </div>
+
+
+
+    <section class="">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <div class="box-tools pull-right">
+                    <label>Fecha de Registro: @String.Format("{0:MM-dd-yyy}", Model.FechaCreacion)</label>
+                </div>
+            </div>
+
+            <div class="box-body">
+
+                @if (Model.Empleado != null)
+                {
+                    <table class="tableSolicitud">
+                        <thead>
+                            <tr>
+                                <th>Área</th>
+                                <th>Nombre completo</th>
+                                <th>Cedula de ciudadanía</th>
+                                <th>Dirección</th>
+                                <th>Ciudad</th>
+                                <th>Teléfono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="row">
+                        No se encontraron datos del empleado...
+                    </div>
+                }
+
+            </div>
+        </div>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <label asp-for="Concepto">Concepto del Anticipo*</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        @Html.TextAreaFor(model => model.Concepto, 4, 140, new { @placeholder = "Explique el concepto del Anticipo (Minímo 50 carácteres)", @style = "width:100%;", @required = "required" })
+                        <span asp-validation-for="Concepto" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="DestinoID" id="lbl_destino">Destino</label>
+                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
+                        @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="ZonaID" id="lbl_zona">Zona Visitada</label>
+                        @Html.DropDownListFor(model => model.ZonaID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Zona" })
+                        @Html.ValidationMessageFor(model => model.ZonaID, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Moneda">Moneda</label>
+                        @Html.DropDownListFor(model => model.MonedaId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "MonedaId" })
+
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="CentroOperacionId">Centro de Operación</label>
+                        @Html.DropDownListFor(model => model.CentroOperacionId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroOperacion" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.CentroOperacionId, "Seleccione un Centro de Operaciones.", new { @class = "text-danger" })
+                        }
+                    </div>
+
+                </div>
+
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="UnidadNegocio">Unidad de Negocio</label>
+                        @Html.DropDownListFor(model => model.UnidadNegocioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "UnidadNegocio" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una Unidad de Negocio.", new { @class = "text-danger" })
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="CentroCosto">Centro de Costo</label>
+                        @Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroCosto" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de Costo.", new { @class = "text-danger" })
+                        }
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="FechaDesde">Fecha Desde</label>
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", qplaceholder = "Selecciona Fecha Desde", id = "FechaDesde" })
+                        @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="FechaHasta">Fecha Hasta</label>
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
+                        @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="row margin-bottom">
+
+                    @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosSolicitud" })
+
+                </div>
+
+                <div class="row display-none" id="mensajeValidacionViaje">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" role="alert">
+                            <span id="mensajeViaje"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-money"></i> Registro de Gastos</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <a id="btnA" class="btn btn-primary" onclick="validarViaje(this);" style="float:right;">
+                            <span class="glyphicon glyphicon-plus"></span> Añadir Gasto
+                        </a>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="tableGastos">
+                            <thead>
+                                <tr>
+                                    <td>Fecha Gasto</td>
+                                    <td class="display-none">PaisID</td>
+                                    <td>Pais</td>
+                                    <td class="display-none">ServicioID</td>
+                                    <td>Servicio</td>
+                                    <td class="display-none">CiudadID</td>
+                                    <td>Ciudad</td>
+                                    <td>Origen</td>
+                                    <td>Destino</td>
+                                    <td>Monto</td>
+                                    <td>IVA</td>
+                                    <td>Rete IVA</td>
+                                    <td>Rete Servicio</td>
+                                    <td>ICA</td>
+                                    <td>Neto</td>
+                                    <td>Iva. Teorico</td>
+                                    <td>Acciones</td>
+                                </tr>
+                            </thead>
+                            <tbody id="Items">
+                                @if (Model.SolicitudGastos.Count > 0)
+                                {
+                                    @foreach (var item in Model.SolicitudGastos)
+                                    {
+                                        wMontoTotal = wMontoTotal + item.Monto;
+
+                                        <tr>
+                                            <td>@item.FechaGasto</td>
+                                            <td class="display-none">@item.PaisId</td>
+                                            <td>@item.Pais</td>
+                                            <td class="display-none">@item.ServicioId</td>
+                                            <td>@item.Servicio</td>
+                                            <td class="display-none">@item.CiudadId</td>
+                                            <td>@item.Ciudad</td>
+                                            <td>@item.Origen</td>
+                                            <td>@item.Destino</td>
+                                            <td>@item.Monto</td>
+                                            <td>@item.IVA</td>
+                                            <td>@item.ReteIVA</td>
+                                            <td>@item.ReteServicio</td>
+                                            <td>@item.ICA</td>
+                                            <td>@item.Neto</td>
+                                            <td>@item.IVATeorico</td>
+                                            <td>
+                                                <a class="btn btn-danger btn-sm btnDelete">
+                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class="col-md-8">
+
+                    </div>
+                    <div class="col-md-2">
+                        <h3>Monto Total:</h3>
+                    </div>
+                    <div class="col-md-2">
+                        @Html.HiddenFor(model => model.Monto, new { @class = "form-control", id = "hdfMontoSolicitud" })
+                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary" onclick="cargarGastos();">
+                    <span class="glyphicon glyphicon-plus"></span> Registrar
+                </button>
+            </div>
+        </div>
+
+    </section>
+</form>
+<!--modal form-->
+<div class="row">
+    <div class="col-md-9">
+        <div class="modal fade bs-example-modal-sm" id="gastosModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-list-alt"></i> Servicio</h3>
+                        <div class="box-tools pull-right">
+                        </div>
+                    </div>
+                    <form asp-controller="SolicitudGastos" asp-action="Asignar" method="post" id="frmAsignarGastos">
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Zona Visitada</label>
+                                        @Html.DropDownList("Zona", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Zona" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">Proveedor</label>
+                                        @Html.DropDownList("Proveedor", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Proveedor" })
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label class="control-label">Servicio</label>
+                                        @Html.DropDownList("Servicio", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Servicio" })
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-4" id="divGastosFecha">
+                                        <label class="control-label">Fecha Gasto</label>
+                                        @Html.Editor("FechaGasto", new { htmlAttributes = new { @class = "form-control datepicker FechaGasto", id = "FechaGasto", qplaceholder = "Selecciona Fecha del Gasto..." } })
+                                    </div>
+                                    <div class="display-none" id="divZonas">
+                                        <div class="col-md-4">
+                                            <label class="control-label">Origen</label>
+                                            @Html.DropDownList("ZonaOrigen", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control lst100", id = "ZonaOrigen" })
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="control-label">Destino</label>
+                                            @Html.DropDownList("ZonaDestino", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control lst100", id = "ZonaDestino" })
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label class="control-label">Monto</label>
+                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto" } })<br />
+                                        <div class="display-none" id="AvisoMontoServicio">
+                                            <label class="text-danger" id="MensajeAviso"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row display-none" id="mensajeValidacionGastos">
+                                    <div class="col-sm-12">
+                                        <div class="alert alert-warning" role="alert">
+                                            <span id="mensajeGastos"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <a id="btnAdd" class="btn btn-primary" onclick="validarGastos();">
+                                <span class="glyphicon glyphicon-plus"></span> Agregar
+                            </a>
+                            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-off"></span> Cerrar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/SolicitudScript.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/table.js"></script>
+    <script src="~/js/tableToJSON.js"></script>
+
+    <script>
+
+        $(function () {
+            $('#tableGastos').DataTable()
+        })
+
+        function cargarGastos() {
+            debugger;
+            var table = $('.tableGastos').tableToJSON({
+                ignoreColumns: [9]
+            });
+
+            if (table.length > 0) {
+                $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+
+
+
+    </script>
+}

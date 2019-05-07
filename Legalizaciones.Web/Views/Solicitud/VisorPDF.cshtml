@@ -1,0 +1,192 @@
+﻿@model Legalizaciones.Model.Solicitud
+@{
+    ViewData["Title"] = "Solicitud Anticipo";
+    Layout = "~/Views/Shared/_VistaBaseImpresion.cshtml";
+}
+
+
+@Html.Partial("_HeaderFields")
+
+<form asp-controller="Solicitud" asp-action="Guardar" method="post">
+    <section>
+
+        <table width="100%" border="0">
+            <tr class="sinBorder">
+                <td width="15%" class="neg sinBorder">Solicitud de anticipio:</td>
+                <td width="25%" class="sinBorder">@Model.NumeroSolicitud</td>
+                <td width="5%" class="neg sinBorder" align="right">Estado:</td>
+                <td width="30%" class="sinBorder">Aprobado Director</td>
+                <td width="4%" class="neg sinBorder">Concepto:</td>
+                <td width="21%" class="sinBorder">Viaticos Cali</td>
+            </tr>
+        </table>
+
+        <br /><br />
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <table width="100%">
+                    <tr class="HeaderTable">
+                        <td>Área</td>
+                        <td>Nombre completo</td>
+                        <td>Cedula de ciudadanía</td>
+                        <td>Dirección</td>
+                        <td>Ciudad</td>
+                        <td>Teléfono</td>
+                    </tr>
+                    <tr class="RowsTable">
+                        <td>@Model.Empleado.Area</td>
+                        <td>@Model.Empleado.Nombre</td>
+                        <td>@Model.Empleado.Cedula</td>
+                        <td>@Model.Empleado.Direccion</td>
+                        <td>@Model.Empleado.Ciudad</td>
+                        <td>@Model.Empleado.Telefono</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div><br />
+
+            <div class="box-body">
+                <label asp-for="Concepto">Concepto del Anticipo*</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <small style="font-weight: unset;">@Model.Concepto </small>
+                        <span asp-validation-for="Concepto" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+            <div class="box-body">
+
+                <table width="100%" height="5px">
+                    <tr>
+                        <td class="neg sinBorder" width="3%">Destino:</td>
+                        <td class="sinBorder lf" width="15%">@Model.Destino.Nombre</td>
+                        <td class="neg sinBorder" width="10%">Zona Visitada:</td>
+                        <td class="sinBorder lf" width="10%"> @Model.Zona.Nombre</td>
+                        <td class="neg sinBorder" width="14%">Centro de Operacion:</td>
+                        <td class="sinBorder lf">@Model.CentroOperacion.Nombre</td>
+                        <td class="neg sinBorder" width="13%">Unidad de negocio:</td>
+                        <td class="sinBorder lf">@Model.UnidadNegocio.Nombre</td>
+                    </tr>
+
+
+                    <tr>
+                        <td class="neg sinBorder" width="12%">Centro de costo:</td>
+                        <td class="sinBorder" width="09%">@Model.CentroCosto.Nombre</td>
+                        <td class="neg sinBorder" width="10%">Fecha desde:</td>
+                        <td class="sinBorder" width="10%">@Model.FechaDesde.ToShortDateString()</td>
+                        <td class="neg sinBorder" width="10%">Fecha hasta:</td>
+                        <td class="sinBorder" width="21%">@Model.FechaHasta.ToShortDateString()</td>
+                        <td class="neg sinBorder">Moneda:</td>
+                        <td class="sinBorder" width="20%">@Model.Moneda.Nombre</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="box-body">
+
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-6">
+                        <label>Registro de Gastos</label>
+                    </div>
+                    <div class="col-md-12">
+                        <table width="100%">
+                            <tr class="HeaderTable">
+                                <td>Fecha Gasto</td>
+                                <td>Pais</td>
+                                <td>Tipo Servicio</td>
+                                <td>Ciudad</td>
+                                <td>Origen</td>
+                                <td>Destino</td>
+
+                                <td>Valor Gasto</td>
+                                <td>Iva Ret</td>
+                                <td>Iva Ret. Serv</td>
+                                <td>Neto</td>
+                                <td>Iva. Teorico</td>
+                            </tr>
+                            <tbody id="Items" class="RowsTable">
+                                @Html.Partial("SolicitudGastos", Model.SolicitudGastos)
+                            </tbody>
+                        </table>
+                        <br />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <footer>
+
+                @*<table style="width:100%">
+                        <tr class="fondoblanco">
+                            <td class="fondoblanco centrarDiv">_________________________</td>
+                            <td class="fondoblanco centrarDiv">_________________________</td>
+                            <td class="fondoblanco centrarDiv">_________________________</td>
+
+                        </tr>
+
+                        <tr class="fondoblanco">
+                            <td class="fondoblanco centrarDiv"><span class="neg">Firma del beneficiario</span></td>
+                            <td class="fondoblanco centrarDiv"><span class="neg">Firma Director Area</span></td>
+                            <td class="fondoblanco centrarDiv"><span class="neg">Firma Dpto Contabilidad</span></td>
+
+                        </tr>
+
+                        <tr class="fondoblanco">
+                            <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                            <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                            <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+
+                        </tr>
+
+                    </table>*@
+
+            </footer>
+
+
+
+        </div>
+
+    </section>
+</form>
+
+<!-- Stepper CSS -->
+<link href="css/addons-pro/steppers.css" rel="stylesheet">
+<!-- Stepper CSS - minified-->
+<link href="css/addons-pro/steppers.min.css" rel="stylesheet">
+
+<!-- Stepper JavaScript -->
+<script type="text/javascript" src="js/addons-pro/stepper.js"></script>
+<!-- Stepper JavaScript - minified -->
+<script type="text/javascript" src="js/addons-pro/stepper.min.js"></script>
+
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/SolicitudScript.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/table.js"></script>
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+        })
+    </script>
+}
