@@ -10,10 +10,11 @@ using System.Text;
 
 namespace Legalizaciones.Data.Repository
 {
-    public class MatrizDetallesRepository :BaseRepository<MatrizDetalle>, IMatrizDetallesRepository
+    public class PasoFlujoSolicitudRepository : BaseRepository<PasoFlujoSolicitud>, IPasoFlujoSolicitudRepository
     {
-        public MatrizDetallesRepository(AppDataContext context) : base(context)
+        public PasoFlujoSolicitudRepository(AppDataContext context) :base(context)
         {
-        }        
+
+        }
     }
 }

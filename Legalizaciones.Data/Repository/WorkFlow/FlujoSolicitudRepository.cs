@@ -10,9 +10,9 @@ using System.Text;
 
 namespace Legalizaciones.Data.Repository
 {
-    public class FlujoAprobacionesRepository : BaseRepository<FlujoAprobacion>, IFlujoAprobacionesRepository
+    public class FlujoSolicitudRepository : BaseRepository<FlujoSolicitud>, IFlujoSolicitudRepository
     {
-        public FlujoAprobacionesRepository(AppDataContext context) :base(context)
+        public FlujoSolicitudRepository(AppDataContext context) :base(context)
         {
 
         }
