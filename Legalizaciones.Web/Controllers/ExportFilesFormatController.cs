@@ -94,7 +94,7 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
                     row.CreateCell(5).SetCellValue(solicitud.Monto);
-                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoID.ToString())).Descripcion);
+                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;
                 }
 

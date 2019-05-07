@@ -1,5 +1,5 @@
 ﻿using Legalizaciones.Interface;
-using Legalizaciones.Model;
+using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Data.AppDbContext;
 using Legalizaciones.Data.Repository.Base;
 using Legalizaciones.Interface.ISolicitud;

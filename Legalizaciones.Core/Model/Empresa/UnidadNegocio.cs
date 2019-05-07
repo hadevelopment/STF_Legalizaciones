@@ -12,9 +12,5 @@ namespace Legalizaciones.Model.Empresa
     {
         [Required]
         public string Nombre { get; set; }
-        [ForeignKey("Compania")]
-        public int? CompaniaId { get; set; }
-        public Empresa.Compania Compania { get; set; }
-        public ICollection<Gerencia> Gerencias { get; set; }
     }
 }
