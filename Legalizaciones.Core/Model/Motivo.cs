@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Legalizaciones.Model
 {
-    public class TipoServicio: BaseModel
+    public class Motivo: BaseModel
     {
         [Required]
         public string Nombre { get; set; }
