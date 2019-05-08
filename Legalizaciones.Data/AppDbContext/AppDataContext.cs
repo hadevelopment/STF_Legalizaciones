@@ -23,6 +23,7 @@ namespace Legalizaciones.Data.AppDbContext
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
+        public DbSet<Tasa> Tasa{ get; set; }
         //Objetos
         public DbSet<Banco> Banco { get; set; }
         public DbSet<Solicitud> Solicitud { get; set; }
