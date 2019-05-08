@@ -1,0 +1,252 @@
+﻿@model Legalizaciones.Model.Solicitud
+@{
+    ViewData["Title"] = "Solicitud";
+    //IEnumerable <Legalizaciones.Model.Empresa.CentroOperacion> combooperaciones = ViewBag.CO;
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    >
+                    <a href='@Url.Action("Index","Solicitud")'> Anticipos </a>
+                    > 
+                    Detalle <strong> Anticipo Nro @Model.NumeroSolicitud</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-controller="Solicitud" asp-action="Guardar" method="post">
+    <section class="">
+        <div class="box box-default">
+
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-exclamation-triangle"></i> Estado de la Solicitud: @Model.Estatus</h3>
+                <div class="box-tools pull-right">
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <table class="tableSolicitud">
+                    <tr>
+                        <th>Área</th>
+                        <th>Nombre completo</th>
+                        <th>Cedula de ciudadanía</th>
+                        <th>Dirección</th>
+                        <th>Ciudad</th>
+                        <th>Teléfono</th>
+                    </tr>
+                    <tr>
+                        <td>@Model.Empleado.Area</td>
+                        <td>@Model.Empleado.Nombre</td>
+                        <td>@Model.Empleado.Cedula</td>
+                        <td>@Model.Empleado.Direccion</td>
+                        <td>@Model.Empleado.Ciudad</td>
+                        <td>@Model.Empleado.Telefono</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <label asp-for="Concepto">Concepto del Anticipo*</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <label asp-for="Concepto" id="lbl_concepto">  <small>@Model.Concepto </small>   </label>
+                        <span asp-validation-for="Concepto" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="Destino" id="lbl_destino">Destino: <small> @Model.Destino.Nombre</small>  </label>
+
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Zona" id="lbl_zona">Zona Visitada: <small> @Model.Zona.Nombre  </small></label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                       
+                        <label asp-for="CentroOperacion">Centro de operación: <small> @Model.CentroOperacion.Nombre  </small></label>
+
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label asp-for="UnidadNegocio">Unidad de negocio: <small> @Model.UnidadNegocio.Nombre  </small></label>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="CentroCosto">Centro de costo: <small> @Model.CentroCosto.Nombre  </small></label>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="FechaDesde">Fecha desde: <small> @Model.FechaDesde.ToShortDateString()  </small></label>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label asp-for="FechaHasta">Fecha hasta: <small> @Model.FechaHasta.ToShortDateString()  </small></label>
+                    </div>
+
+
+                    <div class="col-md-3">
+                        <label asp-for="Moneda">Moneda: <small> @Model.Moneda.Nombre  </small></label>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label asp-for="Monto">Monto Solicitud: <small> @Model.Monto </small></label>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.RutaArchivo))
+                    {
+                        <div class="col-md-3">
+                            <label asp-for="CentroCosto">
+                                Carta de Descuento:
+                                <a class="item-btn" onclick="showCartaModal('@Model.RutaArchivo');"> <span class="fa fa-file-pdf-o"></span> </a>
+                            </label>
+                        </div>
+                    }
+                </div>
+
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-6">
+                        <label>Registro de Gastos</label>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="tableSolicitud">
+                            <tr>
+                                <td>Fecha Gasto</td>
+                                <td>Pais</td>
+                                <td>Tipo Servicio</td>
+                                <td>Ciudad</td>
+                                <td>Origen</td>
+                                <td>Destino</td>
+                                <td>Valor Gasto</td>
+                            </tr>
+                            <tbody id="Items">
+                                @if (Model.SolicitudGastos.Count > 0)
+                                {
+                                    @Html.Partial("SolicitudGastos", Model.SolicitudGastos)
+
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7">No hay gastos registrados para esta solicitud...</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+
+                        <a class="btn btn-primary fa-file-pdf-o" asp-controller="ExportFilesFormat" asp-action="CreatePDF" asp-route-id="@Model.Id" style="float:right;">Exportar</a>
+
+                        <a class="btn btn-primary" asp-area="" style="float:right;"
+                           asp-controller="Solicitud" asp-action="Index">< Volver</a>
+                        <div style="float:right">    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+<div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-off"></span> Cerrar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stepper CSS -->
+<link href="css/addons-pro/steppers.css" rel="stylesheet">
+<!-- Stepper CSS - minified-->
+<link href="css/addons-pro/steppers.min.css" rel="stylesheet">
+
+<!-- Stepper JavaScript -->
+<script type="text/javascript" src="js/addons-pro/stepper.js"></script>
+<!-- Stepper JavaScript - minified -->
+<script type="text/javascript" src="js/addons-pro/stepper.min.js"></script>
+
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/SolicitudScript.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/table.js"></script>
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+        })
+
+        function showCartaModal(ruta) {
+            debugger;
+            ruta = ruta.replace("~", "");
+            $('#iframePDF').attr('src', ruta);
+            $('#pdfModal').modal('show');
+            console.log(ruta);
+        }
+    </script>
+}
