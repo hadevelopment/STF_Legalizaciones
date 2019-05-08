@@ -34,6 +34,30 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Banco");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EmpleadoCedula");
+
+                    b.Property<string>("EmpleadoPermisoCedula");
+
+                    b.Property<string>("EmpleadoPermisoNombre");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("TipoPermisoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoPermisoId");
+
+                    b.ToTable("EmpleadoPermiso");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.FlujoSolicitud", b =>
                 {
                     b.Property<int>("Id")
@@ -459,6 +483,23 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("SolicitudGastos");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.TipoPermiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoPermiso");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.TipoSolicitud", b =>
                 {
                     b.Property<int>("Id")
@@ -480,6 +521,14 @@ namespace Legalizaciones.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoSolicitud");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.TipoPermiso", "TipoPermiso")
+                        .WithMany()
+                        .HasForeignKey("TipoPermisoId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Legalizaciones.Model.FlujoSolicitud", b =>
