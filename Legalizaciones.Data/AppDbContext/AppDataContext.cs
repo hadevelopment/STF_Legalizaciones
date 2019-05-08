@@ -15,7 +15,6 @@ namespace Legalizaciones.Data.AppDbContext
         {
         }
 
-
         //Localidades
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }
@@ -25,8 +24,11 @@ namespace Legalizaciones.Data.AppDbContext
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
         //Objetos
+        public DbSet<Banco> Banco { get; set; }
         public DbSet<Solicitud> Solicitud { get; set; }
         public DbSet<SolicitudGastos> SolicitudGastos { get; set; }
+        public DbSet<Legalizacion> Legalizacion { get; set; }
+        public DbSet<LegalizacionGastos> LegalizacionGastos { get; set; }
         public DbSet<ServicioDetalle> ServicioDetalle { get; set; }
         //WorkFlow
         public DbSet<FlujoSolicitud> FlujoSolicitud{ get; set; }
