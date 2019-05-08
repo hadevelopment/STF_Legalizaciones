@@ -82,3 +82,11 @@ margin-bottom:20px;
 }
 
 
+
+
+/* Boostrap Modal Customs */
+
+.close {
+    font-weight: 900 !important;
+    opacity: inherit !important;
+}

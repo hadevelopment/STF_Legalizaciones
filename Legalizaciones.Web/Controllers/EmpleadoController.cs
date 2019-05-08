@@ -19,10 +19,9 @@ namespace Legalizaciones.Web.Controllers
         {
             return View();
         }
-
-        public JsonResult Empleados()
+        public IActionResult PreferenciasLegalizacion()
         {
-            return Json(empleadoRepository.All());
+            return View();
         }
     }
 }
