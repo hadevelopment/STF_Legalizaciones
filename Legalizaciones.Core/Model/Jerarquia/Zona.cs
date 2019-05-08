@@ -17,5 +17,7 @@ namespace Legalizaciones.Model.Jerarquia
         public int DestinoID { get; set; }
         public Destino Destino { get; set; }
 
+        public string Abreviatura { get; set; }
+
     }
 }
