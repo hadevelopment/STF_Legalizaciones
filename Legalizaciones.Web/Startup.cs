@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Legalizaciones.Interface;
+using Legalizaciones.Interface.IEmpresa;
 using Legalizaciones.Interface.IJerarquia;
 using Legalizaciones.Interface.ISolicitud;
 using Legalizaciones.Data.AppDbContext;
@@ -39,10 +40,25 @@ namespace Legalizaciones
             services.AddMvc();
             services.AddDbContext<AppDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
+          
+            //registering repositories to service 
+            services.AddTransient<IProductoRepository, ProductoRepository>();
+            services.AddTransient<ICategoriaRepository, CategoriaRepository>();
+            services.AddTransient<IClienteRepository, ClienteRepository>();
+            services.AddTransient<IInventarioRepository,InventarioRepository>();
+            services.AddTransient<IInventarioGastosRepository, InventarioGastosRepository>();
+            //Services by me
+            services.AddTransient<IServicioRepository, ServicioRepository>();
+            services.AddTransient<IProveedorRepository, ProveedorRepository>();
+            services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
 
+            //IEmpresa
+            services.AddTransient<ICompaniaRepository, CompaniaRepository>();
+            services.AddTransient<IGerenciaRepository, GerenciaRepository>();
+            services.AddTransient<ISupervicionRepository, SupervisorRepository>();
             //IJerarquia
             services.AddTransient<ICiudadRepository, CiudadRepository>();
             services.AddTransient<IPaisRepository, PaisRepository>();

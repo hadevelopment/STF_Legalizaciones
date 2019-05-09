@@ -14,10 +14,11 @@ namespace Legalizaciones.Model.Jerarquia
         public string Nombre { get; set; }
 
         [ForeignKey("Destino")]
-        public int DestinoID { get; set; }
-        public Destino Destino { get; set; }
+        public int DestinoID      { get; set; }
 
         public string Abreviatura { get; set; }
+
+        public Destino Destino { get; set; }
 
     }
 }

@@ -8,6 +8,7 @@ using System.Text;
 
 namespace Legalizaciones.Model.Empresa
 {
+    [Table("Cargo")]
     public class Cargo : BaseModel
     {
         [Required]

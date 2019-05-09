@@ -14,5 +14,6 @@ namespace Legalizaciones.Model.Empresa
         public string Nombre { get; set; }
         public string Cuenta { get; set; }
         public int GerenciaId { get; set; }
+        public Gerencia Gerencia { get; set; }
     }
 }

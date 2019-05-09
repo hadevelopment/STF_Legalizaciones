@@ -31,6 +31,7 @@ namespace Legalizaciones.Web.Controllers
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
 
+        public readonly IEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
@@ -40,6 +41,7 @@ namespace Legalizaciones.Web.Controllers
             ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository,
             ITipoSolicitudRepository tipoSolicitudRepository,
+            IEmpleadoRepository empleadoRepository,
             IMonedaRepository monedaRepository,
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,
@@ -49,6 +51,7 @@ namespace Legalizaciones.Web.Controllers
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
             this.tipoSolicitudRepository = tipoSolicitudRepository;
+            this.empleadoRepository = empleadoRepository;
             this.monedaRepository = monedaRepository;
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
@@ -81,7 +84,6 @@ namespace Legalizaciones.Web.Controllers
 
             if (cargo == "3")
             {
-
                  solicitudes = solicitudRepository.All().ToList();
                 //var q = from sol in dbContext.Solicitud
                 //        join es in dbContext.EstadoSolicitud on sol.Estatus  equals es.Id 
@@ -97,11 +99,10 @@ namespace Legalizaciones.Web.Controllers
                 //                 FechaPago       = sol.FechaVencimiento
                 //    };
 
-
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = objUNOEE.getEmpleadoCedula("6.845.256.666");
-                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
+                    item.Empleado = empleadoRepository.All().Where(e => e.Cedula == cedula).ToList().FirstOrDefault();
+                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoID.ToString()));
                 }
 
                 return View(solicitudes);
@@ -112,8 +113,8 @@ namespace Legalizaciones.Web.Controllers
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
-                    item.EstadoSolicitud = estatusRepository.All().Where(e => e.Id == item.EstadoId).ToList().FirstOrDefault();
+                    item.Empleado = empleadoRepository.All().Where(e => e.Cedula == cedula).ToList().FirstOrDefault();
+                    item.EstadoSolicitud = estatusRepository.All().Where(e => e.Id == item.EstadoID).ToList().FirstOrDefault();
                 }
 
                 return View(solicitudes);
@@ -276,6 +277,22 @@ namespace Legalizaciones.Web.Controllers
                 TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de actualizar la solicitud.";
                 return RedirectToAction("Editar", "Solicitud", data.Id);
             }
+
+        }
+
+
+        /* ****************************************************************************
+ *     Descripcion: VISTA para exortar datos al Excel
+ *     Creada: 23-04-2019 
+ *     Autor: Javier Rodriguez    
+       **************************************************************************** */
+        [HttpPost]
+        [Route("Filtrar")]
+        public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<Solicitud> solicitudes = solicitudRepository.All()
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).ToList();
+            return View("Index", solicitudes);
 
         }
 

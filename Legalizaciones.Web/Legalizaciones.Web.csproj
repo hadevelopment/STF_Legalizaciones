@@ -38,7 +38,7 @@
  </ItemGroup>
 
  <ItemGroup>
-   <Folder Include="wwwroot\files\24296342\1\facturas\" />
+   <Folder Include="Views\Legalizaciones\" />
  </ItemGroup>
 
 </Project>

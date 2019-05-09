@@ -1,8 +1,13 @@
 ﻿using Legalizaciones.Model.Base;
+using Legalizaciones.Model.Empresa;
+using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text;
 
 namespace Legalizaciones.Model
 {
@@ -16,13 +21,19 @@ namespace Legalizaciones.Model
         public int PaisID { get; set; }
         public Pais Pais { get; set; }
 
-        public string Cargo { get; set; }
+        [ForeignKey("Cargo")]
+        [DisplayName("Cargo")]
+        public int CargoId { get; set; }
+        public Cargo Cargo { get; set; }
 
         [Required]
         public float Monto { get; set; }
         public string Descripcion { get; set; }
 
-        public string TipoServicio { get; set; }
+        [DisplayName("Tipo Servicio")]
+        [Required]
+        public int TipoServicioID { get; set; }
+        public TipoServicio TipoServicio { get; set; }
 
         [ForeignKey("Zona"), Column(Order = 0)]
         [DisplayName("Origen")]
@@ -34,7 +45,9 @@ namespace Legalizaciones.Model
         public int ZonaDestinoId { get; set; }
         public Zona Destino { get; set; }
 
+        [DisplayName("Proveedor")]
+        [Required]
         public int ProveedorID { get; set; }
-        public string Proveedor { get; set; }
+        public Proveedor Proveedor { get; set; }
     }
 }

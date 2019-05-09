@@ -9,6 +9,7 @@ using System.Linq;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Legalizaciones.Interface.ISolicitud;
+using Legalizaciones.Model.Jerarquia;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -16,14 +17,17 @@ namespace Legalizaciones.Web.Controllers
     {
         private IConverter _converter;
         private readonly ISolicitudRepository solicitudRepository;
+        private readonly IZonaRepository zonaRepository;
         private readonly IEstadoSolicitudRepository estatusRepository;
 
         public ExportFilesFormatController(IConverter converter, 
                                            ISolicitudRepository solicitudRepository,
-                                           IEstadoSolicitudRepository estatusRepository)
+                                           IEstadoSolicitudRepository estatusRepository,
+                                           IZonaRepository zonaRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
+            this.zonaRepository      = zonaRepository;
             this.estatusRepository   = estatusRepository;
         }
 
@@ -73,7 +77,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Demo");
+                ISheet excelSheet = workbook.CreateSheet("Solicitudes");
                 IRow row = excelSheet.CreateRow(0);
 
                 row.CreateCell(0).SetCellValue("ID");
@@ -94,7 +98,47 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
                     row.CreateCell(5).SetCellValue(solicitud.Monto);
-                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
+                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoID.ToString())).Descripcion);
+                    index++;
+                }
+
+                workbook.Write(fs);
+            }
+
+            return Download(sFileName);
+        }
+
+
+
+        [HttpGet]
+        public ActionResult ExportDatosZonasExcel()
+        {
+            List<Zona> lstZonas = this.zonaRepository.All().ToList();
+            string sFileName = "Zonas.xls";
+            string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Zona");
+                IRow row = excelSheet.CreateRow(0);
+
+                row.CreateCell(0).SetCellValue("ID");
+                row.CreateCell(1).SetCellValue("Nombre");
+                row.CreateCell(2).SetCellValue("Abreviatura");
+                row.CreateCell(3).SetCellValue("Fecha Creacion");
+
+                var index = 1;
+                foreach (var zona in lstZonas)
+                {
+                    row = excelSheet.CreateRow(index);
+                    row.CreateCell(0).SetCellValue(zona.Id);
+                    row.CreateCell(1).SetCellValue(zona.Nombre);
+                    row.CreateCell(2).SetCellValue(zona.Abreviatura);
+                    row.CreateCell(3).SetCellValue(zona.FechaCreacion.ToShortDateString());
                     index++;
                 }
 

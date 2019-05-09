@@ -69,7 +69,6 @@ namespace Legalizaciones.Web.Controllers
 
         }
 
-
         public JsonResult DestinosEdit(int Id)
         {
             var OSolicitud = SolicitudRepository.Find(Id);
@@ -85,6 +84,19 @@ namespace Legalizaciones.Web.Controllers
 
             return Json(ListDestinos);
         }
+
+        public JsonResult ZonasDestinosMaeEdit(int Id)
+        {
+            var ListZonaDestino = destinoRepository.All().ToList();
+            foreach (var item in ListZonaDestino)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(ListZonaDestino);
+        }
+
         public JsonResult ZonasDestinosEdit(int Id)
         {
             var OSolicitud = SolicitudRepository.Find(Id);

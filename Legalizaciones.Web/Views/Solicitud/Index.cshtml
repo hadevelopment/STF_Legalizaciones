@@ -21,15 +21,48 @@
         <div class="box">
 
             <div class="box-header with-border">
-                <span class="fa fa-info-circle"></span>
-                <h1 class="box-title">Mis  Solicitudes de Anticipo </h1>
+                <div class="row" style="height:50px">
+                    <div class="col-md-12">
+                        <span class="fa fa-info-circle"></span>
+                        <h1 class="box-title">Mis Solicitudes de Anticipo </h1>
+                    </div>
+                 </div>
 
-                @if (ViewBag.cargo != "3")
-                { //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+                <div class="row">
+                    <div style="float: left;" class="col-md-3">
+                        <strong>Consultar por historico de fechas:</strong>
+                    </div>
+                    <form asp-controller="Solicitud" asp-action="Filtrar" method="Post" name="form1">
 
-                    <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
-                }
-            </div>
+                        <div style="float: left;" class="col-md-2">
+                            <label>Desde</label>
+                            <input type="date" id="fechaDesde" name="fechaDesde" class="form- control"/>
+                        </div>
+                        <div style="float: left;" class="col-md-2">
+                            <label>Hasta</label>
+                            <input type="date" id="fechaHasta" name="fechaHasta" class="form- control"/>
+
+                        </div>
+
+                        <div style="float: left;" class="col-md-1">
+
+                            <button class="icon" onclick="document.form1.submit()"><i class="fa fa-search"></i></button>
+
+                        </div>
+
+                    </form>
+
+                        <div style="float: left;" class="col-md-4">
+                            @if (ViewBag.cargo != "3")
+                            {
+                                //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+
+                                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+                            }
+                        </div>
+                </div>
+
+             </div>
 
 
             <div class="box-body">
@@ -78,7 +111,7 @@
                                         @Html.DisplayFor(modelItem => item.Monto)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Estatus)
+                                        @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
                                     </td>
                                     <td>
                                         <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
