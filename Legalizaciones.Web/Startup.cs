@@ -13,15 +13,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-
-
-
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Legalizaciones.Web.Engine;
 
 namespace Legalizaciones
 {
@@ -79,6 +76,8 @@ namespace Legalizaciones
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
 
+            //services.Configure<ProjectSettings>(Configuration.GetSection("ProjectSettings"));
+            EngineDb.DefaultConnection = Configuration["ConnectionStrings:Default"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

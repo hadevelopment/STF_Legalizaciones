@@ -10,7 +10,8 @@ namespace Legalizaciones.Web.Engine
 {
     public class EngineDb
     {
-        private string StringConexion = "Data Source=sql7005.site4now.net;Initial Catalog=DB_A486E4_Legalizaciones;user id=DB_A486E4_Legalizaciones_admin; password=Innova4j";
+        public static string DefaultConnection { get; set; }
+        private string StringConexion = EngineDb.DefaultConnection;
 
         public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula)
         {
