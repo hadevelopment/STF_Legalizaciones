@@ -319,10 +319,10 @@
                         </div>
                         <div class="modal-footer">
                             <a id="btnAdd" class="btn btn-primary" onclick="validarGastos();">
-                                <span class="glyphicon glyphicon-plus"></span> Agregar
+                                <span id="addX" class="glyphicon glyphicon-plus"></span>Agregar
                             </a>
                             <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
+                                <span class="glyphicon glyphicon-off"></span>Cerrar
                             </a>
                         </div>
                     </form>
@@ -332,6 +332,9 @@
     </div>
 </div>
 
+
+
+
 @section scripts {
     <script src="https://code.jquery.com/ui/1.8.2/jquery-ui.js"></script>
     <script src="~/js/select2.min.js"></script>
@@ -339,7 +342,7 @@
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
     <script src="~/js/SolicitudScript.js"></script>
-    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
     <script src="~/js/tableToJSON.js"></script>
 

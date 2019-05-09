@@ -16,7 +16,7 @@ namespace Legalizaciones.Web.Controllers
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
             string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion","11346727"); ;
+            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",usuarioCedula); ;
             return View(model);
         }
 

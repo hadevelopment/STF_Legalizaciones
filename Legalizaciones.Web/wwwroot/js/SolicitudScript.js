@@ -211,7 +211,7 @@
                 datatype: "Json",
                 data: { servicioId: idServicio },
                 success: function (data) {
-                    debugger;
+                    //debugger;
                     //aca debe ir la validacion que limite el campo del monto a la tarifa configurada del servicio
                     //$('#Monto').val(data.monto);
 
@@ -521,7 +521,7 @@ function LoadProductsData(id) {
 }
 
 function validarGastos() {
-    debugger;
+    //debugger;
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -530,8 +530,8 @@ function validarGastos() {
     var servicio = $("#Servicio option:selected").text();
     var ciudadId = $("#Ciudad option:selected").val();
     var ciudad = $("#Ciudad option:selected").text();
-    var origen = $("#ZonaOrigen option:selected").text();
-    var destino = $("#ZonaDestino option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
@@ -551,6 +551,9 @@ function validarGastos() {
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        <a class="btn btn-danger btn-sm">
+                            <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
                         </a>
                     </td>
                 </tr>`;
@@ -589,6 +592,9 @@ function validarGastos() {
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
+                         <a class="btn btn-danger btn-sm btnDelete"">
+                            <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
+                        </a>
                     </td>
                 </tr>`;
 
@@ -611,6 +617,13 @@ function validarGastos() {
 
 
 }
+
+function ShowModalUpdate()
+{
+    const m = $('#addX');
+    m.innerHTML = 'Actualizar';
+    $('#gastosModal').modal('show');
+} 
 
 function validarViaje(boton) {
     var destino = $("#Destino option:selected").val();
