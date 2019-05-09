@@ -22,12 +22,10 @@ namespace Legalizaciones.Web.Controllers
 
         public ExportFilesFormatController(IConverter converter, 
                                            ISolicitudRepository solicitudRepository,
-                                           IEstadoSolicitudRepository estatusRepository,
-                                           IZonaRepository zonaRepository)
+                                           IEstadoSolicitudRepository estatusRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
-            this.zonaRepository      = zonaRepository;
             this.estatusRepository   = estatusRepository;
         }
 
@@ -64,6 +62,41 @@ namespace Legalizaciones.Web.Controllers
 
         }
 
+
+        [HttpGet]
+        public ActionResult CreateLegalizacionesPDF(int id)
+        {
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF Report",
+                Out = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\solicitud.pdf"
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                Page = $"http://{Request.Host}/Solicitud/VisorLegalizacionPDF?id=" + id.ToString(),
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+            };
+
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            var file = _converter.Convert(pdf);
+
+            return Download("Solicitud.pdf");
+
+        }
+
+
         [HttpGet]
         public ActionResult ExportDatosSolicitudExcel()
         {
@@ -77,7 +110,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 IWorkbook workbook;
                 workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("Solicitudes");
+                ISheet excelSheet = workbook.CreateSheet("Demo");
                 IRow row = excelSheet.CreateRow(0);
 
                 row.CreateCell(0).SetCellValue("ID");
@@ -98,7 +131,7 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
                     row.CreateCell(5).SetCellValue(solicitud.Monto);
-                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoID.ToString())).Descripcion);
+                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;
                 }
 
@@ -107,7 +140,6 @@ namespace Legalizaciones.Web.Controllers
 
             return Download(sFileName);
         }
-
 
 
         [HttpGet]
@@ -147,6 +179,7 @@ namespace Legalizaciones.Web.Controllers
 
             return Download(sFileName);
         }
+
 
         public ActionResult Download(string filename)
         {

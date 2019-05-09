@@ -1,0 +1,216 @@
+﻿@model Legalizaciones.Model.Legalizacion
+@{
+    ViewData["Title"] = "VisorLegalizacion";
+    Layout = "~/Views/Shared/_VistaBaseImpresion.cshtml";
+}
+
+<h2>VisorLegalizacion</h2>
+
+
+@Html.Partial("_HeaderFields")
+
+<form asp-controller="Solicitud" asp-action="Guardar" method="post">
+    <section>
+
+        <table width="100%" border="0">
+            <tr class="sinBorder">
+                <td width="15%" class="neg sinBorder">Legalizacion de anticipio:</td>
+                <td width="25%" class="sinBorder">@Model.SolicitudID</td>
+                <td width="5%" class="neg sinBorder" align="right">Estado:</td>
+                <td width="30%" class="sinBorder">Aprobado Director</td>
+                <td width="4%" class="neg sinBorder">Concepto:</td>
+                <td width="21%" class="sinBorder">Viaticos Cali</td>
+                <td width="4%" class="neg sinBorder">Concecutivo ERP:</td>
+                <td width="21%" class="sinBorder">8652</td>
+            </tr>
+        </table>
+
+        <br /><br />
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del anticipo</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <table width="100%">
+                    <tr class="HeaderTable">
+                        <td>ID</td>
+                        <td>ID documento en ERP</td>
+                        <td>Consecutivo ERP</td>
+                        <td>Concepto</td>
+                    </tr>
+                    <tr class="RowsTable">
+                        <td>@Model.Id</td>
+                        <td>755377</td>
+                        <td>6533788</td>
+                        <td>Concepto Datos</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <table width="100%">
+                    <tr class="HeaderTable">
+                        <td>Área</td>
+                        <td>Nombre completo</td>
+                        <td>Cedula de ciudadanía</td>
+                        <td>Dirección</td>
+                        <td>Ciudad</td>
+                        <td>Teléfono</td>
+                    </tr>
+                    <tr class="RowsTable">
+                        <td>Model.Empleado.Area</td>
+                        <td>Model.Empleado.Nombre</td>
+                        <td>Model.Empleado.Cedula</td>
+                        <td>Model.Empleado.Direccion</td>
+                        <td>Model.Empleado.Ciudad</td>
+                        <td>Model.Empleado.Telefono</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div><br />
+
+            <div class="box-body">
+
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-6">
+                        <label>Detalles de Legalizacion</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha de registros: 10/05/2018</label>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Fecha de vencimiento: 10/062018</label>
+                    </div>
+                    <div class="col-md-12">
+                        <table width="100%">
+                            <tr class="HeaderTable">
+                                <td>ID</td>
+                                <td>Fecha del gasto</td>
+                                <td>Pais</td>
+                                <td>Tipo de Servicio</td>
+                                <td>Ciudad</td>
+                                <td>Origen</td>
+                                <td>Destino</td>
+                                <td>Gasto</td>
+                                <td>IVA</td>
+                                <td>Rete IVA</td>
+                                <td>Rete Fue</td>
+                                <td>Rete Serv</td>
+                                <td>ICA</td>
+                                <td>Neto</td>
+                            </tr>
+                            <tbody id="Items" class="RowsTable">
+                            @*@foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        @item.FechaGasto.ToShortDateString()
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Pais)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Servicio)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Ciudad)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Origen)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Destino)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Monto) 
+                                    </td>
+                                </tr>
+                            }*@
+
+                            </tbody>
+                        </table>
+                        <br />
+                    </div>
+
+                </div>
+
+            </div>
+
+            <footer>
+
+                <table style="width:100%">
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma del beneficiario</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Director Area</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Dpto Contabilidad</span></td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+
+                    </tr>
+
+                </table>
+
+            </footer>
+
+
+
+        </div>
+
+    </section>
+</form>
+
+<!-- Stepper CSS -->
+<link href="css/addons-pro/steppers.css" rel="stylesheet">
+<!-- Stepper CSS - minified-->
+<link href="css/addons-pro/steppers.min.css" rel="stylesheet">
+
+<!-- Stepper JavaScript -->
+<script type="text/javascript" src="js/addons-pro/stepper.js"></script>
+<!-- Stepper JavaScript - minified -->
+<script type="text/javascript" src="js/addons-pro/stepper.min.js"></script>
+
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/SolicitudScript.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/js/table.js"></script>
+    <script>
+        $(function () {
+            $('#example1').DataTable()
+        })
+    </script>

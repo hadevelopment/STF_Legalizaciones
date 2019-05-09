@@ -32,10 +32,6 @@ namespace Legalizaciones.Model
         [ForeignKey("Destino")]
         public int? DestinoID { get; set; }
 
-        [Required(ErrorMessage = "Estado Solicitud.")]
-        [ForeignKey("EstadoID")]
-        public int? EstadoID { get; set; }
-
         [Required(ErrorMessage = "Ciudad es requerido.")]
         [ForeignKey("Zona")]
         public int? ZonaID { get; set; }
@@ -72,6 +68,10 @@ namespace Legalizaciones.Model
         [DisplayName("Moneda")]
         [ForeignKey("Moneda")]
         public int? MonedaId { get; set; }
+
+        [Required(ErrorMessage = "Estado de la Solicitud.")]
+        [ForeignKey("EstadoSolicitud")]
+        public int EstadoId { get; set; }
 
         [NotMapped]
         public Moneda Moneda { get; set; }

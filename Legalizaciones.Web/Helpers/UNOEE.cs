@@ -56,10 +56,7 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "Centro Operaciones 01",
-                UnidadNegocios = "Unidad de Negocio 01",
-                CentroCostos = "Centro de Costo 01"
+                CargoId = 1 // ROL Empleado
             };
 
             Empleados[1] = new Empleado
@@ -70,24 +67,18 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
-                CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = "Centro Operaciones 02",
-                UnidadNegocios = "Unidad de Negocio 02",
-                CentroCostos = "Centro de Costo 02"
+                CargoId = 2 // ROL Administracion Tesoreria
             };
 
             Empleados[2] = new Empleado
             {
                 Area = "Contabilidad",
                 Nombre = "Empleado Tres",
-                Cedula = "8.845.256.666",
+                Cedula = "7.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
-                CentroOperaciones = "Centro Operaciones 03",
-                UnidadNegocios = "Unidad de Negocio 03",
-                CentroCostos = "Centro de Costo 03"
+                CargoId = 3 // ROL Administracion Contabilidad
             };
 
             return (Empleados[IdEmpleado - 1]);
@@ -118,10 +109,7 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "Centro Operaciones 01",
-                UnidadNegocios = "Unidad de Negocio 01",
-                CentroCostos = "Centro de Costo 01"
+                CargoId = 1 // ROL Empleado
             };
 
             Empleados[1] = new Empleado
@@ -132,24 +120,18 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
-                CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = "Centro Operaciones 02",
-                UnidadNegocios = "Unidad de Negocio 02",
-                CentroCostos = "Centro de Costo 02"
+                CargoId = 2 // ROL Administracion Tesoreria
             };
 
             Empleados[2] = new Empleado
             {
                 Area = "Contabilidad",
                 Nombre = "Empleado Tres",
-                Cedula = "8.845.256.666",
+                Cedula = "7.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
-                CentroOperaciones = "Centro Operaciones 03",
-                UnidadNegocios = "Unidad de Negocio 03",
-                CentroCostos = "Centro de Costo 03"
+                CargoId = 3 // ROL Administracion Contabilidad
             };
 
 

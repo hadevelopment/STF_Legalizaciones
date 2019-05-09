@@ -9,7 +9,6 @@ using System.Text;
 
 namespace Legalizaciones.Model
 {
-    [Table("Empleado")]
     public class Empleado : BaseModel
     {
         [Required]
@@ -24,11 +23,5 @@ namespace Legalizaciones.Model
         public string Ciudad { get; set; }
         public string NombreSupervisor { get; set; }
         public int SupervisorId { get; set; }
-
-        public string CentroOperaciones { get; set; }
-
-        public string UnidadNegocios { get; set; }
-
-        public string CentroCostos { get; set; }
     }
 }

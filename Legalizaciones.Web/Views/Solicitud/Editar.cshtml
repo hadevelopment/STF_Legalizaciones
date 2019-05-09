@@ -33,6 +33,8 @@
         @Html.TextBoxFor(model => model.FechaVencimiento, new { @class = "form-control " })
         @Html.TextBoxFor(model => model.EmpleadoCedula, new { @class = "form-control " })
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
+
+
     </div>
 
 
@@ -104,7 +106,7 @@
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="DestinoID" id="lbl_destino">Destino</label>
-                        @Html.DropDownListFor(model => model.DestinoID,new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
+                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
                         @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
@@ -119,13 +121,11 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroOperacionId">Centro de Operación</label>
-                        @*@Html.DropDownListFor(model => model.CentroOperacionId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroOperacion" })
-        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-        {
-            @Html.ValidationMessageFor(model => model.CentroOperacionId, "Seleccione un Centro de Operaciones.", new { @class = "text-danger" })
-        }*@
-                        @Html.TextBoxFor(model => model.Empleado.CentroOperaciones, new { @class = "form-control", @Readonly = "readonly", id = "CentroOperaciones" })
-
+                        @Html.DropDownListFor(model => model.CentroOperacionId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroOperacion" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.CentroOperacionId, "Seleccione un Centro de Operaciones.", new { @class = "text-danger" })
+                        }
                     </div>
 
                 </div>
@@ -133,22 +133,19 @@
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="UnidadNegocio">Unidad de Negocio</label>
-                        @*@Html.DropDownListFor(model => model.UnidadNegocioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "UnidadNegocio" })
-        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-        {
-            @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una Unidad de Negocio.", new { @class = "text-danger" })
-        }*@
-                        @Html.TextBoxFor(model => model.Empleado.UnidadNegocios, new { @class = "form-control", @Readonly = "readonly", id = "UnidadNegocios" })
-
+                        @Html.DropDownListFor(model => model.UnidadNegocioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "UnidadNegocio" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una Unidad de Negocio.", new { @class = "text-danger" })
+                        }
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroCosto">Centro de Costo</label>
-                        @*@Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroCosto" })
-        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-        {
-            @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de Costo.", new { @class = "text-danger" })
-        }*@
-                        @Html.TextBoxFor(model => model.Empleado.CentroCostos, new { @class = "form-control", @Readonly = "readonly", id = "CentroCostos" })
+                        @Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroCosto" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de Costo.", new { @class = "text-danger" })
+                        }
                     </div>
 
                     <div class="col-md-3">

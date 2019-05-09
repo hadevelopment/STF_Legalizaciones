@@ -673,7 +673,7 @@ function CargarCombosAlEditar() {
         type: "GET",
         url: "/Localidad/ZonasDestinosEdit" + "?Id=" + $('#Id').val(),
         datatype: "Json",
-       success: function (resultado) {
+        success: function (resultado) {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
@@ -709,45 +709,45 @@ function CargarCombosAlEditar() {
     });
 
 
-    ////Obtener centro de operaciones
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroOperaciones",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroOperacion').empty();
-    //        $.each(data, function (index, value) {
-    //            $('#CentroOperacion').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+    //Obtener centro de operaciones
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/CentroOperaciones",
+        datatype: "Json",
+        success: function (data) {
+            $('#CentroOperacion').empty();
+            $.each(data, function (index, value) {
+                $('#CentroOperacion').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
 
 
-    ////Obtener unidades de negocio
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/UnidadNegocios",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#UnidadNegocio').empty();
-    //        $.each(data, function (index, value) {
-    //            $('#UnidadNegocio').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+    //Obtener unidades de negocio
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/UnidadNegocios",
+        datatype: "Json",
+        success: function (data) {
+            $('#UnidadNegocio').empty();
+            $.each(data, function (index, value) {
+                $('#UnidadNegocio').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
 
-    ////Obtener centros de costo
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroCostos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroCosto').empty();
-    //        $.each(data, function (index, value) {
-    //            $('#CentroCosto').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+    //Obtener centros de costo
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/CentroCostos",
+        datatype: "Json",
+        success: function (data) {
+            $('#CentroCosto').empty();
+            $.each(data, function (index, value) {
+                $('#CentroCosto').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
 
 }
 
@@ -793,66 +793,49 @@ function CargarComboAlcrear() {
         }
     });
 
-    ////Obtener unidades de negocio
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/UnidadNegocios",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#UnidadNegocio').empty();
-    //        $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#UnidadNegocio").select2();
-    //            $('#UnidadNegocio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    ////Obtener centro de operaciones
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroOperaciones",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroOperacion').empty();
-    //        $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroOperacion").select2();
-    //            $('#CentroOperacion').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    ////Obtener centros de costo
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroCostos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroCosto').empty();
-    //        $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroCosto").select2();
-    //            $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-}
-
-
-$('#Empleado').change(function () {
-
+    //Obtener unidades de negocio
     $.ajax({
         type: "GET",
-        url: "/UNOEE/GetEmpleadoCedula" + "?wCedula=" + $('#Empleado').val(),
+        url: "/UNOEE/UnidadNegocios",
         datatype: "Json",
         success: function (data) {
-            $('#CentroOperaciones').val(data.centroOperaciones);
-            $('#UnidadNegocios').val(data.unidadNegocios);
-            $('#CentroCostos').val(data.centroCostos);
-
+            $('#UnidadNegocio').empty();
+            $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                $("#UnidadNegocio").select2();
+                $('#UnidadNegocio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
         }
-
     });
-});
+
+    //Obtener centro de operaciones
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/CentroOperaciones",
+        datatype: "Json",
+        success: function (data) {
+            $('#CentroOperacion').empty();
+            $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                $("#CentroOperacion").select2();
+                $('#CentroOperacion').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    //Obtener centros de costo
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/CentroCostos",
+        datatype: "Json",
+        success: function (data) {
+            $('#CentroCosto').empty();
+            $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                $("#CentroCosto").select2();
+                $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+}

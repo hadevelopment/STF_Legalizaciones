@@ -13,5 +13,8 @@ namespace Legalizaciones.Model
         public string Nombre { get; set; }
         public int DiasHabiles { get; set; }
         public string Descripcion { get; set; }
+
+        [ForeignKey("FlujoSolicitud")]
+        public int FlujoSolicitudId { get; set; }
     }
 }

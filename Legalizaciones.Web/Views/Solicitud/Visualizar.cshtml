@@ -30,6 +30,48 @@
 
                 </div>
 
+                @* Desde aqui es steppers ********************************************************************* *@
+
+                @*<!-- Horizontal Steppers -->
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <!-- Stepers Wrapper -->
+                        <ul class="stepper stepper-horizontal">
+
+                            <!-- First Step -->
+                            <li class="completed">
+                                <a href="#!">
+                                    <span class="circle">1</span>
+                                    <span class="label">First step</span>
+                                </a>
+                            </li>
+
+                            <!-- Second Step -->
+                            <li class="active">
+                                <a href="#!">
+                                    <span class="circle">2</span>
+                                    <span class="label">Second step</span>
+                                </a>
+                            </li>
+
+                            <!-- Third Step -->
+                            <li class="warning">
+                                <a href="#!">
+                                    <span class="circle"><i class="fas fa-exclamation"></i></span>
+                                    <span class="label">Third step</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                        <!-- /.Stepers Wrapper -->
+
+                    </div>
+                </div>
+                <!-- /.Horizontal Steppers -->*@
+                @* Hasta aqui stpers*************************************************************************** *@
+
+
             </div>
         </div>
 
@@ -74,6 +116,8 @@
                 <label asp-for="Concepto">Concepto del Anticipo*</label>
                 <div class="row">
                     <div class="col-md-12">
+                        @*@Html.TextAreaFor(model => model.Concepto, 4, 140,
+                            new { @placeholder = "Explique el concepto del Anticipo (Minímo 50 carácteres)", @style = "width:100%;", @editable ="False" })*@
                         <label asp-for="Concepto" id="lbl_concepto">  <small>@Model.Concepto </small>   </label>
                         <span asp-validation-for="Concepto" class="text-danger"></span>
                     </div>
