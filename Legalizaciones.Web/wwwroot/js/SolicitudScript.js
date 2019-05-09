@@ -620,8 +620,7 @@ function validarGastos() {
 
 function ShowModalUpdate()
 {
-    const m = $('#addX');
-    m.innerHTML = 'Actualizar';
+    $('#select2-Pais-container').prop('title', 'Seleccione');
     $('#gastosModal').modal('show');
 } 
 
