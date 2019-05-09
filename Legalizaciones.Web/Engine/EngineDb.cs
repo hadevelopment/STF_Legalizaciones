@@ -12,7 +12,7 @@ namespace Legalizaciones.Web.Engine
     {
         private string StringConexion = "Data Source=sql7005.site4now.net;Initial Catalog=DB_A486E4_Legalizaciones;user id=DB_A486E4_Legalizaciones_admin; password=Innova4j";
 
-        public List<InfoLegalizacion> ListadoClientGroup_Empresa(string SpName)
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula)
         {
             List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
             DataTable dataTabla = new DataTable();
@@ -22,6 +22,8 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Open();
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@EmpleadoCedula", empleadoCedula);
                 SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
                 dataAdaptador.Fill(dataTabla);
                 Conexion.Close();

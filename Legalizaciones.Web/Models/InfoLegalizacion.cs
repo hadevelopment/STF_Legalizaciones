@@ -11,13 +11,13 @@ namespace Legalizaciones.Web.Models
         public string NumeroSolicitud { get; set; }
         public string FechaCreacion { get; set; }
         public string Concepto { get; set; }
-        public double Monto { get; set; }
+        public string Monto { get; set; }
         public string Moneda { get; set; }
-        public double Tasa { get; set; }//RATA CAMBIO
+        public string Tasa { get; set; }//RATA CAMBIO
         public string Beneficiario { get; set; }//EMPLEADO
         public string EmpleadoCedula { get; set; }
         public string Estado { get; set; }//SATATUS SOLICITUD
-        public int IdDocErp { get; set; }
+        public string IdDocErp { get; set; }
         public string  ConsecutivoErp { get; set; }
         public string FechaEntrega { get; set; }
         public string FechaVencimiento { get; set; }

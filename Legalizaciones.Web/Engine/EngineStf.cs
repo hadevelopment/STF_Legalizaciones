@@ -26,27 +26,36 @@ namespace Legalizaciones.Web.Engine
                 if (row[3] != DBNull.Value)
                     item.Concepto = row[3].ToString();
                 if (row[4] != DBNull.Value)
-                    item.Monto = Convert.ToDouble(row[4]);
+                    item.Monto = Convert.ToDouble(row[4]).ToString("N2");
                 if (row[5] != DBNull.Value)
-                    item.Concepto = row[5].ToString();
+                    item.Moneda = row[5].ToString();
                 if (row[6] != DBNull.Value)
-                    item.Tasa = Convert.ToDouble(row[6]);
+                    item.Tasa = Convert.ToDouble(row[6]).ToString("N2"); ;
                 if (row[7] != DBNull.Value)
                     item.EmpleadoCedula = row[7].ToString();
                 if (row[8] != DBNull.Value)
                     item.Estado = row[8].ToString();
                 if (row[9] != DBNull.Value)
-                    item.IdDocErp = Convert.ToInt32(row[9]);
+                    item.FechaEntrega = row[9].ToString().Substring(0, 10);
                 if (row[10] != DBNull.Value)
-                    item.FechaEntrega = row[10].ToString().Substring(0, 10);
+                    item.FechaVencimiento = row[10].ToString().Substring(0, 10);
                 if (row[11] != DBNull.Value)
-                    item.FechaVencimiento = row[11].ToString().Substring(0, 10);
-                if (row[12] != DBNull.Value)
-                    item.Id = Convert.ToInt32(row[12]);
+                    item.DiasTrascurridos = Convert.ToInt32(row[11]);
+
+                item.IdDocErp = Aleatorio(n);
+                item.ConsecutivoErp = Aleatorio(n);
+                item.Beneficiario = "Efrain Mejias C";
                 list.Insert(n, item);
                 n++;
             }
             return list;
+        }
+
+        public string Aleatorio(int s)
+        {
+            Random rnd = new Random(s);
+            int n = rnd.Next(1, 999);
+            return "000" + n.ToString();
         }
     }
 }

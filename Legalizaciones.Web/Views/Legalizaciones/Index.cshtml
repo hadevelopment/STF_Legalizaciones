@@ -1,6 +1,9 @@
 ﻿@model List<InfoLegalizacion>
 @{
     ViewData["Title"] = "Index";
+    string leg = string.Empty ;
+    string vie = string.Empty;
+    string edi = string.Empty;
 }
 
 <div class="row">
@@ -29,89 +32,110 @@
 
 
             <div class="box-body">
-                <table id="tblSolicitudes" class="table table-bordered table-hover myDataTable">
+                <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable">
                     <thead>
                         <tr>
                             <th> Id </th>
                             <th> Registro </th>
                             <th> Concepto </th>
+                            <th> Beneficiario </th>
+                            <th> Estado </th>
                             <th> Monto </th>
-                            <th> </th>
-                            <th> </th>
+                            <th> Tasa</th>
                             <th> Id ERP </th>
-                            <th> Consecutivo ERP </th>
+                            <th> Nro ERP </th>
                             <th> Entrega </th>
-                            <th> Tasa </th>
-                            <th> Dias Entregado</th>
+                            <th> Dias Entrega</th>
                             <th> Acciones </th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (Model != null)
                         {
+                            int ix = 0;
+
                             @foreach (var item in Model)
-
                             {
-                        <tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Id)
-                            </td>
-                            <td>
+                                leg = "legalizar" ;
+                                vie = "view" ;
+                                edi = "edit" ;
+                            
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Id)
+                                </td>
+                                <td>
 
-                                @Html.DisplayFor(modelItem => item.FechaCreacion)
-                            </td>
-                            <td>
+                                    @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                </td>
+                                <td>
 
-                                @Html.DisplayFor(modelItem => item.Concepto)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Monto)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Moneda)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Tasa)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.IdDocErp)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.ConsecutivoErp)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.FechaEntrega)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DiasTrascurridos)
-                            </td>
-                            <td>
-                                <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
-                                    <span class="fa fa-eye"></span>
-                                </a>
+                                    @Html.DisplayFor(modelItem => item.Concepto)
+                                </td>
+                                <td>
 
-                                <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
-                                    <span class="fa fa-pencil"></span>
-                                </a>
+                                    @Html.DisplayFor(modelItem => item.Beneficiario)
+                                </td>
+                                <td>
 
-                                @if (!string.IsNullOrEmpty(item.RutaArchivo))
-                                {
-                                    <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
-                                        <span class="fa fa-file-pdf-o"></span>
-                                    </a>
-                                }
-                            </td>
-                        </tr>
-                            }
+                                    @Html.DisplayFor(modelItem => item.Estado)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
+                                </td>
+                                <td>
+                                    @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
+                                    @Html.DisplayFor(modelItem => item.Tasa)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.IdDocErp)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.ConsecutivoErp)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.FechaEntrega)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DiasTrascurridos)
+                                </td>
+                                <td>
+
+                                    @if (item.Estado == "Vencido")
+                                    {
+                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Legalizar" asp-route-id="@item.Id">Legalizar</a>
+                                    }
+                                    else if (item.Estado == "Legalizado")
+                                    {
+                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
+                                            <span class="fa fa-eye"></span>
+                                        </a>
+                                    }
+                                    else if (item.Estado == "Rechazado")
+                                    {
+                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
+                                            <span class="fa fa-pencil"></span>
+                                        </a>
+                                    }
+                                    @if (!string.IsNullOrEmpty(item.RutaArchivo))
+                                    {
+                                        <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
+                                            <span class="fa fa-file-pdf-o"></span>
+                                        </a>
+                                    }
+                                </td>
+                            </tr>
+                            ix++;
+                        }
 
                         }
                         else
                         {
-                            <tr>
-                                <td colspan="8">
-                                    No se encontraron resultados...
-                                </td>
-                            </tr>
+                        <tr>
+                            <td colspan="8">
+                                No posee anticipos pendientes por Legalizar...
+                            </td>
+                        </tr>
                         }
 
                     </tbody>
@@ -153,4 +177,20 @@
         </div>
     </div>
 </div>
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#tblLegalizaciones').DataTable({
+                "order": [[0, "desc"]]
+            });
+        });
+    </script>
+}
+
+
 
