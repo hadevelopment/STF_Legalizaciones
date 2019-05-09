@@ -552,7 +552,7 @@ function validarGastos() {
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
-                        <a class="btn btn-danger btn-sm">
+                        <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
                         </a>
                     </td>
@@ -592,7 +592,7 @@ function validarGastos() {
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
-                         <a class="btn btn-danger btn-sm btnDelete"">
+                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
                         </a>
                     </td>
