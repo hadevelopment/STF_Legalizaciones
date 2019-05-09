@@ -1,0 +1,84 @@
+﻿/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.box-title .fa{
+    margin-right:10px;
+}
+
+a {
+    color: #333;
+}
+
+.btn {
+    margin-bottom:15px !important;
+}
+
+.txtLargo{
+    width: 100%;
+}
+
+.navbar-header {
+    min-height: 50px;
+    display: table;
+    width: 100%;
+    position: relative;
+    background-color: white;
+    margin-bottom: 25px;
+}
+
+.menu-site-left {
+    float:left;
+    text-align:center;
+}
+
+.menu-site-right {
+    float: right;
+    text-align: center;
+}
+
+.breadcrumb{
+    position:relative !important;
+    float:left !important;
+}
+
+.container-fluid {
+    background-color: #eeeeee;
+}
+
+.select2 {
+    width:100% !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 34px !important;
+}
+
+.lbl100{
+    width:100%;
+}
+
+.lst100 {
+    width: 100%;
+}
+
+.display-none{
+    display:none;
+}
+
+.display{
+    display:block;
+}
+
+.alert{
+    margin-top:20px;
+}
+
+m-bottom-20 {
+margin-bottom:20px;
+}
+
+
