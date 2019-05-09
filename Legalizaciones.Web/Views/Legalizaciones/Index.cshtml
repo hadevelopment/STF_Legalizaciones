@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Legalizaciones.Model.Solicitud>
+﻿@model List<InfoLegalizacion>
 @{
     ViewData["Title"] = "Index";
 }
@@ -36,6 +36,8 @@
                             <th> Registro </th>
                             <th> Concepto </th>
                             <th> Monto </th>
+                            <th> </th>
+                            <th> </th>
                             <th> Id ERP </th>
                             <th> Consecutivo ERP </th>
                             <th> Entrega </th>
@@ -50,50 +52,56 @@
                             @foreach (var item in Model)
 
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td>
-                                    <td>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
 
-                                        @Html.DisplayFor(modelItem => item.FechaCreacion)
-                                    </td>
-                                    <td>
+                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                            </td>
+                            <td>
 
-                                        @Html.DisplayFor(modelItem => item.FechaVencimiento)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Concepto)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmpleadoCedula)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Empleado.Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Monto)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Estatus)
-                                    </td>
-                                    <td>
-                                        <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
-                                            <span class="fa fa-eye"></span>
-                                        </a>
+                                @Html.DisplayFor(modelItem => item.Concepto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Monto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Moneda)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Tasa)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.IdDocErp)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ConsecutivoErp)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FechaEntrega)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DiasTrascurridos)
+                            </td>
+                            <td>
+                                <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                    <span class="fa fa-eye"></span>
+                                </a>
 
-                                        <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
-                                            <span class="fa fa-pencil"></span>
-                                        </a>
+                                <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
+                                    <span class="fa fa-pencil"></span>
+                                </a>
 
-                                        @if (!string.IsNullOrEmpty(item.RutaArchivo))
-                                        {
-                                            <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
-                                                <span class="fa fa-file-pdf-o"></span>
-                                            </a>
-                                        }
-                                    </td>
-                                </tr>
+                                @if (!string.IsNullOrEmpty(item.RutaArchivo))
+                                {
+                                    <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
+                                        <span class="fa fa-file-pdf-o"></span>
+                                    </a>
+                                }
+                            </td>
+                        </tr>
                             }
 
                         }
