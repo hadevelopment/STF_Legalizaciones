@@ -553,7 +553,7 @@ function validarGastos() {
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                         <a class="btn btn-danger btn-sm btnDelete">
-                            <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate();" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -593,7 +593,7 @@ function validarGastos() {
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                          <a class="btn btn-danger btn-sm btnDelete">
-                            <span class="glyphicon glyphicon-edit" onclick="ShowModalUpdate();"></span>
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate();" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -618,7 +618,8 @@ function validarGastos() {
 
 }
 
-function ShowModalUpdate()
+
+function ShowModalUpdate(value)
 {
     $.ajax({
         type: "GET",
@@ -665,7 +666,6 @@ function ShowModalUpdate()
     $('#Monto').val("");
     $('#ZonaOrigen').val("");
     $('#ZonaDestino').val("");
-
     $('#gastosModal').modal('show');
 } 
 
