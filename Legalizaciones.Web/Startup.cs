@@ -13,9 +13,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
-
-
-
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
@@ -52,6 +49,10 @@ namespace Legalizaciones
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
+            services.AddTransient<ILegalizacionRepository, LegalizacionRepository>();
+            services.AddTransient<ILegalizacionGastosRepository, LegalizacionGastosRepository>();
+
+            services.AddTransient<IBancoRepository, BancoRepository>();
 
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));

@@ -56,7 +56,10 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
-                CargoId = 1 // ROL Empleado
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
             Empleados[1] = new Empleado
@@ -67,7 +70,10 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
-                CargoId = 2 // ROL Administracion Tesoreria
+                CargoId = 2, // ROL Administracion Tesoreria
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
             Empleados[2] = new Empleado
@@ -78,7 +84,10 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3 // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contabilidad
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
             return (Empleados[IdEmpleado - 1]);
@@ -109,7 +118,10 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
-                CargoId = 1 // ROL Empleado
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
             Empleados[1] = new Empleado
@@ -120,22 +132,67 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
-                CargoId = 2 // ROL Administracion Tesoreria
+                CargoId = 2, // ROL Administracion Tesoreria
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
             Empleados[2] = new Empleado
             {
                 Area = "Contabilidad",
                 Nombre = "Empleado Tres",
-                Cedula = "7.845.256.666",
+                Cedula = "8.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3 // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contabilidad
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
             };
 
 
             return (Empleados[ind - 1]);
+        }
+
+
+        public List<Motivo> GetListMotivos(int CentroCostoId)
+        {
+            var wListMotivos = new List<Motivo>();
+            if (CentroCostoId == 1)
+            {
+                var wM1 = new Motivo
+                {
+                    Id = 1,
+                    Nombre = "Motivo 1 centro Operaciones 1"
+                };
+                var wM2 = new Motivo
+                {
+                    Id = 2,
+                    Nombre = "Motivo 2 centro Operaciones 1"
+                };
+                wListMotivos.Add(wM1);
+                wListMotivos.Add(wM2);
+            }
+            else
+            {
+                var wM1 = new Motivo
+                {
+                    Id = 1,
+                    Nombre = "Motivo 1 centro Operaciones 2"
+                };
+                var wM2 = new Motivo
+                {
+                    Id = 2,
+                    Nombre = "Motivo 2 centro Operaciones 2"
+                };
+                wListMotivos.Add(wM1);
+                wListMotivos.Add(wM2);
+
+            }
+
+            return wListMotivos;
         }
 
 
