@@ -83,7 +83,7 @@
                     <div class="col-md-12">
                         <div class="col-md-12 pb-2">
                             <label class="control-label">Empleado</label>
-                            @Html.DropDownList("Empleado", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control required", id = "Empleado" })
+                            @Html.DropDownList("Empleado", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Empleado", @required = "required" })
                         </div>
                     </div>
                 </div>
