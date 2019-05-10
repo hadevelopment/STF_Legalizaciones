@@ -11,12 +11,10 @@ namespace Legalizaciones.Web.Controllers
 {
     public class EmpleadoController : Controller
     {
-        private readonly IEmpleadoRepository empleadoRepository;
         private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
 
-        public EmpleadoController(IEmpleadoRepository _empleadoRepository, IEmpleadoPermisoRepository _empleadoPermisoRepository)
+        public EmpleadoController( IEmpleadoPermisoRepository _empleadoPermisoRepository)
         {
-            this.empleadoRepository = _empleadoRepository;
             this.empleadoPermisoRepository = _empleadoPermisoRepository;
         }
         public IActionResult Index()
