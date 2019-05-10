@@ -634,6 +634,20 @@ function ShowModalUpdate()
         }
     });
 
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/CiudadesPais",
+        datatype: "Json",
+        data: { paisID: valor },
+        success: function (data) {
+            $("#Ciudad").empty();
+            $('#Ciudad').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                $('#Ciudad').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
     $('#gastosModal').modal('show');
 } 
 
