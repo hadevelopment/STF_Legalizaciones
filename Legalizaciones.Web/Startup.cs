@@ -44,11 +44,14 @@ namespace Legalizaciones
             services.AddTransient<ICiudadRepository, CiudadRepository>();
             services.AddTransient<IPaisRepository, PaisRepository>();
             //ISolicitud
-          
+
             //registering repositories to service 
+            services.AddTransient<IBancoRepository, BancoRepository>();
             services.AddTransient<IEmpleadoPermisoRepository, EmpleadoPermisoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
+            services.AddTransient<ILegalizacionRepository, LegalizacionRepository>();
+            services.AddTransient<ILegalizacionGastosRepository, LegalizacionGastosRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
             services.AddTransient<IConceptoRepository, ConceptoRepository>();
             services.AddTransient<IDestinoRepository, DestinoRepository>();

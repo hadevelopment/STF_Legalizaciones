@@ -26,8 +26,6 @@
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
                 <h1 class="box-title">Mis  Solicitudes de Anticipo </h1>
-
-                <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir legalizacion sin anticipo</a>
             </div>
 
 
@@ -100,12 +98,11 @@
                                     @Html.DisplayFor(modelItem => item.DiasTrascurridos)
                                 </td>
                                 <td>
-
-                                    @if (item.Estado == "Vencido" || item.Estado == "Legalizar")
+                                    @if (item.Estado == "En Espera de Aprobacion")
                                     {
-                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Legalizar" asp-route-id="@item.Id">Legalizar</a>
+                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
                                     }
-                                    else if (item.Estado == "Legalizado")
+                                    @*else if (item.Estado == "Legalizado")
                                     {
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
                                             <span class="fa fa-eye"></span>
@@ -120,13 +117,7 @@
                                     else
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
-                                    }
-                                    @if (!string.IsNullOrEmpty(item.RutaArchivo))
-                                    {
-                                        <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
-                                            <span class="fa fa-file-pdf-o"></span>
-                                        </a>
-                                    }
+                                    }*@
                                 </td>
                             </tr>
                             ix++;
@@ -186,14 +177,6 @@
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
-
-    <script>
-        $(document).ready(function () {
-            $('#tblLegalizaciones').DataTable({
-                "order": [[0, "desc"]]
-            });
-        });
-    </script>
 }
 
 
