@@ -620,7 +620,20 @@ function validarGastos() {
 
 function ShowModalUpdate()
 {
-    $('#Pais').val(0);
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/Paises",
+        datatype: "Json",
+        success: function (data) {
+            $("#Pais").empty();
+            $('#Pais').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                //$("#Destino").select2();
+                $('#Pais').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
     $('#gastosModal').modal('show');
 } 
 
