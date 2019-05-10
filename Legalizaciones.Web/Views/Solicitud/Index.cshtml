@@ -23,11 +23,11 @@
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
                 <h1 class="box-title">Mis  Solicitudes de Anticipo </h1>
-
+                <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
                 @if (ViewBag.cargo != "3")
                 { //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
 
-                    <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+
                 }
             </div>
 
