@@ -11,6 +11,7 @@
 
 a {
     color: #333;
+    cursor: pointer;
 }
 
 .btn {
@@ -93,8 +94,14 @@ body {
 }
 
 
-/* Boostrap Modal Customs */
+/* Nav Item */
 
+.nav-item {
+   text-align: center;
+}
+
+
+/* Boostrap Modal Customs */
 .close {
     font-weight: 900 !important;
     opacity: inherit !important;
