@@ -22,6 +22,7 @@ using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Legalizaciones
 {
@@ -51,6 +52,7 @@ namespace Legalizaciones
             services.AddTransient<IServicioRepository, ServicioRepository>();
             services.AddTransient<IProveedorRepository, ProveedorRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+            services.AddTransient<IEmpleadoPermisoRepository, EmpleadoPermisoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
@@ -68,7 +70,7 @@ namespace Legalizaciones
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
-
+            //Iempl
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
 
