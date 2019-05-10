@@ -29,6 +29,7 @@ namespace Legalizaciones.Model
         public string IVATeorico { get; set; }
         //public string Zona { get; set; }
 
+
         [ForeignKey("Solicitud")]
         public int? SolicitudId { get; set; }
         public Solicitud Solicitud { get; set; }
