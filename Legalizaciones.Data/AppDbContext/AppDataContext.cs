@@ -15,6 +15,9 @@ namespace Legalizaciones.Data.AppDbContext
         {
         }
 
+        //Configuracion
+        public DbSet<ConfiguracionGasto> ConfiguracionGasto { get; set; }
+
         //Localidades
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }

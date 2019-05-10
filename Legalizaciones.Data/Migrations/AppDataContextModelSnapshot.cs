@@ -34,6 +34,62 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Banco");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.ConfiguracionGasto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Cargo");
+
+                    b.Property<string>("CargoId");
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<int?>("DestinoId");
+
+                    b.Property<string>("DestinoNombre");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<bool>("GastoDiario");
+
+                    b.Property<int>("MonedaId");
+
+                    b.Property<string>("MonedaNombre");
+
+                    b.Property<float>("Monto");
+
+                    b.Property<int?>("OrigenId");
+
+                    b.Property<string>("OrigenNombre");
+
+                    b.Property<int>("PaisId");
+
+                    b.Property<string>("PaisNombre");
+
+                    b.Property<string>("TipoServicio");
+
+                    b.Property<string>("TipoServicioId");
+
+                    b.Property<int>("ZonaDestinoId");
+
+                    b.Property<int>("ZonaOrigenId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinoId");
+
+                    b.HasIndex("MonedaId");
+
+                    b.HasIndex("OrigenId");
+
+                    b.HasIndex("PaisId");
+
+                    b.ToTable("ConfiguracionGasto");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
                 {
                     b.Property<int>("Id")
@@ -521,6 +577,27 @@ namespace Legalizaciones.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TipoSolicitud");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.ConfiguracionGasto", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Destino")
+                        .WithMany()
+                        .HasForeignKey("DestinoId");
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
+                        .WithMany()
+                        .HasForeignKey("MonedaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Origen")
+                        .WithMany()
+                        .HasForeignKey("OrigenId");
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
+                        .WithMany()
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>

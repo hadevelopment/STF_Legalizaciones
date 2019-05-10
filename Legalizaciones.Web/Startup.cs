@@ -39,14 +39,15 @@ namespace Legalizaciones
             services.AddMvc();
             services.AddDbContext<AppDataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-            services.AddTransient<ISolicitudRepository, SolicitudRepository>();
-            services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
-            services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
-
-            //IJerarquia
+            //Configuracion
+            services.AddTransient<IConfiguracionGastoRepository, ConfiguracionGastoRepository>();
+            //Localidad
             services.AddTransient<ICiudadRepository, CiudadRepository>();
             services.AddTransient<IPaisRepository, PaisRepository>();
             //ISolicitud
+            services.AddTransient<ISolicitudRepository, SolicitudRepository>();
+            services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
+            services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
             services.AddTransient<IConceptoRepository, ConceptoRepository>();
             services.AddTransient<IDestinoRepository, DestinoRepository>();
             services.AddTransient<IMonedaRepository, MonedaRepository>();

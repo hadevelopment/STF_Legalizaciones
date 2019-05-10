@@ -63,10 +63,7 @@ namespace Legalizaciones.Web.Controllers
         }
         public JsonResult CiudadesPais(int paisID)
         {
-
             return Json(ciudadRepository.All().Where(x => x.PaisID == paisID));
-
-
         }
 
 

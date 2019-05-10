@@ -14,7 +14,7 @@ namespace Legalizaciones.Web.Helpers
         {
             // 1= ROL Empleado
             // 2= ROL Administracion Tesoreria
-            // 3= ROL Administracion Contabilidad
+            // 3= ROL Administracion Contraloria
 
             int EL_Empleado = 2;
             return EL_Empleado;
@@ -50,9 +50,9 @@ namespace Legalizaciones.Web.Helpers
 
             Empleados[0] = new Empleado
             {
-                Area = "Ventas",
-                Nombre = "Empleado Uno",
-                Cedula = "6.845.256.666",
+                Area = "Empleado",
+                Nombre = "Juan Perez",
+                Cedula = "6.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -61,8 +61,8 @@ namespace Legalizaciones.Web.Helpers
 
             Empleados[1] = new Empleado
             {
-                Area = "Tesoreria",
-                Nombre = "Empleado Dos",
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
                 Cedula = "7.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
@@ -72,16 +72,18 @@ namespace Legalizaciones.Web.Helpers
 
             Empleados[2] = new Empleado
             {
-                Area = "Contabilidad",
-                Nombre = "Empleado Tres",
-                Cedula = "7.845.256.666",
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "8.845.256.667",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3 // ROL Administracion Contabilidad
+                CargoId = 3 // ROL Administracion Contraloria
             };
 
-            return (Empleados[IdEmpleado - 1]);
+
+            var result = Empleados.Where(e => e.CargoId == IdEmpleado).FirstOrDefault();
+            return (result);
         }
         public Empleado getEmpleadoCedula(string cedula)
         {
@@ -90,22 +92,22 @@ namespace Legalizaciones.Web.Helpers
             int ind = 1;
             switch (cedula)
             {
-                case "6.845.256.666":
+                case "6.845.256.665":
                     ind = 1;
                     break;
                 case "7.845.256.666":
                     ind = 2;
                     break;
-                case "8.845.256.666":
+                case "8.845.256.667":
                     ind = 3;
                     break;
             }
 
             Empleados[0] = new Empleado
             {
-                Area = "Ventas",
-                Nombre = "Empleado Uno",
-                Cedula = "6.845.256.666",
+                Area = "Empleado",
+                Nombre = "Juan Perez",
+                Cedula = "6.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -114,8 +116,8 @@ namespace Legalizaciones.Web.Helpers
 
             Empleados[1] = new Empleado
             {
-                Area = "Administracion",
-                Nombre = "Empleado Dos",
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
                 Cedula = "7.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
@@ -125,13 +127,13 @@ namespace Legalizaciones.Web.Helpers
 
             Empleados[2] = new Empleado
             {
-                Area = "Contabilidad",
-                Nombre = "Empleado Tres",
-                Cedula = "7.845.256.666",
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "8.845.256.667",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3 // ROL Administracion Contabilidad
+                CargoId = 3 // ROL Administracion Contraloria
             };
 
 
