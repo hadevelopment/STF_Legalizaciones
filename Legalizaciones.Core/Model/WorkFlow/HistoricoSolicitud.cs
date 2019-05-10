@@ -12,12 +12,15 @@ namespace Legalizaciones.Model
     {
         [ForeignKey("Solicitud")]
         public int SolicitudId { get; set; }
+        public Solicitud Solicitud { get; set; }
 
         [ForeignKey("FlujoSolicitud")]
         public int FlujoSolicitudId { get; set; }
+        public FlujoSolicitud FlujoSolicitud { get; set; }
 
         [ForeignKey("PasoFlujoSolicitud")]
         public int PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud{ get; set; }
 
         public string Descripcion { get; set; }
     }

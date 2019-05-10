@@ -11,7 +11,9 @@ namespace Legalizaciones.Model.ItemSolicitud
     {
         [ForeignKey("Moneda")]
         public int MonedaId { get; set; }
+        public Moneda Moneda { get; set; }
+
         [Required]
-        public string Nombre { get; set; }
+        public string Valor { get; set; }
     }
 }

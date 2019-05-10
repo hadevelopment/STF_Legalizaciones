@@ -15,6 +15,9 @@ namespace Legalizaciones.Data.AppDbContext
         {
         }
 
+        //Configuracion
+        public DbSet<ConfiguracionGasto> ConfiguracionGasto { get; set; }
+
         //Localidades
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }
@@ -23,8 +26,10 @@ namespace Legalizaciones.Data.AppDbContext
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
+        public DbSet<Tasa> Tasa{ get; set; }
         //Objetos
         public DbSet<Banco> Banco { get; set; }
+        public DbSet<EmpleadoPermiso> EmpleadoPermiso { get; set; }
         public DbSet<Solicitud> Solicitud { get; set; }
         public DbSet<SolicitudGastos> SolicitudGastos { get; set; }
         public DbSet<Legalizacion> Legalizacion { get; set; }
@@ -35,6 +40,7 @@ namespace Legalizaciones.Data.AppDbContext
         public DbSet<PasoFlujoSolicitud> PasoFlujoSolicitud { get; set; }
         public DbSet<HistoricoSolicitud> HistoricoSolicitud { get; set; }
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
+        public DbSet<TipoPermiso> TipoPermiso{ get; set; }
         public DbSet<EstadoSolicitud> EstadoSolicitud { get; set; }
         public object Setting { get; private set; }
     }

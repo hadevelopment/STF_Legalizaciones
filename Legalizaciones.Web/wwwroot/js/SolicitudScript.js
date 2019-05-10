@@ -2,7 +2,6 @@
 
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    var montoServicio = 0;
 
 
 
@@ -151,7 +150,6 @@
         multiple: false
     });
 
-
     //Propiedades del dropdown monedas
     $("#Moneda").select2({
         multiple: false
@@ -162,40 +160,6 @@
         multiple: false
     });
 
-    //Proveedores
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Proveedores",
-        datatype: "Json",
-        success: function (data) {
-            $('#Proveedor').empty();
-            $('#Proveedor').append('<option selected value="">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                $('#Proveedor').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-            });
-        }
-    });
-
-    ////Servicios por Proveedor
-    $('#Proveedor').change(function () {
-
-        $.ajax({
-            type: "GET",
-            url: "/UNOEE/Servicios",
-            datatype: "Json",
-            data: { proveedorId: $('#Proveedor').val() },
-            success: function (data) {
-                $('#Servicio').empty();
-                $('#Servicio').append('<option selected value="">Seleccione...</option>');
-                $.each(data, function (index, value) {
-                    $('#Servicio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                });
-                //cargar precio del servicio
-                //LoadProductsData($("#Servicio option:selected").val());
-            }
-        });
-    });
-
     $("#Servicio").change(function () {
         var idServicio = $('#Servicio  option:selected').val();
         var nombreServicio = $('#Servicio  option:selected').text();
@@ -204,34 +168,6 @@
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
             $('#divZonas').addClass('display-none');
-
-            $.ajax({
-                type: "GET",
-                url: "/UNOEE/MontoServicio",
-                datatype: "Json",
-                data: { servicioId: idServicio },
-                success: function (data) {
-                    debugger;
-                    //aca debe ir la validacion que limite el campo del monto a la tarifa configurada del servicio
-                    //$('#Monto').val(data.monto);
-
-
-                    if (data.monto > 0 && data.monto !== '') {
-                        montoServicio = data.monto;
-                        $('#Monto').on('input', function () {
-                            var value = $(this).val();
-                            if ((value !== '') && (value.indexOf('.') === -1)) {
-                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
-                                //$('#AvisoMontoServicio').removeClass('display-none');
-                                //$('#MensajeAviso').text('El Monto Limite es de ' + data.monto);
-                            } else {
-                                //$('#AvisoMontoServicio').addClass('display-none');
-                                //$('#MensajeAviso').text('');
-                            }
-                        });
-                    }
-                }
-            });
         } else {
             $('#Monto').val("");
 
@@ -242,6 +178,8 @@
             $('#divGastosDescripcion').addClass('col-md-4');
             $('#divZonas').removeClass('display-none');
         }
+
+        consultarLimiteGasto();
 
         //LoadProductsData($("#Servicio option:selected").val());
     });
@@ -453,42 +391,57 @@
                 });
             }
         });
-    });
 
-    ////Obtener MONEDAS
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Localidad/Monedas",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $.each(data, function (index, value) {
-    //            $('#Moneda').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+
+        var dataZona = [];
+
+        $.ajax({
+            type: "GET",
+            url: "/UNOEE/OrigenDestinosPais",
+            dataType: "json",
+            data: { paisID: valor },
+            success: function (data) {
+                if (data.length > 0) {
+                    $.map(data, function (item) {
+                        var data1 = { label: item.nombre, value: item.nombre, id: item.id };
+                        dataZona.push(data1);
+                        //return { label: item.nombre, value: item.id };
+                    });
+                }
+
+                $("#ZonaOrigen").autocomplete({
+                    source: dataZona,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        console.log(ui.item.label);
+                    },
+                    select: function (e, ui) {
+                        $('#hdfZonaOrigen').val(ui.item.id);
+                        consultarLimiteGasto();
+                    }
+                });
+
+                $("#ZonaDestino").autocomplete({
+                    source: dataZona,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        console.log(ui.item.label);
+                    },
+                    select: function (e, ui) {
+                        $('#hdfZonaDestino').val(ui.item.id);
+                        consultarLimiteGasto();
+                    }
+                });
+            }
+        });
+
+        consultarLimiteGasto();
+
+    });
 
     //Propiedades del dropdown destinos
     $("#Destino").select2({
         multiple: false
-    });
-
-
-    $("#Pais").change(function () {
-        valorPais = $("#Pais").val();
-        $.ajax({
-            type: "GET",
-            url: "/Localidad/CiudadesPais",
-            datatype: "Json",
-            data: { paisID: valorPais },
-
-            success: function (data) {
-                $("#Ciudad").empty();
-                $('#Ciudad').append('<option selected value="">Seleccione...</option>');
-                $.each(data, function (index, value) {
-                    $('#Ciudad').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                });
-            }
-        });
     });
 
     //*****************************************   F I N ******************************************
@@ -521,7 +474,7 @@ function LoadProductsData(id) {
 }
 
 function validarGastos() {
-    debugger;
+    
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -530,8 +483,8 @@ function validarGastos() {
     var servicio = $("#Servicio option:selected").text();
     var ciudadId = $("#Ciudad option:selected").val();
     var ciudad = $("#Ciudad option:selected").text();
-    var origen = $("#ZonaOrigen option:selected").text();
-    var destino = $("#ZonaDestino option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
@@ -615,22 +568,86 @@ function validarGastos() {
 function validarViaje(boton) {
     var destino = $("#Destino option:selected").val();
     var zona = $("#Zona option:selected").val();
+    var moneda = $("#Moneda option:selected").val();
 
-    if (destino !== "" && zona !== "") {
+    if (destino !== "" && zona !== "" && moneda !== "") {
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
-
         
         return true;
 
     } else {
-        $("#mensajeViaje").html("Seleccione <strong>Destino y Zona Visitada</strong> para añadir gastos.");
+        $("#mensajeViaje").html("Seleccione <strong>Destino, Zona Visitada y Moneda</strong> para añadir gastos.");
         $('#mensajeValidacionViaje').show("slow");
         return false;
     }
 }
 
+
+function consultarLimiteGasto() {
+    var _monedaID = $("#Moneda option:selected").val();
+    var _paisID = $("#Pais option:selected").val();
+    var _tipoServicio = $("#Servicio option:selected").text();
+    var _tipoServicioID = $("#Servicio option:selected").val();
+    var _origenID = $("#hdfZonaOrigen").val();
+    var _destinoID = $("#hdfZonaDestino").val();
+    //console.log(monedaID + ', ' + paisID + ', ' + tipoServicioID + ', ' + origenID + ', ' + destinoID);
+
+    if (_monedaID !== "" && _paisID !== "" && _tipoServicioID !== "") {
+        if (_tipoServicio === "Transporte" || _tipoServicio === "Movilidad") {
+            $.ajax({
+                type: "GET",
+                url: "/ConfiguracionGasto/obtenerLimiteGastoRuta",
+                datatype: "Json",
+                data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID, origenID: _origenID, destinoID: _destinoID },
+                success: function (data) {
+                    
+                    if (data.monto > 0 && data.monto !== '') {
+                        $('#AvisoMontoServicio').removeClass('display-none');
+                        $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                            }
+                        });
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+                    }
+
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/ConfiguracionGasto/obtenerLimiteGasto",
+                datatype: "Json",
+                data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID },
+                success: function (data) {
+                    
+                    if (data.monto > 0 && data.monto !== '') {
+                        $('#AvisoMontoServicio').removeClass('display-none');
+                        $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                            }
+                        });
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+                    }
+                }
+            });
+        }
+    }
+}
 
 //*****************************************************************************//
 
@@ -639,7 +656,7 @@ function validarViaje(boton) {
 //*****************************************************************************//
 
 window.onload = function () {
-    if ($("#txProceso").val() != "A") {
+    if ($("#txProceso").val() !== "A") {
         CargarComboAlcrear();
     } else {
         CargarCombosAlEditar();
@@ -657,7 +674,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#Destino').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {
@@ -677,7 +694,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#Zona').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {
@@ -697,7 +714,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#MonedaId').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {

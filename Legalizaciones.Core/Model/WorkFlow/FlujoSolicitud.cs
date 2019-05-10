@@ -12,8 +12,10 @@ namespace Legalizaciones.Model
     {
         [ForeignKey("TipoSolicitud")]
         public int TipoSolicitudId { get; set; }
+        public TipoSolicitud TipoSolicitud { get; set; }
 
         [ForeignKey("PasoFlujoSolicitud")]
         public int PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud{ get; set; }
     }
 }

@@ -22,8 +22,8 @@
     <link rel="stylesheet" href="~/lib/legalizaciones/dist/css/AdminLTE.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/Ionicons/css/ionicons.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="~/lib/legalizaciones/lib/select2/dist/css/select2.min.css">
-    <link rel="stylesheet" href="~/lib/legalizaciones/lib/datatables.net-bs/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="~/lib/legalizaciones/lib/select2/dist/css/select2.css">
+    <link rel="stylesheet" href="~/lib/legalizaciones/lib/datatables.net-bs/css/dataTables.bootstrap.css">
     <link href="~/lib/legalizaciones/lib/datatables.net/css/jquery.dataTables.css" rel="stylesheet" />
     <link href="~/lib/jquery-ui/base/jquery.ui.autocomplete.css" rel="stylesheet" />
     <link href="~/css/toastr.min.css" rel="stylesheet" />
@@ -71,6 +71,12 @@
                         <a href='@Url.Action("", "")'>
                             <i class="fa fa-briefcase"></i> <br />
                             <span>Servicios</span>
+                        </a>
+                    </li>
+                    <li class="btnMenu">
+                        <a href='@Url.Action("Index", "ConfiguracionGasto")'>
+                            <i class="fa fa-gear"></i> <br />
+                            <span>Conf. Gastos</span>
                         </a>
                     </li>
                 </ul>
@@ -148,6 +154,7 @@
         <script src="~/lib/legalizaciones/dist/js/demo.js"></script>
         <script src="~/js/toastr.min.js"></script>
         <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+
     </environment>
     <script>
         toastr.options = {
@@ -181,7 +188,33 @@
         }
 
         $(document).ready(function () {
-            $('.myDataTable').DataTable();
+            $('.myDataTable').on('processing.dt', function (e, settings, processing) {
+                console.log('cargando');
+                //$('#processingIndicator').css('display', processing ? 'block' : 'none');
+            }).DataTable({
+                "processing": true,
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                pageLength: 10
+            });
         });
     </script>
 

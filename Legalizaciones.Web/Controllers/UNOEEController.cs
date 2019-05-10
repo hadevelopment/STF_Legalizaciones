@@ -116,9 +116,9 @@ namespace Legalizaciones.Web.Controllers
 
             Empleados[0] = new Empleado
             {
-                Area = "Ventas",
-                Nombre = "Empleado Uno",
-                Cedula = "6.845.256.666",
+                Area = "Empleado",
+                Nombre = "Juan Perez",
+                Cedula = "6.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -127,8 +127,8 @@ namespace Legalizaciones.Web.Controllers
 
             Empleados[1] = new Empleado
             {
-                Area = "Administracion",
-                Nombre = "Empleado Dos",
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
                 Cedula = "7.845.256.666",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
@@ -138,16 +138,78 @@ namespace Legalizaciones.Web.Controllers
 
             Empleados[2] = new Empleado
             {
-                Area = "Contabilidad",
-                Nombre = "Empleado Tres",
-                Cedula = "7.845.256.666",
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "7.845.256.667",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3 // ROL Administracion Contabilidad
+                CargoId = 3 // ROL Administracion Contraloria
             };
 
             return Json(Empleados);
+        }
+
+        public JsonResult Cargos()
+        {
+            Cargo[] Cargos = new Cargo[3];
+
+            Cargos[0] = new Cargo
+            {
+                Id = 1,
+                Nombre = "Empleado",
+                Descripcion = "Departamento de Ventas",
+                Estatus = 1
+            };
+
+            Cargos[1] = new Cargo
+            {
+                Id = 2,
+                Nombre = "Administracion Tesoreria",
+                Descripcion = "Departamento de Compras",
+                Estatus = 1
+            };
+
+            Cargos[2] = new Cargo
+            {
+                Id = 3,
+                Nombre = "Administracion Contraloria",
+                Descripcion = "Gerente de Ventas",
+                Estatus = 1
+            };
+
+            return Json(Cargos);
+        }
+
+        public JsonResult OrigenDestinosPais(string paisID)
+        {
+            OrigenDestino[] OrigenDestinos = new OrigenDestino[4];
+
+            OrigenDestinos[0] = new OrigenDestino
+            {
+                Id = 1,
+                Nombre = "Cali",
+            };
+
+            OrigenDestinos[1] = new OrigenDestino
+            {
+                Id = 2,
+                Nombre = "Bogota",
+            };
+
+            OrigenDestinos[2] = new OrigenDestino
+            {
+                Id = 3,
+                Nombre = "Medellin",
+            };
+
+            OrigenDestinos[3] = new OrigenDestino
+            {
+                Id = 4,
+                Nombre = "Cucuta",
+            };
+
+            return Json(OrigenDestinos);
         }
     }
 }

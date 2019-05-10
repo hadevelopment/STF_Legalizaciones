@@ -67,7 +67,7 @@ namespace Legalizaciones.Web.Controllers
              * HAY 3 empleados (del 1 al 3)
              * EMPLEADO = 1 Tiene ROL EMPLEADO ROL = 1
              * EMPLEADO = 2 Tiene ROL Adm. Tesoreria ROL = 2
-             * EMPLEADO = 3 Tiene ROL Adm. Contabilidad ROL = 3
+             * EMPLEADO = 3 Tiene ROL Adm. Contraloria ROL = 3
             */
 
             // Obtenemos datos del empleado en Session
@@ -79,9 +79,9 @@ namespace Legalizaciones.Web.Controllers
 
             ViewBag.cargo = cargo;
 
+            //Si es administrador puede ver todas las solicitudes
             if (cargo == "3")
             {
-
                  solicitudes = solicitudRepository.All().ToList();
                 //var q = from sol in dbContext.Solicitud
                 //        join es in dbContext.EstadoSolicitud on sol.Estatus  equals es.Id 
@@ -100,12 +100,13 @@ namespace Legalizaciones.Web.Controllers
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = objUNOEE.getEmpleadoCedula("6.845.256.666");
+                    item.Empleado = erp.getEmpleadoCedula(cedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
                 return View(solicitudes);
             }
+            //Si no es administrador solo puede ver las solicitudes creadas por el
             else
             {
                 solicitudes = solicitudRepository.All().Where(e => e.EmpleadoCedula == cedula).ToList();
@@ -133,13 +134,10 @@ namespace Legalizaciones.Web.Controllers
             {
                 cedula = HttpContext.Session.GetString("Usuario_Cedula");
                 cargo = HttpContext.Session.GetString("Usuario_Cargo");
-             
             }
 
-            if(cargo != "3")
-            {
-                empleado = objUNOEE.getEmpleadoCedula(cedula);
-            }
+            //Se obtiene el objeto empleado
+            empleado = objUNOEE.getEmpleadoCedula(cedula);
 
             Solicitud solicitud = new Solicitud();
             solicitud.Empleado = empleado;
@@ -176,22 +174,25 @@ namespace Legalizaciones.Web.Controllers
                     listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                     solicitud.SolicitudGastos = listaGastos;
 
-                    //Se guarda la carta de descuento en el directorio
-                    if (solicitud.Carta.FileName != "")
-                    {
-                        //Se sube al directorio
-                        SubirArchivo(solicitud.Carta, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
-
-                        //Se actualiza la ruta en BD
-                        solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
-                        solicitudRepository.Update(solicitud);
-                    }
-
                     //Se Registran los gastos de la Solicitud
                     foreach (SolicitudGastos item in listaGastos)
                     {
                         item.SolicitudId = solicitud.Id;
                         solicitudGastosRepository.Insert(item);
+                    }
+
+                    //Se guarda la carta de descuento en el directorio en caso de que exista
+                    if (solicitud.Carta != null)
+                    {
+                        if (solicitud.Carta.FileName != "")
+                        {
+                            //Se sube al directorio
+                            SubirArchivo(solicitud.Carta, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+
+                            //Se actualiza la ruta en BD
+                            solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                            solicitudRepository.Update(solicitud);
+                        }
                     }
 
                     TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
