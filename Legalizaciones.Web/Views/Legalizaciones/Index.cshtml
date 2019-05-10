@@ -101,7 +101,7 @@
                                 </td>
                                 <td>
 
-                                    @if (item.Estado == "Vencido")
+                                    @if (item.Estado == "Vencido" || item.Estado == "Legalizar")
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Legalizar" asp-route-id="@item.Id">Legalizar</a>
                                     }
@@ -116,6 +116,10 @@
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
                                             <span class="fa fa-pencil"></span>
                                         </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
                                     }
                                     @if (!string.IsNullOrEmpty(item.RutaArchivo))
                                     {

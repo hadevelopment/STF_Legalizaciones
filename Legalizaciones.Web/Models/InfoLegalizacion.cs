@@ -23,5 +23,6 @@ namespace Legalizaciones.Web.Models
         public string FechaVencimiento { get; set; }
         public int DiasTrascurridos { get; set; }
         public string RutaArchivo { get; set; }
+        public string Accion { get; set; }
     }
 }

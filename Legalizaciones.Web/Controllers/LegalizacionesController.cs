@@ -15,8 +15,18 @@ namespace Legalizaciones.Web.Controllers
         {
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
-            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",usuarioCedula); ;
+           
+            string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
+            string usuarioCedula = string.Empty;
+            if (usuarioCargo == "3")
+            {
+                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion", string.Empty); 
+            }
+            else
+            {
+                usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
+                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+            }
             return View(model);
         }
 
@@ -31,6 +41,11 @@ namespace Legalizaciones.Web.Controllers
         }
 
         public ActionResult Legalizar(int idSolicitud = 0)
+        {
+            return RedirectToAction("Index", "Legalizaciones");
+        }
+
+        public ActionResult Aprobar(int idSolicitud = 0)
         {
             return RedirectToAction("Index", "Legalizaciones");
         }

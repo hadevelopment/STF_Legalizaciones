@@ -34,16 +34,19 @@ namespace Legalizaciones.Web.Engine
                 if (row[7] != DBNull.Value)
                     item.EmpleadoCedula = row[7].ToString();
                 if (row[8] != DBNull.Value)
-                    item.Estado = row[8].ToString();
+                    item.FechaEntrega = row[8].ToString().Substring(0, 10);
                 if (row[9] != DBNull.Value)
-                    item.FechaEntrega = row[9].ToString().Substring(0, 10);
+                    item.FechaVencimiento = row[9].ToString().Substring(0, 10);
                 if (row[10] != DBNull.Value)
-                    item.FechaVencimiento = row[10].ToString().Substring(0, 10);
+                    item.DiasTrascurridos = Convert.ToInt32(row[10]);
                 if (row[11] != DBNull.Value)
-                    item.DiasTrascurridos = Convert.ToInt32(row[11]);
+                    item.Estado = row[11].ToString();
+                if (row[12] != DBNull.Value)
+                    item.Accion = row[12].ToString();
+                
 
                 item.IdDocErp = Aleatorio(n);
-                item.ConsecutivoErp = Aleatorio(n);
+                item.ConsecutivoErp = Aleatorio(n + 2);
                 item.Beneficiario = "Efrain Mejias C";
                 list.Insert(n, item);
                 n++;
