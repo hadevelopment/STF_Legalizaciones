@@ -21,12 +21,12 @@
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
                 <h1 class="box-title">Mis  Solicitudes de Anticipo </h1>
-
-                @*@if (ViewBag.cargo != "3")
-        { //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud*@
-
                 <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
-                @*}*@
+                @if (ViewBag.cargo != "3")
+                { //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+
+
+                }
             </div>
 
 
@@ -117,31 +117,7 @@
             </div>
 
 
-            <div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
-                            <div class="box-tools pull-right">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-horizontal">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 </div>

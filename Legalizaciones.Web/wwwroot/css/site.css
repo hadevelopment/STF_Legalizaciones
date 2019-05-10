@@ -11,6 +11,7 @@
 
 a {
     color: #333;
+    cursor: pointer;
 }
 
 .btn {
@@ -185,4 +186,40 @@ i {
     100% {
         transform: translate(19px, 0);
     }
+}
+
+/* Body Custom */
+
+body {
+    height: 100vh !important;
+    min-height: 100% !important;
+    display: flex;
+    flex-flow: column;
+}
+
+
+/* Nav Item */
+
+.nav-item {
+   text-align: center;
+}
+
+
+/* Boostrap Modal Customs */
+.close {
+    font-weight: 900 !important;
+    opacity: inherit !important;
+}
+
+/* Custom Layout */
+
+.container-fluid {
+    height: auto;
+    flex: 1;
+    width: 100%;
+    padding-top: 15px;
+}
+
+.navbar-header {
+    margin-bottom: inherit!important;
 }

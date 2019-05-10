@@ -2,16 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Legalizaciones.Data.Repository;
+using Legalizaciones.Interface;
 using Legalizaciones.Model;
 using Legalizaciones.Model.Empresa;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Legalizaciones.Web.Controllers
 {
     public class UNOEEController : Controller
     {
+
+        private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
+
+
+        public UNOEEController(IEmpleadoPermisoRepository _empleadoPermisoRepository)
+        {
+            this.empleadoPermisoRepository = _empleadoPermisoRepository;
+        }
         public IActionResult Index()
         {
             return View();
@@ -110,7 +121,7 @@ namespace Legalizaciones.Web.Controllers
             return Json(lstCentroCosto);
         }
 
-        public JsonResult Empleados()
+        public JsonResult Empleados(Boolean filtroCedula)
         {
             Empleado[] Empleados = new Empleado[3];
 
@@ -146,6 +157,13 @@ namespace Legalizaciones.Web.Controllers
                 Telefono = "(1) 560 00100-3",
                 CargoId = 3 // ROL Administracion Contraloria
             };
+
+            if (filtroCedula)
+            {
+                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == HttpContext.Session.GetString("Usuario_Cedula")).ToList();
+                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula));
+                return Json(list);
+            }
 
             return Json(Empleados);
         }

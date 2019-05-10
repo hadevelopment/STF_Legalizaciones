@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
  <PropertyGroup>
    <TargetFramework>netcoreapp2.0</TargetFramework>
@@ -37,8 +37,12 @@
    <ProjectReference Include="..\Legalizaciones.Data\Legalizaciones.Data.csproj" />
  </ItemGroup>
 
+
  <ItemGroup>
    <Folder Include="wwwroot\files\24296342\1\facturas\" />
  </ItemGroup>
+
+ <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
+
 
 </Project>

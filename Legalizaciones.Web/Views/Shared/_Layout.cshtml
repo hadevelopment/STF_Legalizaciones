@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="~/css/Banner.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/dist/css/AdminLTE.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/Ionicons/css/ionicons.css" />
+    <link rel="stylesheet" href="~/js/Helpers/Loader/loader.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/font-awesome/css/font-awesome.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/select2/dist/css/select2.css">
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/datatables.net-bs/css/dataTables.bootstrap.css">
@@ -31,6 +32,7 @@
     <link href="~/css/site.css" rel="stylesheet" />
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
+    <div class="loading">Loading&#8230;</div>
     <div id="Banner">
         <div class="row" style="text-align:center">
             <img src="~/images/logo.png" />
@@ -38,13 +40,6 @@
     </div>
 
     <header class="main-header">
-        <!-- Logo -->
-        @*<a class="nav-link text-dark logo" asp-area="" asp-controller="Home" asp-action="Index">
-                <!-- mini logo for sidebar mini 50x50 pixels -->
-                <span class="logo-mini"><b>STF</b></span>
-                <!-- logo for regular state and mobile devices -->
-                <span class="logo-lg"><b>STF</b>Legalizaciones</span>
-            </a>*@
         <nav class="navbar-header">
 
             <div class="menu-site-left">
@@ -62,7 +57,7 @@
                         </a>
                     </li>
                     <li class="btnMenu">
-                        <a href='@Url.Action("", "")'>
+                        <a href='@Url.Action("Index", "Legalizaciones")'>
                             <i class="fa fa-archive"></i> <br />
                             <span>Legalizaciones</span>
                         </a>
@@ -89,50 +84,19 @@
                     <li class="dropdown user user-menu" style="right:10px;">
                         <!-- Menu Toggle Button -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <!-- The user image in the navbar-->
                             <i class="fa fa-user-circle"></i>
-                            <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                            <span class="hidden-xs">@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Nombre")</span><br />
-                            <span class="hidden-xs">@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Area")</span>
+                            <br />
+
+                            <span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Nombre")</span>
+                            <span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Area")</span>
                         </a>
-                        @*<ul class="dropdown-menu">
-                            <!-- The user image in the menu -->
-                            <li class="user-header">
-                                <img src="~/lib/legalizaciones/dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
-                                <p>
-                                    
-                                    Admin Innova4j - Master
-                                    <small>Member since Mar. 2019</small>
-                                </p>
-                            </li>
-                            <!-- Menu Body -->
-                            <li class="user-body">
-                                <div class="row">
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Followers</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Sales</a>
-                                    </div>
-                                    <div class="col-xs-4 text-center">
-                                        <a href="#">Friends</a>
-                                    </div>
-                                </div>
-                                <!-- /.row -->
-                            </li>
-                            <!-- Menu Footer-->
-                            <li class="user-footer">
-                                <div class="pull-left">
-                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
-                                </div>
-                                <div class="pull-right">
-                                    <a href="#" class="btn btn-default btn-flat">Sign out</a>
-                                </div>
-                            </li>
-                        </ul>*@
+                        <ul class="dropdown-menu">
+                            <li><a href='@Url.Action("PreferenciasLegalizacion", "Empleado", new { cedula = HttpContextAccessor.HttpContext.Session.GetString("Usuario_Cedula") })'><span class="fa fa-gear"></span>Configuracion de Permisos</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/auth/logout"><i class="icon-off"></i> Cerrar Session</a></li>
+                        </ul>
                     </li>
                 </ul>
-            </div>
         </nav>
     </header>
 
@@ -182,6 +146,7 @@
         {
             @:ejecutarAlerta("@alerta.ToString().Split('-')[0].Trim()", "@alerta.ToString().Split('-')[1].Trim()");
         }
+
 
         function ejecutarAlerta(a, b) {
             toastr[a](b);

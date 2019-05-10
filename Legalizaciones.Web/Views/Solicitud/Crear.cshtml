@@ -242,6 +242,7 @@
                         <div class="box-tools pull-right">
                         </div>
                     </div>
+                    @Html.Hidden("hdfRowIndex", new { @id = "hdfRowIndex"})
                     <form asp-controller="SolicitudGastos" asp-action="Asignar" method="post" id="frmAsignarGastos" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="form-horizontal">
@@ -255,9 +256,9 @@
                                         @Html.DropDownList("Ciudad", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Ciudad" })
                                     </div>
                                     @*<div class="col-md-4">
-                                            <label class="control-label">Proveedor</label>
-                                            @Html.DropDownList("Proveedor", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Proveedor" })
-                                        </div>*@
+                            <label class="control-label">Proveedor</label>
+                            @Html.DropDownList("Proveedor", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Proveedor" })
+                        </div>*@
 
                                 </div>
                                 <br />
@@ -275,14 +276,14 @@
                                 <div class="row">
                                     <div class="display-none" id="divZonas">
                                         @*<div class="col-md-4">
-                                                <label class="control-label">Origen</label>
-                                                @Html.DropDownList("ZonaOrigen", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaOrigen" })
-                                            </div>
+                                <label class="control-label">Origen</label>
+                                @Html.DropDownList("ZonaOrigen", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaOrigen" })
+                            </div>
 
-                                            <div class="col-md-4">
-                                                <label class="control-label">Destino</label>
-                                                @Html.DropDownList("ZonaDestino", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaDestino" })
-                                            </div>*@
+                            <div class="col-md-4">
+                                <label class="control-label">Destino</label>
+                                @Html.DropDownList("ZonaDestino", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaDestino" })
+                            </div>*@
 
                                         <div class="col-md-4">
                                             <label class="control-label">Origen</label>
@@ -313,11 +314,14 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <a id="btnUpd" class="btn btn-primary display-none" onclick="actualizarGastos();">
+                                <span id="addX" class="glyphicon glyphicon-plus"></span>Actualizar
+                            </a>
                             <a id="btnAdd" class="btn btn-primary" onclick="validarGastos();">
-                                <span class="glyphicon glyphicon-plus"></span> Agregar
+                                <span id="addX" class="glyphicon glyphicon-plus"></span>Agregar
                             </a>
                             <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
+                                <span class="glyphicon glyphicon-off"></span>Cerrar
                             </a>
                         </div>
                     </form>
@@ -326,6 +330,9 @@
         </div>
     </div>
 </div>
+
+
+
 
 @section scripts {
     <script src="~/js/jquery-ui-1.8.2.js"></script>

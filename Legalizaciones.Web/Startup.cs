@@ -12,15 +12,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-
-
-
 using DinkToPdf;
 using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Legalizaciones.Web.Engine;
+
 
 namespace Legalizaciones
 {
@@ -45,6 +44,9 @@ namespace Legalizaciones
             services.AddTransient<ICiudadRepository, CiudadRepository>();
             services.AddTransient<IPaisRepository, PaisRepository>();
             //ISolicitud
+          
+            //registering repositories to service 
+            services.AddTransient<IEmpleadoPermisoRepository, EmpleadoPermisoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
@@ -53,7 +55,7 @@ namespace Legalizaciones
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
-
+            //Iempl
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
 
@@ -64,6 +66,8 @@ namespace Legalizaciones
             services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
             services.AddSession();
 
+            //services.Configure<ProjectSettings>(Configuration.GetSection("ProjectSettings"));
+            EngineDb.DefaultConnection = Configuration["ConnectionStrings:Default"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Legalizaciones.Data.Repository
 {
-    public class ÉmpleadoPermisoRepository : BaseRepository<EmpleadoPermiso>, IEmpleadoPermisoRepository
+    public class EmpleadoPermisoRepository : BaseRepository<EmpleadoPermiso>, IEmpleadoPermisoRepository
     {
-        public ÉmpleadoPermisoRepository(AppDataContext context) : base(context)
+        public EmpleadoPermisoRepository(AppDataContext context) : base(context)
         {
 
         }

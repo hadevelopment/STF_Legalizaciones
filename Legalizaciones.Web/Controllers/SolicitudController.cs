@@ -98,11 +98,18 @@ namespace Legalizaciones.Web.Controllers
                 //    };
 
 
-                foreach (var item in solicitudes)
+
+               /* foreach (var item in solicitudes)
                 {
                     item.Empleado = erp.getEmpleadoCedula(cedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
+
+              /*  foreach (var item in solicitudes)
+                {
+                    item.Empleado = empleadoRepository.All().Where(e => e.Cedula == cedula).ToList().FirstOrDefault();
+                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoID.ToString()));
+                }*/
 
                 return View(solicitudes);
             }
