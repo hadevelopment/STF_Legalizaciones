@@ -153,10 +153,7 @@
         }
 
         $(document).ready(function () {
-            $('.myDataTable').on('processing.dt', function (e, settings, processing) {
-                console.log('cargando');
-                //$('#processingIndicator').css('display', processing ? 'block' : 'none');
-            }).DataTable({
+            $('.myDataTable').DataTable({
                 "processing": true,
                 language: {
                     "decimal": "",
