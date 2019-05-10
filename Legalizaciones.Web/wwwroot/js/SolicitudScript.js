@@ -638,7 +638,7 @@ function ShowModalUpdate()
         type: "GET",
         url: "/Localidad/CiudadesPais",
         datatype: "Json",
-        data: { paisID: valor },
+        data: { paisID: 1 },
         success: function (data) {
             $("#Ciudad").empty();
             $('#Ciudad').append('<option selected value="">Seleccione...</option>');
@@ -647,6 +647,24 @@ function ShowModalUpdate()
             });
         }
     });
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/Servicios",
+        datatype: "Json",
+        success: function (data) {
+            $("#Servicio").empty();
+            $('#Servicio').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                //$("#Destino").select2();
+                $('#Servicio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    $('#Monto').val("");
+    $('#ZonaOrigen').val("");
+    $('#ZonaDestino').val("");
 
     $('#gastosModal').modal('show');
 } 
