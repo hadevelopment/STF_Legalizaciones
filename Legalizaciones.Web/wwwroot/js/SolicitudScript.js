@@ -4,8 +4,6 @@
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     var montoServicio = 0;
 
-
-
     $("#btnSubmit").click(function () {
 
         var list = [];
@@ -73,7 +71,6 @@
     });
 
 
-
     //Obtener zonas
     //$.ajax({
     //    type: "GET",
@@ -88,9 +85,7 @@
     //});
 
     //Propiedades del dropdown concepto
-    $("#Zona").select2({
-        multiple: false
-    });
+    
 
     //Obtener centro de operaciones
     //$.ajax({
@@ -211,7 +206,7 @@
                 datatype: "Json",
                 data: { servicioId: idServicio },
                 success: function (data) {
-                    debugger;
+                    //debugger;
                     //aca debe ir la validacion que limite el campo del monto a la tarifa configurada del servicio
                     //$('#Monto').val(data.monto);
 
@@ -410,6 +405,10 @@
                     else
                         $('#Zona').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 });
+
+                $("#Zona").select2({
+                    multiple: false
+                });
             }
         });
 
@@ -520,8 +519,10 @@ function LoadProductsData(id) {
     });
 }
 
+var rowIndex = 0;
+
 function validarGastos() {
-    debugger;
+    //debugger;
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -530,17 +531,17 @@ function validarGastos() {
     var servicio = $("#Servicio option:selected").text();
     var ciudadId = $("#Ciudad option:selected").val();
     var ciudad = $("#Ciudad option:selected").text();
-    var origen = $("#ZonaOrigen option:selected").text();
-    var destino = $("#ZonaDestino option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
-
-            var row = `<tr>
+            rowIndex = rowIndex + 1;
+            var row = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
-                    <td class="PaisId display-none">${paisId}</td>
-                    <td class="Pais">${pais}</td>
+                    <td class="paisId display-none">${paisId}</td>
+                    <td class="pais">${pais}</td>
                     <td class="servicioId display-none">${servicioId}</td>
                     <td class="servicio">${servicio}</td>
                     <td class="ciudadId display-none">${ciudadId}</td>
@@ -551,6 +552,9 @@ function validarGastos() {
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                        <a class="btn btn-danger btn-sm btnEdit">
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex${rowIndex}');" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -573,11 +577,11 @@ function validarGastos() {
 
     } else {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
-
-            var row2 = `<tr>
+            rowIndex= rowIndex + 1;
+            var row2 = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
-                    <td class="PaisId display-none">${paisId}</td>
-                    <td class="Pais">${pais}</td>
+                    <td class="paisId display-none">${paisId}</td>
+                    <td class="pais">${pais}</td>
                     <td class="servicioId display-none">${servicioId}</td>
                     <td class="servicio">${servicio}</td>
                     <td class="ciudadId display-none">${ciudadId}</td>
@@ -588,6 +592,9 @@ function validarGastos() {
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                         <a class="btn btn-danger btn-sm btnEdit">
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex${rowIndex}');" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -612,7 +619,72 @@ function validarGastos() {
 
 }
 
+function actualizarGastos(){
+    var value = $('#hdfRowIndex').val();
+
+    var fechaGasto = $("#FechaGasto").val();
+    var paisId = $("#Pais option:selected").val();
+    var pais = $("#Pais option:selected").text();
+    var servicioId = $("#Servicio option:selected").val();
+    var servicio = $("#Servicio option:selected").text();
+    var ciudadId = $("#Ciudad option:selected").val();
+    var ciudad = $("#Ciudad option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
+    var monto = $("#Monto").val();
+
+
+    $('.' + value + ' .fechaGasto').text(fechaGasto);
+    $('.' + value + ' .paisId').text(paisId);
+    $('.' + value + ' .pais').text(pais);
+    $('.' + value + ' .servicioId').text(servicioId);
+    $('.' + value + ' .servicio').text(servicio);
+    $('.' + value + ' .ciudadId').text(ciudadId);
+    $('.' + value + ' .ciudad').text(ciudad);
+    $('.' + value + ' .origen').text(origen);
+    $('.' + value + ' .destino').text(destino);
+    $('.' + value + ' .monto').text(monto);
+
+    $('#gastosModal').modal('hide');
+}
+
+
+
+function ShowModalUpdate(value)
+{
+
+    var fechaGasto = $('.' + value + ' .fechaGasto').text();
+    var paisId = $('.' + value + ' .paisId').text();
+    var pais = $('.' + value + ' .pais').text();
+    var servicioId = $('.' + value + ' .servicioId').text();
+    var servicio = $('.' + value + ' .servicio').text();
+    var ciudadId = $('.' + value + ' .ciudadId').text();
+    var ciudad = $('.' + value + ' .ciudad').text();
+    var origen = $('.' + value + ' .origen').text();
+    var destino = $('.' + value + ' .destino').text();
+    var monto = $('.' + value + ' .monto').text();
+
+    console.log(fechaGasto + ', ' + paisId + ', ' + pais + ', ' + servicioId + ', ' + servicio + ', ' + ciudadId + ', ' + ciudad + ', ' + origen + ', ' + destino + ', ' + monto);
+
+    $('#FechaGasto').val(fechaGasto);
+    $("#Pais").val(paisId);
+    $("#Servicio").val(paisId);
+    $("#Ciudad").val(paisId);
+    $('#ZonaOrigen').val(origen);
+    $('#ZonaDestino').val(destino);
+    $('#Monto').val(monto);
+
+    $('#btnAdd').addClass('display-none');
+    $('#btnUpd').removeClass('display-none');
+    $('#hdfRowIndex').val(value);
+    
+    $('#gastosModal').modal('show');
+} 
+
 function validarViaje(boton) {
+    $('#btnAdd').removeClass('display-none');
+    $('#btnUpd').addClass('display-none');
+
     var destino = $("#Destino option:selected").val();
     var zona = $("#Zona option:selected").val();
 
