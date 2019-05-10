@@ -98,12 +98,13 @@ namespace Legalizaciones.Web.Controllers
                 //    };
 
 
-                foreach (var item in solicitudes)
+               /* foreach (var item in solicitudes)
                 {
                     item.Empleado = objUNOEE.getEmpleadoCedula("6.845.256.666");
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
+                */
                 return View(solicitudes);
             }
             else
