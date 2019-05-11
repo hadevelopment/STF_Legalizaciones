@@ -60,6 +60,40 @@ namespace Legalizaciones.Web.Controllers
 
         }
 
+
+        [HttpGet]
+        public ActionResult CreateLegalizacionesPDF(int id)
+        {
+            var globalSettings = new GlobalSettings
+            {
+                ColorMode = ColorMode.Color,
+                Orientation = Orientation.Portrait,
+                PaperSize = PaperKind.A4,
+                Margins = new MarginSettings { Top = 10 },
+                DocumentTitle = "PDF Report",
+                Out = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\solicitud.pdf"
+            };
+
+            var objectSettings = new ObjectSettings
+            {
+                PagesCount = true,
+                Page = $"http://{Request.Host}/Solicitud/VisorLegalizacionPDF?id=" + id.ToString(),
+                WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
+                HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
+            };
+
+            var pdf = new HtmlToPdfDocument()
+            {
+                GlobalSettings = globalSettings,
+                Objects = { objectSettings }
+            };
+
+            var file = _converter.Convert(pdf);
+
+            return Download("Solicitud.pdf");
+
+        }
+
         [HttpGet]
         public ActionResult ExportDatosSolicitudExcel()
         {
