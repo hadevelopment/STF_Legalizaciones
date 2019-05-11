@@ -45,9 +45,9 @@ namespace Legalizaciones.Web.Engine
                 if (row[10] != DBNull.Value)
                     item.DiasTrascurridos = Convert.ToInt32(row[10]);
                 if (row[11] != DBNull.Value)
-                    item.Estado = row[11].ToString();
+                    item.EstadoId = Convert.ToInt32(row[11]);
                 if (row[12] != DBNull.Value)
-                    item.Accion = row[12].ToString();
+                    item.Estado = row[12].ToString();
 
                 Empleado empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
 

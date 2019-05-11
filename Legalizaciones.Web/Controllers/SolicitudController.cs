@@ -168,12 +168,13 @@ namespace Legalizaciones.Web.Controllers
                     List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                     solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
                     solicitud.FechaCreacion = DateTime.Now;
-                    solicitud.Estatus = 1;
-                    solicitud.TipoSolicitudID = 1;
+                    solicitud.Estatus = 1;//Activa
+                    solicitud.EstadoId = 1;//Estado Sin Legalizar
+                    solicitud.TipoSolicitudID = 1;//Anticipo
 
                     //Calculo Fecha de Vencimiento de la Solicitud
                     var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
-                    solicitud.FechaVencimiento = solicitud.FechaDesde.AddDays(DiasHabiles);
+                    solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
 
                     //Se Registra la Solicitud
                     solicitudRepository.Insert(solicitud);

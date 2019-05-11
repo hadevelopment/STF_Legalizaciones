@@ -100,7 +100,7 @@ namespace Legalizaciones.Web.Controllers
             var OLegalizaciones = new LegalizacionesViewModel
             {
                 AnticipoId = Osolicitud.Id,
-                DocumentoERPID = 11111,
+                DocumentoERPID = 0,
                 FechaRegistro = Osolicitud.FechaSolicitud,
                 FechaVencimiento = Osolicitud.FechaVencimiento,
                 Concepto = Osolicitud.Concepto,
@@ -131,8 +131,6 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-
-
                 //creo mi objeto de legalizaciones del header
                 var OLegalizacionHeader = new Legalizacion
                 {
@@ -145,6 +143,15 @@ namespace Legalizaciones.Web.Controllers
                     BancoId = legalizacion.BancoId
                 };
                 legalizacionRepository.Insert(OLegalizacionHeader);
+
+
+                //Se actualiza el estado de la solicitud a Legalizada
+                if(OLegalizacionHeader.Id != null && OLegalizacionHeader.Id > 0)
+                {
+                    var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
+                    solicitud.EstadoId = 2;//Legalizada
+                    solicitudRepository.Update(solicitud);
+                }
 
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
                 var LegalizacionGastos = JsonConvert.DeserializeObject<List<LegalizacionGastos>>(legalizacion.GastosJSON);

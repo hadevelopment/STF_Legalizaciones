@@ -162,24 +162,22 @@
                             @Html.ValidationMessageFor(model => model.BancoId, "Seleccione un Banco.", new { @class = "text-danger" })
                         }
                     </div>
-
                 </div>
 
                 <div class="row margin-bottom">
-
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
                         @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })
                     </div>
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.EditorFor(model => model.FechaDesde, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                        @Html.EditorFor(model => model.FechaDesde, new { htmlAttributes = new { @class = "form-control datepicker fechaDesde", @required = "required", @id="FechaDesde" } })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.EditorFor(model => model.FechaHasta, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                        @Html.EditorFor(model => model.FechaHasta, new { htmlAttributes = new { @class = "form-control datepicker fechaHasta", @required = "required", @id = "FechaHasta" } })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
 
@@ -372,7 +370,14 @@
                             <thead>
                                 <tr>
                                     @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                    <td class="display-none">FechaaGasto</td> <td class="display-none">MotivoId</td> <td class="display-none">PaisId</td> <td class="display-none">CiudadId</td> <td class="display-none">TipoServicioId</td> <td class="display-none">ProveedorId</td><td class="display-none">Concepto</td><td class="display-none">Valor</td>
+                                    <td class="display-none">FechaaGasto</td>
+                                    <td class="display-none">MotivoId</td>
+                                    <td class="display-none">PaisId</td>
+                                    <td class="display-none">CiudadId</td>
+                                    <td class="display-none">TipoServicioId</td>
+                                    <td class="display-none">ProveedorId</td>
+                                    <td class="display-none">Concepto</td>
+                                    <td class="display-none">Valor</td>
                                     <td>IDGasto</td>
                                     <td>Fecha</td>
                                     <td>Centro Oper.</td>
@@ -386,12 +391,12 @@
                                     <td>Concepto Gasto</td>
                                     <td>Valor</td>
                                     @*<td>IVA</td>
-                                    <td>Ret IVA</td>
-                                    <td>Ret Serv</td>
-                                    <td>Ret Fuent</td>
-                                    <td>ICA</td>
-                                    <td>Neto</td>
-                                    <td>IVA Teoric</td>*@
+                                        <td>Ret IVA</td>
+                                        <td>Ret Serv</td>
+                                        <td>Ret Fuent</td>
+                                        <td>ICA</td>
+                                        <td>Neto</td>
+                                        <td>IVA Teoric</td>*@
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
@@ -470,71 +475,71 @@
 
 
 
-                        <div class="class=" row margin-bottom"">
-                            <p>
-                                <br />
-                            </p>
-                        </div>
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
 
-                        <div class="modal-body">
-                            <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
 
-                                <div class="row ListadoGastos">
-                                    <div class="col-md-12">
-                                        <table class="col-md-12">
-                                            <thead>
-                                                <tr>
-                                                    <td>ID</td>
-                                                    <td>Fecha</td>
-                                                    <td>Pais</td>
-                                                    <td>servicio</td>
-                                                    <td>Ciudad</td>
-                                                    <td>Origen</td>
-                                                    <td>Destino</td>
-                                                    <td>Valor</td>
-                                                    <td>Acciones</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (Model.SolicitudGastos.Count > 0)
+                            <div class="row ListadoGastos">
+                                <div class="col-md-12">
+                                    <table class="col-md-12">
+                                        <thead>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>Fecha</td>
+                                                <td>Pais</td>
+                                                <td>servicio</td>
+                                                <td>Ciudad</td>
+                                                <td>Origen</td>
+                                                <td>Destino</td>
+                                                <td>Valor</td>
+                                                <td>Acciones</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.SolicitudGastos.Count > 0)
+                                            {
+                                                @foreach (var item in Model.SolicitudGastos)
                                                 {
-                                                    @foreach (var item in Model.SolicitudGastos)
-                                                    {
 
-                                                        <tr>
-                                                            <td class="col-md-1 ">@item.Id</td>
-                                                            <td class="col-md-3 "><small><small>@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</small></small></td>
-                                                            <td class="col-md-1 ">@item.PaisId</td>
-                                                            <td class="col-md-1 ">@item.ServicioId</td>
-                                                            <td class="col-md-1 ">@item.CiudadId</td>
-                                                            <td class="col-md-1 ">@item.Origen</td>
-                                                            <td class="col-md-1 ">@item.Destino</td>
-                                                            <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
-                                                            <td class="col-md-1 ">
-                                                                <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen,@item.Destino,@item.Monto);">
-                                                                    <small><small><small>Seleccionar</small></small></small>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                    }
+                                                    <tr>
+                                                        <td class="col-md-1 ">@item.Id</td>
+                                                        <td class="col-md-3 "><small><small>@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</small></small></td>
+                                                        <td class="col-md-1 ">@item.PaisId</td>
+                                                        <td class="col-md-1 ">@item.ServicioId</td>
+                                                        <td class="col-md-1 ">@item.CiudadId</td>
+                                                        <td class="col-md-1 ">@item.Origen</td>
+                                                        <td class="col-md-1 ">@item.Destino</td>
+                                                        <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                                        <td class="col-md-1 ">
+                                                            <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen,@item.Destino,@item.Monto);">
+                                                                <small><small><small>Seleccionar</small></small></small>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                 }
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
+                            </div>
 
 
 
 
-                                <div class="row display-none" id="mensajeValidacionGastos">
-                                    <div class="col-sm-12">
-                                        <div class="alert alert-warning" role="alert">
-                                            <span id="mensajeGastos"></span>
-                                        </div>
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -542,7 +547,7 @@
     </div>
 </div>
 
- @*Formulario modal de envio de reporte*@
+@*Formulario modal de envio de reporte*@
 <div class="row">
     <div class="col-md-9">
         <div class="modal fade bs-example-modal-sm" id="EnviarReporteModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -560,96 +565,96 @@
 
 
 
-                        <div class="class=" row margin-bottom"">
-                            <p>
-                                <br />
-                            </p>
-                        </div>
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
 
-                        <div class="modal-body">
-                            <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
 
-                                <div class="row">
+                            <div class="row">
 
-                                    <div class="row margin-bottom ">
+                                <div class="row margin-bottom ">
+                                    <div class="col-md-12">
                                         <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ZonasVisitadas, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextBoxFor(model => model.ZonasVisitadas, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
-                                            </div>
+                                            @Html.LabelFor(model => model.ZonasVisitadas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.ZonasVisitadas, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
                                         </div>
                                     </div>
-
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.Objetivo, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextBoxFor(model => model.Objetivo, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ActividadesDesarrolladas, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.ActividadesDesarrolladas, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                            <div class="col-md-1"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ResultadosObtenidos, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.ResultadosObtenidos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.Compromisos, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.Compromisos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                     </div>
-
-                                    <div class="row margin-bottom col-md-12">
-                                        <div class="box-tools pull-right">
-                                            <a id="btnAddNuevoGasto" class="btn btn-primary" onclick="ImprimirReporte();">
-                                                <span class="glyphicon glyphicon-plus"></span> EnviarReporte
-                                            </a>
-                                        </div>
-                                    </div>
-
                                 </div>
 
 
-
-
-                                <div class="row display-none" id="mensajeValidacionGastos">
-                                    <div class="col-sm-12">
-                                        <div class="alert alert-warning" role="alert">
-                                            <span id="mensajeGastos"></span>
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Objetivo, htmlAttributes: new { @class = "text-left col-md-12" })
                                         </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.Objetivo, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ActividadesDesarrolladas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ActividadesDesarrolladas, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ResultadosObtenidos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ResultadosObtenidos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Compromisos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.Compromisos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom col-md-12">
+                                    <div class="box-tools pull-right">
+                                        <a id="btnAddNuevoGasto" class="btn btn-primary" onclick="ImprimirReporte();">
+                                            <span class="glyphicon glyphicon-plus"></span> EnviarReporte
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -660,40 +665,40 @@
 
 
 @section scripts {
-    <script src="https://code.jquery.com/ui/1.8.2/jquery-ui.js"></script>
+    <script src="~/js/jquery-ui-1.8.2.js"></script>
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
     <script src="~/js/LegalizacionesScript.js"></script>
-    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
     <script src="~/js/tableToJSON.js"></script>
 
 
     <script>
-            //$(function () {
-            //    $('#tableGastos').DataTable();
+                            //$(function () {
+                            //    $('#tableGastos').DataTable();
 
 
-            //    function cargarGastos() {
-            //        var table = $('.tableGastos').tableToJSON({
-            //            ignoreColumns: [16]
-            //        });
+                            //    function cargarGastos() {
+                            //        var table = $('.tableGastos').tableToJSON({
+                            //            ignoreColumns: [16]
+                            //        });
 
-            //        if (table.length > 0) {
-            //            $("#mensajeRegistro").text("");
-            //            $('#mensajeValidacionRegistro').hide("slow");
-            //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
-            //            return true;
-            //        } else {
-            //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-            //            $('#mensajeValidacionRegistro').show("slow");
-            //            return false;
-            //        }
+                            //        if (table.length > 0) {
+                            //            $("#mensajeRegistro").text("");
+                            //            $('#mensajeValidacionRegistro').hide("slow");
+                            //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                            //            return true;
+                            //        } else {
+                            //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                            //            $('#mensajeValidacionRegistro').show("slow");
+                            //            return false;
+                            //        }
 
-            //    }
-            //});
+                            //    }
+                            //});
 
     </script>
 }

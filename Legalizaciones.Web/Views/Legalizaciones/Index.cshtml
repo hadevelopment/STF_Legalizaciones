@@ -98,26 +98,38 @@
                                     @Html.DisplayFor(modelItem => item.DiasTrascurridos)
                                 </td>
                                 <td>
-                                    @if (item.Estado == "En Espera de Aprobacion")
+                                    @if (item.EstadoId == 1)//Sin Legalizar
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
                                     }
-                                    @*else if (item.Estado == "Legalizado")
+                                    else if (item.EstadoId == 2)//Legalizada
                                     {
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
                                             <span class="fa fa-eye"></span>
                                         </a>
                                     }
-                                    else if (item.Estado == "Rechazado")
+                                    else if (item.EstadoId == 3)//Rechazada
                                     {
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
                                             <span class="fa fa-pencil"></span>
                                         </a>
                                     }
-                                    else
-                                    {
-                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
-                                    }*@
+                                    @*else if (item.Estado == "Legalizado")
+        {
+            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
+                <span class="fa fa-eye"></span>
+            </a>
+        }
+        else if (item.Estado == "Rechazado")
+        {
+            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
+                <span class="fa fa-pencil"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
+        }*@
                                 </td>
                             </tr>
                             ix++;

@@ -24,6 +24,7 @@ namespace Legalizaciones.Model
 
         [ForeignKey("TipoSolicitud")]
         public int TipoSolicitudID { get; set; }
+        public TipoSolicitud TipoSolicitud { get; set; }
 
         [Required(ErrorMessage = "Concepto es requerido.")]
         public string Concepto { get; set; }
@@ -31,10 +32,12 @@ namespace Legalizaciones.Model
         [Required(ErrorMessage = "Destino es requerido.")]
         [ForeignKey("Destino")]
         public int? DestinoID { get; set; }
+        public Destino Destino { get; set; }
 
         [Required(ErrorMessage = "Ciudad es requerido.")]
         [ForeignKey("Zona")]
         public int? ZonaID { get; set; }
+        public Zona Zona { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Operaciones.")]
         public int CentroOperacionId { get; set; }
@@ -68,19 +71,15 @@ namespace Legalizaciones.Model
         [DisplayName("Moneda")]
         [ForeignKey("Moneda")]
         public int? MonedaId { get; set; }
+        public Moneda Moneda { get; set; }
 
         [Required(ErrorMessage = "Estado de la Solicitud.")]
         [ForeignKey("EstadoSolicitud")]
-        public int EstadoId { get; set; }
-
-        [NotMapped]
-        public Moneda Moneda { get; set; }
+        public int? EstadoId { get; set; }
+        public EstadoSolicitud EstadoSolicitud { get; set; }
 
         [NotMapped]
         public string GastosJSON { get; set; }
-
-        [NotMapped]
-        public EstadoSolicitud EstadoSolicitud { get; set; }
 
         public string EmpleadoCedula { get; set; }
 
@@ -100,13 +99,6 @@ namespace Legalizaciones.Model
 
         [NotMapped]
         public ICollection<SolicitudGastos> SolicitudGastos { get; set; }
-
-        [NotMapped]
-        public Destino Destino { get; set; }
-        [NotMapped]
-        public Zona Zona { get; set; }
-        [NotMapped]
-        public TipoSolicitud TipoSolicitud { get; set; }
 
         [NotMapped]
         public IFormFile Carta { get; set; }

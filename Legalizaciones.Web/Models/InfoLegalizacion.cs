@@ -16,7 +16,8 @@ namespace Legalizaciones.Web.Models
         public string Tasa { get; set; }//RATA CAMBIO
         public string Beneficiario { get; set; }//EMPLEADO
         public string EmpleadoCedula { get; set; }
-        public string Estado { get; set; }//SATATUS SOLICITUD
+        public int EstadoId { get; set; }//STATUS SOLICITUD
+        public string Estado { get; set; }//STATUS SOLICITUD NOMBRE
         public string IdDocErp { get; set; }
         public string  ConsecutivoErp { get; set; }
         public string FechaEntrega { get; set; }
