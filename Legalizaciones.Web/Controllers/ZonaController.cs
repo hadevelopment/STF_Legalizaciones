@@ -41,8 +41,6 @@ namespace Legalizaciones.Web.Controllers
             return View(Zonas);
         }
 
-
-
         /*     ****************************************************************************
        *     Descripcion: VISTA para acceder a datos de la Solicitud. 
        *     Creada: 05-06-2019 
