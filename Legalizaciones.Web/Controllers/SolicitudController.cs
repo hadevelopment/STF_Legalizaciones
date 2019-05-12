@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using Legalizaciones.Interface;
 using Legalizaciones.Interface.ISolicitud;
 using Legalizaciones.Model;
@@ -12,11 +11,6 @@ using Legalizaciones.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Legalizaciones.Data.AppDbContext;
-using System.Configuration;
-using Legalizaciones.Web.Models;
 using Legalizaciones.Web.Models.ViewModel;
 
 namespace Legalizaciones.Web.Controllers
@@ -31,6 +25,7 @@ namespace Legalizaciones.Web.Controllers
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
 
+        public readonly IEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
@@ -99,17 +94,11 @@ namespace Legalizaciones.Web.Controllers
 
 
 
-               /* foreach (var item in solicitudes)
+                foreach (var item in solicitudes)
                 {
                     item.Empleado = erp.getEmpleadoCedula(cedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
-
-              /*  foreach (var item in solicitudes)
-                {
-                    item.Empleado = empleadoRepository.All().Where(e => e.Cedula == cedula).ToList().FirstOrDefault();
-                    item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoID.ToString()));
-                }*/
 
                 return View(solicitudes);
             }
@@ -472,6 +461,21 @@ namespace Legalizaciones.Web.Controllers
 
         }
 
+
+        /* ****************************************************************************
+*     Descripcion: VISTA para exortar datos al Excel
+*     Creada: 09-05-2019 
+*     Autor: Javier Rodriguez    
+      **************************************************************************** */
+        [HttpPost]
+        [Route("Filtrar")]
+        public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<Solicitud> solicitudes = solicitudRepository.All()
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).ToList();
+            return View("Index", solicitudes);
+
+        }
 
 
         #region Metodos sin acciones
