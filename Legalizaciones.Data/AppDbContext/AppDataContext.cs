@@ -14,6 +14,7 @@
         public DbSet<Tasa> Tasa{ get; set; }
         //Objetos
         public DbSet<Banco> Banco { get; set; }
+        public DbSet<Empleado> Empleado { get; set; }
         public DbSet<EmpleadoPermiso> EmpleadoPermiso { get; set; }
         public DbSet<Solicitud> Solicitud { get; set; }
         public DbSet<SolicitudGastos> SolicitudGastos { get; set; }

@@ -1,23 +1,20 @@
-﻿using Legalizaciones.Model.Base;
-using Legalizaciones.Model.Empresa;
-using Legalizaciones.Model.ItemSolicitud;
-using Legalizaciones.Model.Jerarquia;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
+using Legalizaciones.Model.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
+
 
 namespace Legalizaciones.Model
 {
     [Table("Legalizacion")]
     public class Legalizacion : BaseModel
     {
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Legalizacion()
         {
+            //Solicitud          = new HashSet<Solicitud>();
+            //SolicitudGastos    = new HashSet<SolicitudGastos>();
+            //LegalizacionGastos = new HashSet<LegalizacionGastos>();
         }
 
         [ForeignKey("Solicitud")]
@@ -34,6 +31,26 @@ namespace Legalizaciones.Model
 
         [ForeignKey("Banco")]
         public int BancoId{ get; set; }
+
+        [NotMapped] public Banco Banco { get; set; }
+
+        [NotMapped] public Solicitud Solicitud { get; set; }
+
+        [NotMapped] public Empleado Empleado { get; set; }
+
+        [NotMapped] public List<SolicitudGastos> SolicitudGastos { get; set; }
+
+        [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual Solicitud Solicitud { get; set; }
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual ICollection<SolicitudGastos> SolicitudGastos { get; set; }
+
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        //public virtual ICollection<LegalizacionGastos> LegalizacionGastos { get; set; }
+
 
     }
 }
