@@ -40,7 +40,7 @@
                 CentroOperacion: ($("#CentroOperacion").val()),
                 EmpleadoId: parseInt($("#Empleado").val()),
                 UnidadNegocio: ($("#UnidadNegocio").val()),
-                CentroCosto: ($("#CentroCosto").val()),
+                CentroCostos: ($("#CentroCostos").val()),
                 Moneda: ($("#Moneda").val()),
                 TotalAmount: parseFloat($("#TotalAmount").val()),
                 GivenAmount: parseFloat($("#GivenAmount").val()),
@@ -131,11 +131,11 @@
     //    url: "/UNOEE/CentroCostos",
     //    datatype: "Json",
     //    success: function (data) {
-    //        $('#CentroCosto').empty();
-    //        $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
+    //        $('#CentroCostos').empty();
+    //        $('#CentroCostos').append('<option selected value="">Seleccione...</option>');
     //        $.each(data, function (index, value) {
-    //            $("#CentroCosto").select2();
-    //            $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+    //            $("#CentroCostos").select2();
+    //            $('#CentroCostos').append('<option value="' + value.id + '">' + value.nombre + '</option>');
     //        });
     //    }
     //});
@@ -831,9 +831,9 @@ function CargarCombosAlEditar() {
         url: "/UNOEE/CentroCostos",
         datatype: "Json",
         success: function (data) {
-            $('#CentroCosto').empty();
+            $('#CentroCostos').empty();
             $.each(data, function (index, value) {
-                $('#CentroCosto').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+                $('#CentroCostos').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
             });
         }
     });
@@ -918,11 +918,11 @@ function CargarComboAlcrear() {
         url: "/UNOEE/CentroCostos",
         datatype: "Json",
         success: function (data) {
-            $('#CentroCosto').empty();
-            $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
+            $('#CentroCostos').empty();
+            $('#CentroCostos').append('<option selected value="">Seleccione...</option>');
             $.each(data, function (index, value) {
-                $("#CentroCosto").select2();
-                $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                $("#CentroCostos").select2();
+                $('#CentroCostos').append('<option value="' + value.id + '">' + value.nombre + '</option>');
             });
         }
     });

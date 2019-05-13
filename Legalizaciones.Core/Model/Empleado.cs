@@ -24,11 +24,15 @@ namespace Legalizaciones.Model
         public string NombreSupervisor { get; set; }
         public int SupervisorId { get; set; }
 
-        public int CentroOperaciones { get; set; }
+        public string CentroOperacion { get; set; }
 
-        public int CentroCosto { get; set; }
+        public string CentroOperaciones { get; set; }
 
-        public int UnidadNegocio { get; set; }
+        public string CentroCostos { get; set; }
+
+        public string UnidadNegocio { get; set; }
+
+        public string UnidadNegocios { get; set; }
 
     }
 }

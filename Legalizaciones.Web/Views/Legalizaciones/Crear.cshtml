@@ -462,12 +462,12 @@
                                     <td>Concepto Gasto</td>
                                     <td>Valor</td>
                                     @*<td>IVA</td>
-                                    <td>Ret IVA</td>
-                                    <td>Ret Serv</td>
-                                    <td>Ret Fuent</td>
-                                    <td>ICA</td>
-                                    <td>Neto</td>
-                                    <td>IVA Teoric</td>*@
+                                        <td>Ret IVA</td>
+                                        <td>Ret Serv</td>
+                                        <td>Ret Fuent</td>
+                                        <td>ICA</td>
+                                        <td>Neto</td>
+                                        <td>IVA Teoric</td>*@
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
@@ -546,14 +546,14 @@
 
 
 
-                        <div class="class=" row margin-bottom"">
-                            <p>
-                                <br />
-                            </p>
-                        </div>
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
 
-                        <div class="modal-body">
-                            <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
 
                                 <div class="row ListadoGastos">
                                     <div class="col-md-12">
@@ -607,15 +607,15 @@
 
 
 
-                                <div class="row display-none" id="mensajeValidacionGastos">
-                                    <div class="col-sm-12">
-                                        <div class="alert alert-warning" role="alert">
-                                            <span id="mensajeGastos"></span>
-                                        </div>
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -623,7 +623,7 @@
     </div>
 </div>
 
- @*Formulario modal de envio de reporte*@
+@*Formulario modal de envio de reporte*@
 <div class="row">
     <div class="col-md-9">
         <div class="modal fade bs-example-modal-sm" id="EnviarReporteModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
@@ -641,96 +641,96 @@
 
 
 
-                        <div class="class=" row margin-bottom"">
-                            <p>
-                                <br />
-                            </p>
-                        </div>
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
 
-                        <div class="modal-body">
-                            <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
 
-                                <div class="row">
+                            <div class="row">
 
-                                    <div class="row margin-bottom ">
+                                <div class="row margin-bottom ">
+                                    <div class="col-md-12">
                                         <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ZonasVisitadas, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextBoxFor(model => model.ZonasVisitadas, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
-                                            </div>
+                                            @Html.LabelFor(model => model.ZonasVisitadas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.ZonasVisitadas, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
                                         </div>
                                     </div>
-
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.Objetivo, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextBoxFor(model => model.Objetivo, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ActividadesDesarrolladas, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.ActividadesDesarrolladas, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                            <div class="col-md-1"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.ResultadosObtenidos, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.ResultadosObtenidos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row margin-bottom">
-                                        <div class="col-md-12">
-                                            <div class="col-md-12">
-                                                @Html.LabelFor(model => model.Compromisos, htmlAttributes: new { @class = "text-left col-md-12" })
-                                            </div>
-                                            <div class="col-md-12">
-                                                @Html.TextAreaFor(model => model.Compromisos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
-                                            </div>
-                                        </div>
-                                     </div>
-
-                                    <div class="row margin-bottom col-md-12">
-                                        <div class="box-tools pull-right">
-                                            <a id="btnAddNuevoGasto" class="btn btn-primary" onclick="ImprimirReporte();">
-                                                <span class="glyphicon glyphicon-plus"></span> EnviarReporte
-                                            </a>
-                                        </div>
-                                    </div>
-
                                 </div>
 
 
-
-
-                                <div class="row display-none" id="mensajeValidacionGastos">
-                                    <div class="col-sm-12">
-                                        <div class="alert alert-warning" role="alert">
-                                            <span id="mensajeGastos"></span>
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Objetivo, htmlAttributes: new { @class = "text-left col-md-12" })
                                         </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.Objetivo, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ActividadesDesarrolladas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ActividadesDesarrolladas, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ResultadosObtenidos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ResultadosObtenidos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Compromisos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.Compromisos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom col-md-12">
+                                    <div class="box-tools pull-right">
+                                        <a id="btnAddNuevoGasto" class="btn btn-primary" onclick="ImprimirReporte();">
+                                            <span class="glyphicon glyphicon-plus"></span> EnviarReporte
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
                 </div>
             </div>
@@ -741,40 +741,40 @@
 
 
 @section scripts {
-    <script src="https://code.jquery.com/ui/1.8.2/jquery-ui.js"></script>
+    <script src="~/js/jquery-ui-1.8.2.js"></script>
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
     <script src="~/js/LegalizacionesScript.js"></script>
-    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
     <script src="~/js/tableToJSON.js"></script>
 
 
     <script>
-            //$(function () {
-            //    $('#tableGastos').DataTable();
+                            //$(function () {
+                            //    $('#tableGastos').DataTable();
 
 
-            //    function cargarGastos() {
-            //        var table = $('.tableGastos').tableToJSON({
-            //            ignoreColumns: [16]
-            //        });
+                            //    function cargarGastos() {
+                            //        var table = $('.tableGastos').tableToJSON({
+                            //            ignoreColumns: [16]
+                            //        });
 
-            //        if (table.length > 0) {
-            //            $("#mensajeRegistro").text("");
-            //            $('#mensajeValidacionRegistro').hide("slow");
-            //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
-            //            return true;
-            //        } else {
-            //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-            //            $('#mensajeValidacionRegistro').show("slow");
-            //            return false;
-            //        }
+                            //        if (table.length > 0) {
+                            //            $("#mensajeRegistro").text("");
+                            //            $('#mensajeValidacionRegistro').hide("slow");
+                            //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                            //            return true;
+                            //        } else {
+                            //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                            //            $('#mensajeValidacionRegistro').show("slow");
+                            //            return false;
+                            //        }
 
-            //    }
-            //});
+                            //    }
+                            //});
 
     </script>
 }

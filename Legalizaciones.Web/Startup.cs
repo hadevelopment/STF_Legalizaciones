@@ -58,6 +58,7 @@ namespace Legalizaciones
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
+            services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
             //Iempl
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));

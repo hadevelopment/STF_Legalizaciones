@@ -98,10 +98,21 @@
                                     @Html.DisplayFor(modelItem => item.DiasTrascurridos)
                                 </td>
                                 <td>
-                                    @*@if (item.Estado == "En Espera de Aprobacion")*@
-                                    @if (item.Estado == "1")
+                                    @if (item.EstadoId == 1)//Sin Legalizar
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
+                                    }
+                                    else if (item.EstadoId == 2)//Legalizada
+                                    {
+                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionId">
+                                            <span class="fa fa-eye"></span>
+                                        </a>
+                                    }
+                                    else if (item.EstadoId == 3)//Rechazada
+                                    {
+                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
+                                            <span class="fa fa-pencil"></span>
+                                        </a>
                                     }
                                     @*else if (item.Estado == "Legalizado")
         {

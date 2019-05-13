@@ -20,6 +20,7 @@ namespace Legalizaciones.Web.Controllers
     public class LegalizacionesController : Controller
     {
         private readonly ISolicitudRepository solicitudRepository;
+        private readonly IEmpleadoRepository  empleadoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly IBancoRepository bancoRepository;
         private readonly IMonedaRepository monedaRepository;
@@ -28,7 +29,11 @@ namespace Legalizaciones.Web.Controllers
 
         public UNOEE objUNOEE = new UNOEE();
 
-        public LegalizacionesController(ISolicitudRepository solicitudRepository, ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository, IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository, ILegalizacionGastosRepository legalizacionGastosRepository)
+        public LegalizacionesController(ISolicitudRepository solicitudRepository,
+            ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
+            IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
+            IEmpleadoRepository empleadoRepository, 
+            ILegalizacionGastosRepository legalizacionGastosRepository)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -36,7 +41,9 @@ namespace Legalizaciones.Web.Controllers
             this.monedaRepository = monedaRepository;
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
+            this.empleadoRepository = empleadoRepository;
         }
+
         public IActionResult Index()
         {
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
@@ -46,7 +53,8 @@ namespace Legalizaciones.Web.Controllers
             string usuarioCedula = string.Empty;
             if (usuarioCargo == "3")
             {
-                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion", string.Empty); 
+                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                    string.Empty);
             }
             else
             {
@@ -60,10 +68,12 @@ namespace Legalizaciones.Web.Controllers
                 }
 
                 if (usuarioCedula != string.Empty)
-                    model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+                    model = Metodo.SolicitudesAntPendientesLegalizacion(
+                        "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
                 else
                     return View(model);
             }
+
             return View(model);
         }
 
@@ -160,8 +170,6 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-
-
                 //creo mi objeto de legalizaciones del header
                 var OLegalizacionHeader = new Legalizacion
                 {
@@ -175,8 +183,18 @@ namespace Legalizaciones.Web.Controllers
                 };
                 legalizacionRepository.Insert(OLegalizacionHeader);
 
+
+                //Se actualiza el estado de la solicitud a Legalizada
+                if (OLegalizacionHeader.Id != null && OLegalizacionHeader.Id > 0)
+                {
+                    var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
+                    solicitud.EstadoId = 2; //Legalizada
+                    solicitudRepository.Update(solicitud);
+                }
+
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
-                var LegalizacionGastos = JsonConvert.DeserializeObject<List<LegalizacionGastos>>(legalizacion.GastosJSON);
+                var LegalizacionGastos =
+                    JsonConvert.DeserializeObject<List<LegalizacionGastos>>(legalizacion.GastosJSON);
                 foreach (var item in LegalizacionGastos)
                 {
                     item.LegalizacionId = OLegalizacionHeader.Id;
@@ -201,6 +219,42 @@ namespace Legalizaciones.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        [Route("LegalizacionDetalles")]
+        public ActionResult Ver(int Id)
+        {
+            Legalizacion legalizacion = legalizacionRepository.Find(Id);
+            legalizacion.Solicitud = solicitudRepository.Find(legalizacion.SolicitudID);
+            legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a=> a.SolicitudId == legalizacion.SolicitudID).ToList();
+            legalizacion.LegalizacionGastos =
+                legalizacionGastosRepository.All().Where(a => a.LegalizacionId == Id).ToList();
+            legalizacion.Empleado = empleadoRepository
+                .All().FirstOrDefault(a => a.Cedula == legalizacion.Solicitud.EmpleadoCedula);
 
+            @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
+            @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
+
+            return View(legalizacion);
+        }
+
+        [HttpGet]
+        [Route("CreateLegalizacionesPDF")]
+        public ActionResult VisorLegalizacionPDF(int id)
+        {
+            Legalizacion legalizacion = legalizacionRepository.Find(id);
+            legalizacion.Solicitud = solicitudRepository.Find(legalizacion.SolicitudID);
+            legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == legalizacion.SolicitudID).ToList();
+            legalizacion.LegalizacionGastos =
+                legalizacionGastosRepository.All().Where(a => a.LegalizacionId == id).ToList();
+            legalizacion.Empleado = empleadoRepository
+                .All().FirstOrDefault(a => a.Cedula == legalizacion.Solicitud.EmpleadoCedula);
+
+            @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
+            @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
+
+            return View(legalizacion);
+        }
+
+        
     }
 }

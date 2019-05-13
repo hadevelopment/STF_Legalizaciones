@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Legalizaciones.Model;
 using Legalizaciones.Web.Helpers;
@@ -19,8 +20,6 @@ namespace Legalizaciones.Web.Engine
             int n = 0;
             foreach (DataRow row in dt.Rows)
             {
-                
-
                 InfoLegalizacion item = new InfoLegalizacion();
                 if (row[0] != DBNull.Value) 
                     item.Id = Convert.ToInt32(row[0]);
@@ -45,11 +44,13 @@ namespace Legalizaciones.Web.Engine
                 if (row[10] != DBNull.Value)
                     item.DiasTrascurridos = Convert.ToInt32(row[10]);
                 if (row[11] != DBNull.Value)
-                    item.Estado = row[11].ToString();
+                    item.EstadoId = Convert.ToInt32(row[11]);
                 if (row[12] != DBNull.Value)
-                    item.Accion = row[12].ToString();
+                    item.Estado = row[12].ToString();
+                if (row[13] != DBNull.Value)
+                    item.legalizacionId = Convert.ToInt32(row[13]);
 
-                Empleado empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+                var empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
 
                 item.IdDocErp = Aleatorio(n);
                 item.ConsecutivoErp = Aleatorio(n + 2);

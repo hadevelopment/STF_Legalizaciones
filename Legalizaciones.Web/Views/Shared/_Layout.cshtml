@@ -8,6 +8,7 @@
     <title>@ViewData["Title"] - Legalizaciones</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/Banner.css" />
+    <link rel="stylesheet" href="~/css/Comun.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/dist/css/AdminLTE.css" />
     <link rel="stylesheet" href="~/lib/legalizaciones/lib/Ionicons/css/ionicons.css" />
     <link rel="stylesheet" href="~/js/Helpers/Loader/loader.css" />
@@ -61,6 +62,12 @@
                         <a href='@Url.Action("Index", "ConfiguracionGasto")'>
                             <i class="fa fa-gear"></i> <br />
                             <span>Conf. Gastos</span>
+                        </a>
+                    </li>
+                    <li class="btnMenu">
+                        <a href='@Url.Action("Index", "Zona")'>
+                            <i class="fa fa-bus"></i> <br />
+                            <span>Zonas</span>
                         </a>
                     </li>
                 </ul>

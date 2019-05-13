@@ -41,9 +41,11 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("Cargo");
 
-                    b.Property<string>("CargoId");
+                    b.Property<string>("CargoId")
+                        .IsRequired();
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
 
                     b.Property<int?>("DestinoId");
 
@@ -71,7 +73,8 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("TipoServicio");
 
-                    b.Property<string>("TipoServicioId");
+                    b.Property<string>("TipoServicioId")
+                        .IsRequired();
 
                     b.Property<int>("ZonaDestinoId");
 
@@ -452,7 +455,8 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("EmpleadoCedula");
 
-                    b.Property<int>("EstadoId");
+                    b.Property<int?>("EstadoId")
+                        .IsRequired();
 
                     b.Property<int>("Estatus");
 
@@ -485,6 +489,16 @@ namespace Legalizaciones.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DestinoID");
+
+                    b.HasIndex("EstadoId");
+
+                    b.HasIndex("MonedaId");
+
+                    b.HasIndex("TipoSolicitudID");
+
+                    b.HasIndex("ZonaID");
 
                     b.ToTable("Solicitud");
                 });
@@ -683,6 +697,34 @@ namespace Legalizaciones.Data.Migrations
                     b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
                         .WithMany()
                         .HasForeignKey("PaisID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Solicitud", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Destino", "Destino")
+                        .WithMany()
+                        .HasForeignKey("DestinoID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoSolicitud", "EstadoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("EstadoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
+                        .WithMany()
+                        .HasForeignKey("MonedaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.TipoSolicitud", "TipoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("TipoSolicitudID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Zona")
+                        .WithMany()
+                        .HasForeignKey("ZonaID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

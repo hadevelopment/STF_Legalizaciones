@@ -129,7 +129,7 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", qplaceholder = "Selecciona Fecha Desde", id = "FechaDesde" })
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde" })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 

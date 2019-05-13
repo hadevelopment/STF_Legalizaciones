@@ -227,3 +227,12 @@ window.onload = function () {
     CargarMotivos();
     CargarPais();
 }
+
+$('.datepicker').datepicker({
+    format: 'dd/mm/yyyy',
+    todayHighlight: true,
+    autoclose: true,
+    orientation: 'bottom auto'
+});
+
+$(".datepicker").datepicker("update", new Date());

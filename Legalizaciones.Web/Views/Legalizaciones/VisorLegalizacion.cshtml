@@ -1,0 +1,250 @@
+﻿@model Legalizaciones.Model.Legalizacion
+@{
+    ViewData["Title"] = "VisorLegalizacion";
+    Layout = "~/Views/Shared/_VistaBaseImpresion.cshtml";
+}
+
+<h2>VisorLegalizacion</h2>
+
+
+@Html.Partial("_HeaderFields")
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
+    </div>
+
+    <div class="box-body">
+        <table width="100%">
+
+            <tr class="HeaderTable">
+                <td class="col-md-1 sinBorder">
+                    <label>ID</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>ID documentos en ERP</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>Concecutivo ERP</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Concepto</label>
+                </td>
+            </tr>
+
+
+            <tr class="RowsTable">
+                <td class="sinBorder RowsTable">
+                    <label>@Model.SolicitudID</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>84526</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>8652</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>@Model.Solicitud.Concepto</label>
+                </td>
+
+            </tr>
+
+        </table>
+
+
+    </div>
+</div>
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del empleado</strong></h3>
+        <div class="box-tools pull-right">
+        </div>
+
+        <div class="box-body">
+            <table width="100%">
+
+                <tr class="HeaderTable">
+                    <td class="col-md-3 sinBorder">
+                        <label>Beneficiario del anticipo</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cedula de ciudadania</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Area</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cargo</label>
+                    </td>
+                </tr>
+
+
+                <tr class="RowsTable">
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Nombre @Model.Empleado.Apellido</label>
+                    </td>
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Solicitud.EmpleadoCedula</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Area</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>Vendedor</label>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-random"></i><strong>Detalles de legalizacion</strong></h3>
+
+        <div class="box-body">
+
+            <table width="100%">
+                <tr height="20px">
+
+                    <td style="width: 60%" class="sinBorder">
+
+                        <table width="100%" border="0">
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
+                                <td width="15%" class="sinBorder">@Model.FechaCreacion</td>
+                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
+                                <td width="15%" class="sinBorder">@Model.Solicitud.FechaHasta</td>
+                            </tr>
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
+                                <td width="15%" class="sinBorder RowsTable">@Model.ReciboCaja</td>
+                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
+                                <td width="15%" class="sinBorder RowsTable">@Model.Consignacion</td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <td style="width: 80%" height="20px" class="sinBorder">
+
+                        <div class="row" style="margin-top: 0px;">
+                            <div class="col-md-12 Curva">
+
+                                <table width="80%" border="0">
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
+                                        <td class="RowsTable sinBorder">0.00 COP</td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br /><br />
+
+            <table class="col-md-12">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Fecha</td>
+                        <td>Pais</td>
+                        <td>Servicio</td>
+                        <td>Ciudad</td>
+                        <td>Origen</td>
+                        <td>Destino</td>
+                        <td>Valor</td>
+                        <td>IVA</td>
+                        <td>Reten Servicio</td>
+                        <td>Neto</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.SolicitudGastos.Count > 0)
+                    {
+                        @foreach (var item in Model.SolicitudGastos)
+                        {
+
+                            <tr>
+                                <td class="col-md-1 ">@item.Id</td>
+                                <td class="col-md-3 "><small><small>@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</small></small></td>
+                                <td class="col-md-1 ">@item.PaisId</td>
+                                <td class="col-md-1 ">@item.ServicioId</td>
+                                <td class="col-md-1 ">@item.CiudadId</td>
+                                <td class="col-md-1 ">@item.Origen</td>
+                                <td class="col-md-1 ">@item.Destino</td>
+                                <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                <td class="col-md-1 "><small><small>@item.IVA</small></small></td>
+                                <td class="col-md-1 "><small><small>0</small></small></td>
+                                <td class="col-md-1 "><small><small>@item.Monto + @item.IVA</small></small></td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <br /><br />
+
+            <footer>
+
+                <table style="width:100%">
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma del beneficiario</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Director Area</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Dpto Contabilidad</span></td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+
+                    </tr>
+
+                </table>
+
+            </footer>
+
+        </div>
+    </div>
+</div>
