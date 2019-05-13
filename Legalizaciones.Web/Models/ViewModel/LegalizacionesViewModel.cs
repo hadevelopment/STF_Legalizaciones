@@ -146,5 +146,13 @@ namespace Legalizaciones.Web.Models.ViewModel
         [DisplayName("Compromisos")]
         public string Compromisos { get; set; }
 
+        //para a legalizacion de gastos sin anticipo
+        public SelectList ListaEmpleado { get; set; }
+
+        [DisplayName("Beneficiario")]
+        public string CedulaId { get; set; }
+        public int LegalizacionSinAnticipo { get; set; }
+
+
     }
 }

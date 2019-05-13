@@ -51,7 +51,7 @@ namespace Legalizaciones.Web.Helpers
             Empleados[0] = new Empleado
             {
                 Area = "Empleado",
-                Nombre = "Juan Perez",
+                Nombre = "Eliezer Vargas",
                 Cedula = "6.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
@@ -115,7 +115,7 @@ namespace Legalizaciones.Web.Helpers
             Empleados[0] = new Empleado
             {
                 Area = "Empleado",
-                Nombre = "Juan Perez",
+                Nombre = "Eliezer Vargas",
                 Cedula = "6.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
@@ -155,7 +155,7 @@ namespace Legalizaciones.Web.Helpers
             };
 
 
-            return (Empleados[ind - 1]);
+            return (Empleados.Where(e => e.Cedula == cedula).FirstOrDefault());
         }
 
 
@@ -197,6 +197,59 @@ namespace Legalizaciones.Web.Helpers
             return wListMotivos;
         }
 
+        public List<Empleado> EmpleadoAll()
+        {
+            var LisEmpleado = new List<Empleado>();
+
+            var Empleado1 = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Eliezer Vargas",
+                Cedula = "6.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
+            };
+
+            var Empleado2 = new Empleado
+            {
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
+                Cedula = "7.845.256.666",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-2",
+                CargoId = 2, // ROL Administracion Tesoreria
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
+            };
+
+            var Empleado3 = new Empleado
+            {
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "8.845.256.667",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 3, // ROL Administracion Contabilidad
+                CentroOperaciones = 1,
+                CentroCosto = 1,
+                UnidadNegocio = 1
+            };
+
+            LisEmpleado.Add(Empleado1);
+            LisEmpleado.Add(Empleado2);
+            LisEmpleado.Add(Empleado3);
+
+            return LisEmpleado;
+
+        }
 
     }
 }

@@ -96,7 +96,7 @@ namespace Legalizaciones.Web.Controllers
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = erp.getEmpleadoCedula(cedula);
+                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
@@ -472,9 +472,8 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
             List<Solicitud> solicitudes = solicitudRepository.All()
-                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).ToList();
+                .Where(a => a.FechaCreacion >= fechaDesde && a.FechaCreacion <= fechaHasta).ToList();
             return View("Index", solicitudes);
-
         }
 
 
