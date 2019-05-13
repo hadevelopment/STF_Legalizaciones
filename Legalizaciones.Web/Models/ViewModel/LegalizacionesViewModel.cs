@@ -151,7 +151,7 @@ namespace Legalizaciones.Web.Models.ViewModel
 
         [DisplayName("Beneficiario")]
         public string CedulaId { get; set; }
-        public int LegalizacionSinAnticipo { get; set; }
+        public int ConAnticipo { get; set; }
 
 
     }

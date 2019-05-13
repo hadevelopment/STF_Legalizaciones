@@ -159,7 +159,7 @@
         var idServicio = $('#Servicio  option:selected').val();
         var nombreServicio = $('#Servicio  option:selected').text();
 
-        if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
+        if (nombreServicio !== "Transporte" || nombreServicio !== "Movilidad") {
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
             $('#divZonas').addClass('display-none');
@@ -231,9 +231,21 @@
     });
 
     $('#gastosModal').on("hidden.bs.modal", function () {
+        limpiarFormGastos();
         $('#mensajeValidacionGastos').hide("slow");
     });
 
+
+    function limpiarFormGastos() {
+        $('#FechaGasto').val('');
+        $("#Servicio").val('');
+        $('#ZonaOrigen').val('');
+        $('#ZonaDestino').val('');
+        $('#Monto').val('');
+
+        $('#AvisoMontoServicio').addClass('display-none');
+        $('#MensajeAviso').text('');
+    }
 
     //************************************   I N I C I O  ************************************
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
@@ -599,6 +611,13 @@ function actualizarGastos(){
     $('.' + value + ' .monto').text(monto);
 
     $('#gastosModal').modal('hide');
+
+    var sum = 0;
+    $('td.monto').each(function () {
+        sum += parseFloat(this.innerHTML);
+    });
+    $("#txMontoT").val(sum);
+    $('#hdfMontoSolicitud').val($("#txMontoT").val());
 }
 
 
@@ -621,8 +640,8 @@ function ShowModalUpdate(value)
 
     $('#FechaGasto').val(fechaGasto);
     $("#Pais").val(paisId);
-    $("#Servicio").val(paisId);
-    $("#Ciudad").val(paisId);
+    $("#Servicio").val(servicioId);
+    $("#Ciudad").val(ciudadId);
     $('#ZonaOrigen').val(origen);
     $('#ZonaDestino').val(destino);
     $('#Monto').val(monto);
@@ -630,12 +649,23 @@ function ShowModalUpdate(value)
     $('#btnAdd').addClass('display-none');
     $('#btnUpd').removeClass('display-none');
     $('#hdfRowIndex').val(value);
+
+    if (servicio === "Movilidad" || servicio === "Transporte") {
+        $('#divGastosDescripcion').removeClass('col-md-12');
+        $('#divGastosDescripcion').addClass('col-md-4');
+        $('#divZonas').removeClass('display-none');
+    } else {
+        $('#divGastosDescripcion').removeClass('col-md-4');
+        $('#divGastosDescripcion').addClass('col-md-12');
+        $('#divZonas').addClass('display-none');
+    }
     
     $('#gastosModal').modal('show');
 } 
 
 function validarViaje(boton) {
     $('#btnAdd').removeClass('display-none');
+    $('#btnUpd').addClass('display-none');
     $('#btnUpd').addClass('display-none');
 
     var destino = $("#Destino option:selected").val();
@@ -674,22 +704,32 @@ function consultarLimiteGasto() {
                 datatype: "Json",
                 data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID, origenID: _origenID, destinoID: _destinoID },
                 success: function (data) {
-                    
-                    if (data.monto > 0 && data.monto !== '') {
-                        $('#AvisoMontoServicio').removeClass('display-none');
-                        $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+                    if (data !== null) {
+                        if (data.monto > 0 && data.monto !== '') {
+                            $('#AvisoMontoServicio').removeClass('display-none');
+                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
 
-                        $('#Monto').on('input', function () {
-                            var value = $(this).val();
-                            if ((value !== '') && (value.indexOf('.') === -1)) {
-                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
-                            }
-                        });
-                    } else {
-                        $('#AvisoMontoServicio').addClass('display-none');
-                        $('#MensajeAviso').text('');
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                                }
+                            });
+                        } else {
+                            $('#AvisoMontoServicio').addClass('display-none');
+                            $('#MensajeAviso').text('');
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, value), -value));
+                                }
+                            });
+
+                            $('#AvisoMontoServicio').addClass('display-none');
+                            $('#MensajeAviso').text('');
+                        }
                     }
-
                 }
             });
         }
@@ -700,20 +740,28 @@ function consultarLimiteGasto() {
                 datatype: "Json",
                 data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID },
                 success: function (data) {
-                    
-                    if (data.monto > 0 && data.monto !== '') {
-                        $('#AvisoMontoServicio').removeClass('display-none');
-                        $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+                    if (data !== null) {
+                        if (data.monto > 0 && data.monto !== '') {
+                            $('#AvisoMontoServicio').removeClass('display-none');
+                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
 
-                        $('#Monto').on('input', function () {
-                            var value = $(this).val();
-                            if ((value !== '') && (value.indexOf('.') === -1)) {
-                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
-                            }
-                        });
-                    } else {
-                        $('#AvisoMontoServicio').addClass('display-none');
-                        $('#MensajeAviso').text('');
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                                }
+                            });
+                        } else {
+                            $('#AvisoMontoServicio').addClass('display-none');
+                            $('#MensajeAviso').text('');
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, value), -value));
+                                }
+                            });
+                        }
                     }
                 }
             });

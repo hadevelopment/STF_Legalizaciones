@@ -15,19 +15,33 @@ function ImprimirReporte(boton) {
 }
 
 //Funcion cuando selecciona un item del listado pantalla modal
-function Seleccionar(Id, FechaGasto, PaisId, ServicioId, CiudadId, Origen,Destino, Monto) {
+function Seleccionar(Id) {
     //var wFecha = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/SolicitudGastos",
+        datatype: "Json",
+        data: { wId: Id },
+        success: function (data) {
+            console.log(data);
+            if (data !== null) {
+                $("#GastosId").val(Id);
+                $("#MontoGasto").val(data.monto);
+                $("#Origen").val(data.origen);
+                $("#Destino").val(data.destino);
+                $("#ConceptoGasto").val(data.concepto);
+            }
+            
+        }
+    });
+
     //aqui llenare todos los controles del formulario de legalizaciones gastos
-    $("#GastosId").val(Id);
-    $("#MontoGasto").val(Monto);
-    $("#Origen").val(Origen);
-    $("#Destino").val(Destino);
-    $("#ConceptoGasto").val("");
+    
     //$("#FechaGasto").val(wFecha);
 
-    CargarPais();
-    CargarCiudad(PaisId);
+    //CargarPais();
+    //CargarCiudad(PaisId);
 
     funcion_Visible($('#RegistroDatos'));
 
@@ -159,7 +173,7 @@ function cargarGastos() {
 
 $("#PaisId").change(function () {
     valorPais = $("#PaisId").val();
-    CargarCiudad(valor);
+    CargarCiudad(valorPais);
 });
 
 //-+-+-+-+-++- +-+-+-+-funciones ajax para carga de combos - +-+-+-+-+-+-+-+-

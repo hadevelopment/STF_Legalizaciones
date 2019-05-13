@@ -135,9 +135,9 @@ namespace Legalizaciones.Web.Controllers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
                 CargoId = 1, // ROL Empleado
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             Empleados[1] = new Empleado
@@ -149,9 +149,9 @@ namespace Legalizaciones.Web.Controllers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
                 CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             Empleados[2] = new Empleado
@@ -163,9 +163,9 @@ namespace Legalizaciones.Web.Controllers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
                 CargoId = 3, // ROL Administracion Contabilidad
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             if (filtroCedula)
@@ -256,9 +256,9 @@ namespace Legalizaciones.Web.Controllers
                     OEmpleado.Ciudad = "Bogota";
                     OEmpleado.Telefono = "(1) 560 00100";
                     OEmpleado.CargoId = 1;
-                    OEmpleado.CentroOperaciones = 1;
-                    OEmpleado.CentroCosto = 1;
-                    OEmpleado.UnidadNegocio = 1;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
                     OEmpleado.FechaCreacion = DateTime.Now;
                     break;
 
@@ -270,9 +270,9 @@ namespace Legalizaciones.Web.Controllers
                     OEmpleado.Ciudad = "Bogota";
                     OEmpleado.Telefono = "(1) 560 00100-2";
                     OEmpleado.CargoId = 2;
-                    OEmpleado.CentroOperaciones = 1;
-                    OEmpleado.CentroCosto = 1;
-                    OEmpleado.UnidadNegocio = 1;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
                     OEmpleado.FechaCreacion = DateTime.Now;
                     break;
 
@@ -284,9 +284,9 @@ namespace Legalizaciones.Web.Controllers
                     OEmpleado.Ciudad = "Bogota";
                     OEmpleado.Telefono = "(1) 560 00100-3";
                     OEmpleado.CargoId = 3;
-                    OEmpleado.CentroOperaciones = 1;
-                    OEmpleado.CentroCosto = 1;
-                    OEmpleado.UnidadNegocio = 1;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
                     OEmpleado.FechaCreacion = DateTime.Now;
                     break;
             }

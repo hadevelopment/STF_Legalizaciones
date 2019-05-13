@@ -20,6 +20,8 @@ namespace Legalizaciones.Model
         [ForeignKey("Solicitud")]
         public int SolicitudID { get; set; }
 
+        public string EmpleadoCedula { get; set; }
+
         [Required(ErrorMessage = "Recibo de caja es requerido.")]
         public long ReciboCaja { get; set; }
 

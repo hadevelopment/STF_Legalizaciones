@@ -93,6 +93,53 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("ConfiguracionGasto");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Empleado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Apellido");
+
+                    b.Property<string>("Area");
+
+                    b.Property<int?>("CargoId");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired();
+
+                    b.Property<string>("CentroCostos");
+
+                    b.Property<string>("CentroOperacion");
+
+                    b.Property<string>("CentroOperaciones");
+
+                    b.Property<string>("Ciudad");
+
+                    b.Property<string>("Correo");
+
+                    b.Property<string>("Direccion");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<string>("NombreSupervisor");
+
+                    b.Property<int>("SupervisorId");
+
+                    b.Property<string>("Telefono");
+
+                    b.Property<string>("UnidadNegocio");
+
+                    b.Property<string>("UnidadNegocios");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Empleado");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
                 {
                     b.Property<int>("Id")
@@ -314,6 +361,8 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int>("BancoId");
 
                     b.Property<long>("Consignacion");
+
+                    b.Property<string>("EmpleadoCedula");
 
                     b.Property<int>("Estatus");
 

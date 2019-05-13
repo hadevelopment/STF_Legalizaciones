@@ -210,9 +210,9 @@ namespace Legalizaciones.Web.Helpers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
                 CargoId = 1, // ROL Empleado
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             var Empleado2 = new Empleado
@@ -224,9 +224,9 @@ namespace Legalizaciones.Web.Helpers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
                 CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             var Empleado3 = new Empleado
@@ -238,9 +238,9 @@ namespace Legalizaciones.Web.Helpers
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
                 CargoId = 3, // ROL Administracion Contabilidad
-                CentroOperaciones = 1,
-                CentroCosto = 1,
-                UnidadNegocio = 1
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             LisEmpleado.Add(Empleado1);

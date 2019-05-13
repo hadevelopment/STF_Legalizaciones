@@ -94,12 +94,11 @@ namespace Legalizaciones.Web.Controllers
                 var ListaEmpleado = objUNOEE.EmpleadoAll();
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
-
                     DocumentoERPID = 11111,
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
-                    LegalizacionSinAnticipo = 1,
+                    ConAnticipo = 0,
                     CedulaId = wCedulaUsuariopordefecto
 
                 };
@@ -153,7 +152,7 @@ namespace Legalizaciones.Web.Controllers
                     MonedaId = Osolicitud.MonedaId,
                     ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
                     SolicitudGastos = ListsolicitudGastos,
-                    LegalizacionSinAnticipo = 0
+                    ConAnticipo = 1
 
                 };
 
@@ -179,7 +178,8 @@ namespace Legalizaciones.Web.Controllers
                     ReciboCaja = legalizacion.ReciboCaja,
                     Consignacion = legalizacion.Consignacion,
                     Valor = legalizacion.Valor,
-                    BancoId = legalizacion.BancoId
+                    BancoId = legalizacion.BancoId,
+                    EmpleadoCedula = legalizacion.CedulaId != null ? legalizacion.CedulaId : null
                 };
                 legalizacionRepository.Insert(OLegalizacionHeader);
 
@@ -187,9 +187,12 @@ namespace Legalizaciones.Web.Controllers
                 //Se actualiza el estado de la solicitud a Legalizada
                 if (OLegalizacionHeader.Id != null && OLegalizacionHeader.Id > 0)
                 {
-                    var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
-                    solicitud.EstadoId = 2; //Legalizada
-                    solicitudRepository.Update(solicitud);
+                    if(legalizacion.AnticipoId != null && legalizacion.AnticipoId > 0)
+                    {
+                        var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
+                        solicitud.EstadoId = 2; //Legalizada
+                        solicitudRepository.Update(solicitud);
+                    }
                 }
 
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd

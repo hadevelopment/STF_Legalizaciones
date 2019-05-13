@@ -34,10 +34,6 @@ namespace Legalizaciones.Model
         public int? DestinoID { get; set; }
         public Destino Destino { get; set; }
 
-        [Required(ErrorMessage = "Estado Solicitud.")]
-        [ForeignKey("EstadoID")]
-        public int? EstadoID { get; set; }
-
         [Required(ErrorMessage = "Ciudad es requerido.")]
         [ForeignKey("Zona")]
         public int? ZonaID { get; set; }

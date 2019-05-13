@@ -114,11 +114,11 @@ i {
 }
 
 .display-none {
-    display: none !important;
+    display: none;
 }
 
 .display {
-    display: block !important;
+    display: block;
 }
 
 .lds-ellipsis {
