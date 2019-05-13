@@ -18,8 +18,9 @@ namespace Legalizaciones.Web.Controllers
         private readonly ICiudadRepository ciudadRepository;
         private readonly IMonedaRepository monedaRepository;
         private readonly ISolicitudRepository SolicitudRepository;
+        private readonly ISolicitudGastosRepository solicitudGastosRepository;
 
-        public LocalidadController(IDestinoRepository destinoRepository, IZonaRepository zonaRepository, ICiudadRepository estadoRepository, IPaisRepository paisRepository, ICiudadRepository ciudadRepository, IMonedaRepository monedaRepository, ISolicitudRepository SolicitudRepository) {
+        public LocalidadController(IDestinoRepository destinoRepository, IZonaRepository zonaRepository, ICiudadRepository estadoRepository, IPaisRepository paisRepository, ICiudadRepository ciudadRepository, IMonedaRepository monedaRepository, ISolicitudRepository SolicitudRepository, ISolicitudGastosRepository solicitudGastosRepository) {
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
             this.estadoRepository = estadoRepository;
@@ -27,9 +28,10 @@ namespace Legalizaciones.Web.Controllers
             this.ciudadRepository= ciudadRepository;
             this.monedaRepository = monedaRepository;
             this.SolicitudRepository = SolicitudRepository;
+            this.solicitudGastosRepository = solicitudGastosRepository;
         }
 
-     
+
         public IActionResult Index()
         {
             return View();
@@ -105,6 +107,16 @@ namespace Legalizaciones.Web.Controllers
 
             }
             return Json(ListMoneda);
+        }
+
+        public JsonResult SolicitudGastos(int wId)
+        {
+            var wG = solicitudGastosRepository.Find(wId);
+
+            var wResult = Json(wG);
+
+            return wResult;
+
         }
 
     }

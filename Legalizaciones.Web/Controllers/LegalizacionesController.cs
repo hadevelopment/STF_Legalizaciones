@@ -71,58 +71,87 @@ namespace Legalizaciones.Web.Controllers
         [Route("Crear")]
         public ActionResult Crear(int id)
         {
+            //Usuario_Cedula
+            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cargo").ToString();
 
-            var Osolicitud = solicitudRepository.Find(id);
-            var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
-            var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
-            var OCentroCosto = objUNOEE.getCentroCosto(Osolicitud.CentroCostoId);
-            var OCentroOperaciones = objUNOEE.getCentroOperacion(Osolicitud.CentroOperacionId);
-            var OUnidadNegocio = objUNOEE.getUnidadNegocio(Osolicitud.UnidadNegocioId);
-
-            string wCargo = "Empleado";
-            switch (OEmpleado.CargoId)
-            {
-                case 1:
-                    wCargo = "Empleado";
-                    break;
-                case 2:
-                    wCargo = "Tesoreria";
-                    break;
-                case 3:
-                    wCargo = "Contabilidad";
-                    break;
-            }
 
             var ListaBanco = bancoRepository.All().ToList();
             var ListaMoneda = monedaRepository.All().ToList();
-            var ListaMotivo = objUNOEE.GetListMotivos(Osolicitud.CentroCostoId);
 
-            var OLegalizaciones = new LegalizacionesViewModel
+            if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
-                AnticipoId = Osolicitud.Id,
-                DocumentoERPID = 11111,
-                FechaRegistro = Osolicitud.FechaSolicitud,
-                FechaVencimiento = Osolicitud.FechaVencimiento,
-                Concepto = Osolicitud.Concepto,
-                Monto = Osolicitud.Monto,
-                CentroCosto = OCentroCosto.Nombre,
-                CentroOperacion = OCentroOperaciones.Nombre,
-                UnidadNegocio = OUnidadNegocio.Nombre,
-                FechaDesde = Osolicitud.FechaDesde,
-                FechaHasta = Osolicitud.FechaHasta,
-                Nombre = OEmpleado.Nombre,
-                Cedula = OEmpleado.Cedula,
-                Cargo = wCargo,
-                Area = OEmpleado.Area,
-                ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
-                ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
-                MonedaId = Osolicitud.MonedaId,
-                ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
-                SolicitudGastos = ListsolicitudGastos
 
-            };
+                var ListaEmpleado = objUNOEE.EmpleadoAll();
+                var OLegalizaciones = new LegalizacionesViewModel
+                {
 
-            return View(OLegalizaciones);
+                    DocumentoERPID = 11111,
+                    ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                    ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
+                    ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
+                    LegalizacionSinAnticipo = 1,
+                    CedulaId = wCedulaUsuariopordefecto
+
+                };
+                return View(OLegalizaciones);
+            }
+            else
+            {
+                var Osolicitud = solicitudRepository.Find(id);
+                var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
+                var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
+                var OCentroCosto = objUNOEE.getCentroCosto(Osolicitud.CentroCostoId);
+                var OCentroOperaciones = objUNOEE.getCentroOperacion(Osolicitud.CentroOperacionId);
+                var OUnidadNegocio = objUNOEE.getUnidadNegocio(Osolicitud.UnidadNegocioId);
+                var ListaMotivo = objUNOEE.GetListMotivos(OCentroCosto.Id);
+
+                string wCargo = "Empleado";
+                switch (OEmpleado.CargoId)
+                {
+                    case 1:
+                        wCargo = "Empleado";
+                        break;
+                    case 2:
+                        wCargo = "Tesoreria";
+                        break;
+                    case 3:
+                        wCargo = "Contabilidad";
+                        break;
+                }
+
+             
+
+                var OLegalizaciones = new LegalizacionesViewModel
+                {
+                    AnticipoId = Osolicitud.Id,
+                    DocumentoERPID = 11111,
+                    FechaRegistro = Osolicitud.FechaSolicitud,
+                    FechaVencimiento = Osolicitud.FechaVencimiento,
+                    Concepto = Osolicitud.Concepto,
+                    Monto = Osolicitud.Monto,
+                    CentroCosto = OCentroCosto.Nombre,
+                    CentroOperacion = OCentroOperaciones.Nombre,
+                    UnidadNegocio = OUnidadNegocio.Nombre,
+                    FechaDesde = Osolicitud.FechaDesde,
+                    FechaHasta = Osolicitud.FechaHasta,
+                    Nombre = OEmpleado.Nombre,
+                    Cedula = OEmpleado.Cedula,
+                    Cargo = wCargo,
+                    Area = OEmpleado.Area,
+                    ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                    ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
+                    MonedaId = Osolicitud.MonedaId,
+                    ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
+                    SolicitudGastos = ListsolicitudGastos,
+                    LegalizacionSinAnticipo = 0
+
+                };
+
+                return View(OLegalizaciones);
+
+            }
+
+
         }
 
         [HttpPost]
@@ -171,5 +200,7 @@ namespace Legalizaciones.Web.Controllers
 
             return RedirectToAction("Index");
         }
+
+
     }
 }

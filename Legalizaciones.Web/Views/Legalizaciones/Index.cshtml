@@ -98,26 +98,27 @@
                                     @Html.DisplayFor(modelItem => item.DiasTrascurridos)
                                 </td>
                                 <td>
-                                    @if (item.Estado == "En Espera de Aprobacion")
+                                    @*@if (item.Estado == "En Espera de Aprobacion")*@
+                                    @if (item.Estado == "1")
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
                                     }
                                     @*else if (item.Estado == "Legalizado")
-                                    {
-                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
-                                            <span class="fa fa-eye"></span>
-                                        </a>
-                                    }
-                                    else if (item.Estado == "Rechazado")
-                                    {
-                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
-                                            <span class="fa fa-pencil"></span>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
-                                    }*@
+        {
+            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
+                <span class="fa fa-eye"></span>
+            </a>
+        }
+        else if (item.Estado == "Rechazado")
+        {
+            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
+                <span class="fa fa-pencil"></span>
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
+        }*@
                                 </td>
                             </tr>
                             ix++;
@@ -139,6 +140,9 @@
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
                         <a class="btn btn-primary fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
+                    </div>
+                    <div style="float: left;" class="col-md-2">
+                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Legalizar sin Anticipo</a>
                     </div>
                 </div>
             </div>
