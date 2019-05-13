@@ -78,13 +78,13 @@ namespace Legalizaciones.Web.Controllers
                 PaperSize = PaperKind.A4,
                 Margins = new MarginSettings { Top = 10 },
                 DocumentTitle = "PDF Report",
-                Out = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\solicitud.pdf"
+                Out = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\Legalizaciones.pdf"
             };
 
             var objectSettings = new ObjectSettings
             {
                 PagesCount = true,
-                Page = $"http://{Request.Host}/Solicitud/VisorLegalizacionPDF?id=" + id.ToString(),
+                Page = $"http://{Request.Host}/Legalizaciones/VisorLegalizacionPDF?id=" + id.ToString(),
                 WebSettings = { DefaultEncoding = "utf-8", UserStyleSheet = Path.Combine(Directory.GetCurrentDirectory(), "assets", "styles.css") },
                 HeaderSettings = { FontName = "Arial", FontSize = 9, Right = "Page [page] of [toPage]", Line = true },
             };
@@ -97,7 +97,7 @@ namespace Legalizaciones.Web.Controllers
 
             var file = _converter.Convert(pdf);
 
-            return Download("Solicitud.pdf");
+            return Download("Legalizaciones.pdf");
 
         }
 

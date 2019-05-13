@@ -9,151 +9,213 @@
 
 @Html.Partial("_HeaderFields")
 
-<form asp-controller="Solicitud" asp-action="Guardar" method="post">
-    <section>
 
-        <table width="100%" border="0">
-            <tr class="sinBorder">
-                <td width="15%" class="neg sinBorder">Legalizacion de anticipio:</td>
-                <td width="25%" class="sinBorder">@Model.SolicitudID</td>
-                <td width="5%" class="neg sinBorder" align="right">Estado:</td>
-                <td width="30%" class="sinBorder">Aprobado Director</td>
-                <td width="4%" class="neg sinBorder">Concepto:</td>
-                <td width="21%" class="sinBorder">Viaticos Cali</td>
-                <td width="4%" class="neg sinBorder">Concecutivo ERP:</td>
-                <td width="21%" class="sinBorder">8652</td>
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
+    </div>
+
+    <div class="box-body">
+        <table width="100%">
+
+            <tr class="HeaderTable">
+                <td class="col-md-1 sinBorder">
+                    <label>ID</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>ID documentos en ERP</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>Concecutivo ERP</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Concepto</label>
+                </td>
             </tr>
+
+
+            <tr class="RowsTable">
+                <td class="sinBorder RowsTable">
+                    <label>@Model.SolicitudID</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>84526</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>8652</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>@Model.Solicitud.Concepto</label>
+                </td>
+
+            </tr>
+
         </table>
 
-        <br /><br />
 
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del anticipo</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
+    </div>
+</div>
 
-            <div class="box-body">
-                <table width="100%">
-                    <tr class="HeaderTable">
-                        <td>ID</td>
-                        <td>ID documento en ERP</td>
-                        <td>Consecutivo ERP</td>
-                        <td>Concepto</td>
-                    </tr>
-                    <tr class="RowsTable">
-                        <td>@Model.Id</td>
-                        <td>755377</td>
-                        <td>6533788</td>
-                        <td>Concepto Datos</td>
-                    </tr>
-                </table>
-            </div>
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del empleado</strong></h3>
+        <div class="box-tools pull-right">
         </div>
 
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div>
+        <div class="box-body">
+            <table width="100%">
 
-            <div class="box-body">
-                <table width="100%">
-                    <tr class="HeaderTable">
-                        <td>Área</td>
-                        <td>Nombre completo</td>
-                        <td>Cedula de ciudadanía</td>
-                        <td>Dirección</td>
-                        <td>Ciudad</td>
-                        <td>Teléfono</td>
-                    </tr>
-                    <tr class="RowsTable">
-                        <td>Model.Empleado.Area</td>
-                        <td>Model.Empleado.Nombre</td>
-                        <td>Model.Empleado.Cedula</td>
-                        <td>Model.Empleado.Direccion</td>
-                        <td>Model.Empleado.Ciudad</td>
-                        <td>Model.Empleado.Telefono</td>
-                    </tr>
-                </table>
-            </div>
+                <tr class="HeaderTable">
+                    <td class="col-md-3 sinBorder">
+                        <label>Beneficiario del anticipo</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cedula de ciudadania</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Area</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cargo</label>
+                    </td>
+                </tr>
+
+
+                <tr class="RowsTable">
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Nombre @Model.Empleado.Apellido</label>
+                    </td>
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Solicitud.EmpleadoCedula</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Area</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>Vendedor</label>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
         </div>
+    </div>
+</div>
 
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
-                <div class="box-tools pull-right">
-                </div>
-            </div><br />
 
-            <div class="box-body">
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-random"></i><strong>Detalles de legalizacion</strong></h3>
 
-                <div class="row" style="margin-top:40px;">
-                    <div class="col-md-6">
-                        <label>Detalles de Legalizacion</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Fecha de registros: 10/05/2018</label>
-                    </div>
-                    <div class="col-md-3">
-                        <label>Fecha de vencimiento: 10/062018</label>
-                    </div>
-                    <div class="col-md-12">
-                        <table width="100%">
-                            <tr class="HeaderTable">
-                                <td>ID</td>
-                                <td>Fecha del gasto</td>
-                                <td>Pais</td>
-                                <td>Tipo de Servicio</td>
-                                <td>Ciudad</td>
-                                <td>Origen</td>
-                                <td>Destino</td>
-                                <td>Gasto</td>
-                                <td>IVA</td>
-                                <td>Rete IVA</td>
-                                <td>Rete Fue</td>
-                                <td>Rete Serv</td>
-                                <td>ICA</td>
-                                <td>Neto</td>
+        <div class="box-body">
+
+            <table width="100%">
+                <tr height="20px">
+
+                    <td style="width: 60%" class="sinBorder">
+
+                        <table width="100%" border="0">
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
+                                <td width="15%" class="sinBorder">@Model.FechaCreacion</td>
+                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
+                                <td width="15%" class="sinBorder">@Model.Solicitud.FechaHasta</td>
                             </tr>
-                            <tbody id="Items" class="RowsTable">
-                                @*@foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @item.FechaGasto.ToShortDateString()
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Pais)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Servicio)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Ciudad)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Origen)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Destino)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Monto)
-                                            </td>
-                                        </tr>
-                                    }*@
-
-                            </tbody>
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
+                                <td width="15%" class="sinBorder RowsTable">@Model.ReciboCaja</td>
+                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
+                                <td width="15%" class="sinBorder RowsTable">@Model.Consignacion</td>
+                            </tr>
                         </table>
-                        <br />
-                    </div>
 
-                </div>
+                    </td>
 
-            </div>
+                    <td style="width: 80%" height="20px" class="sinBorder">
+
+                        <div class="row" style="margin-top: 0px;">
+                            <div class="col-md-12 Curva">
+
+                                <table width="80%" border="0">
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
+                                        <td class="RowsTable sinBorder">0.00 COP</td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br /><br />
+
+            <table class="col-md-12">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Fecha</td>
+                        <td>Pais</td>
+                        <td>Servicio</td>
+                        <td>Ciudad</td>
+                        <td>Origen</td>
+                        <td>Destino</td>
+                        <td>Valor</td>
+                        <td>IVA</td>
+                        <td>Reten Servicio</td>
+                        <td>Neto</td>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.SolicitudGastos.Count > 0)
+                    {
+                        @foreach (var item in Model.SolicitudGastos)
+                        {
+
+                            <tr>
+                                <td class="col-md-1 ">@item.Id</td>
+                                <td class="col-md-3 "><small><small>@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</small></small></td>
+                                <td class="col-md-1 ">@item.PaisId</td>
+                                <td class="col-md-1 ">@item.ServicioId</td>
+                                <td class="col-md-1 ">@item.CiudadId</td>
+                                <td class="col-md-1 ">@item.Origen</td>
+                                <td class="col-md-1 ">@item.Destino</td>
+                                <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                <td class="col-md-1 "><small><small>@item.IVA</small></small></td>
+                                <td class="col-md-1 "><small><small>0</small></small></td>
+                                <td class="col-md-1 "><small><small>@item.Monto + @item.IVA</small></small></td>
+
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <br /><br />
 
             <footer>
 
@@ -183,34 +245,6 @@
 
             </footer>
 
-
-
         </div>
-
-    </section>
-</form>
-
-<!-- Stepper CSS -->
-<link href="css/addons-pro/steppers.css" rel="stylesheet">
-<!-- Stepper CSS - minified-->
-<link href="css/addons-pro/steppers.min.css" rel="stylesheet">
-
-<!-- Stepper JavaScript -->
-<script type="text/javascript" src="js/addons-pro/stepper.js"></script>
-<!-- Stepper JavaScript - minified -->
-<script type="text/javascript" src="js/addons-pro/stepper.min.js"></script>
-
-
-@section scripts {
-    <script src="~/js/select2.min.js"></script>
-    <link href="~/css/select2.min.css" rel="stylesheet" />
-    <script src="~/js/bootstrap-datepicker.js"></script>
-    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
-    <script src="~/js/SolicitudScript.js"></script>
-    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="~/js/table.js"></script>
-    <script>
-        $(function () {
-            $('#example1').DataTable()
-        })
-    </script>
+    </div>
+</div>

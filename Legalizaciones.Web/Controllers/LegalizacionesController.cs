@@ -202,6 +202,9 @@ namespace Legalizaciones.Web.Controllers
             legalizacion.Empleado = empleadoRepository
                 .All().FirstOrDefault(a => a.Cedula == legalizacion.Solicitud.EmpleadoCedula);
 
+            @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
+            @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
+
             return View(legalizacion);
         }
     }
