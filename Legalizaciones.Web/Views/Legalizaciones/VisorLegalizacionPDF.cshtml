@@ -4,11 +4,6 @@
     Layout = "~/Views/Shared/_VistaBaseImpresion.cshtml";
 }
 
-<h2>VisorLegalizacion</h2>
-
-
-@Html.Partial("_HeaderFields")
-
 
 <div class="box box-default">
     <div class="box-header with-border">
@@ -114,67 +109,9 @@
 
         <div class="box-body">
 
-            <table width="100%">
-                <tr height="20px">
-
-                    <td style="width: 60%" class="sinBorder">
-
-                        <table width="100%" border="0">
-                            <tr class="sinBorder">
-                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
-                                <td width="15%" class="sinBorder">@Model.FechaCreacion</td>
-                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
-                                <td width="15%" class="sinBorder">@Model.Solicitud.FechaHasta</td>
-                            </tr>
-                            <tr class="sinBorder">
-                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
-                                <td width="15%" class="sinBorder RowsTable">@Model.ReciboCaja</td>
-                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
-                                <td width="15%" class="sinBorder RowsTable">@Model.Consignacion</td>
-                            </tr>
-                        </table>
-
-                    </td>
-
-                    <td style="width: 80%" height="20px" class="sinBorder">
-
-                        <div class="row" style="margin-top: 0px;">
-                            <div class="col-md-12 Curva">
-
-                                <table width="80%" border="0">
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
-                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
-                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
-                                        <td class="RowsTable sinBorder">0.00 COP</td>
-
-                                    </tr>
-
-                                </table>
-
-                            </div>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            </table>
-
             <br /><br />
 
-            <table class="col-md-12">
+            <table class="col-md-12" width="100%">
                 <thead>
                     <tr>
                         <td>ID</td>
@@ -216,6 +153,68 @@
                 </tbody>
             </table>
             <br /><br />
+
+
+            <table width="100%">
+                <tr height="20px">
+
+                    <td style="width: 60%" class="sinBorder">
+
+                        <table width="100%">
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
+                                <td width="15%" class="sinBorder"><span class="letras10">@Model.FechaCreacion<span></td>
+                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
+                                <td width="15%" class="sinBorder"><span class="letras10">@Model.Solicitud.FechaHasta<span></td>
+                            </tr>
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
+                                <td width="15%" class="sinBorder RowsTable"><span class="letras10">@Model.ReciboCaja</span></td>
+                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
+                                <td width="15%" class="sinBorder RowsTable"><span class="letras10">@Model.Consignacion</span></td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <td style="width: 80%" height="20px" class="sinBorder">
+
+                        <div class="row" style="margin-top: 0px;">
+                            <div class="col-md-12 Curva">
+
+                                <table width="80%" border="0">
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
+                                        <td class="RowsTable sinBorder">0.00 COP</td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br /><br />  <br /><br />
+
 
             <footer>
 

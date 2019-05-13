@@ -209,7 +209,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpGet]
-        [Route("CreateLegalizacionesPDF")]
+        [Route("VisorLegalizacionPDF")]
         public ActionResult VisorLegalizacionPDF(int id)
         {
             Legalizacion legalizacion = legalizacionRepository.Find(id);

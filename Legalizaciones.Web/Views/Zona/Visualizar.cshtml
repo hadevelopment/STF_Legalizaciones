@@ -25,58 +25,59 @@
 <form asp-controller="Zona" asp-action="Eliminar" method="post" name="form1">
     <div class="hidden">
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
-        <input class="hide" type="text" id="hdDestinoId" name="hdDestinoId" value="@Model.DestinoID" />
+        @*<input class="hide" type="text" id="hdDestinoId" name="hdDestinoId" value="@Model.DestinoID" />*@
         <input class="hide" type="text" id="Id" name="Id" value="@Model.Id" />
     </div>
+    <input asp-for="DestinoID" type="text" class="form-control" class="hide" />
 
     <section>
 
         <div class="box">
 
-          <div class="box-body">
+            <div class="box-body">
 
-            <div class="row">
-                <div class="col-md-4">
-                    <label asp-for="Nombre" class="control-label"></label>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label asp-for="Nombre" class="control-label"></label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Abreviatura" class="control-label"></label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Destino" class="control-label"></label>
+                    </div>
+
                 </div>
 
-                <div class="col-md-4">
-                    <label asp-for="Abreviatura" class="control-label"></label>
-                </div>
+                <div class="row">
 
-                <div class="col-md-4">
-                    <label asp-for="Destino" class="control-label"></label>
+                    <div class="col-md-4">
+
+                        <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre zona" readonly="readonly" />
+                        <span asp-validation-for="Nombre" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <input asp-for="Abreviatura" type="text" class="form-control" placeholder="Abreviatura" readonly="readonly" />
+                        <span asp-validation-for="Abreviatura" class="text-danger"></span>
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", disabled = "disabled", id = "Destino" })
+                        @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
+
+                    </div>
+
                 </div>
 
             </div>
 
-            <div class="row">
-
-                <div class="col-md-4">
-
-                    <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre zona" readonly="readonly" />
-                    <span asp-validation-for="Nombre" class="text-danger"></span>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    <input asp-for="Abreviatura" type="text" class="form-control" placeholder="Abreviatura" readonly="readonly" />
-                    <span asp-validation-for="Abreviatura" class="text-danger"></span>
-
-                </div>
-
-                <div class="col-md-4">
-
-                    @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", disabled = "disabled", id = "Destino" })
-                    @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
-
-                </div>
-
-            </div>
-
-        </div>
-        
         </div>
 
     </section>
