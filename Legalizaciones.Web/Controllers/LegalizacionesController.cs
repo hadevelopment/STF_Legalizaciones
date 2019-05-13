@@ -207,5 +207,25 @@ namespace Legalizaciones.Web.Controllers
 
             return View(legalizacion);
         }
+
+        [HttpGet]
+        [Route("CreateLegalizacionesPDF")]
+        public ActionResult VisorLegalizacionPDF(int id)
+        {
+            Legalizacion legalizacion = legalizacionRepository.Find(id);
+            legalizacion.Solicitud = solicitudRepository.Find(legalizacion.SolicitudID);
+            legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == legalizacion.SolicitudID).ToList();
+            legalizacion.LegalizacionGastos =
+                legalizacionGastosRepository.All().Where(a => a.LegalizacionId == id).ToList();
+            legalizacion.Empleado = empleadoRepository
+                .All().FirstOrDefault(a => a.Cedula == legalizacion.Solicitud.EmpleadoCedula);
+
+            @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
+            @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
+
+            return View(legalizacion);
+        }
+
+        
     }
 }
