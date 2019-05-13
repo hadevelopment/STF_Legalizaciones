@@ -32,7 +32,7 @@
                     <strong>Consultar por historico de fechas:</strong>
                 </div>
 
-                <form asp-controller="Solicitud" asp-action="Filtrar" method="Post" name="form1">
+                <form asp-controller="Solicitud" asp-action="Filtrar" method="Post">
 
                     <div style="float: left;" class="col-md-2">
                         <label>Desde</label>
@@ -45,9 +45,9 @@
                     </div>
 
                     <div style="float: left;" class="col-md-1">
-
-                        <button class="icon" onclick="document.form1.submit()"><i class="fa fa-search"></i></button>
-
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search"></span> Filtrar
+                        </button>
                     </div>
 
                 </form>
@@ -133,7 +133,7 @@
                             }
                             else
                             {
-                                <tr>
+                                <tr class="tableEmpty">
                                     <td colspan="8">
                                         No se encontraron resultados...
                                     </td>
@@ -144,7 +144,7 @@
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
                     </div>
                 </div>
             </div>

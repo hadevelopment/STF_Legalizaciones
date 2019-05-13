@@ -155,7 +155,7 @@ namespace Legalizaciones.Web.Helpers
             };
 
 
-            return (Empleados[ind - 1]);
+            return (Empleados.Where(e => e.Cedula == cedula).FirstOrDefault());
         }
 
 

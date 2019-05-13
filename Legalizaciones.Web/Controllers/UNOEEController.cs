@@ -151,7 +151,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 Area = "Administracion Contraloria",
                 Nombre = "Daniel Sanchez",
-                Cedula = "7.845.256.667",
+                Cedula = "8.845.256.667",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
@@ -160,8 +160,9 @@ namespace Legalizaciones.Web.Controllers
 
             if (filtroCedula)
             {
-                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == HttpContext.Session.GetString("Usuario_Cedula")).ToList();
-                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula));
+                var cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == cedula).ToList();
+                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula) && m.Cedula != cedula);
                 return Json(list);
             }
 

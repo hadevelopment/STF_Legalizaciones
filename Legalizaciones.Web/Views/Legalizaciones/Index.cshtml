@@ -102,18 +102,18 @@
                                     {
                                         <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
                                     }
-                                    else if (item.EstadoId == 2)//Legalizada
+                                    else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizada
                                     {
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionId">
                                             <span class="fa fa-eye"></span>
                                         </a>
                                     }
-                                    else if (item.EstadoId == 3)//Rechazada
+                                    @*else if (item.EstadoId == 3)//Rechazada
                                     {
                                         <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
                                             <span class="fa fa-pencil"></span>
                                         </a>
-                                    }
+                                    }*@
                                     @*else if (item.Estado == "Legalizado")
         {
             <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
@@ -138,7 +138,7 @@
                         }
                         else
                         {
-                        <tr>
+                        <tr class="tableEmpty">
                             <td colspan="8">
                                 No posee anticipos pendientes por Legalizar...
                             </td>
@@ -150,7 +150,7 @@
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
                     </div>
                 </div>
             </div>
