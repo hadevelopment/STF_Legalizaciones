@@ -19,7 +19,8 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Legalizaciones
 {
@@ -89,7 +90,21 @@ namespace Legalizaciones
 
             app.UseStaticFiles();
             app.UseSession();
-
+            //*********************Cultura: Español - Colombia********************************
+            var infoCultura = new CultureInfo("es-CO");
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(infoCultura),
+                SupportedCultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                }
+            });
+            //********************************************************************************
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
