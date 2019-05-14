@@ -504,8 +504,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("EmpleadoCedula");
 
-                    b.Property<int?>("EstadoId")
-                        .IsRequired();
+                    b.Property<int?>("EstadoId");
 
                     b.Property<int>("Estatus");
 
@@ -567,7 +566,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<DateTime>("FechaGasto");
+                    b.Property<string>("FechaGasto");
 
                     b.Property<string>("ICA");
 
@@ -758,8 +757,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoSolicitud", "EstadoSolicitud")
                         .WithMany()
-                        .HasForeignKey("EstadoId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EstadoId");
 
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
                         .WithMany()

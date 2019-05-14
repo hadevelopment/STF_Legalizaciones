@@ -11,7 +11,7 @@ namespace Legalizaciones.Model
     [Table("SolicitudGastos")]
     public class SolicitudGastos : BaseModel
     {
-        public DateTime FechaGasto { get; set; }
+        public string FechaGasto { get; set; }
         public int PaisId{ get; set; }
         public string Pais { get; set; }
         public int? ServicioId { get; set; }
@@ -28,7 +28,6 @@ namespace Legalizaciones.Model
         public string Neto { get; set; }
         public string IVATeorico { get; set; }
         //public string Zona { get; set; }
-
 
         [ForeignKey("Solicitud")]
         public int? SolicitudId { get; set; }

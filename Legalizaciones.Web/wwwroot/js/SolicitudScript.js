@@ -40,7 +40,7 @@
                 CentroOperacion: ($("#CentroOperacion").val()),
                 EmpleadoId: parseInt($("#Empleado").val()),
                 UnidadNegocio: ($("#UnidadNegocio").val()),
-                CentroCostos: ($("#CentroCostos").val()),
+                CentroCostos: ($("#CentroCosto").val()),
                 Moneda: ($("#Moneda").val()),
                 TotalAmount: parseFloat($("#TotalAmount").val()),
                 GivenAmount: parseFloat($("#GivenAmount").val()),
@@ -69,79 +69,18 @@
         $('#hdfMontoSolicitud').val($("#txMontoT").val());
     });
 
-
-    //Obtener zonas
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Home/Zonas",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $.each(data, function (index, value) {
-    //            $("#Zona").select2();
-    //            $('#Zona').append('<option value="' + value.nombre + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    //Propiedades del dropdown concepto
-    
-
-    //Obtener centro de operaciones
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroOperaciones",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroOperacion').empty();
-    //        $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroOperacion").select2();
-    //            $('#CentroOperacion').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+    //Propiedades del dropdown unidades de negocio
+    $("#CentroCosto").select2({
+        multiple: false
+    });
 
     //Propiedades del dropdown de centros de operaciones
     $("#CentroOperacion").select2({
         multiple: false
     });
 
-    //Obtener unidades de negocio
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/UnidadNegocios",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#UnidadNegocio').empty();
-    //        $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#UnidadNegocio").select2();
-    //            $('#UnidadNegocio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
     //Propiedades del dropdown unidades de negocio
     $("#UnidadNegocio").select2({
-        multiple: false
-    });
-
-    //Obtener centros de costo
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroCostos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroCostos').empty();
-    //        $('#CentroCostos').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroCostos").select2();
-    //            $('#CentroCostos').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    //Propiedades del dropdown unidades de negocio
-    $("#CentroCosto").select2({
         multiple: false
     });
 
@@ -158,8 +97,9 @@
     $("#Servicio").change(function () {
         var idServicio = $('#Servicio  option:selected').val();
         var nombreServicio = $('#Servicio  option:selected').text();
+        console.log(nombreServicio);
 
-        if (nombreServicio !== "Transporte" || nombreServicio !== "Movilidad") {
+        if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
             $('#divZonas').addClass('display-none');
@@ -245,6 +185,10 @@
 
         $('#AvisoMontoServicio').addClass('display-none');
         $('#MensajeAviso').text('');
+
+        $('#divGastosDescripcion').removeClass('col-md-4');
+        $('#divGastosDescripcion').addClass('col-md-12');
+        $('#divZonas').addClass('display-none');
     }
 
     //************************************   I N I C I O  ************************************
@@ -272,21 +216,6 @@
     $("#Empleado").select2({
         multiple: false
     });
-
-    //Obtener DESTINOS
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Localidad/Destinos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $("#Destino").empty();
-    //        $('#Destino').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            //$("#Destino").select2();
-    //            $('#Destino').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
 
 
     //*****************************************************************************************
@@ -722,13 +651,20 @@ function consultarLimiteGasto() {
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
                                 if ((value !== '') && (value.indexOf('.') === -1)) {
-                                    $(this).val(Math.max(Math.min(value, value), -value));
+                                    $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
                                 }
                             });
-
-                            $('#AvisoMontoServicio').addClass('display-none');
-                            $('#MensajeAviso').text('');
                         }
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                            }
+                        });
                     }
                 }
             });
@@ -758,10 +694,20 @@ function consultarLimiteGasto() {
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
                                 if ((value !== '') && (value.indexOf('.') === -1)) {
-                                    $(this).val(Math.max(Math.min(value, value), -value));
+                                    $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
                                 }
                             });
                         }
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                            }
+                        });
                     }
                 }
             });
@@ -879,11 +825,15 @@ function CargarCombosAlEditar() {
         url: "/UNOEE/CentroCostos",
         datatype: "Json",
         success: function (data) {
-            $('#CentroCostos').empty();
+            $('#CentroCosto').empty();
             $.each(data, function (index, value) {
-                $('#CentroCostos').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+                $('#CentroCosto').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
             });
         }
+    });
+
+    $("#CentroCosto").select2({
+        multiple: false
     });
 
 }
@@ -966,13 +916,15 @@ function CargarComboAlcrear() {
         url: "/UNOEE/CentroCostos",
         datatype: "Json",
         success: function (data) {
-            $('#CentroCostos').empty();
-            $('#CentroCostos').append('<option selected value="">Seleccione...</option>');
+            $('#CentroCosto').empty();
+            $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
             $.each(data, function (index, value) {
-                $("#CentroCostos").select2();
-                $('#CentroCostos').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                $("#CentroCosto").select2();
+                $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
             });
         }
     });
+
+    
 
 }

@@ -24,7 +24,7 @@ namespace Legalizaciones.Web.Engine
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Clear();
-                command.Parameters.AddWithValue("@EmpleadoCedula", empleadoCedula);
+                command.Parameters.AddWithValue("@EmpleadoCedula", "");
                 SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
                 dataAdaptador.Fill(dataTabla);
                 Conexion.Close();

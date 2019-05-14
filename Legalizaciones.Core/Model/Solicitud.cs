@@ -73,7 +73,6 @@ namespace Legalizaciones.Model
         public int? MonedaId { get; set; }
         public Moneda Moneda { get; set; }
 
-        [Required(ErrorMessage = "Estado de la Solicitud.")]
         [ForeignKey("EstadoSolicitud")]
         public int? EstadoId { get; set; }
         public EstadoSolicitud EstadoSolicitud { get; set; }
