@@ -91,7 +91,7 @@ namespace Legalizaciones
             app.UseStaticFiles();
             app.UseSession();
             //*********************Cultura: Español - Colombia********************************
-            var infoCultura = new CultureInfo("es-CO");
+            var infoCultura = new CultureInfo("en-US");
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(infoCultura),
