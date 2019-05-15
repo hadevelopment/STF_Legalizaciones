@@ -32,7 +32,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string  Concepto { get; set; }
 
         [DisplayName("Valor")]
-        public double Monto { get; set; }
+        public float Monto { get; set; }
 
         [DisplayName("Centro de Costo")]
         public string CentroCosto { get; set; }
@@ -112,7 +112,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string ConceptoGasto { get; set; }
 
         [DisplayName("Valor del Gasto")]
-        public double MontoGasto { get; set; }
+        public float MontoGasto { get; set; }
 
         [DisplayName("Origen")]
         public string Origen { get; set; }
