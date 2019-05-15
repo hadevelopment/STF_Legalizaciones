@@ -13,24 +13,29 @@ namespace Legalizaciones.Web.Engine
         public static string DefaultConnection { get; set; }
         private string StringConexion = EngineDb.DefaultConnection;
 
-        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula)
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula = "")
         {
             List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
-            DataTable dataTabla = new DataTable();
-            SqlConnection Conexion = new SqlConnection(StringConexion);
-            using (Conexion)
+            try
             {
-                Conexion.Open();
-                SqlCommand command = new SqlCommand(SpName, Conexion);
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@EmpleadoCedula", empleadoCedula);
-                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
-                dataAdaptador.Fill(dataTabla);
-                Conexion.Close();
+                DataTable dataTabla = new DataTable();
+                SqlConnection Conexion = new SqlConnection(StringConexion);
+                using (Conexion)
+                {
+                    Conexion.Open();
+                    SqlCommand command = new SqlCommand(SpName, Conexion);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@EmpleadoCedula", empleadoCedula);
+                    SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                    dataAdaptador.Fill(dataTabla);
+                    Conexion.Close();
+                }
+                EngineStf Funcion = new EngineStf();
+                InfoLegalizacion = Funcion.ConvertirToListSolicitud(dataTabla);
             }
-            EngineStf Funcion = new EngineStf();
-            InfoLegalizacion = Funcion.ConvertirToListSolicitud(dataTabla);
+            catch { }
+           
             return InfoLegalizacion;
         }
 

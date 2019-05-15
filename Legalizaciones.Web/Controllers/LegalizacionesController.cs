@@ -57,21 +57,10 @@ namespace Legalizaciones.Web.Controllers
                     string.Empty);
             }
             else
-            {
-                try
-                {
-                    usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-                }
-                catch
-                {
-                    usuarioCedula = string.Empty;
-                }
-
+            { 
                 if (usuarioCedula != string.Empty)
                     model = Metodo.SolicitudesAntPendientesLegalizacion(
                         "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
-                else
-                    return View(model);
             }
 
             return View(model);
