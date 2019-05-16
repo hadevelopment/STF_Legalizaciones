@@ -112,7 +112,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string ConceptoGasto { get; set; }
 
         [DisplayName("Valor del Gasto")]
-        public double MontoGasto { get; set; }
+        public float MontoGasto { get; set; }
 
         [DisplayName("Origen")]
         public string Origen { get; set; }

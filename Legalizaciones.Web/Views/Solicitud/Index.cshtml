@@ -107,7 +107,7 @@
                                             @Html.DisplayFor(modelItem => item.Empleado.Nombre)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Monto)
+                                            @item.Monto.ToString("N2")
                                         </td>
                                         <td>
                                             @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
