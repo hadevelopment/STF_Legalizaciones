@@ -1,11 +1,7 @@
 ﻿@model List<InfoLegalizacion>
 @{
-    ViewData["Title"] = "Index";
-    string leg = string.Empty ;
-    string vie = string.Empty;
-    string edi = string.Empty;
-    double  num = 1234.45;
-}
+    ViewData["Title"] = "Index"; }
+
 
 <div class="row">
     <div class="col-sm-12">
@@ -13,7 +9,7 @@
             <div class="box-body">
                 <small>
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
-                     <strong> Anticipos @DateTime.Now @num  </strong>
+                     <strong> Anticipos </strong>
                 </small>
             </div>
         </div>
@@ -59,9 +55,6 @@
 
                             @foreach (var item in Model)
                             {
-                                leg = "legalizar";
-                                vie = "view";
-                                edi = "edit";
 
                                 <tr>
                                     <td>
