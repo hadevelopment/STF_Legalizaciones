@@ -104,6 +104,7 @@ namespace Legalizaciones
                   infoCultura,
                 }
             });
+
             //********************************************************************************
             app.UseMvc(routes =>
             {
