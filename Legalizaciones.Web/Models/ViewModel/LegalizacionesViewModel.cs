@@ -32,7 +32,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string  Concepto { get; set; }
 
         [DisplayName("Valor")]
-        public double Monto { get; set; }
+        public decimal Monto { get; set; }
 
         [DisplayName("Centro de Costo")]
         public string CentroCosto { get; set; }

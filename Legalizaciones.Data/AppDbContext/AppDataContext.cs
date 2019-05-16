@@ -8,6 +8,7 @@
 
         //Localidades
         public DbSet<Pais> Pais { get; set; }        public DbSet<Ciudad> Ciudad { get; set; }        public DbSet<Destino> Destino { get; set; }        public DbSet<Zona> Zona { get; set; }
+        public DbSet<OrigenDestino> OrigenDestino { get; set; }
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }

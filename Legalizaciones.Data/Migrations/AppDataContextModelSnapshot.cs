@@ -311,6 +311,26 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Destino");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Jerarquia.OrigenDestino", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("PaisId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaisId");
+
+                    b.ToTable("OrigenDestino");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.Jerarquia.Pais", b =>
                 {
                     b.Property<int>("Id")
@@ -523,7 +543,7 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int?>("MonedaId")
                         .IsRequired();
 
-                    b.Property<float>("Monto");
+                    b.Property<decimal>("Monto");
 
                     b.Property<string>("NumeroSolicitud");
 
@@ -574,7 +594,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("IVATeorico");
 
-                    b.Property<float>("Monto");
+                    b.Property<decimal>("Monto");
 
                     b.Property<string>("Neto");
 
@@ -714,6 +734,14 @@ namespace Legalizaciones.Data.Migrations
                     b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
                         .WithMany("Ciudad")
                         .HasForeignKey("PaisID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Jerarquia.OrigenDestino", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
+                        .WithMany()
+                        .HasForeignKey("PaisId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

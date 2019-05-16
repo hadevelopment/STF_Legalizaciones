@@ -86,7 +86,7 @@ namespace Legalizaciones.Model
         public Empleado Empleado { get; set; }
 
         [DisplayName("Monto")]
-        public float Monto { get; set; }
+        public decimal Monto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaSolicitud { get; set; }

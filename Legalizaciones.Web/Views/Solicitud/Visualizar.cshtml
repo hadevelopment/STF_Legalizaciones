@@ -7,13 +7,13 @@
     <div class="col-sm-12">
         <div class="box">
             <div class="box-body">
-                <small>
+                
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
                     >
                     <a href='@Url.Action("Index","Solicitud")'> Anticipos </a>
                     > 
                     Detalle <strong> Anticipo Nro @Model.NumeroSolicitud</strong>
-                </small>
+                
             </div>
         </div>
     </div>
@@ -28,49 +28,6 @@
                 <div class="box-tools pull-right">
 
                 </div>
-
-                @* Desde aqui es steppers ********************************************************************* *@
-
-                @*<!-- Horizontal Steppers -->
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <!-- Stepers Wrapper -->
-                        <ul class="stepper stepper-horizontal">
-
-                            <!-- First Step -->
-                            <li class="completed">
-                                <a href="#!">
-                                    <span class="circle">1</span>
-                                    <span class="label">First step</span>
-                                </a>
-                            </li>
-
-                            <!-- Second Step -->
-                            <li class="active">
-                                <a href="#!">
-                                    <span class="circle">2</span>
-                                    <span class="label">Second step</span>
-                                </a>
-                            </li>
-
-                            <!-- Third Step -->
-                            <li class="warning">
-                                <a href="#!">
-                                    <span class="circle"><i class="fas fa-exclamation"></i></span>
-                                    <span class="label">Third step</span>
-                                </a>
-                            </li>
-
-                        </ul>
-                        <!-- /.Stepers Wrapper -->
-
-                    </div>
-                </div>
-                <!-- /.Horizontal Steppers -->*@
-                @* Hasta aqui stpers*************************************************************************** *@
-
-
             </div>
         </div>
 
@@ -117,7 +74,7 @@
                     <div class="col-md-12">
                         @*@Html.TextAreaFor(model => model.Concepto, 4, 140,
                             new { @placeholder = "Explique el concepto del Anticipo (Minímo 50 carácteres)", @style = "width:100%;", @editable ="False" })*@
-                        <label asp-for="Concepto" id="lbl_concepto">  <small>@Model.Concepto </small>   </label>
+                        <span> @Model.Concepto </span>
                         <span asp-validation-for="Concepto" class="text-danger"></span>
                     </div>
                 </div>
@@ -125,60 +82,44 @@
             <div class="box-body">
                 <div class="row">
 
-
                 </div>
 
                 <div class="row">
                     <div class="col-md-3">
-                        <label asp-for="Destino" id="lbl_destino">Destino: <small> @Model.Destino.Nombre</small>  </label>
-
+                        <label asp-for="Destino" id="lbl_destino">Destino:</label>&nbsp;<span>@Model.Destino.Nombre </span>
                     </div>
                     <div class="col-md-3">
-                        <label asp-for="Zona" id="lbl_zona">Zona Visitada: <small> @Model.Zona.Nombre  </small></label>
-
+                        <label asp-for="Zona" id="lbl_zona">Zona Visitada:</label>&nbsp;<span>@Model.Zona.Nombre</span>
                     </div>
 
                     <div class="col-md-3">
-                       
-                        <label asp-for="CentroOperacion">Centro de operación: <small> @Model.CentroOperacion.Nombre  </small></label>
-
+                        <label asp-for="CentroOperacion">Centro de operación:</label>&nbsp;<span>@Model.CentroOperacion.Nombre</span>
                     </div>
-
-
                     <div class="col-md-3">
-                        <label asp-for="UnidadNegocio">Unidad de negocio: <small> @Model.UnidadNegocio.Nombre  </small></label>
-
+                        <label asp-for="UnidadNegocio">Unidad de negocio:</label>&nbsp;<span>@Model.UnidadNegocio.Nombre </span>
                     </div>
-
                 </div>
-            </div>
 
-            <div class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <label asp-for="CentroCosto">Centro de costo: <small> @Model.CentroCosto.Nombre  </small></label>
-
+                        <label asp-for="CentroCosto">Centro de costo:</label> &nbsp;<span> @Model.CentroCosto.Nombre</span>
                     </div>
 
                     <div class="col-md-3">
-                        <label asp-for="FechaDesde">Fecha desde: <small> @Model.FechaDesde.ToShortDateString()  </small></label>
+                        <label asp-for="FechaDesde">Fecha desde:</label> &nbsp;<span>@Model.FechaDesde.ToShortDateString() </span>
                     </div>
-
 
                     <div class="col-md-3">
-                        <label asp-for="FechaHasta">Fecha hasta: <small> @Model.FechaHasta.ToShortDateString()  </small></label>
+                        <label asp-for="FechaHasta">Fecha hasta:</label> &nbsp;<span> @Model.FechaHasta.ToShortDateString()</span>
                     </div>
-
 
                     <div class="col-md-3">
-                        <label asp-for="Moneda">Moneda: <small> @Model.Moneda.Nombre  </small></label>
+                        <label asp-for="Moneda">Moneda:</label> &nbsp;<span>@Model.Moneda.Nombre</span>
                     </div>
-
-
                 </div>
                 <div class="row">
                     <div class="col-md-3">
-                        <label asp-for="Monto">Monto Solicitud: <small> @Model.Monto </small></label>
+                        <label asp-for="Monto">Monto Solicitud:</label> &nbsp;<span>@Model.Monto</span>
                     </div>
                     @if (!string.IsNullOrEmpty(Model.RutaArchivo))
                     {
@@ -190,6 +131,9 @@
                         </div>
                     }
                 </div>
+            </div>
+
+            <div class="box-body">
 
                 <div class="row" style="margin-top:40px;">
                     <div class="col-md-6">

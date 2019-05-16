@@ -12,6 +12,8 @@ namespace Legalizaciones.Model.Jerarquia
     {
         public string Nombre { get; set; }
 
+        [ForeignKey("Pais")]
         public int PaisId { get; set; }
+        public Pais Pais { get; set; }
     }
 }
