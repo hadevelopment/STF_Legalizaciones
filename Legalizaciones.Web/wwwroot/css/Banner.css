@@ -4,15 +4,19 @@
     border-bottom: 5px solid #da8c10;
 }
 
-    #Banner img {
-        width: 150px;
-        height: auto;
-    }
+#Banner img {
+    width: 150px;
+    height: auto;
+}
+
+input[type="text"] {
+    padding: 09px 09px;
+    line-height: 09px;
+}
 
 /*@supports(object-fit: cover) {
     #Banner img {
         height: 100%;
         object-fit: cover;
         object-position: center center;
-    }*/
-}
+
