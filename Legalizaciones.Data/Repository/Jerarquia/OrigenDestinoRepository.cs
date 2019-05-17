@@ -1,21 +1,21 @@
-﻿using Legalizaciones.Interface.ISolicitud;
-using Legalizaciones.Data.AppDbContext;
+﻿using Legalizaciones.Data.AppDbContext;
 using Legalizaciones.Data.Repository.Base;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using Legalizaciones.Interface.IJerarquia;
 using Legalizaciones.Model.Jerarquia;
 
-namespace Legalizaciones.Data.Repository
+namespace Legalizaciones.Data.Repository.Jerarquia
 {
-    public class DestinoRepository : BaseRepository<Destino>, IDestinoRepository
+    public class OrigenDestinoRepository : BaseRepository<OrigenDestino>, IOrigenDestinoRepository
     {
-        public DestinoRepository(AppDataContext context) : base(context)
+        public OrigenDestinoRepository(AppDataContext context) : base(context)
         {
 
         }
 
-        public IEnumerable<SelectListItem> listaDestinos()
+        public IEnumerable<SelectListItem> listaOrigenDestino()
         {
             return All().ToList().Select(x => new SelectListItem()
             {

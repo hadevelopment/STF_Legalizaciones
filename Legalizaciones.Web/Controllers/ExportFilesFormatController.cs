@@ -6,6 +6,7 @@ using Legalizaciones.Interface;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
+using Legalizaciones.Interface.IJerarquia;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Legalizaciones.Interface.ISolicitud;
@@ -20,18 +21,25 @@ namespace Legalizaciones.Web.Controllers
         private readonly IZonaRepository zonaRepository;
         private readonly IDestinoRepository destinoRepository;
         private readonly IEstadoSolicitudRepository estatusRepository;
+        private readonly IOrigenDestinoRepository origenDestinoRepository;
+        private readonly IPaisRepository paisRepository;
+        
 
         public ExportFilesFormatController(IConverter converter, 
                                            ISolicitudRepository solicitudRepository,
                                            IZonaRepository    zonaRepository,
                                            IDestinoRepository destinoRepository,
-                                           IEstadoSolicitudRepository estatusRepository)
+                                           IEstadoSolicitudRepository estatusRepository,
+                                           IOrigenDestinoRepository origenDestinoRepository,
+                                           IPaisRepository paisRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
             this.estatusRepository   = estatusRepository;
             this.zonaRepository      = zonaRepository;
-            this.destinoRepository = destinoRepository;
+            this.destinoRepository       = destinoRepository;
+            this.origenDestinoRepository = origenDestinoRepository;
+            this.paisRepository = paisRepository;
         }
 
         [HttpGet]
@@ -145,11 +153,54 @@ namespace Legalizaciones.Web.Controllers
             return Download(sFileName);
         }
 
+        [HttpGet]
+        public ActionResult ExportDatosOrigenDestinoExcel()
+        {
+            List<OrigenDestino> lstOrigenDestino = this.origenDestinoRepository.All().Where(a => a.Estatus == 1).ToList();
+            foreach (var item in lstOrigenDestino)
+            {
+                item.Pais = paisRepository.Find(long.Parse(item.PaisId.ToString()));
+            }
+
+            string sFileName = "OrigenDestino.xls";
+            string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("OrigenDestino");
+                IRow row = excelSheet.CreateRow(0);
+
+                row.CreateCell(0).SetCellValue("ID");
+                row.CreateCell(1).SetCellValue("Nombre");
+                row.CreateCell(2).SetCellValue("Pais");
+                row.CreateCell(3).SetCellValue("Fecha Creacion");
+
+                var index = 1;
+                foreach (var itemOrigenDestino in lstOrigenDestino)
+                {
+                    row = excelSheet.CreateRow(index);
+                    row.CreateCell(0).SetCellValue(itemOrigenDestino.Id);
+                    row.CreateCell(1).SetCellValue(itemOrigenDestino.Nombre);
+                    row.CreateCell(2).SetCellValue(itemOrigenDestino.Pais.Nombre);
+                    row.CreateCell(3).SetCellValue(itemOrigenDestino.FechaCreacion.ToShortDateString());
+                    index++;
+                }
+
+                workbook.Write(fs);
+            }
+
+            return Download(sFileName);
+        }
+
 
         [HttpGet]
         public ActionResult ExportDatosZonasExcel()
         {
-            List<Zona> lstZonas = this.zonaRepository.All().ToList();
+            List<Zona> lstZonas = this.zonaRepository.All().Where(a => a.Estatus == 1).ToList();
             foreach (var zona in lstZonas)
             {
                 zona.Destino = destinoRepository.Find(long.Parse(zona.DestinoID.ToString()));

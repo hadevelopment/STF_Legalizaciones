@@ -1,10 +1,10 @@
-﻿@model Legalizaciones.Model.Jerarquia.Zona
+﻿@model Legalizaciones.Model.Jerarquia.OrigenDestino
 @{
     ViewData["Title"] = "Visualizar";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Visualizar Zonas</h2>
+<h2>Visualizar Origen-Destinos</h2>
 
 <div class="row">
     <div class="col-sm-12">
@@ -13,7 +13,7 @@
                 <small>
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
                     >
-                    <a href='@Url.Action("Index","Solicitud")'> Zonas </a>
+                    <a href='@Url.Action("Index","Solicitud")'> Origen-Destino </a>
                     >
                     <strong>Editar</strong>
                 </small>
@@ -22,13 +22,13 @@
     </div>
 </div>
 
-<form asp-controller="Zona" asp-action="Eliminar" method="post" name="form1">
+<form asp-controller="OrigenDestino" asp-action="Eliminar" method="post" name="form1">
     <div class="hidden">
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
-        @*<input class="hide" type="text" id="hdDestinoId" name="hdDestinoId" value="@Model.DestinoID" />*@
         <input class="hide" type="text" id="Id" name="Id" value="@Model.Id" />
     </div>
-    <input asp-for="DestinoID" type="text" class="form-control hide" />
+
+    <input asp-for="PaisId" type="text" class="form-control hide" />
 
     <section>
 
@@ -42,11 +42,7 @@
                     </div>
 
                     <div class="col-md-4">
-                        <label asp-for="Abreviatura" class="control-label"></label>
-                    </div>
-
-                    <div class="col-md-4">
-                        <label asp-for="Destino" class="control-label"></label>
+                        <label asp-for="Pais" class="control-label"></label>
                     </div>
 
                 </div>
@@ -55,22 +51,15 @@
 
                     <div class="col-md-4">
 
-                        <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre zona" readonly="readonly" />
+                        <input asp-for="Nombre" type="text" class="form-control" placeholder="Nombre origen" readonly="readonly" />
                         <span asp-validation-for="Nombre" class="text-danger"></span>
 
                     </div>
 
                     <div class="col-md-4">
 
-                        <input asp-for="Abreviatura" type="text" class="form-control" placeholder="Abreviatura" readonly="readonly" />
-                        <span asp-validation-for="Abreviatura" class="text-danger"></span>
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", disabled = "disabled", id = "Destino" })
-                        @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(model => model.PaisId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", disabled = "disabled", id = "Pais" })
+                        @Html.ValidationMessageFor(model => model.PaisId, "", new { @class = "text-danger" })
 
                     </div>
 
@@ -88,7 +77,7 @@
             <span class="glyphicon glyphicon-trash"></span> Eliminar
         </button>
 
-        <a id="BtnClose" class="btn btn-danger" data-dismiss="modal" asp-controller="Zona" asp-action="Index">
+        <a id="BtnClose" class="btn btn-danger" data-dismiss="modal" asp-controller="OrigenDestino" asp-action="Index">
             <span class="glyphicon glyphicon-off"></span> Volver
         </a>
     </div>
@@ -98,6 +87,6 @@
 @section scripts {
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
-    <script src="~/js/ZonaScript.js"></script>
+    <script src="~/js/OrigenDestinoScript.js"></script>
 }
 

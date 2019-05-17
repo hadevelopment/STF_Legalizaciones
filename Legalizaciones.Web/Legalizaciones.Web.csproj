@@ -42,6 +42,22 @@
    <Folder Include="wwwroot\files\24296342\1\facturas\" />
  </ItemGroup>
 
+
+ <ItemGroup>
+   <Content Update="Views\OrigenDestino\Crear.cshtml">
+     <Pack>$(IncludeRazorContentInPack)</Pack>
+   </Content>
+   <Content Update="Views\OrigenDestino\Editar.cshtml">
+     <Pack>$(IncludeRazorContentInPack)</Pack>
+   </Content>
+   <Content Update="Views\OrigenDestino\Index.cshtml">
+     <Pack>$(IncludeRazorContentInPack)</Pack>
+   </Content>
+   <Content Update="Views\OrigenDestino\Visualizar.cshtml">
+     <Pack>$(IncludeRazorContentInPack)</Pack>
+   </Content>
+ </ItemGroup>
+
  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 
 

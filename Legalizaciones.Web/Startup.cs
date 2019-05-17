@@ -16,6 +16,7 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
 using System.IO;
+using Legalizaciones.Data.Repository.Jerarquia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
@@ -57,6 +58,7 @@ namespace Legalizaciones
             services.AddTransient<IDestinoRepository, DestinoRepository>();
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
+            services.AddTransient<IOrigenDestinoRepository, OrigenDestinoRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
             //Iempl

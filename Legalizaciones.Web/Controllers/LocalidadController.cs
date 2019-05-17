@@ -85,6 +85,18 @@ namespace Legalizaciones.Web.Controllers
             return Json(ListDestinos);
         }
 
+        public JsonResult PaisMaeEdit(int Id)
+        {
+            var ListPaises = paisRepository.All().ToList();
+            foreach (var item in ListPaises)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(ListPaises);
+        }
+
         public JsonResult ZonasDestinosMaeEdit(int Id)
         {
             var ListZonaDestino = destinoRepository.All().ToList();

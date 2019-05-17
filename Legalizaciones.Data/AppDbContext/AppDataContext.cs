@@ -28,6 +28,7 @@
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
         public DbSet<TipoPermiso> TipoPermiso{ get; set; }
         public DbSet<EstadoSolicitud> EstadoSolicitud { get; set; }
+        public DbSet<OrigenDestino> OrigenDestino { get; set; }
         public object Setting { get; private set; }
     }
 }
