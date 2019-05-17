@@ -26,6 +26,7 @@ namespace Legalizaciones
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -76,23 +77,23 @@ namespace Legalizaciones
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder service, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                service.UseDeveloperExceptionPage();
+                service.UseBrowserLink();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                service.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-            app.UseSession();
+            service.UseStaticFiles();
+            service.UseSession();
             //*********************Cultura: English United State -> Formato Numerico ********************************
             var infoCultura = new CultureInfo("en-US");
-            app.UseRequestLocalization(new RequestLocalizationOptions
+            service.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(infoCultura),
                 SupportedCultures = new List<CultureInfo>
@@ -104,9 +105,7 @@ namespace Legalizaciones
                   infoCultura,
                 }
             });
-
-            //********************************************************************************
-            app.UseMvc(routes =>
+            service.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

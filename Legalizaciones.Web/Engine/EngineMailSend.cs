@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
@@ -9,12 +10,15 @@ namespace Legalizaciones.Web.Engine
 {
     public class EngineMailSend
     {
+
         public string Asunto { get; set; }
         public string Cuerpo { get; set; }
         public string RutaArchivoAdjunto { get; set; }
         public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
-        //string patrh = System.Web.Hosting.HostingEnviroment.MapPath("");
+        //string patrh = System.Web.Hosting.HostingEnviroment.MapPath();
+
+        private string path = Path.Combine( "wwwroot", "EmailTemplate", "AprobacionSolicitudAnt.html");
 
         public EngineMailSend(){ }
 
@@ -29,10 +33,10 @@ namespace Legalizaciones.Web.Engine
         public bool EnviarMail()
         {
             bool resultado = false;
+            string template = path;
             try
             {
                 MailMessage mensaje = new MailMessage();
-                SmtpClient servidor = new SmtpClient();
                 mensaje.From = new MailAddress("efrainmejiasc@gmail.com");
                 mensaje.Subject = Asunto;
                 mensaje.SubjectEncoding = System.Text.Encoding.UTF8;
@@ -40,7 +44,9 @@ namespace Legalizaciones.Web.Engine
                 mensaje.BodyEncoding = System.Text.Encoding.UTF8;
                 mensaje.IsBodyHtml = true;
                 mensaje = SetMsjPara(mensaje);
-                if (RutaArchivoAdjunto != string.Empty) { mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto)); }
+                if (RutaArchivoAdjunto != string.Empty)
+                    mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto));
+                SmtpClient servidor = new SmtpClient();
                 servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234santiago");
                 servidor.Port = 587;
                 servidor.Host = "smtp.gmail.com";
