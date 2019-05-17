@@ -17,7 +17,7 @@ namespace Legalizaciones.Web.Engine
         public string RutaArchivoAdjunto { get; set; }
         public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
-        //string patrh = System.Web.Hosting.HostingEnviroment.MapPath();
+
         private readonly IHostingEnvironment env;
         string path = string.Empty;
 
@@ -34,6 +34,7 @@ namespace Legalizaciones.Web.Engine
             this.RutaArchivoAdjunto = pathAdjunto;
             this.MensajePara = msjTo;
             path = Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
+            this.Cuerpo =File.ReadAllText(path);
         }
 
         public bool EnviarMail()

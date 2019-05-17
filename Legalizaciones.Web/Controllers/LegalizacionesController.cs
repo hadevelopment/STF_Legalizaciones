@@ -80,6 +80,7 @@ namespace Legalizaciones.Web.Controllers
             listaDestino.Add("efrainmejias@hotmail.com");
             listaDestino.Add("efrainmejiasc@gmail.com");
             listaDestino.Add("e.mejias@innova4j.com");
+            listaDestino.Add("ha.development.org@gmail.com");
             EngineMailSend Enviar = new EngineMailSend(env, "Prueba Notificacion STF", "Probando Notificacion", string.Empty, listaDestino);
             Enviar.EnviarMail();
         }
