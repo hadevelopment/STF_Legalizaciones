@@ -11,7 +11,9 @@ namespace Legalizaciones.Web.Engine
         public string Asunto { get; set; }
         public string Cuerpo { get; set; }
         public string RutaArchivoAdjunto { get; set; }
+        public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
+        //string patrh = System.Web.Hosting.HostingEnviroment.MapPath("");
 
 
         public bool EnviarMail()
