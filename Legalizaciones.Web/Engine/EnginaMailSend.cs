@@ -30,6 +30,7 @@ namespace Legalizaciones.Web.Engine
                 mensaje.To.Add(new MailAddress("efrainmejiasc@gmail.com"));
                 if (RutaArchivoAdjunto != string.Empty) { mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto)); }
                 servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234santiago");
+                servidor.Port = 587;
                 servidor.Host = "smtp.gmail.com";
                 servidor.EnableSsl = true;
                 servidor.Send(mensaje);
