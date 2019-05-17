@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,17 +18,22 @@ namespace Legalizaciones.Web.Engine
         public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
         //string patrh = System.Web.Hosting.HostingEnviroment.MapPath();
+        private readonly IHostingEnvironment env;
+        string path = string.Empty;
 
-        private string path = Path.Combine( "wwwroot", "EmailTemplate", "AprobacionSolicitudAnt.html");
-
-        public EngineMailSend(){ }
-
-        public EngineMailSend (string subject, string body , string pathAdjunto, List<string> msjTo)
+        public EngineMailSend(IHostingEnvironment _env )
         {
+            this.env = _env;
+        }
+
+        public EngineMailSend(IHostingEnvironment _env , string subject, string body , string pathAdjunto, List<string> msjTo)
+        {
+            this.env = _env;
             this.Asunto = subject;
             this.Cuerpo = body;
             this.RutaArchivoAdjunto = pathAdjunto;
             this.MensajePara = msjTo;
+            path = Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
         }
 
         public bool EnviarMail()

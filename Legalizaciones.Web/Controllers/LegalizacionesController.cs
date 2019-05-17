@@ -13,6 +13,7 @@ using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -26,6 +27,7 @@ namespace Legalizaciones.Web.Controllers
         private readonly IMonedaRepository monedaRepository;
         private readonly ILegalizacionRepository legalizacionRepository;
         private readonly ILegalizacionGastosRepository legalizacionGastosRepository;
+        private readonly IHostingEnvironment env;
 
         public UNOEE objUNOEE = new UNOEE();
 
@@ -33,7 +35,7 @@ namespace Legalizaciones.Web.Controllers
             ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
             IEmpleadoRepository empleadoRepository, 
-            ILegalizacionGastosRepository legalizacionGastosRepository)
+            ILegalizacionGastosRepository legalizacionGastosRepository, IHostingEnvironment _env)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -42,6 +44,7 @@ namespace Legalizaciones.Web.Controllers
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
             this.empleadoRepository = empleadoRepository;
+            this.env = _env;
         }
 
         public IActionResult Index()

@@ -26,10 +26,14 @@ namespace Legalizaciones
 {
     public class Startup
     {
-
-        public Startup(IConfiguration configuration)
+        private IConfigurationBuilder builder;
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables();
         }
 
         public IConfiguration Configuration { get; }
@@ -105,6 +109,12 @@ namespace Legalizaciones
                   infoCultura,
                 }
             });
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            this.builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+            //********************************************************************************************************
             service.UseMvc(routes =>
             {
                 routes.MapRoute(
