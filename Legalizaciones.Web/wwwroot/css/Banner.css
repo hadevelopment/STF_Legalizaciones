@@ -9,11 +9,6 @@
         height: auto;
     }
 
-input[type="text"] {
-    padding: 09px 09px;
-    line-height: 09px;
-}
-
 /*@supports(object-fit: cover) {
     #Banner img {
         height: 100%;

@@ -10,13 +10,6 @@
     background-color: white;
 }
 
-.Curva {
-    border-radius: 41px 41px 41px 41px;
-    -moz-border-radius: 41px 41px 41px 41px;
-    -webkit-border-radius: 41px 41px 41px 41px;
-    border: solid 1px black;
-}
-
 td, th {
     border: 1px solid black;
     text-align: left;
@@ -181,5 +174,3 @@ footer {
     height: 250px;
     bottom: 0;
 }
-
-.letras10 { font-size: 10px; font-weight: normal; }
