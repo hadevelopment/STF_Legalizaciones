@@ -49,6 +49,11 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
+
+            //*******************************************************
+            EnviarMensaje();
+            
+            //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -67,6 +72,16 @@ namespace Legalizaciones.Web.Controllers
             }
 
             return View(model);
+        }
+
+        private void EnviarMensaje()
+        {
+            List<string> listaDestino = new List<string>();
+            listaDestino.Add("efrainmejias@hotmail.com");
+            listaDestino.Add("efrainmejiasc@gmail.com");
+            listaDestino.Add("e.mejias@innova4j.com");
+            EngineMailSend Enviar = new EngineMailSend(env, "Prueba Notificacion STF", "Probando Notificacion", string.Empty, listaDestino);
+            Enviar.EnviarMail();
         }
 
         [HttpGet]

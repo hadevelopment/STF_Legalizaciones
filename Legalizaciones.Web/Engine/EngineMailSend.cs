@@ -53,7 +53,7 @@ namespace Legalizaciones.Web.Engine
                 if (RutaArchivoAdjunto != string.Empty)
                     mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto));
                 SmtpClient servidor = new SmtpClient();
-                servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234santiago");
+                servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234fabrizio");
                 servidor.Port = 587;
                 servidor.Host = "smtp.gmail.com";
                 servidor.EnableSsl = true;
