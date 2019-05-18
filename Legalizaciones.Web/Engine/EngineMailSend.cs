@@ -18,29 +18,25 @@ namespace Legalizaciones.Web.Engine
         public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
 
-        private readonly IHostingEnvironment env;
-        string path = string.Empty;
 
-        public EngineMailSend(IHostingEnvironment _env )
-        {
-            this.env = _env;
-        }
+        public EngineMailSend() { }
 
-        public EngineMailSend(IHostingEnvironment _env , string subject, string body , string pathAdjunto, List<string> msjTo)
+        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo)
         {
-            this.env = _env;
             this.Asunto = subject;
-            this.Cuerpo = body;
+            this.Cuerpo = File.ReadAllText(body);
             this.RutaArchivoAdjunto = pathAdjunto;
             this.MensajePara = msjTo;
-            path = Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
-            this.Cuerpo =File.ReadAllText(path);
         }
 
         public bool EnviarMail()
         {
             bool resultado = false;
-            string template = path;
+            if (this.Asunto == string.Empty && this.Cuerpo == string.Empty && this.MensajePara.Count > 0)
+            {
+                ErrorSend = "La notificacion debe contener : Asunto , Cuerpo y Destinatario";
+                return resultado;
+            }
             try
             {
                 MailMessage mensaje = new MailMessage();

@@ -80,9 +80,17 @@ namespace Legalizaciones.Web.Controllers
             listaDestino.Add("efrainmejias@hotmail.com");
             listaDestino.Add("efrainmejiasc@gmail.com");
             listaDestino.Add("e.mejias@innova4j.com");
-            listaDestino.Add("ha.development.org@gmail.com");
-            EngineMailSend Enviar = new EngineMailSend(env, "Prueba Notificacion STF", "Probando Notificacion", string.Empty, listaDestino);
-            Enviar.EnviarMail();
+            //listaDestino.Add("ha.development.org@gmail.com");
+            //****************************************************************************************************
+            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino);
+            bool resultado = Enviar.EnviarMail();
+            //*****************************************************************************************************
+            string msjReturn = string.Empty;
+            if (resultado)
+                msjReturn = "Notificacion enviada satisfactoriamente";
+            else
+                msjReturn = Enviar.ErrorEnviando();
         }
 
         [HttpGet]
