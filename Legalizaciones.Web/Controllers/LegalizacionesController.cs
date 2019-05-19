@@ -49,10 +49,8 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
-
             //*******************************************************
             EnviarMensaje();
-            
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -86,11 +84,11 @@ namespace Legalizaciones.Web.Controllers
             EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino);
             bool resultado = Enviar.EnviarMail();
             //*****************************************************************************************************
-            string msjReturn = string.Empty;
+            string msjGet = string.Empty;
             if (resultado)
-                msjReturn = "Notificacion enviada satisfactoriamente";
+                msjGet = "Notificacion enviada satisfactoriamente";
             else
-                msjReturn = Enviar.ErrorEnviando();
+                msjGet = Enviar.ErrorEnviando();
         }
 
         [HttpGet]
