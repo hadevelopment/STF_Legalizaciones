@@ -13,6 +13,7 @@ using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Legalizaciones.Model.Empresa;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -26,6 +27,7 @@ namespace Legalizaciones.Web.Controllers
         private readonly IMonedaRepository monedaRepository;
         private readonly ILegalizacionRepository legalizacionRepository;
         private readonly ILegalizacionGastosRepository legalizacionGastosRepository;
+        private readonly ITasaRepository tasaRepository;
 
         public UNOEE objUNOEE = new UNOEE();
 
@@ -33,7 +35,8 @@ namespace Legalizaciones.Web.Controllers
             ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
             IEmpleadoRepository empleadoRepository, 
-            ILegalizacionGastosRepository legalizacionGastosRepository)
+            ILegalizacionGastosRepository legalizacionGastosRepository,
+            ITasaRepository tasaRepository)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -42,6 +45,7 @@ namespace Legalizaciones.Web.Controllers
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
             this.empleadoRepository = empleadoRepository;
+            this.tasaRepository = tasaRepository;
         }
 
         public IActionResult Index()
@@ -82,8 +86,13 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult Crear(int id)
         {
             //Usuario_Cedula
-            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cargo").ToString();
+            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cedula").ToString();
+            string wUsuarioCargo = HttpContext.Session.GetString("Usuario_Cargo").ToString();
 
+            if (wUsuarioCargo == "2")
+                ViewBag.MostrarTasa = true;
+            else
+                ViewBag.MostrarTasa = false;
 
             var ListaBanco = bancoRepository.All().ToList();
             var ListaMoneda = monedaRepository.All().ToList();
@@ -112,7 +121,14 @@ namespace Legalizaciones.Web.Controllers
                 var OCentroCosto = objUNOEE.getCentroCosto(Osolicitud.CentroCostoId);
                 var OCentroOperaciones = objUNOEE.getCentroOperacion(Osolicitud.CentroOperacionId);
                 var OUnidadNegocio = objUNOEE.getUnidadNegocio(Osolicitud.UnidadNegocioId);
-                var ListaMotivo = objUNOEE.GetListMotivos(OCentroCosto.Id);
+                //var ListaMotivo = objUNOEE.GetListMotivos(Osolicitud.CentroCostoId);
+
+                var ListaCentroCosto = new List<CentroCosto>();
+                var ListaCentroOperaciones = new List<CentroOperacion>();
+                var ListaUnidadNegocio = new List<UnidadNegocio>();
+                ListaCentroCosto.Add(OCentroCosto);
+                ListaCentroOperaciones.Add(OCentroOperaciones);
+                ListaUnidadNegocio.Add(OUnidadNegocio);
 
                 string wCargo = "Empleado";
                 switch (OEmpleado.CargoId)
@@ -128,19 +144,28 @@ namespace Legalizaciones.Web.Controllers
                         break;
                 }
 
-             
+
+                var OTasa = tasaRepository.All().Where(a => a.MonedaId == Osolicitud.MonedaId).FirstOrDefault();
+                var wTasa = OTasa.Valor;
+                long wIdMoneda = Convert.ToInt64(Osolicitud.MonedaId);
+                var OMoneda = monedaRepository.Find(wIdMoneda);
 
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
+
                     AnticipoId = Osolicitud.Id,
                     DocumentoERPID = 11111,
                     FechaRegistro = Osolicitud.FechaSolicitud,
                     FechaVencimiento = Osolicitud.FechaVencimiento,
                     Concepto = Osolicitud.Concepto,
                     Monto = Osolicitud.Monto,
-                    CentroCosto = OCentroCosto.Nombre,
-                    CentroOperacion = OCentroOperaciones.Nombre,
-                    UnidadNegocio = OUnidadNegocio.Nombre,
+                    CentroCostoDescripcion = OCentroCosto.Nombre,
+                    CentroCosto = Osolicitud.CentroCostoId,
+                    CentroOperacion = Osolicitud.CentroOperacionId,
+                    UnidadNegocio = Osolicitud.UnidadNegocioId,
+                    ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
+                    ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
+                    ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
                     FechaDesde = Osolicitud.FechaDesde,
                     FechaHasta = Osolicitud.FechaHasta,
                     Nombre = OEmpleado.Nombre,
@@ -148,9 +173,12 @@ namespace Legalizaciones.Web.Controllers
                     Cargo = wCargo,
                     Area = OEmpleado.Area,
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
-                    ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
+                    //ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     MonedaId = Osolicitud.MonedaId,
-                    ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
+                    Moneda = OMoneda.Nombre,
+                    ValorTasa = wTasa,
+                    
+                    //ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
                     SolicitudGastos = ListsolicitudGastos,
                     ConAnticipo = 1
 

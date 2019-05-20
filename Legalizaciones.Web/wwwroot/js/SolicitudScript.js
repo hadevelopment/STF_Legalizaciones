@@ -431,6 +431,7 @@ function validarGastos() {
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
+            monto = CalcularGastoComida();
             rowIndex = rowIndex + 1;
             var row = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
@@ -926,5 +927,39 @@ function CargarComboAlcrear() {
     });
 
     
+
+}
+
+
+function CalcularGastoComida() {
+    var wServicio = $('#Servicio option:selected').text();
+    var wMonto = $('#Monto').val();
+
+    if (wServicio == "Comida") {
+        var FechaDesde = $("#FechaDesde").val();
+        var FDdia = FechaDesde.substr(0,2);
+        var FDMes = FechaDesde.substr(3, 2);
+        var FDAnno = FechaDesde.substr(6, 4);
+        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+
+        var FechaHasta = $("#FechaHasta").val();
+        var FHdia = FechaHasta.substr(0, 2);
+        var FHMes = FechaHasta.substr(3, 2);
+        var FHAnno = FechaHasta.substr(6, 4);
+        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+
+        var fecha1 = moment(wFDFormato);
+        var fecha2 = moment(wFHFormato);
+     
+        var wDias = fecha2.diff(fecha1, 'days');
+
+        var wMontoTotal = wMonto * parseInt(wDias);
+
+        return wMontoTotal;
+        
+
+    }
+
+    return wMonto;
 
 }

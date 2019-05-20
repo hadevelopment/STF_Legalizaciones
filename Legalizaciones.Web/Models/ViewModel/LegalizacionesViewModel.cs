@@ -32,10 +32,15 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string  Concepto { get; set; }
 
         [DisplayName("Valor")]
-        public double Monto { get; set; }
+        public decimal Monto { get; set; }
 
         [DisplayName("Centro de Costo")]
-        public string CentroCosto { get; set; }
+        public int CentroCosto { get; set; }
+
+        public string CentroCostoDescripcion { get; set; }
+
+        public SelectList ListaCentroCosto { get; set; }
+
 
         [DisplayName("Fecha desde")]
         public DateTime  FechaDesde { get; set; }
@@ -78,6 +83,11 @@ namespace Legalizaciones.Web.Models.ViewModel
         public int? MonedaId { get; set; }
         public SelectList ListaMoneda { get; set; }
 
+        public string  Moneda{ get; set; }
+
+        [DisplayName("Tasa")]
+        public string ValorTasa { get; set; }
+
         //Para el registro de gastos
         [DisplayName("ID del item")]
         public int GastosId { get; set; }
@@ -86,10 +96,14 @@ namespace Legalizaciones.Web.Models.ViewModel
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]
-        public string CentroOperacion{ get; set; }
+        public int CentroOperacion{ get; set; }
+        public SelectList ListaCentroOperacion { get; set; }
+
 
         [DisplayName("Unidad de negocio")]
-        public string UnidadNegocio { get; set; }
+        public int UnidadNegocio { get; set; }
+        public SelectList ListaUnidadNegocio { get; set; }
+
 
         [DisplayName("Motivo")]
         public string MotivoId { get; set; }
@@ -112,7 +126,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string ConceptoGasto { get; set; }
 
         [DisplayName("Valor del Gasto")]
-        public double MontoGasto { get; set; }
+        public decimal MontoGasto { get; set; }
 
         [DisplayName("Origen")]
         public string Origen { get; set; }

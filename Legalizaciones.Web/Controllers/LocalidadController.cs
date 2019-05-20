@@ -126,6 +126,12 @@ namespace Legalizaciones.Web.Controllers
         {
             var wG = solicitudGastosRepository.Find(wId);
 
+            string wFD = wG.FechaGasto.Substring(0, 4);
+            string wFM = wG.FechaGasto.Substring(5, 2);
+            string wFA = wG.FechaGasto.Substring(8, 2);
+
+            wG.FechaGasto = wFD + "-" + wFM + "-" + wFA;
+
             var wResult = Json(wG);
 
             return wResult;

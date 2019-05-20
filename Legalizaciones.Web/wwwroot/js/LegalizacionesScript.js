@@ -30,18 +30,70 @@ function Seleccionar(Id) {
                 $("#MontoGasto").val(data.monto);
                 $("#Origen").val(data.origen);
                 $("#Destino").val(data.destino);
-                $("#ConceptoGasto").val(data.concepto);
+                $("#FechaGasto").val(data.fechaGasto);
+
+                var wPais = data.paisId;
+                var wCiudad = data.ciudadId;
+                var wServicio = data.servicioId;
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Localidad/Paises",
+                    datatype: "Json",
+                    success: function (data) {
+                        $("#PaisId").empty();
+                        $.each(data, function (index, value) {
+                            if (value.id == wPais) {
+                                $('#PaisId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+                            } else {
+                                $('#PaisId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            }
+                        });
+                    }
+                });
+
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Localidad/CiudadesPais",
+                    datatype: "Json",
+                    data: { paisID: wPais },
+                    success: function (data) {
+                        $("#CiudadId").empty();
+                        $.each(data, function (index, value) {
+                            if (value.id == wCiudad) {
+                                $('#CiudadId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+                            } else {
+                                $('#CiudadId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            }
+                        });
+                    }
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: "/UNOEE/Servicios",
+                    datatype: "Json",
+                    success: function (data) {
+                        $("#Servicio").empty();
+                        $.each(data, function (index, value) {
+                            if (value.id == wServicio) {
+                                $('#TiposervicioId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
+                            } else {
+                                $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                            }
+                        });
+                    }
+                });
+
+
+
+
             }
             
         }
     });
 
-    //aqui llenare todos los controles del formulario de legalizaciones gastos
-    
-    //$("#FechaGasto").val(wFecha);
-
-    //CargarPais();
-    //CargarCiudad(PaisId);
 
     funcion_Visible($('#RegistroDatos'));
 
@@ -64,26 +116,24 @@ function AgregarFilaDatagrid() {
     var FechaGasto = $("#FechaGasto").val();
     var Id = $("#GastosId").val();
 
-    var PaisId = $("#PaisId").val();
-    var Pais = "Colombia";
-    var CiudadId = $("#CiudadId").val();
-    var Ciudad = "Cali";
-    var Monto = $("#MontoGasto").val();
+    var PaisId = $("#PaisId option:selected").val();
+    var Pais = $("#PaisId option:selected").text();
 
-    var ServicioId = $("#TiposervicioId").val();
-    var Servicio = "";
-    if (ServicioId == 1) {
-        Servicio = "Comida";
-    } else {
-        Servicio = "Transporte";
-    }
-    var MotivoId = $("#MotivoId").val();
-    var Motivo = "";
-    if (MotivoId == 1) {
-        Motivo = "Motivo Uno";
-    } else {
-        Motivo = "Motivo Dos";
-    }
+    var CiudadId = $("#CiudadId option:selected").val();
+    var Ciudad = $("#CiudadId option:selected").text();
+
+    //var Monto = $("#MontoGasto").val();
+
+    var ServicioId = $("#TiposervicioId option:selected").val();
+    var Servicio = $("#TiposervicioId option:selected").text();
+
+    //var MotivoId = $("#MotivoId").val();
+    //var Motivo = "";
+    //if (MotivoId == 1) {
+    //    Motivo = "Motivo Uno";
+    //} else {
+    //    Motivo = "Motivo Dos";
+    //}
     var ConceptoGasto = $("#ConceptoGasto").val();
 
     var ProveedorId = $("#ProveedorId").val();
@@ -94,11 +144,11 @@ function AgregarFilaDatagrid() {
         Proveedor = "Proveedor Dos";
     }
 
-    //quite 7 colummnas xq se muestran vacias y no me cabe en la pantalla
+    var Monto = CalcularGastoComidaLegalizacion();
 
+    //quite 7 colummnas xq se muestran vacias y no me cabe en la pantalla
     var row = `<tr>
                     <td class="display-none">${FechaGasto}</td> 
-                    <td class="display-none">1</td>
                     <td class="display-none">${PaisId}</td> 
                     <td class="display-none">${CiudadId}</td> 
                     <td class="display-none">${ServicioId}</td> 
@@ -111,7 +161,6 @@ function AgregarFilaDatagrid() {
                     <td>Centro de Operacion</td>
                     <td>Unidad de Negocio</td>
                     <td>Centro de Costo</td>
-                    <td>${Motivo}</td>
                     <td class="PaisId">${Pais}</td>
                     <td class="CiudadId">${Ciudad}</td>
                     <td class="ServicioId">${Servicio}</td>
@@ -128,12 +177,29 @@ function AgregarFilaDatagrid() {
 
     $('#Items').append(row);
 
+
     //Suma de Montos de Gastos legalizados
     var sum = 0;
     $('td.Monto').each(function () {
         sum += parseFloat(this.innerHTML);
     });
-    $("#txMontoT").text(sum);
+
+    //$("#txMontoT").text(sum);
+    
+    var wSaldo = parseFloat($('#txSaldo').val());
+    var wDiferencia = wSaldo - sum; 
+
+    if (wDiferencia > 0) {
+        funcion_InVisible($("#txMontoSobrante"));
+        funcion_Visible($("#txMontoFaltante"));
+        $('#txMontoFaltante').text(sum);
+    } else {
+        funcion_InVisible($("#txMontoFaltante"));
+        funcion_Visible($("#txMontoSobrante"));
+        $('#txMontoSobrante').text(sum);
+    }
+        
+
 }
 
 
@@ -238,9 +304,15 @@ window.onload = function () {
 
     CargarTipoServicio();
     CargarProveedor();
-    CargarMotivos();
+    //CargarMotivos();
     CargarPais();
+
+    var w = $('#txSaldo').val();
+    w = w.replace(",", ".");
+    $('#txSaldo').val(w); 
+
 }
+
 
 $('.datepicker').datepicker({
     format: 'dd/mm/yyyy',
@@ -250,3 +322,38 @@ $('.datepicker').datepicker({
 });
 
 $(".datepicker").datepicker("update", new Date());
+
+
+
+function CalcularGastoComidaLegalizacion() {
+    var wServicio = $('#TiposervicioId option:selected').text();
+    var wMonto = $('#MontoGasto').val();
+
+    if (wServicio == "Comida") {
+        var FechaDesde = $("#FechaDesde").val();
+        var FDdia = FechaDesde.substr(0, 2);
+        var FDMes = FechaDesde.substr(3, 2);
+        var FDAnno = FechaDesde.substr(6, 4);
+        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+
+        var FechaHasta = $("#FechaHasta").val();
+        var FHdia = FechaHasta.substr(0, 2);
+        var FHMes = FechaHasta.substr(3, 2);
+        var FHAnno = FechaHasta.substr(6, 4);
+        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+
+        var fecha1 = moment(wFDFormato);
+        var fecha2 = moment(wFHFormato);
+
+        var wDias = fecha2.diff(fecha1, 'days');
+
+        var wMontoTotal = wMonto * parseInt(wDias);
+
+        return wMontoTotal;
+
+
+    }
+
+    return wMonto;
+
+}
