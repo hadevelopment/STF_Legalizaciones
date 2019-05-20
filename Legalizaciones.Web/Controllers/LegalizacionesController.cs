@@ -14,6 +14,7 @@ using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Legalizaciones.Model.Empresa;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -28,6 +29,7 @@ namespace Legalizaciones.Web.Controllers
         private readonly ILegalizacionRepository legalizacionRepository;
         private readonly ILegalizacionGastosRepository legalizacionGastosRepository;
         private readonly ITasaRepository tasaRepository;
+        private readonly IHostingEnvironment env;
 
         public UNOEE objUNOEE = new UNOEE();
 
@@ -36,7 +38,8 @@ namespace Legalizaciones.Web.Controllers
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
             IEmpleadoRepository empleadoRepository, 
             ILegalizacionGastosRepository legalizacionGastosRepository,
-            ITasaRepository tasaRepository)
+            ITasaRepository tasaRepository,
+            IHostingEnvironment _env)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -46,6 +49,7 @@ namespace Legalizaciones.Web.Controllers
             this.legalizacionGastosRepository = legalizacionGastosRepository;
             this.empleadoRepository = empleadoRepository;
             this.tasaRepository = tasaRepository;
+            this.env = _env;
         }
 
         public IActionResult Index()
@@ -61,21 +65,10 @@ namespace Legalizaciones.Web.Controllers
                     string.Empty);
             }
             else
-            {
-                try
-                {
-                    usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-                }
-                catch
-                {
-                    usuarioCedula = string.Empty;
-                }
-
+            { 
                 if (usuarioCedula != string.Empty)
                     model = Metodo.SolicitudesAntPendientesLegalizacion(
                         "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
-                else
-                    return View(model);
             }
 
             return View(model);

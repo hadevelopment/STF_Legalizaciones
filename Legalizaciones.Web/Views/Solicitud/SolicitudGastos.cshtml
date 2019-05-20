@@ -26,7 +26,7 @@
                 @Html.DisplayFor(modelItem => item.Destino)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Monto) 
+                @item.Monto.ToString("N2")
             </td>
         </tr>
     }

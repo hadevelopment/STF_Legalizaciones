@@ -1,4 +1,6 @@
-﻿using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
+
+﻿using Legalizaciones.Model;
+using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
 
 
     public class AppDataContext : DbContext    {
@@ -10,6 +12,7 @@
 
         //Localidades
         public DbSet<Pais> Pais { get; set; }        public DbSet<Ciudad> Ciudad { get; set; }        public DbSet<Destino> Destino { get; set; }        public DbSet<Zona> Zona { get; set; }
+        public DbSet<OrigenDestino> OrigenDestino { get; set; }
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
@@ -33,3 +36,4 @@
         public object Setting { get; private set; }
     }
 }
+

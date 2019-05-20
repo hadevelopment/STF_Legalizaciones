@@ -19,15 +19,21 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Legalizaciones
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IConfigurationBuilder builder;
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables();
         }
 
         public IConfiguration Configuration { get; }
@@ -76,22 +82,41 @@ namespace Legalizaciones
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder service, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                service.UseDeveloperExceptionPage();
+                service.UseBrowserLink();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                service.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-            app.UseSession();
-
-            app.UseMvc(routes =>
+            service.UseStaticFiles();
+            service.UseSession();
+            //*********************Cultura: English United State -> Formato Numerico ********************************
+            var infoCultura = new CultureInfo("en-US");
+            service.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(infoCultura),
+                SupportedCultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                }
+            });
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            this.builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+            //********************************************************************************************************
+            service.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

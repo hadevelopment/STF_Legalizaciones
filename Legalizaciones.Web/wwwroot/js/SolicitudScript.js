@@ -428,6 +428,7 @@ function validarGastos() {
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
+    $('#monto').val('');
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
@@ -461,7 +462,9 @@ function validarGastos() {
             $('td.monto').each(function () {
                 sum += parseFloat(this.innerHTML);
             });
-            $("#txMontoT").val(sum);
+            var v = String(sum);
+            v = v.replace('.', ',');
+            $("#txMontoT").val(v);
             $('#hdfMontoSolicitud').val($("#txMontoT").val());
 
         } else {
@@ -546,7 +549,9 @@ function actualizarGastos(){
     $('td.monto').each(function () {
         sum += parseFloat(this.innerHTML);
     });
-    $("#txMontoT").val(sum);
+    var v = String(sum);
+    v = v.replace('.', ',');
+    $("#txMontoT").val(v);
     $('#hdfMontoSolicitud').val($("#txMontoT").val());
 }
 

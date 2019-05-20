@@ -207,7 +207,7 @@
                     {
                         @foreach (var item in Model.SolicitudGastos)
                         {
-
+                            string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
                             <tr>
                                 <td class="col-md-1 ">@item.Id</td>
                                 <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
@@ -216,10 +216,10 @@
                                 <td class="col-md-1 ">@item.Ciudad</td>
                                 <td class="col-md-1 ">@item.Origen</td>
                                 <td class="col-md-1 ">@item.Destino</td>
-                                <td class="col-md-1 ">@item.Monto</td>
-                                <td class="col-md-1 ">@item.IVA</td>
-                                <td class="col-md-1 ">0</td>
-                                <td class="col-md-1 ">@item.Monto</td>
+                                <td class="col-md-1 "><small><small>@item.Monto.ToString("N2")</small></small></td>
+                                <td class="col-md-1 "><small><small>@Convert.ToDecimal(item.IVA).ToString("N2")</small></small></td>
+                                <td class="col-md-1 "><small><small>0</small></small></td>
+                                <td class="col-md-1 "><small><small>@total</small></small></td>
 
                             </tr>
                         }
