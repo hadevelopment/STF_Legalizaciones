@@ -7,6 +7,8 @@ using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using System.Runtime.CompilerServices;
+
 namespace Legalizaciones.Web.Engine
 {
     public class EngineMailSend
@@ -17,33 +19,32 @@ namespace Legalizaciones.Web.Engine
         public string RutaArchivoAdjunto { get; set; }
         public List<string> MensajePara { get; set; }
         private string ErrorSend { get; set; }
-        //string patrh = System.Web.Hosting.HostingEnviroment.MapPath();
-        private readonly IHostingEnvironment env;
-        string path = string.Empty;
 
-        public EngineMailSend(IHostingEnvironment _env )
-        {
-            this.env = _env;
-        }
 
-        public EngineMailSend(IHostingEnvironment _env , string subject, string body , string pathAdjunto, List<string> msjTo)
+        public EngineMailSend() { }
+
+        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo ,Models.Email model)
         {
-            this.env = _env;
+
             this.Asunto = subject;
-            this.Cuerpo = body;
+            this.Cuerpo = File.ReadAllText(body);
+            this.Cuerpo = ReplaceParameters(model, this.Cuerpo);
             this.RutaArchivoAdjunto = pathAdjunto;
             this.MensajePara = msjTo;
-            path = Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
         }
 
         public bool EnviarMail()
         {
             bool resultado = false;
-            string template = path;
+            if (this.Asunto == string.Empty && this.Cuerpo == string.Empty && this.MensajePara.Count > 0)
+            {
+                ErrorSend = "La notificacion debe contener : Asunto , Cuerpo y Destinatario";
+                return resultado;
+            }
             try
             {
                 MailMessage mensaje = new MailMessage();
-                mensaje.From = new MailAddress("efrainmejiasc@gmail.com");
+                mensaje.From = new MailAddress("STF Mail Notify<efrainmejiasc@gmail.com>");
                 mensaje.Subject = Asunto;
                 mensaje.SubjectEncoding = System.Text.Encoding.UTF8;
                 mensaje.Body = Cuerpo;
@@ -53,7 +54,7 @@ namespace Legalizaciones.Web.Engine
                 if (RutaArchivoAdjunto != string.Empty)
                     mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto));
                 SmtpClient servidor = new SmtpClient();
-                servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234santiago");
+                servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234fabrizio");
                 servidor.Port = 587;
                 servidor.Host = "smtp.gmail.com";
                 servidor.EnableSsl = true;
@@ -68,7 +69,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        public MailMessage SetMsjPara( MailMessage mensaje )
+        private MailMessage SetMsjPara( MailMessage mensaje )
         {
             foreach (string email in this.MensajePara)
             { 
@@ -78,7 +79,7 @@ namespace Legalizaciones.Web.Engine
             return mensaje;
         }
 
-        public bool EmailEsValido(string email)
+        private bool EmailEsValido(string email)
         {
             string expresion = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
             bool resultado = false;
@@ -90,9 +91,19 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
+        private string ReplaceParameters(Models.Email model,string cuerpo)
+        {
+            cuerpo = cuerpo.Replace("@Model.Fecha", model.Fecha);
+            cuerpo = cuerpo.Replace("@Model.NombreDestinatario", model.NombreDestinatario);
+            cuerpo = cuerpo.Replace("@Model.NumeroDocumento",model.NumeroDocumento);
+            cuerpo = cuerpo.Replace("@Model.Direccion", model.Direccion);
+            return cuerpo;
+        }
+
         public string ErrorEnviando ()
         {
             return ErrorSend;
         }
+
     }
 }

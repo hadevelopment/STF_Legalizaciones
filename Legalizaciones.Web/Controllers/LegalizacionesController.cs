@@ -54,6 +54,9 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
+            //*******************************************************
+            //EnviarMensaje();
+            //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -72,6 +75,32 @@ namespace Legalizaciones.Web.Controllers
             }
 
             return View(model);
+        }
+
+        private void EnviarMensaje()
+        {
+            List<string> listaDestino = new List<string>();
+            listaDestino.Add("efrainmejias@hotmail.com");
+            listaDestino.Add("efrainmejiasc@gmail.com");
+            listaDestino.Add("e.mejias@innova4j.com");
+            listaDestino.Add("ha.development.org@gmail.com");
+            //****************************************************************************************************
+            Email model = new Email
+            {
+                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
+                NombreDestinatario = "Leo Messi",
+                NumeroDocumento ="00010",
+                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
+            };
+            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
+            bool resultado = Enviar.EnviarMail();
+            //*****************************************************************************************************
+            string msjGet = string.Empty;
+            if (resultado)
+                msjGet = "Notificacion enviada satisfactoriamente";
+            else
+                msjGet = Enviar.ErrorEnviando();
         }
 
         [HttpGet]

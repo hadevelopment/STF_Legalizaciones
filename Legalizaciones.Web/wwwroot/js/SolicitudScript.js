@@ -416,7 +416,7 @@ function LoadProductsData(id) {
 var rowIndex = 0;
 
 function validarGastos() {
-    
+
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -475,7 +475,7 @@ function validarGastos() {
 
     } else {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
-            rowIndex= rowIndex + 1;
+            rowIndex = rowIndex + 1;
             var row2 = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
                     <td class="paisId display-none">${paisId}</td>
@@ -517,7 +517,7 @@ function validarGastos() {
 
 }
 
-function actualizarGastos(){
+function actualizarGastos() {
     var value = $('#hdfRowIndex').val();
 
     var fechaGasto = $("#FechaGasto").val();
@@ -557,8 +557,7 @@ function actualizarGastos(){
 
 
 
-function ShowModalUpdate(value)
-{
+function ShowModalUpdate(value) {
 
     var fechaGasto = $('.' + value + ' .fechaGasto').text();
     var paisId = $('.' + value + ' .paisId').text();
@@ -594,9 +593,9 @@ function ShowModalUpdate(value)
         $('#divGastosDescripcion').addClass('col-md-12');
         $('#divZonas').addClass('display-none');
     }
-    
+
     $('#gastosModal').modal('show');
-} 
+}
 
 function validarViaje(boton) {
     $('#btnAdd').removeClass('display-none');
@@ -611,7 +610,7 @@ function validarViaje(boton) {
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
-        
+
         return true;
 
     } else {
@@ -931,7 +930,7 @@ function CargarComboAlcrear() {
         }
     });
 
-    
+
 
 }
 
