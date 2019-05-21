@@ -38,9 +38,6 @@
  </ItemGroup>
 
  <ItemGroup>
-   <Content Update="Views\Legalizaciones\TemplateEmail.cshtml">
-     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-   </Content>
    <Content Update="wwwroot\EmailTemplate\TemplateEmail.cshtml">
      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
    </Content>
