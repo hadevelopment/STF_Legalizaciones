@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Notificacion STF</title>
@@ -13,23 +13,23 @@
             color: #FFFFFF;
             font-size: 18px;
             background-color: black;
-            border: black  0px solid;
+            border: black 0px solid;
         }
-		  .line {
 
+        .line {
             background-color: orange;
-            border: black  0px solid;
-			height:10px;
+            border: black 0px solid;
+            height: 10px;
         }
 
         .celda {
-            background-color:white;
+            background-color: white;
             border: white 0px solid;
         }
 
         .table-borderless td,
         .table-borderless th {
-            border:white 0px solid;
+            border: white 0px solid;
         }
         -->
     </style>
@@ -41,8 +41,8 @@
                 <tr>
                     <td colspan="2" class="cabezera"><div align="center">STUDIO F</div></td>
                 </tr>
-				 <tr>
-                    <td colspan="2" ><div class="line" ></div></td>
+                <tr>
+                    <td colspan="2"><div class="line"></div></td>
                 </tr>
                 <tr>
                     <td class="celda">&nbsp;&nbsp;&nbsp; Saludos estimado(a):  </td>
@@ -54,7 +54,7 @@
                 </tr>
                 <tr>
                     <td class="celda">&nbsp;&nbsp;&nbsp; Se le notifica que la solicitud de anticipo, </td>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; Nº: @Model.NumeroDocumento espera por aprobacion.</td>
+                    <td class="celda">&nbsp;&nbsp;&nbsp; Nº @Model.NumeroDocumento espera por aprobacion.</td>
                 </tr>
                 <tr>
                     <td class="celda">&nbsp;&nbsp;&nbsp;</td>
@@ -64,8 +64,8 @@
                     <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Direccion </td>
                     <td class="celda">&nbsp;</td>
                 </tr>
-				 <tr>
-                    <td colspan="2" ><div class="line"></div></td>
+                <tr>
+                    <td colspan="2"><div class="line"></div></td>
                 </tr>
                 <tr>
                     <td colspan="2" class="cabezera"><div align="center"></div></td>

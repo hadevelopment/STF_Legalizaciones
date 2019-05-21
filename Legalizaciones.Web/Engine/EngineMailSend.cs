@@ -7,6 +7,8 @@ using System.Net.Mail;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using System.Runtime.CompilerServices;
+
 namespace Legalizaciones.Web.Engine
 {
     public class EngineMailSend
@@ -21,10 +23,12 @@ namespace Legalizaciones.Web.Engine
 
         public EngineMailSend() { }
 
-        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo)
+        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo ,Models.Email model)
         {
+
             this.Asunto = subject;
             this.Cuerpo = File.ReadAllText(body);
+            this.Cuerpo = ReplaceParameters(model, this.Cuerpo);
             this.RutaArchivoAdjunto = pathAdjunto;
             this.MensajePara = msjTo;
         }
@@ -40,7 +44,7 @@ namespace Legalizaciones.Web.Engine
             try
             {
                 MailMessage mensaje = new MailMessage();
-                mensaje.From = new MailAddress("efrainmejiasc@gmail.com");
+                mensaje.From = new MailAddress("STF Mail Notify<efrainmejiasc@gmail.com>");
                 mensaje.Subject = Asunto;
                 mensaje.SubjectEncoding = System.Text.Encoding.UTF8;
                 mensaje.Body = Cuerpo;
@@ -65,7 +69,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        public MailMessage SetMsjPara( MailMessage mensaje )
+        private MailMessage SetMsjPara( MailMessage mensaje )
         {
             foreach (string email in this.MensajePara)
             { 
@@ -75,7 +79,7 @@ namespace Legalizaciones.Web.Engine
             return mensaje;
         }
 
-        public bool EmailEsValido(string email)
+        private bool EmailEsValido(string email)
         {
             string expresion = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
             bool resultado = false;
@@ -85,6 +89,15 @@ namespace Legalizaciones.Web.Engine
                     resultado = true;    
             }
             return resultado;
+        }
+
+        private string ReplaceParameters(Models.Email model,string cuerpo)
+        {
+            cuerpo = cuerpo.Replace("@Model.Fecha", model.Fecha);
+            cuerpo = cuerpo.Replace("@Model.NombreDestinatario", model.NombreDestinatario);
+            cuerpo = cuerpo.Replace("@Model.NumeroDocumento",model.NumeroDocumento);
+            cuerpo = cuerpo.Replace("@Model.Direccion", model.Direccion);
+            return cuerpo;
         }
 
         public string ErrorEnviando ()

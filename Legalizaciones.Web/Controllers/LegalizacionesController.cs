@@ -80,8 +80,15 @@ namespace Legalizaciones.Web.Controllers
             listaDestino.Add("e.mejias@innova4j.com");
             //listaDestino.Add("ha.development.org@gmail.com");
             //****************************************************************************************************
-            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "AprobacionSolicitudAnt.html");
-            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino);
+            Email model = new Email
+            {
+                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
+                NombreDestinatario = "Leo Messi",
+                NumeroDocumento ="00010",
+                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
+            };
+            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
             bool resultado = Enviar.EnviarMail();
             //*****************************************************************************************************
             string msjGet = string.Empty;
