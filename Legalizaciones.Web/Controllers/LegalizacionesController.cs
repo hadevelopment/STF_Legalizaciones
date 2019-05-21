@@ -16,10 +16,7 @@ using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-<<<<<<< HEAD
-=======
 using Legalizaciones.Model.Empresa;
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 using Microsoft.AspNetCore.Hosting;
 
 namespace Legalizaciones.Web.Controllers
@@ -45,14 +42,8 @@ namespace Legalizaciones.Web.Controllers
         public LegalizacionesController(ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
-<<<<<<< HEAD
             IEmpleadoRepository empleadoRepository, ICiudadRepository ciudadRepository, ITasaRepository tasaRepository,
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
-=======
-            IEmpleadoRepository empleadoRepository, 
-            ILegalizacionGastosRepository legalizacionGastosRepository,
-            ITasaRepository tasaRepository,
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
             IHostingEnvironment _env)
         {
             this.solicitudRepository = solicitudRepository;
@@ -62,12 +53,8 @@ namespace Legalizaciones.Web.Controllers
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
             this.empleadoRepository = empleadoRepository;
-<<<<<<< HEAD
-            this.empleadoRepository = empleadoRepository;
             this.ciudadRepository = ciudadRepository;
             this.paisRepository = paisRepository;
-=======
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
             this.tasaRepository = tasaRepository;
             this.env = _env;
         }
@@ -219,11 +206,6 @@ namespace Legalizaciones.Web.Controllers
                     MonedaId = Osolicitud.MonedaId,
                     Moneda = OMoneda.Nombre,
                     ValorTasa = wTasa,
-<<<<<<< HEAD
-
-=======
-                    
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                     //ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
                     SolicitudGastos = ListsolicitudGastos,
                     ConAnticipo = 1

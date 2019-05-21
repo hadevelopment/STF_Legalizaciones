@@ -45,15 +45,19 @@ namespace Legalizaciones.Web.Controllers
             return View(new ConfiguracionGasto());
         }
 
+        [HttpGet]
+        [Route("Editar")]
+        public ActionResult Editar(int id)
+        {
+            var conf = configuracionGastoRepository.Find(id);
+            return View(conf);
+        }
+
         [HttpPost]
         [Route("Crear")]
         public ActionResult Guardar(ConfiguracionGasto configuracionGasto)
         {
-            if (!ModelState.IsValid)
-            {
-
-            }
-            else
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -67,9 +71,8 @@ namespace Legalizaciones.Web.Controllers
                 {
                     TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la configuración";
                 }
-
             }
-
+           
             return View("Crear", configuracionGasto);
         }
 

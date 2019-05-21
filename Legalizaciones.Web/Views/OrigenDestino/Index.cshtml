@@ -92,7 +92,7 @@
             
             <br />
             <div class="row">
-                <div style="float: left;" class="col-md-2">
+                <div style="margin-left: 2%" class="col-md-2">
                     <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosOrigenDestinoExcel">Exportar Excel</a>
 
 
@@ -102,16 +102,16 @@
                         <input type="file" name="fileExcel" id="fileExcel" multiple>
                     </div>
                     <div style="float: left;" class="col-md-2">
-                        <input type="button" name="btnUpload" id="btnUpload" value="Carga Data" class="btn btn-primary glyphicon glyphicon-plus">
+                        <input type="button" name="btnUpload" id="btnUpload" value="Cargar" class="btn btn-primary">
                     </div>
                 </div>
                 
                 <div id="divUpdateGrid" style="visibility: hidden;">
 
-                    <div style="float: center;" class="col-md-4">
+                    @*<div style="float:center;" class="col-md-4">
                         <label>Datos agregados correctamente, por favor actualice la vista de datos.</label>
                         
-                    </div>
+                    </div>*@
                     
                     <div style="float: left;" class="col-md-4">
 

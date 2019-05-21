@@ -15,7 +15,6 @@ namespace Legalizaciones.Web.Controllers
 {
     public class UNOEEController : Controller
     {
-
         private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
 
@@ -177,6 +176,44 @@ namespace Legalizaciones.Web.Controllers
             }
 
             return Json(Empleados);
+        }
+
+        public JsonResult CargosMaeEdit(int Id)
+        {
+
+            Cargo[] Cargos = new Cargo[3];
+
+            Cargos[0] = new Cargo
+            {
+                Id = 1,
+                Nombre = "Empleado",
+                Descripcion = "Departamento de Ventas",
+                Estatus = 1
+            };
+
+            Cargos[1] = new Cargo
+            {
+                Id = 2,
+                Nombre = "Administracion Tesoreria",
+                Descripcion = "Departamento de Compras",
+                Estatus = 1
+            };
+
+            Cargos[2] = new Cargo
+            {
+                Id = 3,
+                Nombre = "Administracion Contraloria",
+                Descripcion = "Gerente de Ventas",
+                Estatus = 1
+            };
+
+            foreach (var item in Cargos)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(Cargos);
         }
 
         public JsonResult Cargos()

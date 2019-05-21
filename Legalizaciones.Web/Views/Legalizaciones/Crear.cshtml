@@ -324,11 +324,11 @@
                         </div>
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
-<<<<<<< HEAD
+
                                 @Html.TextBoxFor(model => model.CentroOperacion, new { @class = "form-control", @Readonly = "Readonly" })*@
-=======
+
         @Html.TextBoxFor(model => model.CentroOperacion, new { @class = "form-control", @Readonly = "Readonly" })*@
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
+
                             @Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.CentroOperacion, Model.ListaCentroOperacion, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -338,11 +338,11 @@
                         </div>
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
-<<<<<<< HEAD
+
                                 @Html.TextBoxFor(model => model.UnidadNegocio, new { @class = "form-control", @Readonly = "Readonly" })*@
-=======
+
         @Html.TextBoxFor(model => model.UnidadNegocio, new { @class = "form-control", @Readonly = "Readonly" })*@
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
+
                             @Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.UnidadNegocio, Model.ListaUnidadNegocio, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -356,11 +356,11 @@
 
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
-<<<<<<< HEAD
+
                                 @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })*@
                             @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
-=======
+
         @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })*@
                             @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
@@ -381,7 +381,7 @@
                             else
                             { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
                         }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
+
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
                                 @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
@@ -662,7 +662,6 @@
                                                     @foreach (var item in Model.SolicitudGastos)
                                                     {
 
-<<<<<<< HEAD
                                                         <tr>
                                                             <td class="col-md-1 ">@item.Id</td>
                                                             @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
@@ -680,7 +679,6 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
-=======
                                                     <tr>
                                                         <td class="col-md-1 ">@item.Id</td>
                                                         @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
@@ -698,7 +696,6 @@
                                                             </a>
                                                         </td>
                                                     </tr>
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                                                     }
                                                 </tbody>
                                             </table>

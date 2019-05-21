@@ -80,17 +80,17 @@
                             <td>
                                @item.Monto.ToString("N2")
                             </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Estatus)
-                            </td>
                             @*<td>
-                                <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                @Html.DisplayFor(modelItem => item.Estatus)
+                            </td>*@
+                            <td>
+                                @*<a class="item-btn" asp-controller="ConfiguracionGasto" asp-action="Visualizar" asp-route-id="@item.Id">
                                     <span class="fa fa-eye"></span>
-                                </a>
-                                <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
+                                </a>*@
+                                <a class="item-btn" asp-controller="ConfiguracionGasto" asp-action="Editar" asp-route-id="@item.Id">
                                     <span class="fa fa-pencil"></span>
                                 </a>
-                            </td>*@
+                            </td>
                         </tr>
                             }
 

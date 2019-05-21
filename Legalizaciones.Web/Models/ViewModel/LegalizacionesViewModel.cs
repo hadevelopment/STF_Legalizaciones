@@ -89,11 +89,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public int? MonedaId { get; set; }
         public SelectList ListaMoneda { get; set; }
 
-<<<<<<< HEAD
         public string Moneda { get; set; }
-=======
-        public string  Moneda{ get; set; }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 
         [DisplayName("Tasa")]
         public string ValorTasa { get; set; }
@@ -106,11 +102,9 @@ namespace Legalizaciones.Web.Models.ViewModel
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]
-<<<<<<< HEAD
+
         public int CentroOperacion { get; set; }
-=======
-        public int CentroOperacion{ get; set; }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
+
         public SelectList ListaCentroOperacion { get; set; }
 
 

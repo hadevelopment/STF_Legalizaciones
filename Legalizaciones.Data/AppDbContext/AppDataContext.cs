@@ -1,28 +1,16 @@
-<<<<<<< HEAD
-using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
-
-
-    public class AppDataContext : DbContext    {        public AppDataContext(DbContextOptions options) : base(options)        {        }
-=======
-
-﻿using Legalizaciones.Model;
+using Legalizaciones.Model;
 using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
 
 
     public class AppDataContext : DbContext    {
      
         public AppDataContext(DbContextOptions options) : base(options)        {        }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 
         //Configuracion
         public DbSet<ConfiguracionGasto> ConfiguracionGasto { get; set; }
 
         //Localidades
         public DbSet<Pais> Pais { get; set; }        public DbSet<Ciudad> Ciudad { get; set; }        public DbSet<Destino> Destino { get; set; }        public DbSet<Zona> Zona { get; set; }
-<<<<<<< HEAD
-=======
-        public DbSet<OrigenDestino> OrigenDestino { get; set; }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
@@ -43,14 +31,8 @@ using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using 
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
         public DbSet<TipoPermiso> TipoPermiso{ get; set; }
         public DbSet<EstadoSolicitud> EstadoSolicitud { get; set; }
-<<<<<<< HEAD
         public DbSet<OrigenDestino> OrigenDestino { get; set; }
         public object Setting { get; private set; }
     }
 }
-=======
-        public object Setting { get; private set; }
-    }
-}
 
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e

@@ -56,6 +56,7 @@ namespace Legalizaciones.Web.Controllers
                 }
             }
 
+            TempData["Alerta"] = "success - La Zona se registro correctamente.";
             return RedirectToAction("Index", "Zona");
         }
 
@@ -124,6 +125,7 @@ namespace Legalizaciones.Web.Controllers
             zona.Estatus = 0;
             zonaRepository.Update(zona);
 
+            TempData["Alerta"] = "success - Eliminado el registro.";
             return RedirectToAction("Index", "Zona");
         }
 

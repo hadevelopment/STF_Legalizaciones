@@ -63,6 +63,7 @@ namespace Legalizaciones.Web.Controllers
                 }
             }
 
+            TempData["Alerta"] = "success - El Origen-Destino se registro correctamente.";
             return RedirectToAction("Index", "OrigenDestino");
         }
 
@@ -130,6 +131,7 @@ namespace Legalizaciones.Web.Controllers
             origenDestino.Estatus = 0;
             origenDestinoRepository.Update(origenDestino);
 
+            TempData["Alerta"] = "success - eliminado el registro.";
             return RedirectToAction("Index", "OrigenDestino");
         }
 
@@ -154,25 +156,6 @@ namespace Legalizaciones.Web.Controllers
 
                     XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
                     sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-
-                    //if (sFileExtension == ".xls")
-                    //{
-                    //    try
-                    //    {
-                    //        HSSFWorkbook hssfwb = new HSSFWorkbook(stream); //This will read the Excel 97-2000 formats  
-                    //        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook  
-                    //    }
-                    //    catch (Exception)
-                    //    {
-                    //        XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                    //        sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    XSSFWorkbook hssfwb = new XSSFWorkbook(stream); //This will read 2007 Excel format  
-                    //    sheet = hssfwb.GetSheetAt(0); //get first sheet from workbook   
-                    //}
 
                     IRow headerRow = sheet.GetRow(0); //Get Header Row
                     int cellCount = headerRow.LastCellNum;
@@ -206,7 +189,7 @@ namespace Legalizaciones.Web.Controllers
                 }
             }
 
-            //return this.Content("<thead><tr><td>datos</td><td>datos</td></tr></thead><tbody><tr><td>datos</td><td>datos</td></tr></tbody>");
+            TempData["Alerta"] = "success - datos importados correctamente.";
             return this.Content(sb.ToString());
         }
     }
