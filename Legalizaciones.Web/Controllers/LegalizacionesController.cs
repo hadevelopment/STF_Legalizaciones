@@ -69,17 +69,21 @@ namespace Legalizaciones.Web.Controllers
 
             string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
             string usuarioCedula = string.Empty;
-            if (usuarioCargo == "3")
-            {
-                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-                    string.Empty);
-            }
-            else
-            { 
-                if (usuarioCedula != string.Empty)
-                    model = Metodo.SolicitudesAntPendientesLegalizacion(
-                        "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
-            }
+
+            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                string.Empty);
+
+            //if (usuarioCargo == "3")
+            //{
+            //    model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+            //        string.Empty);
+            //}
+            //else
+            //{ 
+            //    if (usuarioCedula != string.Empty)
+            //        model = Metodo.SolicitudesAntPendientesLegalizacion(
+            //            "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+            //}
 
             return View(model);
         }
@@ -343,6 +347,28 @@ namespace Legalizaciones.Web.Controllers
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == Id).ToList();
             legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
 
+            foreach (var item in legalizacion.LegalizacionGastos)
+            {
+                item.Pais = paisRepository.Find(item.PaisId);
+                item.Ciudad = ciudadRepository.Find(item.CiudadId);
+                item.CentroOperacion = new CentroOperacion
+                {
+                    Id = 1,
+                    Nombre = "Centro Operacion"
+                };
+                item.CentroCosto = new CentroCosto
+                {
+                    Id = 1,
+                    Nombre = "Centro de Costo 1"
+                };
+                item.UnidadNegocio = new UnidadNegocio
+                {
+                    Id = 1,
+                    Nombre = "Unidad Neg 1"
+                };
+                //item.Motivo = motivoRepository.Find(long.Parse(item.MotivoId.ToString()));
+            }
+
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
 
@@ -456,13 +482,35 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         [Route("VisorLegalizacionPDF")]
         public ActionResult VisorLegalizacionPDF(int id)
-        {
-            Legalizacion legalizacion = legalizacionRepository.Find(id);
+        { 
+            var legalizacion = legalizacionRepository.Find(id);
             legalizacion.Solicitud = solicitudRepository.Find(legalizacion.SolicitudID);
             legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == legalizacion.SolicitudID).ToList();
             legalizacion.LegalizacionGastos =
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == id).ToList();
             legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
+
+            foreach (var item in legalizacion.LegalizacionGastos)
+            {
+                item.Pais = paisRepository.Find(item.PaisId);
+                item.Ciudad = ciudadRepository.Find(item.CiudadId);
+                item.CentroOperacion = new CentroOperacion
+                {
+                    Id = 1,
+                    Nombre = "Centro Operacion"
+                };
+                item.CentroCosto = new CentroCosto
+                {
+                    Id = 1,
+                    Nombre = "Centro de Costo 1"
+                };
+                item.UnidadNegocio = new UnidadNegocio
+                {
+                    Id = 1,
+                    Nombre = "Unidad Neg 1"
+                };
+                //item.Motivo = motivoRepository.Find(long.Parse(item.MotivoId.ToString()));
+            }
 
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));

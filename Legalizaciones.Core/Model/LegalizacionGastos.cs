@@ -65,6 +65,6 @@ namespace Legalizaciones.Model
         public string Concepto{ get; set; }
         public string Valor { get; set; }
 
-        //LegalizacionGastos
+
     }
 }

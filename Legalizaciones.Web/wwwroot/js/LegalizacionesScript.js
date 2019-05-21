@@ -115,7 +115,6 @@ function AgregarFilaDatagrid() {
 
     var Id = $("#GastosId").val();
 
-<<<<<<< HEAD
     $('#tbGastos tbody tr').each(function () {
         $projectName = $(this).find('td:eq(0)').text();
         if ($projectName == Id) {
@@ -130,10 +129,9 @@ function AgregarFilaDatagrid() {
     var Ciudad = "Cali";
     var Monto = $("#MontoGasto").val();
     var FechaGasto = $("#FechaGasto").val();
-=======
+
     var PaisId = $("#PaisId option:selected").val();
     var Pais = $("#PaisId option:selected").text();
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 
     var CiudadId = $("#CiudadId option:selected").val();
     var Ciudad = $("#CiudadId option:selected").text();
@@ -143,13 +141,14 @@ function AgregarFilaDatagrid() {
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
 
-    //var MotivoId = $("#MotivoId").val();
-    //var Motivo = "";
-    //if (MotivoId == 1) {
-    //    Motivo = "Motivo Uno";
-    //} else {
-    //    Motivo = "Motivo Dos";
-    //}
+
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = mm + '/' + dd + '/' + yyyy;
+
     var ConceptoGasto = $("#ConceptoGasto").val();
 
     var ProveedorId = $("#ProveedorId").val();
@@ -162,11 +161,24 @@ function AgregarFilaDatagrid() {
 
     var Monto = CalcularGastoComidaLegalizacion();
 
-<<<<<<< HEAD
-    var row = `<tr>               
-=======
+                 
+
     //quite 7 colummnas xq se muestran vacias y no me cabe en la pantalla
-    var row = `<tr>
+
+    var row = `<tr>  
+                    <td class="Id">${Id}</td>
+                    <td class="FechaGasto">${today}</td>
+                    <td>Centro de Operacion</td>
+                    <td>Unidad de Negocio</td>
+                    <td>Centro de Costo</td>
+                    <td class="FechaGasto">${FechaGasto}</td>
+                    <td class="PaisId">${Pais}</td>
+                    <td class="CiudadId">${Ciudad}</td>
+                    <td class="ServicioId">${Servicio}</td>
+                    <td>${Proveedor}</td>
+                    <td>${ConceptoGasto}</td>
+                    <td class="Monto">${Monto}</td>
+
                     <td class="display-none">${FechaGasto}</td> 
                     <td class="display-none">${PaisId}</td> 
                     <td class="display-none">${CiudadId}</td> 
@@ -174,19 +186,6 @@ function AgregarFilaDatagrid() {
                     <td class="display-none">1</td> 
                     <td class="display-none">1</td> 
                     <td class="display-none">1</td>
-                                  
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
-                    <td class="Id">${Id}</td>
-                    <td class="FechaGasto">${FechaGasto}</td>
-                    <td>Centro de Operacion</td>
-                    <td>Unidad de Negocio</td>
-                    <td>Centro de Costo</td>
-                    <td class="PaisId">${Pais}</td>
-                    <td class="CiudadId">${Ciudad}</td>
-                    <td class="ServicioId">${Servicio}</td>
-                    <td>${Proveedor}</td>
-                    <td>${ConceptoGasto}</td>
-                    <td class="Monto">${Monto}</td>
                 
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
@@ -342,14 +341,10 @@ $('.datepicker').datepicker({
 
 $(".datepicker").datepicker("update", new Date());
 
-<<<<<<< HEAD
 function remove(tr) {
     $(tr).parent().parent().remove();
     return false;
 }
-
-
-=======
 
 
 function CalcularGastoComidaLegalizacion() {
@@ -384,4 +379,3 @@ function CalcularGastoComidaLegalizacion() {
     return wMonto;
 
 }
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e

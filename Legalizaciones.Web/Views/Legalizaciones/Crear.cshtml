@@ -232,7 +232,15 @@
 
                     <div class="col-md-3">
                         @if (Model.ConAnticipo == 0)
-<<<<<<< HEAD
+                        {
+                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
+                            }
+                        }
+                        else //sin anticipo
+
                         {
                             @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -242,17 +250,6 @@
                         }
                         else //sin anticipo
                         {
-=======
-                        {
-                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
-                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                            {
-                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
-                            }
-                        }
-                        else //sin anticipo
-                        {
->>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                             @if (ViewBag.MostrarTasa = true)
                             {
                                 <div class="col-md-12">
