@@ -18,6 +18,7 @@ namespace Legalizaciones.Web.Controllers
     {
         private IConverter _converter;
         private readonly ISolicitudRepository solicitudRepository;
+        private readonly IEmpleadoRepository empleadoRepository;
         private readonly IZonaRepository zonaRepository;
         private readonly IDestinoRepository destinoRepository;
         private readonly IEstadoSolicitudRepository estatusRepository;
@@ -31,7 +32,8 @@ namespace Legalizaciones.Web.Controllers
                                            IDestinoRepository destinoRepository,
                                            IEstadoSolicitudRepository estatusRepository,
                                            IOrigenDestinoRepository origenDestinoRepository,
-                                           IPaisRepository paisRepository)
+                                           IPaisRepository paisRepository,
+                                           IEmpleadoRepository empleadoRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
@@ -40,6 +42,7 @@ namespace Legalizaciones.Web.Controllers
             this.destinoRepository       = destinoRepository;
             this.origenDestinoRepository = origenDestinoRepository;
             this.paisRepository = paisRepository;
+            this.empleadoRepository = empleadoRepository;
         }
 
         [HttpGet]
@@ -113,6 +116,11 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult ExportDatosSolicitudExcel()
         {
             List<Solicitud> lstSolicitudes = this.solicitudRepository.All().ToList();
+            foreach (var item in lstSolicitudes)
+            {
+                item.Empleado = empleadoRepository.All().FirstOrDefault(x => x.Cedula == item.EmpleadoCedula);
+            }
+
             string sFileName = "Solicitudes.xls";
             string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
             string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
@@ -130,8 +138,9 @@ namespace Legalizaciones.Web.Controllers
                 row.CreateCell(2).SetCellValue("Fecha Vencimiento");
                 row.CreateCell(3).SetCellValue("Concepto Anticipio");
                 row.CreateCell(4).SetCellValue("Cedula del Beneficiario");
-                row.CreateCell(5).SetCellValue("Monto Beneficiario");
-                row.CreateCell(6).SetCellValue("Estado");
+                row.CreateCell(5).SetCellValue("Nombre del Beneficiario");
+                row.CreateCell(6).SetCellValue("Monto Beneficiario");
+                row.CreateCell(7).SetCellValue("Estado");
 
                 var index = 1;
                 foreach (var solicitud in lstSolicitudes)
@@ -142,8 +151,9 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(2).SetCellValue(solicitud.FechaVencimiento.ToShortDateString());
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
-                    row.CreateCell(5).SetCellValue(solicitud.Monto);
-                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
+                    row.CreateCell(5).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
+                    row.CreateCell(6).SetCellValue(double.Parse(solicitud.Monto.ToString()));
+                    row.CreateCell(7).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;
                 }
 

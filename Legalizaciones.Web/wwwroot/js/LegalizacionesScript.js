@@ -15,19 +15,33 @@ function ImprimirReporte(boton) {
 }
 
 //Funcion cuando selecciona un item del listado pantalla modal
-function Seleccionar(Id, FechaGasto, PaisId, ServicioId, CiudadId, Origen,Destino, Monto) {
+function Seleccionar(Id) {
     //var wFecha = new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/SolicitudGastos",
+        datatype: "Json",
+        data: { wId: Id },
+        success: function (data) {
+            console.log(data);
+            if (data !== null) {
+                $("#GastosId").val(Id);
+                $("#MontoGasto").val(data.monto);
+                $("#Origen").val(data.origen);
+                $("#Destino").val(data.destino);
+                $("#ConceptoGasto").val(data.concepto);
+            }
+            
+        }
+    });
+
     //aqui llenare todos los controles del formulario de legalizaciones gastos
-    $("#GastosId").val(Id);
-    $("#MontoGasto").val(Monto);
-    $("#Origen").val(Origen);
-    $("#Destino").val(Destino);
-    $("#ConceptoGasto").val("");
+    
     //$("#FechaGasto").val(wFecha);
 
-    CargarPais();
-    CargarCiudad(PaisId);
+    //CargarPais();
+    //CargarCiudad(PaisId);
 
     funcion_Visible($('#RegistroDatos'));
 
@@ -47,14 +61,22 @@ function getDescCiudad(wID) {
 
 function AgregarFilaDatagrid() {
 
-    var FechaGasto = $("#FechaGasto").val();
     var Id = $("#GastosId").val();
+
+    $('#tbGastos tbody tr').each(function () {
+        $projectName = $(this).find('td:eq(0)').text();
+        if ($projectName == Id) {
+            alert('Este gasto ya esta agregado');
+            return;
+        }
+    });
 
     var PaisId = $("#PaisId").val();
     var Pais = "Colombia";
     var CiudadId = $("#CiudadId").val();
     var Ciudad = "Cali";
     var Monto = $("#MontoGasto").val();
+    var FechaGasto = $("#FechaGasto").val();
 
     var ServicioId = $("#TiposervicioId").val();
     var Servicio = "";
@@ -82,16 +104,7 @@ function AgregarFilaDatagrid() {
 
     //quite 7 colummnas xq se muestran vacias y no me cabe en la pantalla
 
-    var row = `<tr>
-                    <td class="display-none">${FechaGasto}</td> 
-                    <td class="display-none">1</td>
-                    <td class="display-none">${PaisId}</td> 
-                    <td class="display-none">${CiudadId}</td> 
-                    <td class="display-none">${ServicioId}</td> 
-                    <td class="display-none">1</td> 
-                    <td class="display-none">1</td> 
-                    <td class="display-none">1</td>
-                                  
+    var row = `<tr>               
                     <td class="Id">${Id}</td>
                     <td class="FechaGasto">${FechaGasto}</td>
                     <td>Centro de Operacion</td>
@@ -106,7 +119,7 @@ function AgregarFilaDatagrid() {
                     <td class="Monto">${Monto}</td>
                 
                     <td>
-                        <a class="btn btn-danger btn-sm btnDelete">
+                        <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
@@ -121,7 +134,6 @@ function AgregarFilaDatagrid() {
     });
     $("#txMontoT").text(sum);
 }
-
 
 
 function GuardarGastos() {
@@ -159,7 +171,7 @@ function cargarGastos() {
 
 $("#PaisId").change(function () {
     valorPais = $("#PaisId").val();
-    CargarCiudad(valor);
+    CargarCiudad(valorPais);
 });
 
 //-+-+-+-+-++- +-+-+-+-funciones ajax para carga de combos - +-+-+-+-+-+-+-+-
@@ -236,3 +248,10 @@ $('.datepicker').datepicker({
 });
 
 $(".datepicker").datepicker("update", new Date());
+
+function remove(tr) {
+    $(tr).parent().parent().remove();
+    return false;
+}
+
+

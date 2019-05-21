@@ -7,7 +7,7 @@ namespace Legalizaciones.Web.Models
 {
     public class InfoLegalizacion
     {
-        public int legalizacionId { get; set; }
+        public int legalizacionID { get; set; }
         public int Id { get; set; }
         public string NumeroSolicitud { get; set; }
         public string FechaCreacion { get; set; }

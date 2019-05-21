@@ -1,4 +1,4 @@
-﻿using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
+using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
 
 
     public class AppDataContext : DbContext    {        public AppDataContext(DbContextOptions options) : base(options)        {        }

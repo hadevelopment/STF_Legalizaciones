@@ -360,7 +360,6 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult RegistrarSTDC()
         {
             var wSolcitudTDC = new SolicitudTDCViewModel();
-
             return View(wSolcitudTDC);
         }
 

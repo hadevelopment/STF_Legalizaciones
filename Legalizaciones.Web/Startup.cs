@@ -20,7 +20,8 @@ using Legalizaciones.Data.Repository.Jerarquia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Legalizaciones
 {
@@ -61,6 +62,7 @@ namespace Legalizaciones
             services.AddTransient<IOrigenDestinoRepository, OrigenDestinoRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+            services.AddTransient<ITasaRepository, TasaRepository>();
             //Iempl
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));
@@ -91,7 +93,21 @@ namespace Legalizaciones
 
             app.UseStaticFiles();
             app.UseSession();
-
+            //*********************Cultura: Español - Colombia********************************
+            var infoCultura = new CultureInfo("en-US");
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(infoCultura),
+                SupportedCultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                }
+            });
+            //********************************************************************************
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

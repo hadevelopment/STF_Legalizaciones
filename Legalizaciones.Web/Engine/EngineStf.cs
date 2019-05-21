@@ -48,7 +48,7 @@ namespace Legalizaciones.Web.Engine
                 if (row[12] != DBNull.Value)
                     item.Estado = row[12].ToString();
                 if (row[13] != DBNull.Value)
-                    item.legalizacionId = Convert.ToInt32(row[13]);
+                    item.legalizacionID = Convert.ToInt32(row[13]);
 
                 var empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
 
