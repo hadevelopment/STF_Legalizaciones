@@ -1,0 +1,105 @@
+﻿@model Legalizaciones.Web.Models.AprobacionDocumento
+
+@{
+    ViewData["Title"] = "Flujo para Aprobacion de Documentos";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    <strong>  Aprobacion:  Anticipos - Legalizaciones </strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="col-md-12">
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                        <select id="tipoSolicitud" name="tipoSolicitud" onchange="TipoSolicitudChange();" style="width:20%;height:auto; font-size:16px;">
+                            @{
+                                int n = 0;
+                                foreach (var type in Model.TipoSolicitud)
+                                {
+                                    <option value="@n"> @type </option>
+                                    n++;
+                                }
+                            }
+
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" style="float:right;">Nuevo Flujo de Aprobacion</button>
+                <button class="btn btn-primary" style="float:right;">Ver Flujo de Aprobacion</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box-body">
+    <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                @if (Model.Aprobadores != null)
+                {
+                    <th> Orden de Aprobacion </th>
+                    <th> Nombre </th>
+                    <th> E-Mail </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Aprobadores != null)
+            {
+                @foreach (var item in Model.Aprobadores)
+
+                {
+                    <tr>
+                        <td> </td>
+                        <td> </td>
+                        <td></td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No existe flujo de aprobacion creado ...</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<script>
+
+    function TipoSolicitudChange()
+    {
+        const obj = document.getElementById('tipoSolicitud');
+        var indice = obj.selectedIndex;
+        if (indice === 0) { return false; }
+        var tipo = obj.options[obj.selectedIndex].text;
+        console.log(tipo);
+        $.ajax({
+            type: "GET",
+            url: " GetAprobadores",
+            data: { tipoSolicitud: tipo },
+            datType: "json"
+        }).done((result) => {
+            console.log('ok')
+        }).fail((error) => {
+            console.log(error)
+        });
+    }
+
+</script>
+

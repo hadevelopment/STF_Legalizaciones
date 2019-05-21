@@ -67,5 +67,23 @@ namespace Legalizaciones.Web.Engine
             int n = rnd.Next(1, 999);
             return "000" + n.ToString();
         }
+
+        public List<string> TiposDocumentos(DataTable dt)
+        {
+            List<string> documento = new List<string>();
+            int n = 0;
+            documento.Insert(n, "Seleccione...");
+            n++;
+            foreach (DataRow row in dt.Rows)
+            {
+                string doc = string.Empty;
+                if (row[0] != DBNull.Value)
+                    doc = row[0].ToString();
+                documento.Insert(n, doc);
+                n++;
+            }
+            return documento;
+        }
+
     }
 }

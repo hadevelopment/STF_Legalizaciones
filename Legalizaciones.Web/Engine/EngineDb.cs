@@ -40,26 +40,54 @@ namespace Legalizaciones.Web.Engine
             return InfoLegalizacion;
         }
 
-        public int ContadorDeContratos(string SpName, DateTime fechaInicial, DateTime fechaFinal)
+        public List <string> TiposDocumentos (string SpName)
         {
-            int count = 0;
-            object obj = new object();
+            List<string> documento = new List<string>();
+            DataTable dataTabla = new DataTable();
             SqlConnection Conexion = new SqlConnection(StringConexion);
             using (Conexion)
             {
                 Conexion.Open();
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.Clear();
-                command.Parameters.AddWithValue("@fechaInicial", fechaInicial);
-                command.Parameters.AddWithValue("@fechaFinal", fechaFinal);
-                obj = command.ExecuteScalar();
-                if (obj != null && obj != DBNull.Value)
-                    count = Convert.ToInt32(obj);
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
                 Conexion.Close();
             }
-            return count;
+            EngineStf Funcion = new EngineStf();
+            documento = Funcion.TiposDocumentos(dataTabla);
+            return documento;
+        }
 
+        public List<DataAprobacion> AprobadoresTipoSolicitud (string SpName , string tipoSolicitud,int estatus = 1 )
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            List<DataAprobacion> dataList = new List<DataAprobacion>();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@tipoSolicitud", tipoSolicitud);
+                command.Parameters.AddWithValue("@estatus", estatus);
+                DataTable dt = new DataTable();
+                SqlDataReader lector = command.ExecuteReader();
+                int n = 0;
+                while (lector.Read())
+                {
+                    DataAprobacion data = new DataAprobacion();
+                    data.CedulaAprobador = lector.GetString(0);
+                    data.NombreAprobador = lector.GetString(1);
+                    data.EmailAprobador = lector.GetString(2);
+                    data.Orden = lector.GetInt32(3);
+                    dataList.Insert(n, data);
+                    n++;
+                }
+                lector.Close();
+                Conexion.Close();
+            }
+            return dataList;
         }
     }
 }
