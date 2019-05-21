@@ -50,7 +50,7 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             //*******************************************************
-            EnviarMensaje();
+            //EnviarMensaje();
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -78,7 +78,7 @@ namespace Legalizaciones.Web.Controllers
             listaDestino.Add("efrainmejias@hotmail.com");
             listaDestino.Add("efrainmejiasc@gmail.com");
             listaDestino.Add("e.mejias@innova4j.com");
-            //listaDestino.Add("ha.development.org@gmail.com");
+            listaDestino.Add("ha.development.org@gmail.com");
             //****************************************************************************************************
             Email model = new Email
             {
