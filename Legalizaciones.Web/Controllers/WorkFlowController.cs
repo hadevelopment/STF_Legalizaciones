@@ -28,7 +28,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpGet]
-        public  JsonResult GetAprobadores(string tipoSolicitud)
+        public JsonResult GetAprobadores(string tipoSolicitud)
         {
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
