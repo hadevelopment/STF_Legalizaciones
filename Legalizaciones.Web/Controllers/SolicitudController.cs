@@ -389,7 +389,8 @@ namespace Legalizaciones.Web.Controllers
                     FechaSolicitud = DateTime.Now,
                     Banco = solicitudTDC.Banco,
                     Extracto = solicitudTDC.Extracto,
-                    Monto = solicitudTDC.Monto
+                    Monto = solicitudTDC.Monto,
+                    EstadoId = 1,
 
                 };
 

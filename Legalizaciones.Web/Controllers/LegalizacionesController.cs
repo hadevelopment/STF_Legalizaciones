@@ -16,6 +16,10 @@ using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+<<<<<<< HEAD
+=======
+using Legalizaciones.Model.Empresa;
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
 using Microsoft.AspNetCore.Hosting;
 
 namespace Legalizaciones.Web.Controllers
@@ -41,8 +45,14 @@ namespace Legalizaciones.Web.Controllers
         public LegalizacionesController(ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
+<<<<<<< HEAD
             IEmpleadoRepository empleadoRepository, ICiudadRepository ciudadRepository, ITasaRepository tasaRepository,
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
+=======
+            IEmpleadoRepository empleadoRepository, 
+            ILegalizacionGastosRepository legalizacionGastosRepository,
+            ITasaRepository tasaRepository,
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
             IHostingEnvironment _env)
         {
             this.solicitudRepository = solicitudRepository;
@@ -52,15 +62,21 @@ namespace Legalizaciones.Web.Controllers
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
             this.empleadoRepository = empleadoRepository;
+<<<<<<< HEAD
             this.empleadoRepository = empleadoRepository;
             this.ciudadRepository = ciudadRepository;
             this.paisRepository = paisRepository;
+=======
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
             this.tasaRepository = tasaRepository;
             this.env = _env;
         }
 
         public IActionResult Index()
         {
+            //*******************************************************
+            //EnviarMensaje();
+            //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -79,6 +95,32 @@ namespace Legalizaciones.Web.Controllers
             }
 
             return View(model);
+        }
+
+        private void EnviarMensaje()
+        {
+            List<string> listaDestino = new List<string>();
+            listaDestino.Add("efrainmejias@hotmail.com");
+            listaDestino.Add("efrainmejiasc@gmail.com");
+            listaDestino.Add("e.mejias@innova4j.com");
+            listaDestino.Add("ha.development.org@gmail.com");
+            //****************************************************************************************************
+            Email model = new Email
+            {
+                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
+                NombreDestinatario = "Leo Messi",
+                NumeroDocumento ="00010",
+                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
+            };
+            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
+            bool resultado = Enviar.EnviarMail();
+            //*****************************************************************************************************
+            string msjGet = string.Empty;
+            if (resultado)
+                msjGet = "Notificacion enviada satisfactoriamente";
+            else
+                msjGet = Enviar.ErrorEnviando();
         }
 
         [HttpGet]
@@ -177,7 +219,11 @@ namespace Legalizaciones.Web.Controllers
                     MonedaId = Osolicitud.MonedaId,
                     Moneda = OMoneda.Nombre,
                     ValorTasa = wTasa,
+<<<<<<< HEAD
 
+=======
+                    
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                     //ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
                     SolicitudGastos = ListsolicitudGastos,
                     ConAnticipo = 1

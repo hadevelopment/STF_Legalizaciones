@@ -232,6 +232,7 @@
 
                     <div class="col-md-3">
                         @if (Model.ConAnticipo == 0)
+<<<<<<< HEAD
                         {
                             @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -241,6 +242,17 @@
                         }
                         else //sin anticipo
                         {
+=======
+                        {
+                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
+                            }
+                        }
+                        else //sin anticipo
+                        {
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                             @if (ViewBag.MostrarTasa = true)
                             {
                                 <div class="col-md-12">
@@ -312,7 +324,11 @@
                         </div>
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
+<<<<<<< HEAD
                                 @Html.TextBoxFor(model => model.CentroOperacion, new { @class = "form-control", @Readonly = "Readonly" })*@
+=======
+        @Html.TextBoxFor(model => model.CentroOperacion, new { @class = "form-control", @Readonly = "Readonly" })*@
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                             @Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.CentroOperacion, Model.ListaCentroOperacion, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -322,7 +338,11 @@
                         </div>
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
+<<<<<<< HEAD
                                 @Html.TextBoxFor(model => model.UnidadNegocio, new { @class = "form-control", @Readonly = "Readonly" })*@
+=======
+        @Html.TextBoxFor(model => model.UnidadNegocio, new { @class = "form-control", @Readonly = "Readonly" })*@
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                             @Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.UnidadNegocio, Model.ListaUnidadNegocio, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -336,7 +356,12 @@
 
                         <div class="col-md-3">
                             @*@Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
+<<<<<<< HEAD
                                 @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })*@
+                            @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
+=======
+        @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })*@
                             @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
@@ -344,6 +369,24 @@
                                 @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
                             }
                         </div>
+
+
+                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
+                            @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @if (Model.ConAnticipo == 0)
+                            {
+                                @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
+
+                            }
+                            else
+                            { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
+                        }
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
+                            }
+                        </div>*@
 
 
                         @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
@@ -619,6 +662,7 @@
                                                     @foreach (var item in Model.SolicitudGastos)
                                                     {
 
+<<<<<<< HEAD
                                                         <tr>
                                                             <td class="col-md-1 ">@item.Id</td>
                                                             @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
@@ -636,6 +680,25 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
+=======
+                                                    <tr>
+                                                        <td class="col-md-1 ">@item.Id</td>
+                                                        @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
+                                                        <td class="col-md-2 ">@item.FechaGasto.Substring(0,10)</td>
+                                                        <td class="col-md-1 ">@item.Pais</td>
+                                                        <td class="col-md-1 ">@item.Servicio</td>
+                                                        <td class="col-md-1 ">@item.Ciudad</td>
+                                                        <td class="col-md-1 ">@item.Origen</td>
+                                                        <td class="col-md-1 ">@item.Destino</td>
+                                                        <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                                        <td class="col-md-1 ">
+                                                            @*<a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen.ToString().Replace("/",""),@item.Destino.ToString().Replace("/",""),@item.Monto);">*@
+                                                            <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id);">
+                                                                <small><small><small>Seleccionar</small></small></small>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                                                     }
                                                 </tbody>
                                             </table>

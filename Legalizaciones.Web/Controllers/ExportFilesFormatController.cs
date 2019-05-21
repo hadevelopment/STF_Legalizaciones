@@ -151,6 +151,7 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(2).SetCellValue(solicitud.FechaVencimiento.ToShortDateString());
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
+<<<<<<< HEAD
                     row.CreateCell(5).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
                     row.CreateCell(6).SetCellValue(double.Parse(solicitud.Monto.ToString()));
                     row.CreateCell(7).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
@@ -197,6 +198,10 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(1).SetCellValue(itemOrigenDestino.Nombre);
                     row.CreateCell(2).SetCellValue(itemOrigenDestino.Pais.Nombre);
                     row.CreateCell(3).SetCellValue(itemOrigenDestino.FechaCreacion.ToShortDateString());
+=======
+                    //row.CreateCell(5).SetCellValue(solicitud.Monto);
+                    row.CreateCell(6).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
                     index++;
                 }
 

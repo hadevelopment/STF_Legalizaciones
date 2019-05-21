@@ -38,6 +38,7 @@
  </ItemGroup>
 
  <ItemGroup>
+<<<<<<< HEAD
    <Folder Include="wwwroot\files\24296342\1\facturas\" />
  </ItemGroup>
 
@@ -54,6 +55,13 @@
    </Content>
    <Content Update="Views\OrigenDestino\Visualizar.cshtml">
      <Pack>$(IncludeRazorContentInPack)</Pack>
+=======
+   <Content Update="Views\Legalizaciones\TemplateEmail.cshtml">
+     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+   </Content>
+   <Content Update="wwwroot\EmailTemplate\TemplateEmail.cshtml">
+     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+>>>>>>> 234a901aee6f62d7e29f43386881ecbae3affa5e
    </Content>
  </ItemGroup>
 
