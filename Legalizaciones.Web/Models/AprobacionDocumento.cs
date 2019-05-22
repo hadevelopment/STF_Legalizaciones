@@ -9,7 +9,8 @@ namespace Legalizaciones.Web.Models
     {
         public string TipoSeleccionado { get; set; }
         public List<string> TipoSolicitud { get; set; } 
-        public List <DataAprobacion> Aprobadores { get; set; } 
+        public List <DataAprobacion> Aprobadores { get; set; }
+        public List<DataAprobacion> FlujoAprobacion { get; set; }
     }
 
     public class DataAprobacion
@@ -21,5 +22,8 @@ namespace Legalizaciones.Web.Models
         public int FlujoSolicitudId { get; set; }
         public int Estatus { get; set; }
         public string Descripcion { get; set; }
+        public DateTime FechaCreacion { get { return DateTime.Now; } }
+        public int Update { get; set; }
+        public string TipoSolicitud { get; set; }
     }
 }

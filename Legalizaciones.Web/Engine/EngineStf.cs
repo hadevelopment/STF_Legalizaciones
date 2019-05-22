@@ -85,5 +85,23 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
+
+        public AprobacionDocumento SetCreateAprobador(string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus)
+        {
+            DataAprobacion Item = new DataAprobacion()
+            {
+                Update = update,
+                Estatus = estatus,
+                TipoSolicitud = tipoDocumento,
+                NombreAprobador = addAprobador,
+                CedulaAprobador = empleado,
+                EmailAprobador = mail,
+                Descripcion = descripcion,
+
+            };
+            AprobacionDocumento model = new AprobacionDocumento();
+            return model;
+        }
+
     }
 }

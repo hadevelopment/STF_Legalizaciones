@@ -12,10 +12,15 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string tipoDocumento = "" ,string addAprobador = "", string empleado = "" ,string descripcion ="S/D", string mailApr = "")
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
+            if((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty ) && addAprobador != string.Empty && empleado != string.Empty)
+            {
+                EngineStf Funcion = new EngineStf();
+                Funcion.SetCreateAprobador(tipoDocumento , addAprobador ,  empleado , descripcion, mailApr,1,1);
+            }
             return View(model);
         }
 
@@ -32,23 +37,7 @@ namespace Legalizaciones.Web.Controllers
                     model.Aprobadores = null;
 
             }
-            return View("Index", model);
-        }
-
-        [HttpPut]
-        public ActionResult Index(string  n = "")
-        {
-            AprobacionDocumento model = new AprobacionDocumento();
-            model.TipoSeleccionado = Request.Form["tipoSolicitud"];
-            model = GetTipoSolicitudes(model);
-            if (model.TipoSeleccionado != "Seleccione...")
-            {
-                model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
-                if (model.Aprobadores.Count == 0)
-                    model.Aprobadores = null;
-
-            }
-            return View("Index", model);
+            return View(model);
         }
 
         private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)

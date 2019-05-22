@@ -90,5 +90,44 @@ namespace Legalizaciones.Web.Engine
             }
             return dataList;
         }
+
+        public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName , DataAprobacion model)
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            List<DataAprobacion> dataList = new List<DataAprobacion>();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Update", model.Update);
+                command.Parameters.AddWithValue("@Estatus", model.Estatus);
+                command.Parameters.AddWithValue("@FechaCreacion", model.FechaCreacion);
+                command.Parameters.AddWithValue("@Descripcion", model.Descripcion);
+                command.Parameters.AddWithValue("@CedulaAprobador", model.CedulaAprobador);
+                command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
+                command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
+                command.Parameters.AddWithValue("@FlujoSolicitudId", model.FlujoSolicitudId);
+                command.Parameters.AddWithValue("@Orden", model.Orden);
+                DataTable dt = new DataTable();
+                SqlDataReader lector = command.ExecuteReader();
+                int n = 0;
+                while (lector.Read())
+                {
+                    DataAprobacion data = new DataAprobacion();
+                    data.CedulaAprobador = lector.GetString(0);
+                    data.NombreAprobador = lector.GetString(1);
+                    data.EmailAprobador = lector.GetString(2);
+                    data.Orden = lector.GetInt32(3);
+                    data.Descripcion = lector.GetString(4);
+                    dataList.Insert(n, data);
+                    n++;
+                }
+                lector.Close();
+                Conexion.Close();
+            }
+            return dataList;
+        }
     }
 }
