@@ -19,7 +19,7 @@
     </div>
 </div>
 
-<form asp-controller="ConfiguracionGasto" asp-action="Guardar" method="post">
+<form asp-controller="ConfiguracionGasto" asp-action="Actualizar" method="post">
     <div class="hidden">
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
         <input class="hide" type="text" id="Id" name="Id" value="@Model.Id" />
@@ -97,15 +97,34 @@
                     </div>
                 </div>
             </div>
+            
+          
         </div>
 
 
-        <div class="row">
+        @*<div class="row">
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-plus"></span> Registrar
                 </button>
             </div>
+        </div>*@
+        
+        <div class="modal-footer box">
+        
+            <button id="btnAdd type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span> Guardar
+            </button>
+        
+
+            
+            <a id="btnReset" class="btn btn-warning" asp-controller="ConfiguracionGasto" asp-action="Editar" asp-route-id="@Model.Id">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancelar
+            </a>
+
+            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal" asp-controller="ConfiguracionGasto" asp-action="Index">
+                <span class="glyphicon glyphicon-off"></span> Volver
+            </a>
         </div>
 
     </section>
