@@ -149,14 +149,14 @@
                             <tbody>
                                 @if (Model.FlujoAprobacion != null)
                                 {
-                                    @foreach (var item in Model.Aprobadores)
+                                    @foreach (var iten in Model.FlujoAprobacion)
 
                                     {
                                         <tr>
-                                            <td> @item.Orden</td>
-                                            <td> @item.Descripcion</td>
-                                            <td> @item.NombreAprobador</td>
-                                            <td> @item.EmailAprobador</td>
+                                            <td> @iten.Orden</td>
+                                            <td> @iten.Descripcion</td>
+                                            <td> @iten.NombreAprobador</td>
+                                            <td> @iten.EmailAprobador</td>
                                         </tr>
                                     }
                                 }
