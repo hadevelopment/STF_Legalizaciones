@@ -1,19 +1,16 @@
 ﻿
 <style type="text/css">
-    .addFlow{
-      
+    .addFlow {
         width: 25%;
         height: 25%;
-        background-color:green;
-    
+        background-color: green;
     }
-      .modalNF{
-      
+
+    .modalNF {
         width: 70%;
         height: 50%;
-        background-color:gainsboro;
-        display:none;
-    
+        background-color: gainsboro;
+        display: none;
     }
 </style>
 
@@ -56,86 +53,87 @@
 
                         </select>
                     </div>
-                <div>
-                    <form method="POST" id="formFlujo">
-                        <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
-                        <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo">Ver Flujo de Aprobacion</button>
-                    </form>
-                </div>
-                <button type="button" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#nuevoFlujoModal" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                    <div>
+                        <form method="POST" id="formFlujo">
+                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
+                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo">Ver Flujo de Aprobacion</button>
+                        </form>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#nuevoFlujoModal" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
 
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 
-<div class="box-body">
-    @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
-    {
-        string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
-        <label class="control-label"> <strong> @tipoFlujo </strong></label>
-    }
-    <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
-        <thead>
-            <tr>
+    <div class="box-body">
+        @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
+        {
+            string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
+            <label class="control-label"> <strong> @tipoFlujo </strong></label>
+        }
+        <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    @if (Model.Aprobadores != null)
+                    {
+                        <th> Orden de Aprobacion </th>
+                        <th> Descripcion </th>
+                        <th> Nombre Aprobador </th>
+                        <th> E-Mail Aprobador</th>
+                    }
+                </tr>
+            </thead>
+            <tbody>
                 @if (Model.Aprobadores != null)
                 {
-                    <th> Orden de Aprobacion </th>
-                    <th> Descripcion </th>
-                    <th> Nombre Aprobador </th>
-                    <th> E-Mail Aprobador</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Aprobadores != null)
-            {
-                @foreach (var item in Model.Aprobadores)
+                    @foreach (var item in Model.Aprobadores)
 
+                    {
+                        <tr>
+                            <td> @item.Orden</td>
+                            <td> @item.Descripcion</td>
+                            <td> @item.NombreAprobador</td>
+                            <td> @item.EmailAprobador</td>
+                        </tr>
+                    }
+                }
+                else
                 {
-            <tr>
-                <td> @item.Orden</td>
-                <td> @item.Descripcion</td>
-                <td> @item.NombreAprobador</td>
-                <td> @item.EmailAprobador</td>
-            </tr>
+                    <tr>
+                        <td colspan="3">No existe flujo de aprobacion creado ...</td>
+                    </tr>
                 }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="3">No existe flujo de aprobacion creado ...</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-</div>
+    </div>
 
-<!-- Trigger the modal with a button -->
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div id="nuevoFlujoModal" class="modal fade" role="application">
+        <div class="modal-dialog">
 
-<!-- Modal -->
-<div id="nuevoFlujoModal" class="modal fade" role="dialog">>
-    <div class="modal-dialog">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12">
-                    <div class="col-md-12 pb-2">
-                      
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
+                </div>
+                <div class="modal-body">
+                    <div style="height:40%">
+                        <div class="col-md-12 pb-2">
+                            <select id="Empleado" name="Empleado"> </select>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <form id="newFlujo" method="PUT">
+                <div class="modal-footer">
+                    <input type="submit" id="addFlujo" class="addFlow" />
                 </div>
-            </div>
-            <div class="modal-footer">
-                <input type="submit" id="addFlujo" class="addFlow" />
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -146,32 +144,64 @@
 
 </div>
 
-
+@section scripts {
+    <script src="~/js/PermisoSolicitudScript.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+}
 
 <script>
+
+    $(document).ready(function () {
+        var arrayEmpleadoPermiso = [];
+        $.ajax({
+            type: "GET",
+            url: "/UNOEE/Empleados?filtroCedula=true",
+            datatype: "Json",
+            beforeSend: function () {
+                // console.log("Before Send Request");
+            },
+            success: function (data) {
+                data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+                $("#Empleado").empty();
+                $('#Empleado').append('<option selected disabled value="-1">Seleccione...</option>');
+                $.each(data, function (index, value) {
+                    arrayEmpleadoPermiso.push(value);
+                    $('#Empleado').append('<option value="' + value.cedula + '">' + value.nombre + '</option>');
+                });
+            },
+            complete: function () {
+                // console.log(arrayEmpleadoPermiso);
+            }
+        });
+
+        //Propiedades del dropdown destinos
+        $("#Empleado").select2({
+            multiple: false,
+            placeholder: 'Seleccione...'
+        });
+    });
 
     function TipoSolicitudCambio() {
         const obj = document.getElementById('solicitud');
         var tipo = obj.options[obj.selectedIndex].text;
         document.getElementById("tipoSolicitud").value = tipo;
-        }
+    }
 
-      
-    function SetNuevoFlujo()
-    {
+
+    function SetNuevoFlujo() {
         const obj = document.getElementById('solicitud');
         var tipo = obj.options[obj.selectedIndex].text;
-        if (tipo == 'Seleccione...')
-        {
+        if (tipo == 'Seleccione...') {
             document.getElementById("msjNuevoFlujo").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
         }
-        else
-        {
-           document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo + ', el anterior flujo sera modificado'  ;
-        } 
+        else {
+            document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo + ', el anterior flujo sera modificado';
+        }
 
     }
 
- 
+
 </script>
 

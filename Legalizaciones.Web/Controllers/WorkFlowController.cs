@@ -35,6 +35,22 @@ namespace Legalizaciones.Web.Controllers
             return View("Index", model);
         }
 
+        [HttpPut]
+        public ActionResult Index(string  n = "")
+        {
+            AprobacionDocumento model = new AprobacionDocumento();
+            model.TipoSeleccionado = Request.Form["tipoSolicitud"];
+            model = GetTipoSolicitudes(model);
+            if (model.TipoSeleccionado != "Seleccione...")
+            {
+                model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+                if (model.Aprobadores.Count == 0)
+                    model.Aprobadores = null;
+
+            }
+            return View("Index", model);
+        }
+
         private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)
         {
             Engine.EngineDb Metodo = new EngineDb();
