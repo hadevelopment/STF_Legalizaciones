@@ -28,8 +28,14 @@ namespace Legalizaciones.Web.Controllers
             model = GetTipoSolicitudes(model);
             if (tipoSolicitud != "Seleccione...")
             {
-                model.Aprobadores = GetAprobadores(tipoSolicitud);
-                return (Json(model.Aprobadores));
+                if (data == "verFlujo=")
+                {
+                    model.Aprobadores = GetAprobadores(tipoSolicitud);
+                }
+                else if (data == "nuevoFlujo=")
+                {
+                    model.Aprobadores = GetAprobadores(tipoSolicitud);
+                }
             }
             return View(model);
         }
@@ -42,7 +48,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
 
-        public List<DataAprobacion>  GetAprobadores(string tipoSolicitud = "")
+        public List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
         {
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
