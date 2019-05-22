@@ -87,7 +87,7 @@ namespace Legalizaciones.Web.Engine
         }
 
 
-        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model , string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus)
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model , string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus,int paso)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -98,7 +98,7 @@ namespace Legalizaciones.Web.Engine
                 CedulaAprobador = empleado,
                 EmailAprobador = mail,
                 Descripcion = descripcion,
-
+                Orden = paso
             };
 
             EngineDb Metodo = new EngineDb();

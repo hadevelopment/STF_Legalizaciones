@@ -109,6 +109,7 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@CedulaAprobador", model.CedulaAprobador);
                 command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
                 command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
+                command.Parameters.AddWithValue("@Orden", model.Orden);
                 DataTable dt = new DataTable();
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
