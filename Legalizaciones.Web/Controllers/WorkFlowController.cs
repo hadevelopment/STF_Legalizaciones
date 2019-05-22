@@ -14,9 +14,23 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.NoExisteFlujo = null;
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
+            return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult Index(int n = 0)
+        {
+            string tipoSolicitud = Request.Form["tipoSolicitud"];
+            string data = Request.Form.ToString();
+            AprobacionDocumento model = new AprobacionDocumento();
+            model = GetTipoSolicitudes(model);
+            if (tipoSolicitud != "Seleccione...")
+            {
+                model.Aprobadores = GetAprobadores(tipoSolicitud);
+                return (Json(model.Aprobadores));
+            }
             return View(model);
         }
 
@@ -27,13 +41,13 @@ namespace Legalizaciones.Web.Controllers
             return model;
         }
 
-        [HttpGet]
-        public JsonResult GetAprobadores(string tipoSolicitud)
+
+        public List<DataAprobacion>  GetAprobadores(string tipoSolicitud = "")
         {
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
             model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
-            return Json(model);
+            return model;
         }
     }
 }
