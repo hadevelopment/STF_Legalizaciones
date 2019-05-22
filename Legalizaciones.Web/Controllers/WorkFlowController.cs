@@ -24,6 +24,7 @@ namespace Legalizaciones.Web.Controllers
         {
             string tipoSolicitud = Request.Form["tipoSolicitud"];
             string data = Request.Form.ToString();
+            string btn = Request.Form["nuevoFlujo"];
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
             if (tipoSolicitud != "Seleccione...")

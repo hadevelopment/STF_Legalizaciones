@@ -16,7 +16,7 @@
     </div>
 </div>
 
-<form method="POST" id="formFlujo">
+<form method="POST" id="formFlujo" >
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
@@ -38,8 +38,8 @@
                         </div>
                     </div>
                     <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
-                    <button class="btn btn-primary" style="float:right;" id="nuevoFlujo">Nuevo Flujo de Aprobacion</button>
-                    <button class="btn btn-primary" style="float:right;" id="verFlujo">Ver Flujo de Aprobacion</button>
+                    <button type="submit" class="btn btn-primary" style="float:right;" id="nuevoFlujo" name ="nuevoFlujo">Nuevo Flujo de Aprobacion</button>
+                    <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name ="verFlujo">Ver Flujo de Aprobacion</button>
                 </div>
             </div>
         </div>
@@ -65,9 +65,9 @@
 
                 {
                     <tr>
-                        <td> </td>
-                        <td> </td>
-                        <td></td>
+                        <td> @item.Orden</td>
+                        <td> @item.NombreAprobador</td>
+                        <td> @item.EmailAprobador</td>
                     </tr>
                 }
             }
