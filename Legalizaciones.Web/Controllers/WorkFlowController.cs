@@ -22,10 +22,13 @@ namespace Legalizaciones.Web.Controllers
                 int estatus = 1;
                 int update = 0;
                 EngineStf Funcion = new EngineStf();
-                if (paso == 1)
-                    update = paso;
-                else
+                if (paso == 0) {
+                    update = 1;
+                    paso++;
+                }
+                else { 
                     update = 0;
+                }
                 model = Funcion.SetCreateAprobador( model , tipoDocumento , addAprobador ,  empleado , descripcion, mailApr,update,estatus,paso);
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
