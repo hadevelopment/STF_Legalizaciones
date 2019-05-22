@@ -12,14 +12,15 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index(string tipoDocumento = "" ,string addAprobador = "", string empleado = "" ,string descripcion ="S/D", string mailApr = "")
+        public IActionResult Index(string tipoDocumento = "" ,string addAprobador = "", string empleado = "" ,string descripcion ="S/D", string mailApr = "" , int update = 1 )
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
             if((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty ) && addAprobador != string.Empty && empleado != string.Empty)
             {
+                int estatus = 1;
                 EngineStf Funcion = new EngineStf();
-                Funcion.SetCreateAprobador(tipoDocumento , addAprobador ,  empleado , descripcion, mailApr,1,1);
+                model = Funcion.SetCreateAprobador( model , tipoDocumento , addAprobador ,  empleado , descripcion, mailApr,estatus,update);
             }
             return View(model);
         }

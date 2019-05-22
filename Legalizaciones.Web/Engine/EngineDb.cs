@@ -102,14 +102,13 @@ namespace Legalizaciones.Web.Engine
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@Update", model.Update);
+                command.Parameters.AddWithValue("@TipoSolicitud", model.TipoSolicitud);
                 command.Parameters.AddWithValue("@Estatus", model.Estatus);
                 command.Parameters.AddWithValue("@FechaCreacion", model.FechaCreacion);
                 command.Parameters.AddWithValue("@Descripcion", model.Descripcion);
                 command.Parameters.AddWithValue("@CedulaAprobador", model.CedulaAprobador);
                 command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
                 command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
-                command.Parameters.AddWithValue("@FlujoSolicitudId", model.FlujoSolicitudId);
-                command.Parameters.AddWithValue("@Orden", model.Orden);
                 DataTable dt = new DataTable();
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;

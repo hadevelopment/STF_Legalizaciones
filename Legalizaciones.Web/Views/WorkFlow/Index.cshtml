@@ -134,6 +134,35 @@
                                 <input type="text" id="descripcion" name="descripcion" />
                             </div>
                         </div>
+                        <table id="tblFlujo" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    @if (Model.FlujoAprobacion != null)
+                                    {
+                                        <th> Orden de Aprobacion </th>
+                                        <th> Descripcion </th>
+                                        <th> Nombre Aprobador </th>
+                                        <th> E-Mail Aprobador</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.FlujoAprobacion != null)
+                                {
+                                    @foreach (var item in Model.Aprobadores)
+
+                                    {
+                                        <tr>
+                                            <td> @item.Orden</td>
+                                            <td> @item.Descripcion</td>
+                                            <td> @item.NombreAprobador</td>
+                                            <td> @item.EmailAprobador</td>
+                                        </tr>
+                                    }
+                                }
+
+                            </tbody>
+                        </table>
                         <div class="row">
 
                             <div class="modal-footer">

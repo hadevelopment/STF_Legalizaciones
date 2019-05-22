@@ -8,6 +8,7 @@ using Legalizaciones.Model;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
 
+
 namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
@@ -86,7 +87,7 @@ namespace Legalizaciones.Web.Engine
         }
 
 
-        public AprobacionDocumento SetCreateAprobador(string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus)
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model , string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -99,7 +100,9 @@ namespace Legalizaciones.Web.Engine
                 Descripcion = descripcion,
 
             };
-            AprobacionDocumento model = new AprobacionDocumento();
+
+            EngineDb Metodo = new EngineDb();
+            model.FlujoAprobacion = Metodo.AprobadoresTipoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
             return model;
         }
 
