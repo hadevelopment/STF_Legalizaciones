@@ -20,25 +20,19 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(int n = 0)
+        public ActionResult Index(int n = 0)
         {
-            string tipoSolicitud = Request.Form["tipoSolicitud"];
-            string data = Request.Form.ToString();
-            string btn = Request.Form["nuevoFlujo"];
             AprobacionDocumento model = new AprobacionDocumento();
+            model.TipoSeleccionado = Request.Form["tipoSolicitud"];
             model = GetTipoSolicitudes(model);
-            if (tipoSolicitud != "Seleccione...")
+            if (model.TipoSeleccionado != "Seleccione...")
             {
-                if (data == "verFlujo=")
-                {
-                    model.Aprobadores = GetAprobadores(tipoSolicitud);
-                }
-                else if (data == "nuevoFlujo=")
-                {
-                    model.Aprobadores = GetAprobadores(tipoSolicitud);
-                }
+              model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+                if (model.Aprobadores.Count == 0)
+                    model.Aprobadores = null;
+
             }
-            return View(model);
+            return View("Index", model);
         }
 
         private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)

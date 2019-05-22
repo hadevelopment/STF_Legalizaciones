@@ -81,6 +81,7 @@ namespace Legalizaciones.Web.Engine
                     data.NombreAprobador = lector.GetString(1);
                     data.EmailAprobador = lector.GetString(2);
                     data.Orden = lector.GetInt32(3);
+                    data.Descripcion = lector.GetString(4);
                     dataList.Insert(n, data);
                     n++;
                 }

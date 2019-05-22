@@ -1,4 +1,25 @@
-﻿@model Legalizaciones.Web.Models.AprobacionDocumento
+﻿
+<style type="text/css">
+    .addFlow{
+      
+        width: 25%;
+        height: 25%;
+        background-color:green;
+    
+    }
+      .modalNF{
+      
+        width: 70%;
+        height: 50%;
+        background-color:gainsboro;
+        display:none;
+    
+    }
+</style>
+
+
+
+@model Legalizaciones.Web.Models.AprobacionDocumento
 
 @{
     ViewData["Title"] = "Flujo para Aprobacion de Documentos";
@@ -16,45 +37,54 @@
     </div>
 </div>
 
-<form method="POST" id="formFlujo" >
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header with-border">
-                    <div class="col-md-12">
-                        <div class="col-md-12 pb-2">
-                            <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                            <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudChange();">
-                                @{
-                                    int n = 0;
-                                    foreach (var type in Model.TipoSolicitud)
-                                    {
-                                        <option value="@n"> @type </option>
-                                        n++;
-                                    }
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="col-md-12">
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                        <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
+                            @{
+                                int n = 0;
+                                foreach (var type in Model.TipoSolicitud)
+                                {
+                                    <option value="@n"> @type </option>
+                                    n++;
                                 }
+                            }
 
-                            </select>
-                        </div>
+                        </select>
                     </div>
-                    <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
-                    <button type="submit" class="btn btn-primary" style="float:right;" id="nuevoFlujo" name ="nuevoFlujo">Nuevo Flujo de Aprobacion</button>
-                    <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name ="verFlujo">Ver Flujo de Aprobacion</button>
+                <div>
+                    <form method="POST" id="formFlujo">
+                        <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
+                        <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo">Ver Flujo de Aprobacion</button>
+                    </form>
                 </div>
+                <button type="button" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#nuevoFlujoModal" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+
             </div>
         </div>
     </div>
-</form>
+</div>
+
 
 <div class="box-body">
+    @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
+    {
+        string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
+        <label class="control-label"> <strong> @tipoFlujo </strong></label>
+    }
     <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
         <thead>
             <tr>
                 @if (Model.Aprobadores != null)
                 {
                     <th> Orden de Aprobacion </th>
-                    <th> Nombre </th>
-                    <th> E-Mail </th>
+                    <th> Descripcion </th>
+                    <th> Nombre Aprobador </th>
+                    <th> E-Mail Aprobador</th>
                 }
             </tr>
         </thead>
@@ -64,11 +94,12 @@
                 @foreach (var item in Model.Aprobadores)
 
                 {
-                    <tr>
-                        <td> @item.Orden</td>
-                        <td> @item.NombreAprobador</td>
-                        <td> @item.EmailAprobador</td>
-                    </tr>
+            <tr>
+                <td> @item.Orden</td>
+                <td> @item.Descripcion</td>
+                <td> @item.NombreAprobador</td>
+                <td> @item.EmailAprobador</td>
+            </tr>
                 }
             }
             else
@@ -79,14 +110,68 @@
             }
         </tbody>
     </table>
+
 </div>
+
+<!-- Trigger the modal with a button -->
+
+<!-- Modal -->
+<div id="nuevoFlujoModal" class="modal fade" role="dialog">>
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <div class="col-md-12 pb-2">
+                      
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="submit" id="addFlujo" class="addFlow" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div id="test" class="modal fade" role="dialog">
+
+</div>
+
+
+
 <script>
 
-    function TipoSolicitudChange() {
+    function TipoSolicitudCambio() {
         const obj = document.getElementById('solicitud');
         var tipo = obj.options[obj.selectedIndex].text;
         document.getElementById("tipoSolicitud").value = tipo;
+        }
+
+      
+    function SetNuevoFlujo()
+    {
+        const obj = document.getElementById('solicitud');
+        var tipo = obj.options[obj.selectedIndex].text;
+        if (tipo == 'Seleccione...')
+        {
+            document.getElementById("msjNuevoFlujo").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
+        }
+        else
+        {
+           document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo + ', el anterior flujo sera modificado'  ;
+        } 
+
     }
 
+ 
 </script>
 

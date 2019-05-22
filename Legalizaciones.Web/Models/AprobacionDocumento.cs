@@ -20,5 +20,6 @@ namespace Legalizaciones.Web.Models
         public int  Orden { get; set; }
         public int FlujoSolicitudId { get; set; }
         public int Estatus { get; set; }
+        public string Descripcion { get; set; }
     }
 }
