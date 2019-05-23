@@ -113,8 +113,8 @@
                     <td> @item.Descripcion</td>
                     <td> @item.NombreAprobador</td>
                     <td> @item.EmailAprobador</td>
-                    <td> <input type="button" class="btn btn-primary" onclick="GetIdUpdate('@item.Id' , '@item.NombreAprobador');" value="Actualizar"> </td>
-                    <td> <input type="button" class="btn btn-primary" onclick="GetIdDelete('@item.Id' , '@item.NombreAprobador');" value="Eliminar"> </td>
+                    <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','actualizar');" value="Actualizar"> </td>
+                    <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','eliminar');" value="Eliminar"> </td>
                 </tr>
                     }
                 }
@@ -214,6 +214,52 @@
     </div>
 </div>
 
+<form method="POST">
+    <div id="dataModal" name="dataModal" class="modal fade" role="application">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <label class="modal-title text-center" id="msjDataUpdate" name="msjDataUpdate"> </label>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Nombre Aprobador</label>
+                        <input type="text" id="nombre" name="nombre" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Cedula Aprobador</label>
+                        <input type="text" id="cedula" name="cedula" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Email Aprobador</label>
+                        <input type="text" id="email" name="email" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Descripcion</label>
+                        <input type="text" id="descripcion" name="descripcion" />
+                    </div>
+                </div>
+                <input type="hidden" id="id" name="id" />
+                <input type="hidden" id="proceso" name="proceso" />
+
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <input type="submit"  class="btn btn-primary" style="float:right;"  id="modificar" name="modificar" />
+                        <input type="button"  class="btn btn-primary" style="float:right;"  id="cancelado" name="cancelado" value="Cancelar" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 
 
 <!-- Modal -->
@@ -226,9 +272,12 @@
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+}
 
     <script>
+
     $(document).ready(function () {
+
         let pasoFlujo = '@paso';
         console.log(pasoFlujo);
         if (pasoFlujo > 0) {
@@ -239,15 +288,37 @@
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
         }
          
-    });
+      });
 
     function OpenNewFlujo() {
          $('#nuevoFlujoModal').modal('show');
     }
 
-     function GetIdUpdate(v,k) { alert(v + k); }
-     function GetIdDelete(nv,nk) { alert(nv + nk);}
+     function GetDataAprobador(id ,orden, descripcion  , nombre, email , cedula, proceso)
+     {
+        debugger;
+        if (proceso == 'actualizar')
+        {
+          document.getElementById("msjDataUpdate").innerHTML = 'Desea actualizar los siguientes datos (Continuar/Cancelar)';
+          $("#modificar").val('Actualizar');
+        }
+        else if (proceso == 'eliminar')
+        {
+           document.getElementById("msjDataUpdate").innerHTML =  'Desea eliminar los siguientes datos (Continuar/Cancelar)';
+           $("#modificar").val('Eliminar');
+        }
+
+        $('#id').val(id);
+        $('#orden').val(orden);
+        $('#descripcion').val(descripcion);
+        $('#nombre').val(nombre);
+        $('#email').val(email);
+        $('#cedula').val(cedula);
+        $('#proceso').val(proceso);
+        $('#dataModal').modal('show');
+     }
+  
     </script>
 
 
-}
+
