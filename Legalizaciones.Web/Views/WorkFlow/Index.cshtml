@@ -73,7 +73,7 @@
                     </div>
                     @if (Model.Aprobadores != null)
                     {
-                       <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                        <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
                     }
 
                 </div>
@@ -101,21 +101,21 @@
                         <th> Eliminar </th>
                     }
                 </tr>
-            </thead> 
+            </thead>
             <tbody>
                 @if (Model.Aprobadores != null)
                 {
                     @foreach (var item in Model.Aprobadores)
 
                     {
-                <tr>
-                    <td> @item.Orden</td>
-                    <td> @item.Descripcion</td>
-                    <td> @item.NombreAprobador</td>
-                    <td> @item.EmailAprobador</td>
-                    <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','actualizar');" value="Actualizar"> </td>
-                    <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','eliminar');" value="Eliminar"> </td>
-                </tr>
+                        <tr>
+                            <td> @item.Orden</td>
+                            <td> @item.Descripcion</td>
+                            <td> @item.NombreAprobador</td>
+                            <td> @item.EmailAprobador</td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','actualizar');" value="Actualizar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','eliminar');" value="Eliminar"> </td>
+                        </tr>
                     }
                 }
                 else
@@ -189,8 +189,8 @@
                                 <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
                                 <input type="hidden" id="addAprobador" name="addAprobador" />
                                 <input type="hidden" id="addMail" name="addMail" />
-                                <input type="submit" id="addFlujo" class="addFlow" value="Agregar" onclick="" />
-                                <input type="submit" id="cancelFlujo" class="cancelFlow" value="Hecho" onclick="ClearAll();" />
+                                <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
+                                <input type="submit" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
                             </div>
 
                         </div>
@@ -203,13 +203,13 @@
 </div>
 
 
-<div id="msjClienteModal" name ="msjClienteModal" class="modal fade" role="application">
+<div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
@@ -251,8 +251,8 @@
 
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <input type="submit"  class="btn btn-primary" style="float:right;"  id="modificar" name="modificar" />
-                        <input type="button"  class="btn btn-primary" style="float:right;"  id="cancelado" name="cancelado" value="Cancelar" />
+                        <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" />
                     </div>
                 </div>
             </div>
@@ -272,7 +272,7 @@
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
-}
+
 
     <script>
 
@@ -283,11 +283,12 @@
         if (pasoFlujo > 0) {
             OpenNewFlujo();
         }
+
         let tipoDoc = '@ViewBag.TipoDocumento';
         if (tipoDoc != '') {
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
         }
-         
+
       });
 
     function OpenNewFlujo() {
@@ -316,8 +317,8 @@
         $('#proceso').val(proceso);
         $('#dataModal').modal('show');
      }
-  
+
     </script>
 
-
+}
 
