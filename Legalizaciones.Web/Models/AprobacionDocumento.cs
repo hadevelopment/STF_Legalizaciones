@@ -25,5 +25,6 @@ namespace Legalizaciones.Web.Models
         public DateTime FechaCreacion { get { return DateTime.Now; } }
         public int Update { get; set; }
         public string TipoSolicitud { get; set; }
+        public int Id { get; set; }
     }
 }

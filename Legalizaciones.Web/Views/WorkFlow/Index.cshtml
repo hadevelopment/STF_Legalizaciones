@@ -4,8 +4,8 @@
         width: 25%;
         height: 25%;
         background-color: green;
-        color:black;
-        border:0px;
+        color: black;
+        border: 0px;
     }
 
     .cancelFlow {
@@ -15,11 +15,12 @@
         color: black;
         border: 0px;
     }
-        .addFlow:hover {
-            background-color: silver;
-        }
 
-     .cancelFlow:hover {
+    .addFlow:hover {
+        background-color: silver;
+    }
+
+    .cancelFlow:hover {
         background-color: silver;
     }
 </style>
@@ -30,13 +31,14 @@
 
 @{
     ViewData["Title"] = "Flujo para Aprobacion de Documentos";
+    var paso = ViewBag.Paso;
 }
 <div class="row">
     <div class="col-sm-12">
         <div class="box">
             <div class="box-body">
                 <small>
-                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    <a href='@Url.Action("Index", "Home")'> Inicio </a>
                     <strong>  Aprobacion:  Anticipos - Legalizaciones </strong>
                 </small>
             </div>
@@ -66,10 +68,13 @@
                     <div>
                         <form method="POST" id="formFlujo">
                             <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
-                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo">Ver Flujo de Aprobacion</button>
+                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
                         </form>
                     </div>
-                    <button type="button" class="btn btn-primary" style="float:right;" data-toggle="modal" data-target="#nuevoFlujoModal" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                    @if (Model.Aprobadores != null)
+                    {
+                       <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                    }
 
                 </div>
             </div>
@@ -92,21 +97,25 @@
                         <th> Descripcion </th>
                         <th> Nombre Aprobador </th>
                         <th> E-Mail Aprobador</th>
+                        <th> Actualizar </th>
+                        <th> Eliminar </th>
                     }
                 </tr>
-            </thead>
+            </thead> 
             <tbody>
                 @if (Model.Aprobadores != null)
                 {
                     @foreach (var item in Model.Aprobadores)
 
                     {
-                        <tr>
-                            <td> @item.Orden</td>
-                            <td> @item.Descripcion</td>
-                            <td> @item.NombreAprobador</td>
-                            <td> @item.EmailAprobador</td>
-                        </tr>
+                <tr>
+                    <td> @item.Orden</td>
+                    <td> @item.Descripcion</td>
+                    <td> @item.NombreAprobador</td>
+                    <td> @item.EmailAprobador</td>
+                    <td id="@item.Id" onclick="GetIdUpdate(@item.Id)"><hrf> Actualizar </hrf> </td>
+                    <td> @Html.ActionLink("Eliminar", "UpdateFlujo", "WorkFlow", new { subProceso = "Delete", id = item.Id,orden = item.Orden,descripcion = item.Descripcion,nombreAprobador = item.NombreAprobador,emailAprobador = item.EmailAprobador })</td>
+                </tr>
                     }
                 }
                 else
@@ -128,7 +137,7 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
                         <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
                     </div>
                     <div class="modal-body">
@@ -179,8 +188,9 @@
                                 <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
                                 <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
                                 <input type="hidden" id="addAprobador" name="addAprobador" />
+                                <input type="hidden" id="addMail" name="addMail" />
                                 <input type="submit" id="addFlujo" class="addFlow" value="Agregar" onclick="" />
-                                <input type="submit" id="cancelFlujo" class="cancelFlow" value="Hecho" onclick="" />
+                                <input type="submit" id="cancelFlujo" class="cancelFlow" value="Hecho" onclick="ClearAll();" />
                             </div>
 
                         </div>
@@ -191,7 +201,19 @@
         </div>
     </form>
 </div>
-       
+
+
+<div id="msjClienteModal" name ="msjClienteModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
+            </div>  
+        </div>
+    </div>
+</div>
+
 
 
 <!-- Modal -->
@@ -200,70 +222,31 @@
 </div>
 
 @section scripts {
-    <script src="~/js/PermisoSolicitudScript.js"></script>
+    <script src="~/js/WorkflowScript.js"></script>
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
-}
 
-<script>
-
+    <script>
     $(document).ready(function () {
-        var arrayEmpleadoPermiso = [];
-        $.ajax({
-            type: "GET",
-            url: "/UNOEE/Empleados?filtroCedula=true",
-            datatype: "Json",
-            beforeSend: function () {
-                // console.log("Before Send Request");
-            },
-            success: function (data) {
-                data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-                $("#Empleado").empty();
-                $('#Empleado').append('<option selected disabled value="-1">Seleccione...</option>');
-                $.each(data, function (index, value) {
-                    arrayEmpleadoPermiso.push(value);
-                    $('#Empleado').append('<option value="' + value.cedula + '">' + value.nombre + '</option>');
-                });
-            },
-            complete: function () {
-                // console.log(arrayEmpleadoPermiso);
-            }
-        });
-
-        //Propiedades del dropdown destinos
-        $("#Empleado").select2({
-            multiple: false,
-            placeholder: 'Seleccione...'
-        });
+        let pasoFlujo = '@paso';
+        console.log(pasoFlujo);
+        if (pasoFlujo > 0) {
+            OpenNewFlujo();
+        }
+        let tipoDoc = '@ViewBag.TipoDocumento';
+        if (tipoDoc != '') {
+            $('#tipoDocumento').val('@ViewBag.TipoDocumento');
+        }
+         
     });
 
-    function TipoSolicitudCambio() {
-        const obj = document.getElementById('solicitud');
-        var tipo = obj.options[obj.selectedIndex].text;
-        document.getElementById("tipoSolicitud").value = tipo;
-        document.getElementById("tipoDocumento").value = tipo;
+    function OpenNewFlujo() {
+         $('#nuevoFlujoModal').modal('show');
     }
 
-
-    function SetNuevoFlujo() {
-        const obj = document.getElementById('solicitud');
-        var tipo = obj.options[obj.selectedIndex].text;
-        if (tipo == 'Seleccione...') {
-            document.getElementById("msjNuevoFlujo").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
-        }
-        else {
-            document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo + ', el anterior flujo sera modificado';
-        }
-
-    }
-
-    function AddAprobador() {
-        const sel = document.getElementById('Empleado');
-        var tip = sel.options[sel.selectedIndex].text;
-        document.getElementById("addAprobador").value = tip;
-    }
+    function GetIdUpdate(v) { alert(v);}
+    </script>
 
 
-</script>
-
+}

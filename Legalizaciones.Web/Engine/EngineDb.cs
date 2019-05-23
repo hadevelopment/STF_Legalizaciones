@@ -71,7 +71,6 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@tipoSolicitud", tipoSolicitud);
                 command.Parameters.AddWithValue("@estatus", estatus);
-                DataTable dt = new DataTable();
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
                 while (lector.Read())
@@ -82,6 +81,7 @@ namespace Legalizaciones.Web.Engine
                     data.EmailAprobador = lector.GetString(2);
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
+                    data.Id = lector.GetInt32(5);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -110,7 +110,6 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
                 command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
                 command.Parameters.AddWithValue("@Orden", model.Orden);
-                DataTable dt = new DataTable();
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
                 while (lector.Read())

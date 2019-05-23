@@ -12,12 +12,12 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index(string tipoDocumento = "",string addAprobador = "",string empleado = "",string descripcion = "S/D",string mailApr = "",int paso = 0 )
+        public IActionResult Index(string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
             ViewBag.Paso = 0;
-            if((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty ) && addAprobador != string.Empty && empleado != string.Empty)
+            if((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
             {
                 int estatus = 1;
                 int update = 0;
@@ -29,14 +29,22 @@ namespace Legalizaciones.Web.Controllers
                 else { 
                     update = 0;
                 }
-                model = Funcion.SetCreateAprobador(model,tipoDocumento,addAprobador,empleado,descripcion,mailApr,update,estatus,paso);
+                model = Funcion.SetCreateAprobador(model,tipoDocumento,addAprobador,empleado,descripcion,addMail,update,estatus,paso);
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
+                ViewBag.TipoDocumento = tipoDocumento;
+
+            }
+            else if(clear != string.Empty)
+            {
+                ViewBag.Paso = 0;
+                ViewBag.TipoDocumento = null;
+                model.FlujoAprobacion = null;
             }
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Index(int n = 0)
+        public IActionResult Index(int n = 0)
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model.TipoSeleccionado = Request.Form["tipoSolicitud"];
@@ -49,6 +57,15 @@ namespace Legalizaciones.Web.Controllers
 
             }
             return View(model);
+        }
+
+        public  IActionResult UpdateFlujo (string subProceso ,int id , int orden , string descripcion, string nombreAprobador , string emailAprobador)
+        {
+            AprobacionDocumento model = new AprobacionDocumento();
+            model.TipoSeleccionado = "1000";
+            EngineStf Funcion = new EngineStf();
+            ViewBag.UpdateFlujo = "UPDATE FLUJO";
+            return RedirectToAction("Index", "WorkFlow",model);
         }
 
         private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)
