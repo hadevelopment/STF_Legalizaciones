@@ -4,13 +4,23 @@
         width: 25%;
         height: 25%;
         background-color: green;
+        color:black;
+        border:0px;
     }
 
-    .modalNF {
-        width: 70%;
-        height: 50%;
-        background-color: gainsboro;
-        display: none;
+    .cancelFlow {
+        width: 25%;
+        height: 25%;
+        background-color: red;
+        color: black;
+        border: 0px;
+    }
+        .addFlow:hover {
+            background-color: silver;
+        }
+
+     .cancelFlow:hover {
+        background-color: silver;
     }
 </style>
 
@@ -166,10 +176,11 @@
                         <div class="row">
 
                             <div class="modal-footer">
-                                <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso"/>
-                                <input type="hidden" id="tipoDocumento" name="tipoDocumento"  />
-                                <input type="hidden" id="addAprobador" name="addAprobador"  />
-                                <input type="submit" id="addFlujo" class="addFlow" onclick="" />
+                                <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
+                                <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
+                                <input type="hidden" id="addAprobador" name="addAprobador" />
+                                <input type="submit" id="addFlujo" class="addFlow" value="Agregar" onclick="" />
+                                <input type="submit" id="cancelFlujo" class="cancelFlow" value="Hecho" onclick="" />
                             </div>
 
                         </div>
