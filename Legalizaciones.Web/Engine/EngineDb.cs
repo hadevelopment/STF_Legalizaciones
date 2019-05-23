@@ -44,6 +44,42 @@ namespace Legalizaciones.Web.Engine
             return InfoLegalizacion;
         }
 
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacionFiltrar(string SpName, 
+                                        DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
+            try
+            {
+
+                DataTable dataTabla = new DataTable();
+                SqlConnection Conexion = new SqlConnection(StringConexion);
+                using (Conexion)
+                {
+                    Conexion.Open();
+                    SqlCommand command = new SqlCommand(SpName, Conexion);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Clear();
+                    command.Parameters.Add(new SqlParameter("@fechaDesde", SqlDbType.DateTime));
+                    command.Parameters.Add(new SqlParameter("@fechaHasta", SqlDbType.DateTime));
+                    command.Parameters[0].Value = fechaDesde;
+                    command.Parameters[1].Value = fechaHasta;
+
+                    SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                    dataAdaptador.Fill(dataTabla);
+                    Conexion.Close();
+                }
+
+                EngineStf Funcion = new EngineStf();
+                InfoLegalizacion = Funcion.ConvertirToListSolicitud(dataTabla);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            return InfoLegalizacion;
+        }
+
         public int ContadorDeContratos(string SpName, DateTime fechaInicial, DateTime fechaFinal)
         {
             int count = 0;

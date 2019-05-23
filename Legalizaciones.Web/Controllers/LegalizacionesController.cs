@@ -88,6 +88,18 @@ namespace Legalizaciones.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Route("Filtrar")]
+        public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<InfoLegalizacion> model = new List<InfoLegalizacion>();
+            EngineDb Metodo = new EngineDb();
+
+            model = Metodo.SolicitudesAntPendientesLegalizacionFiltrar("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                fechaDesde, fechaHasta);
+            return View("Index",model);
+        }
+
         private void EnviarMensaje()
         {
             List<string> listaDestino = new List<string>();
