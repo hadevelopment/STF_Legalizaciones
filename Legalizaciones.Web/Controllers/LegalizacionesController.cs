@@ -88,6 +88,18 @@ namespace Legalizaciones.Web.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [Route("Filtrar")]
+        public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            List<InfoLegalizacion> model = new List<InfoLegalizacion>();
+            EngineDb Metodo = new EngineDb();
+
+            model = Metodo.SolicitudesAntPendientesLegalizacionFiltrar("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                fechaDesde, fechaHasta);
+            return View("Index",model);
+        }
+
         private void EnviarMensaje()
         {
             List<string> listaDestino = new List<string>();
@@ -133,6 +145,10 @@ namespace Legalizaciones.Web.Controllers
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
 
+                var ListaCentroCosto = new List<CentroCosto>();
+                var ListaCentroOperaciones = new List<CentroOperacion>();
+                var ListaUnidadNegocio = new List<UnidadNegocio>();
+
                 var ListaEmpleado = objUNOEE.EmpleadoAll();
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
@@ -141,7 +157,10 @@ namespace Legalizaciones.Web.Controllers
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
                     ConAnticipo = 0,
-                    CedulaId = wCedulaUsuariopordefecto
+                    CedulaId = wCedulaUsuariopordefecto,
+                    ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
+                    ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
+                    ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
 
                 };
                 return View(OLegalizaciones);

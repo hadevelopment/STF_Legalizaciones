@@ -238,17 +238,7 @@
                             {
                                 @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
                             }
-                        }
-                        else //sin anticipo
-
-                        {
-                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
-                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                            {
-                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
-                            }
-                        }
-                        else //sin anticipo
+                        }else //sin anticipo
                         {
                             @if (ViewBag.MostrarTasa = true)
                             {
