@@ -243,7 +243,7 @@
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Descripcion</label>
-                        <input type="text" id="descripcion" name="descripcion" />
+                        <input type="text" id="descripcionT" name="descripcionT" />
                     </div>
                 </div>
                 <input type="hidden" id="id" name="id" />
@@ -296,7 +296,6 @@
 
      function GetDataAprobador(id ,orden, descripcion  , nombre, email , cedula, proceso)
      {
-        debugger;
         if (proceso == 'actualizar')
         {
           document.getElementById("msjDataUpdate").innerHTML = 'Desea actualizar los siguientes datos (Continuar/Cancelar)';
@@ -310,7 +309,7 @@
 
         $('#id').val(id);
         $('#orden').val(orden);
-        $('#descripcion').val(descripcion);
+        $('#descripcionT').val(descripcion);
         $('#nombre').val(nombre);
         $('#email').val(email);
         $('#cedula').val(cedula);
