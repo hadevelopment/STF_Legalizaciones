@@ -113,8 +113,8 @@
                     <td> @item.Descripcion</td>
                     <td> @item.NombreAprobador</td>
                     <td> @item.EmailAprobador</td>
-                    <td id="@item.Id" onclick="GetIdUpdate(@item.Id)"><hrf> Actualizar </hrf> </td>
-                    <td> @Html.ActionLink("Eliminar", "UpdateFlujo", "WorkFlow", new { subProceso = "Delete", id = item.Id,orden = item.Orden,descripcion = item.Descripcion,nombreAprobador = item.NombreAprobador,emailAprobador = item.EmailAprobador })</td>
+                    <td> <input type="button" class="btn btn-primary" onclick="GetIdUpdate('@item.Id' , '@item.NombreAprobador');" value="Actualizar"> </td>
+                    <td> <input type="button" class="btn btn-primary" onclick="GetIdDelete('@item.Id' , '@item.NombreAprobador');" value="Eliminar"> </td>
                 </tr>
                     }
                 }
@@ -245,7 +245,8 @@
          $('#nuevoFlujoModal').modal('show');
     }
 
-    function GetIdUpdate(v) { alert(v);}
+     function GetIdUpdate(v,k) { alert(v + k); }
+     function GetIdDelete(nv,nk) { alert(nv + nk);}
     </script>
 
 
