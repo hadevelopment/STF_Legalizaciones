@@ -74,6 +74,7 @@
                                 <th>Id </th>
                                 <th>Registro</th>
                                 <th>Concepto</th>
+                                <th title="Cedula Beneficiario">Cedula</th>
                                 <th title="Beneficiario">Benef</th>
                                 <th>Estado</th>
                                 <th>Monto</th>
@@ -138,6 +139,10 @@
                                             <td>
 
                                                 @Html.DisplayFor(modelItem => item.Concepto)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.EmpleadoCedula)
                                             </td>
                                             <td>
 
@@ -207,6 +212,10 @@
                                             </td>
                                             <td>
 
+                                                @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                            </td>
+                                            <td>
+
                                                 @Html.DisplayFor(modelItem => item.Beneficiario)
                                             </td>
                                             <td>
@@ -217,9 +226,9 @@
                                                 @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
                                             </td>
                                             @*<td>
-                                                @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
-                                                @Html.DisplayFor(modelItem => item.Tasa)
-                                            </td>*@
+            @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
+            @Html.DisplayFor(modelItem => item.Tasa)
+        </td>*@
                                             <td class="hidden">
                                                 @Html.DisplayFor(modelItem => item.IdDocErp)
                                             </td>
