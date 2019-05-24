@@ -145,64 +145,63 @@ namespace Legalizaciones.Web.Controllers
         [Route("Crear")]
         public ActionResult Guardar(Solicitud solicitud, IFormFile file)
         {
-            if (!ModelState.IsValid)
+
+            try
             {
+                solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
+                List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
+                solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
+                solicitud.FechaCreacion = DateTime.Now;
+                solicitud.Estatus = 1;//Activa
+                solicitud.EstadoId = 1;//Estado Sin Legalizar
+                solicitud.TipoSolicitudID = 1;//Anticipo
+                solicitud.FechaDesde = DateTime.Now;
+                solicitud.FechaHasta = DateTime.Now;
+                solicitud.FechaSolicitud = DateTime.Now;
 
-            }
-            else
-            {
-                try
+                //Calculo Fecha de Vencimiento de la Solicitud
+                var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
+                solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
+
+                //Se Registra la Solicitud
+                solicitudRepository.Insert(solicitud);
+
+                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
+                solicitud.SolicitudGastos = listaGastos;
+
+                //Se Registran los gastos de la Solicitud
+                foreach (SolicitudGastos item in listaGastos)
                 {
-                    solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
-                    List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
-                    solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
-                    solicitud.FechaCreacion = DateTime.Now;
-                    solicitud.Estatus = 1;//Activa
-                    solicitud.EstadoId = 1;//Estado Sin Legalizar
-                    solicitud.TipoSolicitudID = 1;//Anticipo
-
-                    //Calculo Fecha de Vencimiento de la Solicitud
-                    var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
-                    solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
-
-                    //Se Registra la Solicitud
-                    solicitudRepository.Insert(solicitud);
-
-                    listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
-                    solicitud.SolicitudGastos = listaGastos;
-
-                    //Se Registran los gastos de la Solicitud
-                    foreach (SolicitudGastos item in listaGastos)
-                    {
-                        item.SolicitudId = solicitud.Id;
-                        solicitudGastosRepository.Insert(item);
-                    }
-
-                    //Se guarda la carta de descuento en el directorio en caso de que exista
-                    if (solicitud.Carta != null)
-                    {
-                        if (solicitud.Carta.FileName != "")
-                        {
-                            //Se sube al directorio
-                            SubirArchivo(solicitud.Carta, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
-
-                            //Se actualiza la ruta en BD
-                            solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
-                            solicitudRepository.Update(solicitud);
-                        }
-                    }
-
-                    TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
-                    return RedirectToAction("Index", "Solicitud");
-                }
-                catch (System.Exception e)
-                {
-                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+                    item.SolicitudId = solicitud.Id;
+                    solicitudGastosRepository.Insert(item);
                 }
 
+                //Se guarda la carta de descuento en el directorio en caso de que exista
+                if (solicitud.Carta != null)
+                {
+                    if (solicitud.Carta.FileName != "")
+                    {
+                        //Se sube al directorio
+                        SubirArchivo(solicitud.Carta, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+
+                        //Se actualiza la ruta en BD
+                        solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        solicitudRepository.Update(solicitud);
+                    }
+                }
+
+                TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
+                return RedirectToAction("Index", "Solicitud");
+            }
+            catch (System.Exception e)
+            {
+                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+
+                return View("Crear", solicitud);
             }
 
-            return View("Crear", solicitud);
+
+
         }
 
         [HttpGet]
@@ -244,8 +243,8 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-                if (!ModelState.IsValid || data.Id == 0)
-                    return View(data);
+                //if (!ModelState.IsValid || data.Id == 0)
+                //    return View(data);
 
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON);

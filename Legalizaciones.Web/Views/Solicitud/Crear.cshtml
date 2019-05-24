@@ -129,13 +129,13 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde" })
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde"})
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
-                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
                 </div>

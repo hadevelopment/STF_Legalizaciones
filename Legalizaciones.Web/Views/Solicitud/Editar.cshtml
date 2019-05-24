@@ -32,6 +32,11 @@
         @Html.TextBoxFor(model => model.NumeroSolicitud, new { @class = "form-control " })
         @Html.TextBoxFor(model => model.FechaVencimiento, new { @class = "form-control " })
         @Html.TextBoxFor(model => model.EmpleadoCedula, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.TipoSolicitudID, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.EstadoId, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.FechaSolicitud, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.Extracto, new { @class = "form-control " })
+        @Html.TextBoxFor(model => model.Banco, new { @class = "form-control " })
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
 
 
@@ -207,12 +212,6 @@
                                     <td>Origen</td>
                                     <td>Destino</td>
                                     <td>Monto</td>
-                                    <td>IVA</td>
-                                    <td>Rete IVA</td>
-                                    <td>Rete Servicio</td>
-                                    <td>ICA</td>
-                                    <td>Neto</td>
-                                    <td>Iva. Teorico</td>
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
@@ -234,12 +233,6 @@
                                             <td>@item.Origen</td>
                                             <td>@item.Destino</td>
                                             <td>@item.Monto</td>
-                                            <td>@item.IVA</td>
-                                            <td>@item.ReteIVA</td>
-                                            <td>@item.ReteServicio</td>
-                                            <td>@item.ICA</td>
-                                            <td>@item.Neto</td>
-                                            <td>@item.IVATeorico</td>
                                             <td>
                                                 <a class="btn btn-danger btn-sm btnDelete">
                                                     <span class="glyphicon glyphicon-trash"></span>

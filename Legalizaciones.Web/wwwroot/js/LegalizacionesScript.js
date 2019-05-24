@@ -163,30 +163,50 @@ function AgregarFilaDatagrid() {
 
                  
 
-    //quite 7 colummnas xq se muestran vacias y no me cabe en la pantalla
+    //los primero campos que indican display-none no se muestran pero son los campos que necesito que se llenen con valores 
+    //para poder realizar la serializacion de json cuando le envie el datagrid con los nombre verdaderos de la clase y con sus id
+    //para mostrar coloco los textos
+    //tiene que estar en orden con el header del datagrid
+    //    <td class="display-none">FechaaGasto</td>
+    //    <td class="display-none">PaisId</td>
+    //    <td class="display-none">CiudadId</td>
+    //    <td class="display-none">TipoServicioId</td>
+    //    <td class="display-none">ProveedorId</td>
+    //    <td class="display-none">Concepto</td>
+    //    <td class="display-none">Valor</td>
+    //    <td>Item</td>
+    //    <td>Fecha</td>
+    //    <td>Centro Oper.</td>
+    //    <td>Unidad Neg</td>
+    //    <td>Centro Cost</td>
+    //    <td>Pais</td>
+    //    <td>Ciudad</td>
+    //    <td>Servicio</td>
+    //    <td>Proveedor</td>
+    //    <td>Concepto Gasto</td>
+    //    <td>Valor</td>
+    //    <td>Acciones</td>
+
 
     var row = `<tr>  
-                    <td class="Id">${Id}</td>
-                    <td class="FechaGasto">${today}</td>
-                    <td>Centro de Operacion</td>
-                    <td>Unidad de Negocio</td>
-                    <td>Centro de Costo</td>
-                    <td class="FechaGasto">${FechaGasto}</td>
-                    <td class="PaisId">${Pais}</td>
-                    <td class="CiudadId">${Ciudad}</td>
-                    <td class="ServicioId">${Servicio}</td>
-                    <td>${Proveedor}</td>
-                    <td>${ConceptoGasto}</td>
-                    <td class="Monto">${Monto}</td>
-
-                    <td class="display-none">${FechaGasto}</td> 
+                    <td class="display-none">${today}</td>
                     <td class="display-none">${PaisId}</td> 
                     <td class="display-none">${CiudadId}</td> 
                     <td class="display-none">${ServicioId}</td> 
-                    <td class="display-none">1</td> 
-                    <td class="display-none">1</td> 
-                    <td class="display-none">1</td>
-                
+                    <td class="display-none">${ProveedorId}</td>
+                    <td class="display-none">${ConceptoGasto}</td>
+                    <td class="class="display-none">${Monto}</td>
+                    <td>${Id}</td>
+                    <td>${today}</td>
+                    <td>Centro de Operacion</td>
+                    <td>Unidad de Negocio</td>
+                    <td>Centro de Costo</td>
+                    <td>${Pais}</td>
+                    <td class="CiudadId">${Ciudad}</td>
+                    <td class="ServicioId">${Servicio}</td>
+                    <td class="display-none">${Proveedor}</td>
+                    <td class="display-none">${ConceptoGasto}</td>
+                    <td class="Monto">${Monto}</td>                
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
                             <span class="glyphicon glyphicon-trash"></span>
