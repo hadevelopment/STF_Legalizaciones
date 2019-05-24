@@ -12,7 +12,7 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model = null , string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
+        public IActionResult Index(AprobacionDocumento model = null , string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "",int paso = 0 ,string clear = "")
         {
             if (model == null)
                 model = new AprobacionDocumento();
@@ -33,6 +33,8 @@ namespace Legalizaciones.Web.Controllers
                 {
                     update = 0;
                 }
+                if (descripcion == string.Empty || descripcion == null)
+                    descripcion = "S/D";
                 model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
                 ViewBag.TipoDocumento = tipoDocumento;
@@ -67,7 +69,7 @@ namespace Legalizaciones.Web.Controllers
             else
                 model.TipoSeleccionado = tipo;
 
-            //string ss = Request.Form["solicitud"].ToString();
+            string ss = Request.Form["solicitud"].ToString();
             model = GetTipoSolicitudes(model);
             if (model.TipoSeleccionado != "Seleccione...")
             {

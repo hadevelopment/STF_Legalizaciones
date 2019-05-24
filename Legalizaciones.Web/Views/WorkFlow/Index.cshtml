@@ -19,161 +19,163 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xs-12">
-        <div class="box">
-            <div class="box-header with-border">
-                <div class="col-md-12">
-                    <div class="col-md-12 pb-2">
-                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                        <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
-                            @{
-                                int n = 0;
-                                foreach (var type in Model.TipoSolicitud)
+<form method="POST" id="formFlujo">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <div class="col-md-12">
+                        <div class="col-md-12 pb-2">
+                            <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                            <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
+                                @{
+                                    int n = 0;
+                                    foreach (var type in Model.TipoSolicitud)
+                                    {
+                                        <option value="@n"> @type </option>
+                                        n++;
+                                    }
+                                }
+
+                            </select>
+                        </div>
+                        <div>
+
+                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
+                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
+
+                        </div>
+                        @if (ViewBag.AprobadoresCount == 0)
+                        {
+                            <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="box-body">
+    @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
+    {
+        string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
+        <label class="control-label"> <strong> @tipoFlujo </strong></label>
+    }
+    <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                @if (Model.Aprobadores != null)
+                {
+                    <th> Orden de Aprobacion </th>
+                    <th> Descripcion </th>
+                    <th> Nombre Aprobador </th>
+                    <th> E-Mail Aprobador</th>
+                    <th> Actualizar </th>
+                    <th> Eliminar </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Aprobadores != null)
+            {
+                @foreach (var item in Model.Aprobadores)
+
+                {
+                    <tr>
+                        <td> @item.Orden</td>
+                        <td> @item.Descripcion</td>
+                        <td> @item.NombreAprobador</td>
+                        <td> @item.EmailAprobador</td>
+                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
+                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="3">No existe flujo de aprobacion creado ...</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+<!-- Trigger the modal with a button -->
+<!-- Modal -->
+<form id="newFlujo" method="GET">
+    <div id="nuevoFlujoModal" class="modal fade" role="application">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
+                    <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <label>Empleado</label>
+                            <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <label>Descripcion</label>
+                            <input type="text" id="descripcion" name="descripcion" class="form-control" />
+                        </div>
+                    </div>
+
+                    <table id="tblFlujo" class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                @if (Model.FlujoAprobacion != null)
                                 {
-                                    <option value="@n"> @type </option>
-                                    n++;
+                                    <th> Orden de Aprobacion </th>
+                                    <th> Descripcion </th>
+                                    <th> Nombre Aprobador </th>
+                                    <th> E-Mail Aprobador</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.FlujoAprobacion != null)
+                            {
+                                @foreach (var iten in Model.FlujoAprobacion)
+
+                                {
+                                    <tr>
+                                        <td> @iten.Orden</td>
+                                        <td> @iten.Descripcion</td>
+                                        <td> @iten.NombreAprobador</td>
+                                        <td> @iten.EmailAprobador</td>
+                                    </tr>
                                 }
                             }
 
-                        </select>
-                    </div>
-                    <div>
-                        <form method="POST" id="formFlujo">
-                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
-                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
-                        </form>
-                    </div>
-                    @if (ViewBag.AprobadoresCount == 0)
-                    {
-                        <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
-                    }
+                        </tbody>
+                    </table>
+                    <div class="row">
+                        <div class="modal-footer">
+                            <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
+                            <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
+                            <input type="hidden" id="addAprobador" name="addAprobador" />
+                            <input type="hidden" id="addMail" name="addMail" />
+                            <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
+                            <input type="submit" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
+                        </div>
 
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
+</form>
 
-
-    <div class="box-body">
-        @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
-        {
-            string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
-            <label class="control-label"> <strong> @tipoFlujo </strong></label>
-        }
-        <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    @if (Model.Aprobadores != null)
-                    {
-                        <th> Orden de Aprobacion </th>
-                        <th> Descripcion </th>
-                        <th> Nombre Aprobador </th>
-                        <th> E-Mail Aprobador</th>
-                        <th> Actualizar </th>
-                        <th> Eliminar </th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Aprobadores != null)
-                {
-                    @foreach (var item in Model.Aprobadores)
-
-                    {
-                        <tr>
-                            <td> @item.Orden</td>
-                            <td> @item.Descripcion</td>
-                            <td> @item.NombreAprobador</td>
-                            <td> @item.EmailAprobador</td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
-                        </tr>
-                    }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="3">No existe flujo de aprobacion creado ...</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-
-    </div>
-
-    <!-- Trigger the modal with a button -->
-    <!-- Modal -->
-    <form id="newFlujo" method="GET">
-        <div id="nuevoFlujoModal" class="modal fade" role="application">
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
-                        <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-12 pb-2">
-                                <label>Empleado</label>
-                                <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12 pb-2">
-                                <label>Descripcion</label>
-                                <input type="text" id="descripcion" name="descripcion" class="form-control" />
-                            </div>
-                        </div>
-
-                        <table id="tblFlujo" class="table table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    @if (Model.FlujoAprobacion != null)
-                                    {
-                                        <th> Orden de Aprobacion </th>
-                                        <th> Descripcion </th>
-                                        <th> Nombre Aprobador </th>
-                                        <th> E-Mail Aprobador</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.FlujoAprobacion != null)
-                                {
-                                    @foreach (var iten in Model.FlujoAprobacion)
-
-                                    {
-                                        <tr>
-                                            <td> @iten.Orden</td>
-                                            <td> @iten.Descripcion</td>
-                                            <td> @iten.NombreAprobador</td>
-                                            <td> @iten.EmailAprobador</td>
-                                        </tr>
-                                    }
-                                }
-
-                            </tbody>
-                        </table>
-                        <div class="row">
-                            <div class="modal-footer">
-                                <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
-                                <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
-                                <input type="hidden" id="addAprobador" name="addAprobador" />
-                                <input type="hidden" id="addMail" name="addMail" />
-                                <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
-                                <input type="submit" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </form>
-</div>
 
 
 <div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
@@ -185,7 +187,7 @@
             </div>
             <div class="row">
                 <div class="col-md-12 pb-2">
-                    <input type="button" class="btn btn-primary" style="float:right;" id="cerrar" name="cerrar" value="Aceptar" onclick="CloseMsjClienteModal();" />
+                    <input type="button" class="btn btn-primary" style="float:right;" id="cerrar" name="cerrar" value="Aceptar" onclick="CloseMensajeClienteModal();" />
                 </div>
             </div>
         </div>
@@ -258,7 +260,7 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
                 </div>
-               
+
                 <input type="hidden" id="ide" name="ide" />
                 <input type="hidden" id="procesoe" name="procesoe" />
                 <input type="hidden" id="typee" name="typee" />
@@ -268,8 +270,8 @@
 
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete"  value="SI" />
-                        <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();"/>
+                        <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();" />
                     </div>
                 </div>
             </div>
@@ -286,8 +288,8 @@
             </div>
             <div class="row">
                 <div class="col-md-12 pb-2">
-                    <input type="button" class="btn btn-primary" style="float:right;" id="si" name="si" value="SI" onclick="OpenDataModal();"/>
-                    <input type="button" class="btn btn-primary" style="float:right;" id="no" name="no" value="NO" onclick="CloseQuestionModal();"/>
+                    <input type="button" class="btn btn-primary" style="float:right;" id="si" name="si" value="SI" onclick="OpenDataModal();" />
+                    <input type="button" class="btn btn-primary" style="float:right;" id="no" name="no" value="NO" onclick="CloseQuestionModal();" />
                 </div>
             </div>
         </div>
