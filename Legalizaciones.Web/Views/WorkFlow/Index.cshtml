@@ -115,8 +115,8 @@
                             <td> @item.Descripcion</td>
                             <td> @item.NombreAprobador</td>
                             <td> @item.EmailAprobador</td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','actualizar');" value="Actualizar"> </td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','eliminar');" value="Eliminar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
                         </tr>
                     }
                 }
@@ -249,18 +249,19 @@
                     </div>
                 </div>
                 <input type="hidden" id="id" name="id" />
-                <input type="hidden" id="proceso" name="proceso" class="form-control" />
+                <input type="hidden" id="proceso" name="proceso" />
+                <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
 
-                    <div class="row">
-                        <div class="col-md-12 pb-2">
-                            <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
-                            <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" />
-                        </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" />
                     </div>
                 </div>
+            </div>
         </div>
     </div>
 </form>
