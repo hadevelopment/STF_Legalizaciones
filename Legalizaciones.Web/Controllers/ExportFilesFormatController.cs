@@ -26,7 +26,8 @@ namespace Legalizaciones.Web.Controllers
         private readonly IEstadoSolicitudRepository estatusRepository;
         private readonly IOrigenDestinoRepository origenDestinoRepository;
         private readonly IPaisRepository paisRepository;
-        
+        private readonly IConfiguracionGastoRepository ConfiguracionGastoRepository;
+
 
         public ExportFilesFormatController(IConverter converter, 
                                            ISolicitudRepository solicitudRepository,
@@ -37,7 +38,8 @@ namespace Legalizaciones.Web.Controllers
                                            IPaisRepository paisRepository,
                                            IEmpleadoRepository empleadoRepository,
                                            ILegalizacionRepository legalizacionRepository,
-                                           IBancoRepository bancoRepository)
+                                           IBancoRepository bancoRepository,
+                                           IConfiguracionGastoRepository ConfiguracionGastoRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
@@ -49,6 +51,7 @@ namespace Legalizaciones.Web.Controllers
             this.empleadoRepository = empleadoRepository;
             this.legalizacionRepository = legalizacionRepository;
             this.bancoRepository = bancoRepository;
+            this.ConfiguracionGastoRepository = ConfiguracionGastoRepository;
         }
 
         [HttpGet]
@@ -230,6 +233,63 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(10).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
                     row.CreateCell(11).SetCellValue(double.Parse(solicitud.Monto.ToString()));
                     row.CreateCell(12).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
+                    index++;
+                }
+
+                workbook.Write(fs);
+            }
+
+            return Download(sFileName);
+        }
+
+        [HttpGet]
+        public ActionResult ExportConfiguracionGastosExcel()
+        {
+            List<ConfiguracionGasto> lstConfGastos = this.ConfiguracionGastoRepository.All().Where(a => a.Estatus == 1).ToList();
+            foreach (var item in lstConfGastos)
+            {
+                item.Pais = paisRepository.Find(long.Parse(item.PaisId.ToString()));
+            }
+
+            string sFileName = "ConfiguracionGastos.xls";
+            string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("ConfiguracionGastos");
+                IRow row = excelSheet.CreateRow(0);
+
+                row.CreateCell(0).SetCellValue("ID");
+                row.CreateCell(1).SetCellValue("Descripcion");
+                row.CreateCell(2).SetCellValue("Cargo");
+                row.CreateCell(3).SetCellValue("Pais");
+                row.CreateCell(4).SetCellValue("Tipo Servicio");
+                row.CreateCell(5).SetCellValue("Origen");
+                row.CreateCell(6).SetCellValue("Destino");
+                row.CreateCell(7).SetCellValue("Moneda");
+                row.CreateCell(8).SetCellValue("Gasto Diario");
+                row.CreateCell(9).SetCellValue("Monto");
+                
+
+                var index = 1;
+                foreach (var itemOrigenDestino in lstConfGastos)
+                {
+                    row = excelSheet.CreateRow(index);
+                    row.CreateCell(0).SetCellValue(itemOrigenDestino.Id);
+                    row.CreateCell(1).SetCellValue(itemOrigenDestino.Descripcion);
+                    row.CreateCell(2).SetCellValue(itemOrigenDestino.Cargo);
+                    row.CreateCell(3).SetCellValue(itemOrigenDestino.Pais.Nombre);
+                    row.CreateCell(4).SetCellValue(itemOrigenDestino.TipoServicio);
+                    row.CreateCell(5).SetCellValue(itemOrigenDestino.OrigenNombre);
+                    row.CreateCell(6).SetCellValue(itemOrigenDestino.DestinoNombre);
+                    row.CreateCell(7).SetCellValue(itemOrigenDestino.MonedaNombre);
+                    row.CreateCell(8).SetCellValue(itemOrigenDestino.GastoDiario);
+                    row.CreateCell(9).SetCellValue(itemOrigenDestino.Monto);
+         
                     index++;
                 }
 
