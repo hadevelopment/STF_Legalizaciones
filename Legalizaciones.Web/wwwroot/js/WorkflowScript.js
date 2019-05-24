@@ -28,9 +28,43 @@
         placeholder: 'Seleccione...'
     });
 
-    $('#Empleado').on('change', function (e) {
-        var email = $("#Empleado option:selected").data('email');
-        document.getElementById("addMail").value = email;
+
+    var arrayEmpleadoPermiso2 = [];
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/Empleados?filtroCedula=true",
+        datatype: "Json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Empleado2").empty();
+            $('#Empleado2').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayEmpleadoPermiso2.push(value);
+                $('#Empleado2').append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+
+
+    //Propiedades del dropdown destinos
+    $("#Empleado2").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+
+    $('#Empleado2').on('change', function (e) {
+        var email = $("#Empleado2 option:selected").data('email');
+        document.getElementById("email").value = email;
+        var tipo = this.options[this.selectedIndex].text;
+        document.getElementById("nombre").value = tipo;
+        var cedula = $("#Empleado2 option:selected").val();
+        document.getElementById("cedula").value = cedula;
     }); 
 });
 
@@ -92,34 +126,46 @@ function OpenNewFlujo() {
 }
 
 
-function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, proceso) {
-    if (proceso == 'actualizar') {
-        document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion';
-        document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos (Continuar/Cancelar)';
-        $("#modificar").val('Actualizar');
-    }
-    else if (proceso == 'eliminar') {
-        document.getElementById("msjDataUpdate").innerHTML = 'Eliminacion de datos para el flujo de aprobacion';
-        document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
-        $("#modificar").val('Eliminar');
-    }
-
+function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSolicitud,proceso) {
+  
+    document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion';
+    document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
+    $("#modificar").val('Actualizar');
+  
     $('#id').val(id);
     $('#orden').val(orden);
     $('#descripcionT').val(descripcion);
     $('#nombre').val(nombre);
     $('#email').val(email);
     $('#cedula').val(cedula);
+    $('#type').val(tipoSolicitud);
     $('#proceso').val(proceso);
     OpenQuestionModal(proceso);
 }
 
-function OpenQuestionModal() {
-    $('#preguntaModal').modal('show');
+function GetDataAprobador2(id,tipoSolicitud, proceso) {
+
+    document.getElementById("msjDataUpdate").innerHTML = 'Eliminacion de datos para el flujo de aprobacion';
+    document.getElementById("msjPreguntaModal").innerHTML = 'Desea eliminar los siguientes datos?  SI para continuar , No para cancelar';
+
+    $('#id').val(id);
+    $('#type').val(tipoSolicitud);
+    $('#proceso').val(proceso);
+    OpenQuestionModal2(proceso);
+}
+
+function OpenQuestionModal(proceso) {
+    if(proceso === 'actualizar')
+        $('#preguntaModal').modal('show');
+    else if (proceso === 'eliminar')
+        $('#preguntaModal2').modal('show');
 }
 
 function CloseQuestionModal() {
-    $("#preguntaModal").modal('hide');
+    if (proceso === 'actualizar')
+        $("#preguntaModal").modal('hide');
+    else if (proceso === 'eliminar')
+        $("#preguntaModal2").modal('hide');
 }
 
 function OpenDataModal() {

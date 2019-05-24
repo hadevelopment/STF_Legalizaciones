@@ -82,6 +82,7 @@ namespace Legalizaciones.Web.Engine
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
                     data.Id = lector.GetInt32(5);
+                    data.TipoSolicitud = lector.GetString(6);
                     dataList.Insert(n, data);
                     n++;
                 }

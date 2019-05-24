@@ -60,12 +60,18 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public  ActionResult UpdateFlujo (string subProceso ,int id , int orden , string descripcion, string nombreAprobador , string emailAprobador)
+        public  ActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" ,string proceso = "")
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
-
-            return RedirectToAction("Index", "WorkFlow",model);
+            switch (proceso)
+            {
+                case ("actualizar"):
+                    break;
+                case ("eliminar"):
+                    break;
+            }
+            return RedirectToAction("Index", "WorkFlow", model);
         }
 
         private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)
@@ -75,8 +81,7 @@ namespace Legalizaciones.Web.Controllers
             return model;
         }
 
-
-        public List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
+        private List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
         {
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
