@@ -15,7 +15,7 @@
             <div class="box-body">
                 <small>
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
-                     <strong> Anticipos </strong>
+                    > <strong> Legalizaciones </strong>
                 </small>
             </div>
         </div>
@@ -57,12 +57,12 @@
                 </div>
 
 
-                <div style="float: left; padding-top: 17px" class="col-md-2">
+                <div style="float: left; padding-top: 17px;" class="col-md-2">
                     <button type="submit" class="btn btn-primary">
                         <span class="fa fa-search"></span> Filtrar
-                    </button>
+                    </button><br /><br /><br />
                 </div>
-                <br /><br />
+                
 
 
                 <div class="box-body">
@@ -77,11 +77,11 @@
                                 <th title="Beneficiario">Benef</th>
                                 <th>Estado</th>
                                 <th>Monto</th>
-                                <th>Tasa</th>
+                                @*<th>Tasa</th>*@
                                 <th class="hidden"> Nro. Anticipo UNOEE</th>
                                 <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
                                 <th title="Entrega"> Entrega </th>
-                                <th title="Dias de Entrega">Dias Entrega</th>
+                                <th title="Dias de Entrega">Dias Entregado</th>
                                 <th title="Fecha de Vencimiento">Vencimiento</th>
                                 <th>Acciones</th>
                             </tr>
@@ -150,10 +150,10 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
                                                 @Html.DisplayFor(modelItem => item.Tasa)
-                                            </td>
+                                            </td>*@
                                             <td class="hidden">
                                                 @Html.DisplayFor(modelItem => item.IdDocErp)
                                             </td>
@@ -216,10 +216,10 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
                                             </td>
-                                            <td>
+                                            @*<td>
                                                 @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
                                                 @Html.DisplayFor(modelItem => item.Tasa)
-                                            </td>
+                                            </td>*@
                                             <td class="hidden">
                                                 @Html.DisplayFor(modelItem => item.IdDocErp)
                                             </td>
@@ -275,7 +275,7 @@
 
                     <div class="row">
                         <div style="float: left;" class="col-md-2">
-                            <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel">Exportar solicitudes</a>
+                            <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel">Exportar</a>
                         </div>
                     </div>
                 </div>
