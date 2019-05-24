@@ -19,43 +19,46 @@
     </div>
 </div>
 
-<form method="POST" id="formFlujo">
+
     <div class="row">
         <div class="col-xs-12">
             <div class="box">
                 <div class="box-header with-border">
                     <div class="col-md-12">
-                        <div class="col-md-12 pb-2">
-                            <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                            <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
-                                @{
-                                    int n = 0;
-                                    foreach (var type in Model.TipoSolicitud)
-                                    {
-                                        <option value="@n"> @type </option>
-                                        n++;
+                       
+                            <div class="col-md-12 pb-2">
+                                <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                                <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
+                                    @{
+                                        int n = 0;
+                                        foreach (var type in Model.TipoSolicitud)
+                                        {
+                                            <option value="@n"> @type </option>
+                                            n++;
+                                        }
                                     }
-                                }
 
-                            </select>
-                        </div>
-                        <div>
-
-                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" style="float:left;" />
-                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
-
-                        </div>
-                        @if (ViewBag.AprobadoresCount == 0)
-                        {
-                            <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
-                        }
-
+                                </select>
+                            </div>
+                            <div>
+                                <form method="POST" id="formFlujo">
+                                    <input type="hidden" id="indiceSolicitu" name="indiceSolicitud" />
+                                    <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
+                                    <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
+                                </form>
+                            </div>
+                        
+                            @if (ViewBag.AprobadoresCount == 0)
+                            {
+                                <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                            }                
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
-</form>
+
 
 <div class="box-body">
     @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
@@ -329,6 +332,11 @@
         if (countDocAsociado > 0)
         {
             OpenMensajeClienteModal();
+        }
+
+        let IndexSollicitud = '@ViewBag.IndexSollicitud'
+         if (IndexSollicitud != '') {
+            $("#solicitud").val(IndexSollicitud);
         }
 
     });

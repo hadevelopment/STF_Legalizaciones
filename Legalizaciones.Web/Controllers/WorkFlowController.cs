@@ -69,7 +69,7 @@ namespace Legalizaciones.Web.Controllers
             else
                 model.TipoSeleccionado = tipo;
 
-            string ss = Request.Form["solicitud"].ToString();
+            ViewBag.IndexSollicitud = Request.Form["solicitud"].ToString();
             model = GetTipoSolicitudes(model);
             if (model.TipoSeleccionado != "Seleccione...")
             {
