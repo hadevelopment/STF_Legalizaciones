@@ -1,33 +1,4 @@
 ﻿
-<style type="text/css">
-   /* .addFlow {
-        width: 25%;
-        height: 25%;
-        background-color: green;
-        color: black;
-        border: 0px;
-    }
-
-    .cancelFlow {
-        width: 25%;
-        height: 25%;
-        background-color: red;
-        color: black;
-        border: 0px;
-    }
-
-    .addFlow:hover {
-        background-color: silver;
-    }
-
-    .cancelFlow:hover {
-        background-color: silver;
-    }*/
-
-  
-</style>
-
-
 
 @model Legalizaciones.Web.Models.AprobacionDocumento
 
@@ -73,7 +44,7 @@
                             <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
                         </form>
                     </div>
-                    @if (Model.Aprobadores != null)
+                    @if (ViewBag.AprobadoresCount == 0)
                     {
                         <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
                     }
@@ -116,7 +87,7 @@
                             <td> @item.NombreAprobador</td>
                             <td> @item.EmailAprobador</td>
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
                         </tr>
                     }
                 }
@@ -152,9 +123,10 @@
                         <div class="row">
                             <div class="col-md-12 pb-2">
                                 <label>Descripcion</label>
-                                <input type="text" id="descripcion" name="descripcion" />
+                                <input type="text" id="descripcion" name="descripcion" class="form-control" />
                             </div>
                         </div>
+
                         <table id="tblFlujo" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -185,7 +157,6 @@
                             </tbody>
                         </table>
                         <div class="row">
-
                             <div class="modal-footer">
                                 <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
                                 <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
@@ -261,11 +232,41 @@
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
-
+                <br />
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" onclick="CloseDataModal();" />
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+</form>
+
+
+
+<form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
+    <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
+                </div>
+               
+                <input type="hidden" id="ide" name="ide" />
+                <input type="hidden" id="procesoe" name="procesoe" />
+                <input type="hidden" id="typee" name="typee" />
+                <div class="row">
+                    <div class="col-md-12 pb-2"> </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete"  value="SI"/>
+                        <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();"/>
                     </div>
                 </div>
             </div>

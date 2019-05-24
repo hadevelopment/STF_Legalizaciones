@@ -12,7 +12,7 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index(string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
+        public IActionResult Index( int solicitud = 0 ,string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
@@ -48,10 +48,12 @@ namespace Legalizaciones.Web.Controllers
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model.TipoSeleccionado = Request.Form["tipoSolicitud"];
+            string ss = Request.Form["solicitud"].ToString();
             model = GetTipoSolicitudes(model);
             if (model.TipoSeleccionado != "Seleccione...")
             {
               model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+               ViewBag.AprobadoresCount = model.Aprobadores.Count;
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
 
@@ -64,13 +66,14 @@ namespace Legalizaciones.Web.Controllers
         {
             AprobacionDocumento model = new AprobacionDocumento();
             model = GetTipoSolicitudes(model);
-            switch (proceso)
-            {
-                case ("actualizar"):
-                    break;
-                case ("eliminar"):
-                    break;
-            }
+            return RedirectToAction("Index", "WorkFlow", model);
+        }
+
+        [HttpPost]
+        public ActionResult EliminarFlujo(int ide = 0, string typee = "", string procesoe = "")
+        {
+            AprobacionDocumento model = new AprobacionDocumento();
+            model = GetTipoSolicitudes(model);
             return RedirectToAction("Index", "WorkFlow", model);
         }
 

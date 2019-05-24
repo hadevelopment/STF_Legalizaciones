@@ -105,6 +105,8 @@ function AddAprobador() {
     const sel = document.getElementById('Empleado');
     var tip = sel.options[sel.selectedIndex].text;
     document.getElementById("addAprobador").value = tip;
+    var email = $("#Empleado option:selected").data('email');
+    document.getElementById("addMail").value = email;
 
 }
 
@@ -145,29 +147,29 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSol
 
 function GetDataAprobador2(id,tipoSolicitud, proceso) {
 
-    document.getElementById("msjDataUpdate").innerHTML = 'Eliminacion de datos para el flujo de aprobacion';
-    document.getElementById("msjPreguntaModal").innerHTML = 'Desea eliminar los siguientes datos?  SI para continuar , No para cancelar';
+    document.getElementById("msjDataEliminar").innerHTML = 'Desea eliminar los siguientes datos?  SI para continuar , No para cancelar';
 
-    $('#id').val(id);
-    $('#type').val(tipoSolicitud);
-    $('#proceso').val(proceso);
-    OpenQuestionModal2(proceso);
+    $('#ide').val(id);
+    $('#typee').val(tipoSolicitud);
+    $('#procesoe').val(proceso);
+    OpenQuestionModal(proceso);
 }
 
 function OpenQuestionModal(proceso) {
     if(proceso === 'actualizar')
         $('#preguntaModal').modal('show');
     else if (proceso === 'eliminar')
-        $('#preguntaModal2').modal('show');
+        $('#dataModal2').modal('show');
 }
 
-function CloseQuestionModal() {
+function CloseQuestionModal(proceso) {
     if (proceso === 'actualizar')
         $("#preguntaModal").modal('hide');
     else if (proceso === 'eliminar')
-        $("#preguntaModal2").modal('hide');
+        $("#dataModal2").modal('hide');
 }
 
+/********************************************* */
 function OpenDataModal() {
     $("#preguntaModal").modal('hide');
     $('#dataModal').modal('show');
@@ -176,3 +178,9 @@ function OpenDataModal() {
 function CloseDataModal(){
     $("#dataModal").modal('hide');
 }
+
+
+function CloseDataModal2() {
+    $("#dataModal2").modal('hide');
+}
+/********************************************* */
