@@ -70,20 +70,20 @@ namespace Legalizaciones.Web.Controllers
             string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
             string usuarioCedula = string.Empty;
 
-            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-                string.Empty);
+            //model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+            //    string.Empty);
 
-            //if (usuarioCargo == "3")
-            //{
-            //    model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-            //        string.Empty);
-            //}
-            //else
-            //{ 
-            //    if (usuarioCedula != string.Empty)
-            //        model = Metodo.SolicitudesAntPendientesLegalizacion(
-            //            "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
-            //}
+            if (usuarioCargo == "3")
+            {
+                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                    string.Empty);
+            }
+            else
+            {
+                if (usuarioCedula != string.Empty)
+                    model = Metodo.SolicitudesAntPendientesLegalizacion(
+                        "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+            }
 
             return View(model);
         }
