@@ -18,6 +18,8 @@ namespace Legalizaciones.Web.Controllers
     {
         private IConverter _converter;
         private readonly ISolicitudRepository solicitudRepository;
+        private readonly IBancoRepository bancoRepository;
+        private readonly ILegalizacionRepository legalizacionRepository;
         private readonly IEmpleadoRepository empleadoRepository;
         private readonly IZonaRepository zonaRepository;
         private readonly IDestinoRepository destinoRepository;
@@ -33,7 +35,9 @@ namespace Legalizaciones.Web.Controllers
                                            IEstadoSolicitudRepository estatusRepository,
                                            IOrigenDestinoRepository origenDestinoRepository,
                                            IPaisRepository paisRepository,
-                                           IEmpleadoRepository empleadoRepository)
+                                           IEmpleadoRepository empleadoRepository,
+                                           ILegalizacionRepository legalizacionRepository,
+                                           IBancoRepository bancoRepository)
         {
             _converter = converter;
             this.solicitudRepository = solicitudRepository;
@@ -43,6 +47,8 @@ namespace Legalizaciones.Web.Controllers
             this.origenDestinoRepository = origenDestinoRepository;
             this.paisRepository = paisRepository;
             this.empleadoRepository = empleadoRepository;
+            this.legalizacionRepository = legalizacionRepository;
+            this.bancoRepository = bancoRepository;
         }
 
         [HttpGet]
@@ -154,6 +160,76 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(5).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
                     row.CreateCell(6).SetCellValue(double.Parse(solicitud.Monto.ToString()));
                     row.CreateCell(7).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
+                    index++;
+                }
+
+                workbook.Write(fs);
+            }
+
+            return Download(sFileName);
+        }
+
+
+        [HttpGet]
+        public ActionResult ExportDatosLegalizacionesExcel()
+        {
+            List<Legalizacion> lstLegalizaciones = this.legalizacionRepository.All().ToList();
+            Solicitud solicitud;
+            foreach (var item in lstLegalizaciones)
+            {
+                item.Banco = bancoRepository.All().FirstOrDefault(x => x.Id == item.BancoId);
+            }
+
+            string sFileName = "Legalizaciones.xls";
+            string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("Legalizaciones");
+                IRow row = excelSheet.CreateRow(0);
+
+                row.CreateCell(0).SetCellValue("ID");
+                row.CreateCell(1).SetCellValue("Recibo Caja");
+                row.CreateCell(2).SetCellValue("Consignacion");
+                row.CreateCell(3).SetCellValue("Valor");
+                row.CreateCell(4).SetCellValue("Banco");
+
+                row.CreateCell(5).SetCellValue("Numero Solicitud");
+                row.CreateCell(6).SetCellValue("Fecha Solicitud");
+                row.CreateCell(7).SetCellValue("Fecha Vencimiento");
+                row.CreateCell(8).SetCellValue("Concepto Anticipio");
+                row.CreateCell(9).SetCellValue("Cedula del Beneficiario");
+                row.CreateCell(10).SetCellValue("Nombre del Beneficiario");
+                row.CreateCell(11).SetCellValue("Monto Beneficiario");
+                row.CreateCell(12).SetCellValue("Estado");
+
+                var index = 1;
+                foreach (var legalizacion in lstLegalizaciones)
+                {
+                    row = excelSheet.CreateRow(index);
+
+                    row.CreateCell(0).SetCellValue(legalizacion.Id);
+                    row.CreateCell(1).SetCellValue(legalizacion.ReciboCaja);
+                    row.CreateCell(2).SetCellValue(legalizacion.Consignacion);
+                    row.CreateCell(3).SetCellValue(legalizacion.Valor);
+                    row.CreateCell(4).SetCellValue(legalizacion.Banco.Nombre);
+
+                    solicitud = solicitudRepository.All().FirstOrDefault(x => x.Id == legalizacion.SolicitudID);
+                    solicitud.Empleado = empleadoRepository.All()
+                        .FirstOrDefault(x => x.Cedula == solicitud.EmpleadoCedula);
+
+                    row.CreateCell(5).SetCellValue(solicitud.Id);
+                    row.CreateCell(6).SetCellValue(solicitud.FechaSolicitud.ToShortDateString());
+                    row.CreateCell(7).SetCellValue(solicitud.FechaVencimiento.ToShortDateString());
+                    row.CreateCell(8).SetCellValue(solicitud.Concepto);
+                    row.CreateCell(9).SetCellValue(solicitud.EmpleadoCedula);
+                    row.CreateCell(10).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
+                    row.CreateCell(11).SetCellValue(double.Parse(solicitud.Monto.ToString()));
+                    row.CreateCell(12).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;
                 }
 
