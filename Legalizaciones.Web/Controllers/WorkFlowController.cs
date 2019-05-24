@@ -12,43 +12,62 @@ namespace Legalizaciones.Web.Controllers
     {
 
         [HttpGet]
-        public IActionResult Index( int solicitud = 0 ,string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
+        public IActionResult Index(AprobacionDocumento model = null , string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "S/D",int paso = 0 ,string clear = "")
         {
-            AprobacionDocumento model = new AprobacionDocumento();
+            if (model == null)
+                model = new AprobacionDocumento();
+
             model = GetTipoSolicitudes(model);
             ViewBag.Paso = 0;
-            if((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
+            if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
             {
                 int estatus = 1;
                 int update = 0;
                 EngineStf Funcion = new EngineStf();
-                if (paso == 0) {
+                if (paso == 0)
+                {
                     update = 1;
                     paso++;
                 }
-                else { 
+                else
+                {
                     update = 0;
                 }
-                model = Funcion.SetCreateAprobador(model,tipoDocumento,addAprobador,empleado,descripcion,addMail,update,estatus,paso);
+                model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
                 ViewBag.TipoDocumento = tipoDocumento;
 
             }
-            else if(clear != string.Empty)
+            else if (clear != string.Empty)
             {
                 ViewBag.Paso = 0;
                 ViewBag.TipoDocumento = null;
                 model.FlujoAprobacion = null;
             }
+            else if (model.TipoSeleccionado != "Seleccione..." && model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
+            {
+                model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+                ViewBag.AprobadoresCount = model.Aprobadores.Count;
+                if (model.Aprobadores.Count == 0)
+                    model.Aprobadores = null;
+            }
+             if (model.CountDocAsociado > 0)
+             {
+                ViewBag.CountDocAsociado = model.CountDocAsociado;
+             }
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(int n = 0)
+        public IActionResult Index(string tipo = "")
         {
             AprobacionDocumento model = new AprobacionDocumento();
-            model.TipoSeleccionado = Request.Form["tipoSolicitud"];
-            string ss = Request.Form["solicitud"].ToString();
+            if (tipo == string.Empty)
+                model.TipoSeleccionado = Request.Form["tipoSolicitud"];
+            else
+                model.TipoSeleccionado = tipo;
+
+            //string ss = Request.Form["solicitud"].ToString();
             model = GetTipoSolicitudes(model);
             if (model.TipoSeleccionado != "Seleccione...")
             {
@@ -62,18 +81,27 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public  ActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" ,string proceso = "")
+        public  IActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" ,string proceso = "")
         {
+            EngineDb Metodo = new EngineDb();
+            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion",id,descripcionT,cedula,nombre,email); 
             AprobacionDocumento model = new AprobacionDocumento();
-            model = GetTipoSolicitudes(model);
+            model.TipoSeleccionado = type;
             return RedirectToAction("Index", "WorkFlow", model);
         }
 
         [HttpPost]
-        public ActionResult EliminarFlujo(int ide = 0, string typee = "", string procesoe = "")
+        public IActionResult EliminarFlujo(int ide = 0, string typee = "", string procesoe = "")
         {
+            EngineDb Metodo = new EngineDb();
             AprobacionDocumento model = new AprobacionDocumento();
-            model = GetTipoSolicitudes(model);
+            model.TipoSeleccionado = typee;
+            model.CountDocAsociado = Metodo.CountDocAsociado("Sp_GetCountDocAsociadoPaso",ide,typee);
+            if (model.CountDocAsociado > 0)
+            {
+                return RedirectToAction("Index", "WorkFlow", model);
+            }
+            Metodo.DeletePasoFlujoAprobacion("Sp_DeletePasoAprobacion", ide);
             return RedirectToAction("Index", "WorkFlow", model);
         }
 

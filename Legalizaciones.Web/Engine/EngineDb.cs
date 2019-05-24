@@ -129,5 +129,68 @@ namespace Legalizaciones.Web.Engine
             }
             return dataList;
         }
+
+
+        public bool UpdatePasoFlujoAprobacion  (string SpName, int id, string descripcion ,string cedulaAprobador ,string nombreAprobador ,string emailAprobador,int orden = 0)
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            bool resultado = false;
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Id", id);
+                command.Parameters.AddWithValue("@Descripcion", descripcion);
+                command.Parameters.AddWithValue("@CedulaAprobador", cedulaAprobador);
+                command.Parameters.AddWithValue("@NombreAprobador", nombreAprobador);
+                command.Parameters.AddWithValue("@EmailAprobador", emailAprobador);
+                command.Parameters.AddWithValue("@Orden", orden);
+                command.ExecuteNonQuery();
+                resultado = true;
+                Conexion.Close();
+            }
+            return resultado;
+        }
+
+           public bool DeletePasoFlujoAprobacion  (string SpName, int id)
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            bool resultado = false;
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Id", id);
+                command.ExecuteNonQuery();
+                resultado = true;
+                Conexion.Close();
+            }
+            return resultado;
+        }
+        
+        public int CountDocAsociado(string SpName, int id,string tipoDocumento)
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            int resultado = -1;
+            object obj = new object();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@tipoDoc", tipoDocumento);
+                command.Parameters.AddWithValue("@Id", id);
+                obj = command.ExecuteScalar();
+                if (obj != null)
+                    resultado = Convert.ToInt32(obj);
+                Conexion.Close();
+            }
+            return resultado;
+        }
     }
 }

@@ -96,6 +96,7 @@ function VerFlujo() {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     if (tipo === 'Seleccione...') {
+        $('#cerrar').hide();
         $("#msjClienteModal").modal('show');
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
     }
@@ -169,7 +170,6 @@ function CloseQuestionModal(proceso) {
         $("#dataModal2").modal('hide');
 }
 
-/********************************************* */
 function OpenDataModal() {
     $("#preguntaModal").modal('hide');
     $('#dataModal').modal('show');
@@ -183,4 +183,13 @@ function CloseDataModal(){
 function CloseDataModal2() {
     $("#dataModal2").modal('hide');
 }
-/********************************************* */
+
+function OpenMensajeClienteModal() {
+    document.getElementById("msjClient").innerHTML = 'Existen documentos Asociados a este flujo, No se puede eliminar';
+    $('#cerrar').show();
+    $("#msjClienteModal").modal('show');
+}
+
+function CloseMensajeClienteModal() {
+    $("#msjClienteModal").modal('hide');
+}

@@ -8,6 +8,7 @@ namespace Legalizaciones.Web.Models
     public class AprobacionDocumento
     {
         public string TipoSeleccionado { get; set; }
+        public int CountDocAsociado { get; set; }
         public List<string> TipoSolicitud { get; set; } 
         public List <DataAprobacion> Aprobadores { get; set; }
         public List<DataAprobacion> FlujoAprobacion { get; set; }
