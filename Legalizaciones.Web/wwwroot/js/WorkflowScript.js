@@ -86,3 +86,47 @@ function ClearAll() {
         data: { clear: clear }
     });
 }
+
+function OpenNewFlujo() {
+    $('#nuevoFlujoModal').modal('show');
+}
+
+
+function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, proceso) {
+    if (proceso == 'actualizar') {
+        document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion';
+        document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos (Continuar/Cancelar)';
+        $("#modificar").val('Actualizar');
+    }
+    else if (proceso == 'eliminar') {
+        document.getElementById("msjDataUpdate").innerHTML = 'Eliminacion de datos para el flujo de aprobacion';
+        document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
+        $("#modificar").val('Eliminar');
+    }
+
+    $('#id').val(id);
+    $('#orden').val(orden);
+    $('#descripcionT').val(descripcion);
+    $('#nombre').val(nombre);
+    $('#email').val(email);
+    $('#cedula').val(cedula);
+    $('#proceso').val(proceso);
+    OpenQuestionModal(proceso);
+}
+
+function OpenQuestionModal() {
+    $('#preguntaModal').modal('show');
+}
+
+function CloseQuestionModal() {
+    $("#preguntaModal").modal('hide');
+}
+
+function OpenDataModal() {
+    $("#preguntaModal").modal('hide');
+    $('#dataModal').modal('show');
+}
+
+function CloseDataModal(){
+    $("#dataModal").modal('hide');
+}

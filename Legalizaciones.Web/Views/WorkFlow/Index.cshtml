@@ -1,6 +1,6 @@
 ﻿
 <style type="text/css">
-    .addFlow {
+   /* .addFlow {
         width: 25%;
         height: 25%;
         background-color: green;
@@ -22,7 +22,9 @@
 
     .cancelFlow:hover {
         background-color: silver;
-    }
+    }*/
+
+  
 </style>
 
 
@@ -214,7 +216,7 @@
     </div>
 </div>
 
-<form method="POST">
+<form method="POST" action='@Url.Action("UpdateFlujo", "WorkFlow")'>
     <div id="dataModal" name="dataModal" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -225,40 +227,60 @@
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Nombre Aprobador</label>
-                        <input type="text" id="nombre" name="nombre" />
+                        <input type="text" id="nombre" name="nombre" class="form-control" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Cedula Aprobador</label>
-                        <input type="text" id="cedula" name="cedula" />
+                        <input type="text" id="cedula" name="cedula" class="form-control" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
-                        <input type="text" id="email" name="email" />
+                        <input type="text" id="email" name="email" class="form-control" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Descripcion</label>
-                        <input type="text" id="descripcionT" name="descripcionT" />
+                        <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
                     </div>
                 </div>
                 <input type="hidden" id="id" name="id" />
-                <input type="hidden" id="proceso" name="proceso" />
-
+                <input type="hidden" id="proceso" name="proceso" class="form-control" />
                 <div class="row">
-                    <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
-                        <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" />
+                    <div class="col-md-12 pb-2"> </div>
+                </div>
+
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
+                            <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" />
+                        </div>
                     </div>
+                </div>
+        </div>
+    </div>
+</form>
+
+<div id="preguntaModal" name="preguntaModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjPreguntaModal" name="msjPreguntaModal"> </label>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pb-2">
+                    <input type="button" class="btn btn-primary" style="float:right;" id="si" name="si" value="SI" onclick="OpenDataModal();"/>
+                    <input type="button" class="btn btn-primary" style="float:right;" id="no" name="no" value="NO" onclick="CloseQuestionModal();"/>
                 </div>
             </div>
         </div>
     </div>
-</form>
+</div>
 
 
 
@@ -289,34 +311,7 @@
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
         }
 
-      });
-
-    function OpenNewFlujo() {
-         $('#nuevoFlujoModal').modal('show');
-    }
-
-     function GetDataAprobador(id ,orden, descripcion  , nombre, email , cedula, proceso)
-     {
-        if (proceso == 'actualizar')
-        {
-          document.getElementById("msjDataUpdate").innerHTML = 'Desea actualizar los siguientes datos (Continuar/Cancelar)';
-          $("#modificar").val('Actualizar');
-        }
-        else if (proceso == 'eliminar')
-        {
-           document.getElementById("msjDataUpdate").innerHTML =  'Desea eliminar los siguientes datos (Continuar/Cancelar)';
-           $("#modificar").val('Eliminar');
-        }
-
-        $('#id').val(id);
-        $('#orden').val(orden);
-        $('#descripcionT').val(descripcion);
-        $('#nombre').val(nombre);
-        $('#email').val(email);
-        $('#cedula').val(cedula);
-        $('#proceso').val(proceso);
-        $('#dataModal').modal('show');
-     }
+    });
 
     </script>
 

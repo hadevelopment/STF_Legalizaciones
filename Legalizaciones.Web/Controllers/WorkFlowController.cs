@@ -59,12 +59,12 @@ namespace Legalizaciones.Web.Controllers
             return View(model);
         }
 
-        public  IActionResult UpdateFlujo (string subProceso ,int id , int orden , string descripcion, string nombreAprobador , string emailAprobador)
+        [HttpPost]
+        public  ActionResult UpdateFlujo (string subProceso ,int id , int orden , string descripcion, string nombreAprobador , string emailAprobador)
         {
             AprobacionDocumento model = new AprobacionDocumento();
-            model.TipoSeleccionado = "1000";
-            EngineStf Funcion = new EngineStf();
-            ViewBag.UpdateFlujo = "UPDATE FLUJO";
+            model = GetTipoSolicitudes(model);
+
             return RedirectToAction("Index", "WorkFlow",model);
         }
 
