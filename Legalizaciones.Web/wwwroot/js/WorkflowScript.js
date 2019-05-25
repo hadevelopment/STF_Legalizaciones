@@ -104,6 +104,9 @@ function SetNuevoFlujo()
 function VerFlujo() {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
+    document.getElementById("tipoSolicitud").value = tipo;
+    document.getElementById("tipoDocumento").value = tipo;
+    document.getElementById("indiceSolicitud").value = document.getElementById("solicitud").selectedIndex;
     if (tipo === 'Seleccione...') {
         $('#cerrar').hide();
         $("#msjClienteModal").modal('show');

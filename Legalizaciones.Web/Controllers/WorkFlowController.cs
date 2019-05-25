@@ -11,9 +11,8 @@ namespace Legalizaciones.Web.Controllers
 {
     public class WorkFlowController : Controller
     {
-
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model = null , string tipoDocumento = "",string addAprobador = "", string addMail = "" ,string empleado = "",string descripcion = "",int paso = 0 ,string clear = "")
+        public IActionResult Index(AprobacionDocumento model = null, string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "")
         {
             if (model == null)
                 model = new AprobacionDocumento();
@@ -21,14 +20,18 @@ namespace Legalizaciones.Web.Controllers
             model = GetTipoSolicitudes(model);
             ViewBag.Paso = 0;
             if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
-                ViewBag.IndexSollicitud = TempData["IndiceSolicitud"];
+                ViewBag.IndexSollicitud = HttpContext.Session.GetString("IndiceSolicitud");
             if ((tipoDocumento == string.Empty || tipoDocumento == null) && (HttpContext.Session.GetString("TipoDocumento") != string.Empty && HttpContext.Session.GetString("TipoDocumento") != null))
+            {
                 tipoDocumento = HttpContext.Session.GetString("TipoDocumento");
+                model.TipoSeleccionado = tipoDocumento;
+            }
 
-                if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
-                {
+            if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
+            {
                 int estatus = 1;
                 int update = 0;
+                EngineDb Metodo = new EngineDb();
                 EngineStf Funcion = new EngineStf();
                 if (paso == 0)
                 {
@@ -41,7 +44,11 @@ namespace Legalizaciones.Web.Controllers
                 }
                 if (descripcion == string.Empty || descripcion == null)
                     descripcion = "S/D";
+                if( Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso,tipoDocumento) == 0)
                 model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
+                else
+                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
                 ViewBag.TipoDocumento = tipoDocumento;
 
@@ -59,15 +66,15 @@ namespace Legalizaciones.Web.Controllers
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
             }
-             if (model.CountDocAsociado > 0)
-             {
+            if (model.CountDocAsociado > 0)
+            {
                 ViewBag.CountDocAsociado = model.CountDocAsociado;
-             }
+            }
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(string tipo = "")
+        public IActionResult Index(string tipo = "" , int n = 0)
         {
             AprobacionDocumento model = new AprobacionDocumento();
             if (tipo == string.Empty)

@@ -22,7 +22,7 @@ namespace Legalizaciones.Web.Engine
             foreach (DataRow row in dt.Rows)
             {
                 InfoLegalizacion item = new InfoLegalizacion();
-                if (row[0] != DBNull.Value) 
+                if (row[0] != DBNull.Value)
                     item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
                     item.FechaCreacion = row[1].ToString().Substring(0, 10);
@@ -87,7 +87,7 @@ namespace Legalizaciones.Web.Engine
         }
 
 
-        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model , string tipoDocumento , string addAprobador , string empleado , string descripcion ,string mail, int update , int estatus,int paso)
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -111,14 +111,14 @@ namespace Legalizaciones.Web.Engine
             bool resultado = false;
             EngineDb Metodo = new EngineDb();
             DataTable dt = new DataTable();
-            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion",tipoDocumento );
+            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion", tipoDocumento);
             if (dt.Rows.Count > 0)
-            dt = ReordenarPaso(dt);
+                dt = ReordenarPaso(dt);
             resultado = Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", dt);
             return resultado;
         }
 
-        private DataTable ReordenarPaso (DataTable dt)
+        private DataTable ReordenarPaso(DataTable dt)
         {
             int n = 1;
             foreach (DataRow r in dt.Rows)

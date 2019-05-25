@@ -13,7 +13,7 @@ namespace Legalizaciones.Web.Engine
         public static string DefaultConnection { get; set; }
         private string StringConexion = EngineDb.DefaultConnection;
 
-        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula = "")
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion(string SpName, string empleadoCedula = "")
         {
             List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
             try
@@ -36,11 +36,11 @@ namespace Legalizaciones.Web.Engine
                 InfoLegalizacion = Funcion.ConvertirToListSolicitud(dataTabla);
             }
             catch { }
-           
+
             return InfoLegalizacion;
         }
 
-        public List <string> TiposDocumentos (string SpName)
+        public List<string> TiposDocumentos(string SpName)
         {
             List<string> documento = new List<string>();
             DataTable dataTabla = new DataTable();
@@ -59,7 +59,7 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
-        public List<DataAprobacion> AprobadoresTipoSolicitud (string SpName , string tipoSolicitud,int estatus = 1 )
+        public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, string tipoSolicitud, int estatus = 1)
         {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             List<DataAprobacion> dataList = new List<DataAprobacion>();
@@ -92,7 +92,7 @@ namespace Legalizaciones.Web.Engine
             return dataList;
         }
 
-        public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName , DataAprobacion model)
+        public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, DataAprobacion model)
         {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             List<DataAprobacion> dataList = new List<DataAprobacion>();
@@ -131,7 +131,7 @@ namespace Legalizaciones.Web.Engine
         }
 
 
-        public bool UpdatePasoFlujoAprobacion  (string SpName, int id, string descripcion ,string cedulaAprobador ,string nombreAprobador ,string emailAprobador,int orden = 0)
+        public bool UpdatePasoFlujoAprobacion(string SpName, int id, string descripcion, string cedulaAprobador, string nombreAprobador, string emailAprobador, int orden = 0)
         {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             bool resultado = false;
@@ -154,7 +154,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        public bool UpdatePasoFlujoAprobacion(string SpName ,DataTable dt)
+        public bool UpdatePasoFlujoAprobacion(string SpName, DataTable dt)
         {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             SqlCommand command = new SqlCommand(SpName, Conexion);
@@ -180,8 +180,8 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        public bool DeletePasoFlujoAprobacion  (string SpName, int id)
-           {
+        public bool DeletePasoFlujoAprobacion(string SpName, int id)
+        {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             bool resultado = false;
             using (Conexion)
@@ -196,9 +196,9 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Close();
             }
             return resultado;
-           }
-        
-        public int CountDocAsociado(string SpName, int id,string tipoDocumento)
+        }
+
+        public int CountDocAsociado(string SpName, int id, string tipoDocumento)
         {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             int resultado = -1;
@@ -219,7 +219,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        public DataTable GetPasoFlujoAprobacion (string SpName, string tipoDocumento)
+        public DataTable GetPasoFlujoAprobacion(string SpName, string tipoDocumento)
         {
             DataTable dataTabla = new DataTable();
             SqlConnection Conexion = new SqlConnection(StringConexion);
@@ -235,6 +235,27 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Close();
             }
             return dataTabla;
+        }
+
+        public int ExistePasoFlujoAprobacion(string SpName, int orden, string tipoDocumento)
+        {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            int resultado = 0;
+            object obj = new object();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Orden", orden);
+                command.Parameters.AddWithValue("@TipoDocumento", tipoDocumento);
+                obj = command.ExecuteScalar();
+                if (obj != null)
+                    resultado = Convert.ToInt32(obj);
+                Conexion.Close();
+            }
+            return resultado;
         }
     }
 }
