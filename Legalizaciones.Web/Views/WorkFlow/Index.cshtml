@@ -1,4 +1,11 @@
-﻿
+﻿<style>
+    .divCss{
+        margin-left:6%;
+        margin-right:6%;
+        margin-top:6%;
+        padding-left:30%;
+    }
+</style>
 
 @model Legalizaciones.Web.Models.AprobacionDocumento
 
@@ -110,7 +117,7 @@
 <!-- Trigger the modal with a button -->
 <!-- MODAL NUEVO FLUJO -->
 <form id="newFlujo" method="GET">
-    <div id="nuevoFlujoModal" class="modal fade" role="application">
+    <div id="nuevoFlujoModal" class="modal fade divCss" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -167,7 +174,7 @@
                             <input type="hidden" id="addAprobador" name="addAprobador" />
                             <input type="hidden" id="addMail" name="addMail" />
                             <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
-                            <input type="submit" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
+                            <input type ="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
                         </div>
 
                     </div>
@@ -180,7 +187,7 @@
 
 <!--MODAL ACTUALIZACION DE FLUJO -->
 <form method="POST" action='@Url.Action("UpdateFlujo", "WorkFlow")'>
-    <div id="dataModal" name="dataModal" class="modal fade" role="application">
+    <div id="dataModal" name="dataModal" class="modal fade divCss" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -239,7 +246,7 @@
 
 <!-- MODAL ELIMINAR PASO FLUJO-->
 <form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
-    <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
+    <div id="dataModal2" name="dataModal2" class="modal fade divCss" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

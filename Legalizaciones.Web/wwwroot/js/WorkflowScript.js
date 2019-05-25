@@ -117,9 +117,6 @@ function AddAprobador() {
     document.getElementById("addAprobador").value = tip;
     var email = $("#Empleado option:selected").data('email');
     document.getElementById("addMail").value = email;
-    const obj = document.getElementById('solicitud');
-    var tipo = obj.options[obj.selectedIndex].text;
-    document.getElementById("tipoDocumento").value = tipo;
 }
 
 function ClearAll() {
@@ -127,8 +124,9 @@ function ClearAll() {
     $('#addAprobador').val('');
     $('#addMail').val('');
     $("#tblFlujo tbody tr").remove();
-    var clear = 'Clear';
-    $.ajax({
+    CloseNewFlujo();
+   var clear = 'Clear';
+   $.ajax({
         type: "Get",
         url: "Index",
         data: { clear: clear }
@@ -137,6 +135,10 @@ function ClearAll() {
 
 function OpenNewFlujo() {
     $('#nuevoFlujoModal').modal('show');
+}
+
+function CloseNewFlujo() {
+    $('#nuevoFlujoModal').modal('hide');
 }
 
 
@@ -175,10 +177,9 @@ function OpenQuestionModal(proceso) {
 }
 
 function CloseQuestionModal(proceso) {
-    if (proceso === 'actualizar')
-        $("#preguntaModal").modal('hide');
-    else if (proceso === 'eliminar')
-        $("#dataModal2").modal('hide');
+  
+    $("#dataModal2").modal('hide');
+    $("#preguntaModal").modal('hide');
 }
 
 function OpenDataModal() {
