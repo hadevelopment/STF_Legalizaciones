@@ -187,7 +187,8 @@ function AgregarFilaDatagrid() {
     //    <td>Valor</td>
     //    <td>Acciones</td>
 
-
+//las primeras son para el mapeo
+    //las demas son para mostrar
     var row = `<tr>  
                     <td class="display-none">${today}</td>
                     <td class="display-none">${PaisId}</td> 
@@ -195,17 +196,18 @@ function AgregarFilaDatagrid() {
                     <td class="display-none">${ServicioId}</td> 
                     <td class="display-none">${ProveedorId}</td>
                     <td class="display-none">${ConceptoGasto}</td>
-                    <td class="class="display-none">${Monto}</td>
+                    <td class="display-none">${Monto}</td>
+
                     <td>${Id}</td>
                     <td>${today}</td>
                     <td>Centro de Operacion</td>
                     <td>Unidad de Negocio</td>
                     <td>Centro de Costo</td>
                     <td>${Pais}</td>
-                    <td class="CiudadId">${Ciudad}</td>
-                    <td class="ServicioId">${Servicio}</td>
-                    <td class="display-none">${Proveedor}</td>
-                    <td class="display-none">${ConceptoGasto}</td>
+                    <td>${Ciudad}</td>
+                    <td>${Servicio}</td>
+                    <td>${Proveedor}</td>
+                    <td>${ConceptoGasto}</td>
                     <td class="Monto">${Monto}</td>                
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
@@ -389,9 +391,11 @@ function CalcularGastoComidaLegalizacion() {
 
         var wDias = fecha2.diff(fecha1, 'days');
 
-        var wMontoTotal = wMonto * parseInt(wDias);
+        if (wDias > 1) {
+            var wMontoTotal = wMonto * parseInt(wDias);
 
-        return wMontoTotal;
+            return wMontoTotal;
+        }
 
 
     }

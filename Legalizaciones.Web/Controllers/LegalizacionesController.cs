@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Legalizaciones.Model.Empresa;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json.Linq;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -70,20 +71,20 @@ namespace Legalizaciones.Web.Controllers
             string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
             string usuarioCedula = string.Empty;
 
-            model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-                string.Empty);
+            //model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+            //    string.Empty);
 
-            //if (usuarioCargo == "3")
-            //{
-            //    model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-            //        string.Empty);
-            //}
-            //else
-            //{ 
-            //    if (usuarioCedula != string.Empty)
-            //        model = Metodo.SolicitudesAntPendientesLegalizacion(
-            //            "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
-            //}
+            if (usuarioCargo == "3")
+            {
+                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
+                    string.Empty);
+            }
+            else
+            {
+                if (usuarioCedula != string.Empty)
+                    model = Metodo.SolicitudesAntPendientesLegalizacion(
+                        "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+            }
 
             return View(model);
         }
@@ -264,9 +265,9 @@ namespace Legalizaciones.Web.Controllers
 
 
                 //Se actualiza el estado de la solicitud a Legalizada
-                if (OLegalizacionHeader.Id != null && OLegalizacionHeader.Id > 0)
+                if (OLegalizacionHeader.Id > 0)
                 {
-                    if(legalizacion.AnticipoId != null && legalizacion.AnticipoId > 0)
+                    if(legalizacion.AnticipoId > 0)
                     {
                         var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
                         solicitud.EstadoId = 2; //Legalizada
@@ -275,16 +276,25 @@ namespace Legalizaciones.Web.Controllers
                 }
 
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
-                var LegalizacionGastos =
-                    JsonConvert.DeserializeObject<List<LegalizacionGastos>>(legalizacion.GastosJSON);
+                var LegalizacionGastos = JsonConvert.DeserializeObject<List<DecerializeLegalizacionGasto>>(legalizacion.GastosJSON);
                 foreach (var item in LegalizacionGastos)
                 {
-                    item.LegalizacionId = OLegalizacionHeader.Id;
-                    item.CentroCostosId = 1;
-                    item.CentroOperacionId = 1;
-                    item.UnidadNegocioId = 1;
+                    var wOLegalizacionGasto = new LegalizacionGastos
+                    {
+                        FechaGasto = item.FechaGasto,
+                        LegalizacionId = OLegalizacionHeader.Id,
+                        CentroOperacionId = 1,
+                        UnidadNegocioId = 1,
+                        CentroCostosId = 1,
+                        MotivoId = 1,
+                        PaisId = item.PaisId,
+                        CiudadId = item.CiudadId,
+                        TipoServicioId = item.TipoServicioId,
+                        ProveedorId = item.ProveedorId
 
-                    legalizacionGastosRepository.Insert(item);
+                    };
+                    legalizacionGastosRepository.Insert(wOLegalizacionGasto);
+
                 }
 
 
@@ -329,17 +339,25 @@ namespace Legalizaciones.Web.Controllers
                     legalizacionGastosRepository.Delete(item);
                 }
 
-                //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
-                var LegalizacionGastos =
-                    JsonConvert.DeserializeObject<List<LegalizacionGastos>>(legalizacion.GastosJSON);
+                var LegalizacionGastos = JsonConvert.DeserializeObject<List<DecerializeLegalizacionGasto>>(legalizacion.GastosJSON);
                 foreach (var item in LegalizacionGastos)
                 {
-                    item.LegalizacionId = OLegalizacionHeader.Id;
-                    item.CentroCostosId = 1;
-                    item.CentroOperacionId = 1;
-                    item.UnidadNegocioId = 1;
+                    var wOLegalizacionGasto = new LegalizacionGastos
+                    {
+                        FechaGasto = item.FechaGasto,
+                        LegalizacionId = OLegalizacionHeader.Id,
+                        CentroOperacionId = 1,
+                        UnidadNegocioId = 1,
+                        CentroCostosId = 1,
+                        MotivoId = 1,
+                        PaisId = item.PaisId,
+                        CiudadId = item.CiudadId,
+                        TipoServicioId = item.TipoServicioId,
+                        ProveedorId = item.ProveedorId
 
-                    legalizacionGastosRepository.Insert(item);
+                    };
+                    legalizacionGastosRepository.Insert(wOLegalizacionGasto);
+
                 }
 
                 TempData["Alerta"] = "success - La Solicitud se ha actualizado correctamente.";

@@ -16,9 +16,11 @@ using Microsoft.AspNetCore.Http;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Legalizaciones.Web.Models.ViewModel;
 
 namespace Legalizaciones.Web.Controllers
 {
+
     public class HomeController : Controller
     {
         //IJerarquia
@@ -47,27 +49,56 @@ namespace Legalizaciones.Web.Controllers
         }
         public IActionResult Index()
         {
-            Empleado emp = new Empleado();
-            UNOEE erp = new UNOEE();
+            //si no existe una variable de sesion creada del empleado cargo la que viene x defecto del archivo appsettings.json
+            if (HttpContext.Session.GetString("Usuario_Cargo") == null)
+            {
+                Empleado emp = new Empleado();
+                UNOEE erp = new UNOEE();
 
-            //Busco el empleado logeado del AppSettings
-            int wEmpleadoLogeado = Convert.ToInt32(_config["AppSettings:EmpLog"]);
+                //Busco el empleado logeado del AppSettings
+                int wEmpleadoLogeado = Convert.ToInt32(_config["AppSettings:EmpLog"]);
 
-            //emp = erp.getEmpleadoID(erp.Empleado_logeado());
-            emp = erp.getEmpleadoID(wEmpleadoLogeado);
-            HttpContext.Session.SetString("Usuario_Nombre", emp.Nombre);
-            HttpContext.Session.SetString("Usuario_Area", emp.Area);
-            HttpContext.Session.SetString("Usuario_Cedula", emp.Cedula);
-            HttpContext.Session.SetString("Usuario_Cargo", emp.CargoId.ToString());
-            HttpContext.Session.SetString("Usuario_Telefono", emp.Telefono);
-            HttpContext.Session.SetString("Usuario_Ciudad", emp.Ciudad);
-            HttpContext.Session.SetString("Usuario_Direccion", emp.Direccion);
+                //emp = erp.getEmpleadoID(erp.Empleado_logeado());
+                emp = erp.getEmpleadoID(wEmpleadoLogeado);
+                HttpContext.Session.SetString("Usuario_Nombre", emp.Nombre);
+                HttpContext.Session.SetString("Usuario_Area", emp.Area);
+                HttpContext.Session.SetString("Usuario_Cedula", emp.Cedula);
+                HttpContext.Session.SetString("Usuario_Cargo", emp.CargoId.ToString());
+                HttpContext.Session.SetString("Usuario_Telefono", emp.Telefono);
+                HttpContext.Session.SetString("Usuario_Ciudad", emp.Ciudad);
+                HttpContext.Session.SetString("Usuario_Direccion", emp.Direccion);
+            }
 
-            return View();
+            UNOEE objUNOEE = new UNOEE();
+            var ListaEmpleado = objUNOEE.EmpleadoAll();
+
+            var wHomevista = new HomeViewModel
+            {
+                ListaEmpleados = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
+            };
+
+            return View(wHomevista);
         }
 
-       
-        public IActionResult Error()
+
+        [HttpGet]
+        [Route("/Home/Cambiar")]
+        public IActionResult Cambiar(string wCedula)
+        {
+            UNOEE erp = new UNOEE();
+            var Oempleado = erp.getEmpleadoCedula(wCedula);
+            HttpContext.Session.SetString("Usuario_Nombre", Oempleado.Nombre);
+            HttpContext.Session.SetString("Usuario_Area", Oempleado.Area);
+            HttpContext.Session.SetString("Usuario_Cedula", Oempleado.Cedula);
+            HttpContext.Session.SetString("Usuario_Cargo", Oempleado.CargoId.ToString());
+            HttpContext.Session.SetString("Usuario_Telefono", Oempleado.Telefono);
+            HttpContext.Session.SetString("Usuario_Ciudad", Oempleado.Ciudad);
+            HttpContext.Session.SetString("Usuario_Direccion", Oempleado.Direccion);
+
+            return RedirectToAction("Index");
+        }
+
+    public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

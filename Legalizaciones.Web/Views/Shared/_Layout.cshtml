@@ -35,6 +35,13 @@
             <div class="menu-site-left">
                 <ul class="nav navbar-nav">
                     <li class="btnMenu">
+                        <a href='@Url.Action("Index","Home")'>
+                            <i class="fa fa-home"></i> <br />
+                            <span>Home</span>
+                        </a>
+                    </li>
+
+                    <li class="btnMenu">
                         <a href='@Url.Action("Index","Solicitud")'>
                             <i class="fa fa-file-text"></i> <br />
                             <span>Anticipos</span>
@@ -47,11 +54,11 @@
                         </a>
                     </li>
                     @*<li class="btnMenu">
-                            <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
-                                <i class="glyphicon glyphicon-credit-card"></i> <br />
-                                <span>Anticipos con TDC</span>
-                            </a>
-                        </li>*@
+            <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
+                <i class="glyphicon glyphicon-credit-card"></i> <br />
+                <span>Anticipos con TDC</span>
+            </a>
+        </li>*@
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "Legalizaciones")'>
                             <i class="fa fa-archive"></i> <br />
@@ -59,11 +66,11 @@
                         </a>
                     </li>
                     @*<li class="btnMenu">
-                            <a href='@Url.Action("", "")'>
-                                <i class="fa fa-briefcase"></i> <br />
-                                <span>Servicios</span>
-                            </a>
-                        </li>*@
+            <a href='@Url.Action("", "")'>
+                <i class="fa fa-briefcase"></i> <br />
+                <span>Servicios</span>
+            </a>
+        </li>*@
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "ConfiguracionGasto")'>
                             <i class="fa fa-gear"></i> <br />
@@ -76,7 +83,7 @@
                             <span>Zonas</span>
                         </a>
                     </li>
-                    
+
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "OrigenDestino")'>
                             <i class="fa fa-plane"></i> <br />

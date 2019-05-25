@@ -495,13 +495,13 @@
                             <thead>
                                 <tr>
                                     @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                    <td class="display-none">FechaaGasto</td>
+                                    <td class="display-none">FechaGasto</td>
                                     <td class="display-none">PaisId</td>
                                     <td class="display-none">CiudadId</td>
                                     <td class="display-none">TipoServicioId</td>
                                     <td class="display-none">ProveedorId</td>
                                     <td class="display-none">Concepto</td>
-                                    <td class="display-none">Valor</td>
+                                    <td class="display-none">Concepto</td>
                                     <td>Item</td>
                                     <td>Fecha</td>
                                     <td>Centro Oper.</td>
@@ -642,23 +642,7 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
-                                                    <tr>
-                                                        <td class="col-md-1 ">@item.Id</td>
-                                                        @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
-                                                        <td class="col-md-2 ">@item.FechaGasto.Substring(0,10)</td>
-                                                        <td class="col-md-1 ">@item.Pais</td>
-                                                        <td class="col-md-1 ">@item.Servicio</td>
-                                                        <td class="col-md-1 ">@item.Ciudad</td>
-                                                        <td class="col-md-1 ">@item.Origen</td>
-                                                        <td class="col-md-1 ">@item.Destino</td>
-                                                        <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
-                                                        <td class="col-md-1 ">
-                                                            @*<a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen.ToString().Replace("/",""),@item.Destino.ToString().Replace("/",""),@item.Monto);">*@
-                                                            <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id);">
-                                                                <small><small><small>Seleccionar</small></small></small>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
+                                                  
                                                     }
                                                 </tbody>
                                             </table>
