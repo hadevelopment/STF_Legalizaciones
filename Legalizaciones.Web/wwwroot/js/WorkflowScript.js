@@ -68,21 +68,21 @@
     }); 
 });
 
-function TipoSolicitudCambio() {
+ /*function TipoSolicitudCambio() {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = $('#solicitud').index; 
-}
+}*/
 
-/*$('#solicitud').on('change', function (e) {
+$('#solicitud').on('change', function (e) {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
-    document.getElementById("indiceSolicitud").value = $('#solicitud').index;
-}); */
+    document.getElementById("indiceSolicitud").value = document.getElementById("solicitud").selectedIndex;
+});
 
 
 function SetNuevoFlujo()

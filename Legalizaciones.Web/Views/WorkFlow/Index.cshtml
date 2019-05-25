@@ -12,7 +12,7 @@
             <div class="box-body">
                 <small>
                     <a href='@Url.Action("Index", "Home")'> Inicio </a>
-                    <strong>  Aprobacion:  Anticipos - Legalizaciones </strong>
+                    <strong>Aprobacion:  Anticipos - Legalizaciones </strong>
                 </small>
             </div>
         </div>
@@ -20,44 +20,44 @@
 </div>
 
 
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="box">
-                <div class="box-header with-border">
-                    <div class="col-md-12">
-                       
-                            <div class="col-md-12 pb-2">
-                                <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                                <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;" onchange="TipoSolicitudCambio();">
-                                    @{
-                                        int n = 0;
-                                        foreach (var type in Model.TipoSolicitud)
-                                        {
-                                            <option value="@n"> @type </option>
-                                            n++;
-                                        }
-                                    }
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="col-md-12">
 
-                                </select>
-                            </div>
-                            <div>
-                                <form method="POST" id="formFlujo">
-                                    <input type="hidden" id="indiceSolicitu" name="indiceSolicitud" />
-                                    <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
-                                    <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
-                                </form>
-                            </div>
-                        
-                            @if (ViewBag.AprobadoresCount == 0)
-                            {
-                                <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
-                            }                
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                        <select id="solicitud" name="solicitud" style="width:20%;height:auto; font-size:16px;">
+                            @{
+                                int n = 0;
+                                foreach (var type in Model.TipoSolicitud)
+                                {
+                                    <option value="@n"> @type </option>
+                                    n++;
+                                }
+                            }
+
+                        </select>
+                    </div>
+                    <div>
+                        <form method="POST" id="formFlujo">
+                            <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
+                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
+                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
+                        </form>
                     </div>
 
+                    @if (ViewBag.AprobadoresCount == 0)
+                    {
+                        <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();">Nuevo Flujo de Aprobacion</button>
+                    }
                 </div>
+
             </div>
         </div>
     </div>
+</div>
 
 
 <div class="box-body">
@@ -108,11 +108,10 @@
 </div>
 
 <!-- Trigger the modal with a button -->
-<!-- Modal -->
+<!-- MODAL NUEVO FLUJO -->
 <form id="newFlujo" method="GET">
     <div id="nuevoFlujoModal" class="modal fade" role="application">
         <div class="modal-dialog">
-            <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
@@ -179,24 +178,7 @@
     </div>
 </form>
 
-
-
-<div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
-            </div>
-            <div class="row">
-                <div class="col-md-12 pb-2">
-                    <input type="button" class="btn btn-primary" style="float:right;" id="cerrar" name="cerrar" value="Aceptar" onclick="CloseMensajeClienteModal();" />
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
+<!--MODAL ACTUALIZACION DE FLUJO -->
 <form method="POST" action='@Url.Action("UpdateFlujo", "WorkFlow")'>
     <div id="dataModal" name="dataModal" class="modal fade" role="application">
         <div class="modal-dialog">
@@ -255,6 +237,7 @@
     </div>
 </form>
 
+<!-- MODAL ELIMINAR PASO FLUJO-->
 <form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
     <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
         <div class="modal-dialog">
@@ -282,6 +265,7 @@
     </div>
 </form>
 
+<!--MODAL PREGUNTA -->
 <div id="preguntaModal" name="preguntaModal" class="modal fade" role="application">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -299,12 +283,23 @@
     </div>
 </div>
 
-
-
-<!-- Modal -->
-<div id="test" class="modal fade" role="dialog">
-
+<!--MODAL MENSAJES  -->
+<div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pb-2">
+                    <input type="button" class="btn btn-primary" style="float:right;" id="cerrar" name="cerrar" value="Aceptar" onclick="CloseMensajeClienteModal();" />
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 @section scripts {
     <script src="~/js/WorkflowScript.js"></script>
