@@ -154,8 +154,34 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-           public bool DeletePasoFlujoAprobacion  (string SpName, int id)
+        public bool UpdatePasoFlujoAprobacion(string SpName ,DataTable dt)
         {
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            SqlCommand command = new SqlCommand(SpName, Conexion);
+            bool resultado = false;
+            using (Conexion)
+            {
+                Conexion.Open();
+                foreach (DataRow R in dt.Rows)
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Id", R["Id"]);
+                    command.Parameters.AddWithValue("@Descripcion", R["Descripcion"]);
+                    command.Parameters.AddWithValue("@CedulaAprobador", R["CedulaAprobador"]);
+                    command.Parameters.AddWithValue("@NombreAprobador", R["NombreAprobador"]);
+                    command.Parameters.AddWithValue("@EmailAprobador", R["EmailAprobador"]);
+                    command.Parameters.AddWithValue("@Orden", R["Orden"]);
+                    command.ExecuteNonQuery();
+                }
+                Conexion.Close();
+                resultado = true;
+            }
+            return resultado;
+        }
+
+        public bool DeletePasoFlujoAprobacion  (string SpName, int id)
+           {
             SqlConnection Conexion = new SqlConnection(StringConexion);
             bool resultado = false;
             using (Conexion)
@@ -170,7 +196,7 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Close();
             }
             return resultado;
-        }
+           }
         
         public int CountDocAsociado(string SpName, int id,string tipoDocumento)
         {
@@ -191,6 +217,24 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Close();
             }
             return resultado;
+        }
+
+        public DataTable GetPasoFlujoAprobacion (string SpName, string tipoDocumento)
+        {
+            DataTable dataTabla = new DataTable();
+            SqlConnection Conexion = new SqlConnection(StringConexion);
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@tipoDocumento", tipoDocumento);
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            return dataTabla;
         }
     }
 }

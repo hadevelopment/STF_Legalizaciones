@@ -106,5 +106,28 @@ namespace Legalizaciones.Web.Engine
             return model;
         }
 
+        public bool ReordenarFlujoAprobacion(string tipoDocumento)
+        {
+            bool resultado = false;
+            EngineDb Metodo = new EngineDb();
+            DataTable dt = new DataTable();
+            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion",tipoDocumento );
+            if (dt.Rows.Count > 0)
+            dt = ReordenarPaso(dt);
+            resultado = Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", dt);
+            return resultado;
+        }
+
+        private DataTable ReordenarPaso (DataTable dt)
+        {
+            int n = 1;
+            foreach (DataRow r in dt.Rows)
+            {
+                r["Orden"] = n;
+                n++;
+            }
+            return dt;
+        }
+
     }
 }

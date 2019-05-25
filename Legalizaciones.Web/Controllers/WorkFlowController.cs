@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Models;
 using Legalizaciones.Web.Engine;
+using Microsoft.AspNetCore.Http;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -19,8 +20,13 @@ namespace Legalizaciones.Web.Controllers
 
             model = GetTipoSolicitudes(model);
             ViewBag.Paso = 0;
-            if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
-            {
+            if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
+                ViewBag.IndexSollicitud = TempData["IndiceSolicitud"];
+            if ((tipoDocumento == string.Empty || tipoDocumento == null) && (HttpContext.Session.GetString("TipoDocumento") != string.Empty && HttpContext.Session.GetString("TipoDocumento") != null))
+                tipoDocumento = HttpContext.Session.GetString("TipoDocumento");
+
+                if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
+                {
                 int estatus = 1;
                 int update = 0;
                 EngineStf Funcion = new EngineStf();
@@ -70,14 +76,15 @@ namespace Legalizaciones.Web.Controllers
                 model.TipoSeleccionado = tipo;
 
             ViewBag.IndexSollicitud = Request.Form["indiceSolicitud"].ToString();
+            HttpContext.Session.SetString("IndiceSolicitud", Request.Form["indiceSolicitud"].ToString());
             model = GetTipoSolicitudes(model);
             if (model.TipoSeleccionado != "Seleccione...")
             {
-              model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
-               ViewBag.AprobadoresCount = model.Aprobadores.Count;
+                HttpContext.Session.SetString("TipoDocumento", model.TipoSeleccionado);
+                model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+                ViewBag.AprobadoresCount = model.Aprobadores.Count;
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
-
             }
             return View(model);
         }
@@ -104,6 +111,8 @@ namespace Legalizaciones.Web.Controllers
                 return RedirectToAction("Index", "WorkFlow", model);
             }
             Metodo.DeletePasoFlujoAprobacion("Sp_DeletePasoAprobacion", ide);
+            EngineStf Funcion = new EngineStf();
+            Funcion.ReordenarFlujoAprobacion(typee);
             return RedirectToAction("Index", "WorkFlow", model);
         }
 

@@ -310,17 +310,23 @@
 
     <script>
 
-    $(document).ready(function () {
+        $(document).ready(function ()
+        {
+         let IndexSollicitud = '@ViewBag.IndexSollicitud'
+         if (IndexSollicitud != '') {
+            $("#solicitud").val(IndexSollicitud);
+            }
+
+        let tipoDoc = '@ViewBag.TipoDocumento';
+        if (tipoDoc != '') {
+            $('#tipoDocumento').val('@ViewBag.TipoDocumento');
+            }
 
         let pasoFlujo = '@paso';
         console.log(pasoFlujo);
         if (pasoFlujo > 0) {
             OpenNewFlujo();
-        }
-
-        let tipoDoc = '@ViewBag.TipoDocumento';
-        if (tipoDoc != '') {
-            $('#tipoDocumento').val('@ViewBag.TipoDocumento');
+            $("#solicitud").val(IndexSollicitud);
         }
 
         let countDocAsociado = '@ViewBag.CountDocAsociado'
@@ -328,13 +334,7 @@
         {
             OpenMensajeClienteModal();
         }
-
-        let IndexSollicitud = '@ViewBag.IndexSollicitud'
-         if (IndexSollicitud != '') {
-            $("#solicitud").val(IndexSollicitud);
-        }
-
-    });
+        });
 
     </script>
 
