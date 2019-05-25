@@ -84,7 +84,7 @@ namespace Legalizaciones.Web.Controllers
             //listaDestino.Add("efrainmejiasc@gmail.com");
             listaDestino.Add("e.mejias@innova4j.com");
             //listaDestino.Add("ha.development.org@gmail.com");
-            listaDestino.Add("abetancourt@innova4j.com");
+            //listaDestino.Add("abetancourt@innova4j.com");
 
             Email model = new Email
             {
@@ -95,7 +95,7 @@ namespace Legalizaciones.Web.Controllers
             };
             //****************************************************************************************************
             string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
-            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF ( Algo asi, Nesecito una plantilla ??)", body, string.Empty, listaDestino,model);
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
             bool resultado = Enviar.EnviarMail();
             //*****************************************************************************************************
             string msjGet = string.Empty;
