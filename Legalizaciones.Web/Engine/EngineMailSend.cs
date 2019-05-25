@@ -44,7 +44,7 @@ namespace Legalizaciones.Web.Engine
             try
             {
                 MailMessage mensaje = new MailMessage();
-                mensaje.From = new MailAddress("STF Mail Notify<efrainmejiasc@gmail.com>");
+                mensaje.From = new MailAddress("Studio F Notificaciones <studiofnotificaciones@gmail.com>");
                 mensaje.Subject = Asunto;
                 mensaje.SubjectEncoding = System.Text.Encoding.UTF8;
                 mensaje.Body = Cuerpo;
@@ -54,7 +54,7 @@ namespace Legalizaciones.Web.Engine
                 if (RutaArchivoAdjunto != string.Empty)
                     mensaje.Attachments.Add(new Attachment(RutaArchivoAdjunto));
                 SmtpClient servidor = new SmtpClient();
-                servidor.Credentials = new System.Net.NetworkCredential("efrainmejiasc", "1234fabrizio");
+                servidor.Credentials = new System.Net.NetworkCredential("studiofnotificaciones", "studiof1234");
                 servidor.Port = 587;
                 servidor.Host = "smtp.gmail.com";
                 servidor.EnableSsl = true;
