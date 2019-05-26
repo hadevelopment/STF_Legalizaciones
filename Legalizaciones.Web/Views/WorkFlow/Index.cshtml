@@ -114,8 +114,6 @@
         @if (ViewBag.AprobadoresCount > 0)
         {
             <input type="hidden" id="addPaso" name="addPaso" value="addPaso" />
-            <input type="hidden" id="indexDocumento" name="indexDocumento" />
-            <input type="hidden" id="tipDocumento" name="tipDocumento" />
             <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
 
         }
@@ -335,7 +333,6 @@
         let tipoDoc = '@ViewBag.TipoDocumento';
         if (tipoDoc != '') {
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
-            $('#tipDocumento').val('@ViewBag.TipoDocumento');
             }
 
         let pasoFlujo = '@paso';

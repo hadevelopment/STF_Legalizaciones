@@ -12,7 +12,7 @@ namespace Legalizaciones.Web.Controllers
     public class WorkFlowController : Controller
     {
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" , string tipDocumento = "")
+        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" )
         {
             model = GetTipoSolicitudes(model);
             if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
@@ -63,25 +63,22 @@ namespace Legalizaciones.Web.Controllers
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
 
-            if ((model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null) || (addPaso != string.Empty && tipDocumento != string.Empty ))
+            //AGREGAR PASO AL FLUJO DE APROBACION
+            if (addPaso != string.Empty)
             {
-                //AGREGAR PASO AL FLUJO DE APROBACION
-                if (addPaso != string.Empty)
-                {
-                    model.FlujoAprobacion = GetAprobadores(tipDocumento);
-                   if (model.FlujoAprobacion != null)
-                        ViewBag.Paso = model.FlujoAprobacion.Count + 1;
-                }
-                //LISTA DE PASOS DE APROBACION
-                else
-                {
-                    model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
-                    ViewBag.AprobadoresCount = model.Aprobadores.Count;
-                    if (model.Aprobadores.Count == 0)
-                        model.Aprobadores = null;
-                }
-             
+                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+                if (model.FlujoAprobacion != null)
+                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
+            //LISTA DE PASOS DE APROBACION
+            if (model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
+            {
+                model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
+                ViewBag.AprobadoresCount = model.Aprobadores.Count;
+                if (model.Aprobadores.Count == 0)
+                    model.Aprobadores = null;
+            }
+
             ViewBag.TipoDocumento = tipoDocumento;
             //FINALIZAR CREACION DE FLUJO DE APROBACION
             if (clear != string.Empty)

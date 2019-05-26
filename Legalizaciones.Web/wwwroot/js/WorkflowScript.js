@@ -84,8 +84,6 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
-    document.getElementById("indexDocumento").value = indice;
-    document.getElementById("tipDocumento").value = tipo;
 
     $('#flow').css('visibility', 'hidden'); 
 });
@@ -104,7 +102,7 @@ function SetNuevoFlujo()
     }
     else {
         $("#nuevoFlujoModal").modal('show');
-        document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo ;
+        document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     }
 
 }
@@ -126,7 +124,7 @@ function SetAgregarPasoFlujo()
         document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     }
 
-    $('#nuevoFlujoModal').modal('show');
+   
 }
 
 function VerFlujo() {
