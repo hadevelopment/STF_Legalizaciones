@@ -110,15 +110,17 @@
         </tbody>
     </table>
     <br />
-    @if (ViewBag.AprobadoresCount > 0)
-    {
-    <form method="get">
-        <input type="hidden" id="indiceDoc" name="indiceDoc" />
-        <input type="hidden" id="typeDoc" name="typeDoc" />
-        <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
+    <form method="GET" id="agregarPaso">
+        @if (ViewBag.AprobadoresCount > 0)
+        {
+
+            <input type="hidden" id ="indexDocumento" name="indexDocumento" />
+            <input type="hidden" id ="tipDocumento" name="tipDocumento" />
+            <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
+
+        }
     </form>
-    }
-</div>
+    </div>
 
 <!-- Trigger the modal with a button -->
 <!-- MODAL NUEVO FLUJO -->

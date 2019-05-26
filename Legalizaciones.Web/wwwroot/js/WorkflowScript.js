@@ -77,14 +77,15 @@
 }*/
 
 $('#solicitud').on('change', function (e) {
+ 
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     var indice = document.getElementById("solicitud").selectedIndex;
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
-    document.getElementById("typeDoc").value = tipo;
-    document.getElementById("indiceDoc").value = indice;
+    document.getElementById("indexDocumento").value = indice;
+    document.getElementById("tipDocumento").value = tipo;
 
     $('#flow').css('visibility', 'hidden'); 
 });
@@ -124,12 +125,7 @@ function SetAgregarPasoFlujo()
         $("#nuevoFlujoModal").modal('show');
         document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     }
-    $.ajax({
-        type: "GET",
-        url: "WorkFlow",
-        data: {tipoDocumento: tipo, addPaso: addPaso},
-        datatype: "Json"
-    });
+
     $('#nuevoFlujoModal').modal('show');
 }
 
@@ -160,12 +156,12 @@ function ClearAll() {
     $('#addMail').val('');
     $("#tblFlujo tbody tr").remove();
     CloseNewFlujo();
-   var clear = 'Clear';
+   /*var clear = 'Clear';
    $.ajax({
         type: "Get",
         url: "Index",
         data: { clear: clear }
-    });
+    });*/
 }
 
 function OpenNewFlujo() {
