@@ -112,7 +112,11 @@
     <br />
     @if (ViewBag.AprobadoresCount > 0)
     {
-        <button type="submit" class="btn btn-primary" style="float:right;" onclick="">Agregar Paso</button>
+    <form method="get">
+        <input type="hidden" id="indiceDoc" name="indiceDoc" />
+        <input type="hidden" id="typeDoc" name="typeDoc" />
+        <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
+    </form>
     }
 </div>
 
@@ -205,19 +209,19 @@
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Nombre Aprobador</label>
-                        <input type="text" id="nombre" name="nombre" class="form-control" />
+                        <input type="text" id="nombre" name="nombre" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Cedula Aprobador</label>
-                        <input type="text" id="cedula" name="cedula" class="form-control" />
+                        <input type="text" id="cedula" name="cedula" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
-                        <input type="text" id="email" name="email" class="form-control" />
+                        <input type="text" id="email" name="email" class="form-control" readonly/>
                     </div>
                 </div>
                 <div class="row">

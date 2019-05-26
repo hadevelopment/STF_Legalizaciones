@@ -79,9 +79,13 @@
 $('#solicitud').on('change', function (e) {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
+    var indice = document.getElementById("solicitud").selectedIndex;
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
-    document.getElementById("indiceSolicitud").value = document.getElementById("solicitud").selectedIndex;
+    document.getElementById("indiceSolicitud").value = indice;
+    document.getElementById("typeDoc").value = tipo;
+    document.getElementById("indiceDoc").value = indice;
+
     $('#flow').css('visibility', 'hidden'); 
 });
 
@@ -99,9 +103,34 @@ function SetNuevoFlujo()
     }
     else {
         $("#nuevoFlujoModal").modal('show');
-        document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo + ', el anterior flujo sera modificado';
+        document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipo ;
     }
 
+}
+
+function SetAgregarPasoFlujo()
+{
+    var addPaso = 'addPaso';
+    const obj = document.getElementById('solicitud');
+    var tipo = obj.options[obj.selectedIndex].text;
+    document.getElementById('tipoDocumento').value = tipo;
+
+    if (tipo === 'Seleccione...') {
+        $("#nuevoFlujoModal").modal('hide');
+        $("#msjClienteModal").modal('show');
+        document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
+    }
+    else {
+        $("#nuevoFlujoModal").modal('show');
+        document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    }
+    $.ajax({
+        type: "GET",
+        url: "WorkFlow",
+        data: {tipoDocumento: tipo, addPaso: addPaso},
+        datatype: "Json"
+    });
+    $('#nuevoFlujoModal').modal('show');
 }
 
 function VerFlujo() {
