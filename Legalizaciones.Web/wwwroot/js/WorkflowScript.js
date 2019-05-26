@@ -82,6 +82,7 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = document.getElementById("solicitud").selectedIndex;
+    $('#flow').css('visibility', 'hidden'); 
 });
 
 
@@ -89,6 +90,8 @@ function SetNuevoFlujo()
 {
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
+    document.getElementById('tipoDocumento').value = tipo;
+
     if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');

@@ -12,22 +12,20 @@ namespace Legalizaciones.Web.Controllers
     public class WorkFlowController : Controller
     {
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model = null, string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "")
+        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "")
         {
-            if (model == null)
-                model = new AprobacionDocumento();
-
             model = GetTipoSolicitudes(model);
-            ViewBag.Paso = 0;
             if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
                 ViewBag.IndexSollicitud = HttpContext.Session.GetString("IndiceSolicitud");
-            if ((tipoDocumento == string.Empty || tipoDocumento == null) && (HttpContext.Session.GetString("TipoDocumento") != string.Empty && HttpContext.Session.GetString("TipoDocumento") != null))
+            if ((tipoDocumento == null || tipoDocumento == string.Empty) && (HttpContext.Session.GetString("TipoDocumento") != null && HttpContext.Session.GetString("TipoDocumento") != string.Empty))
             {
                 tipoDocumento = HttpContext.Session.GetString("TipoDocumento");
                 model.TipoSeleccionado = tipoDocumento;
             }
 
-            if ((tipoDocumento != "Seleccione..." && tipoDocumento != string.Empty && tipoDocumento != null) && addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
+            //INSERTAR NUEVO PASO
+            ViewBag.Paso = 0;
+            if (tipoDocumento != string.Empty &&  addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
             {
                 int estatus = 1;
                 int update = 0;
@@ -43,33 +41,45 @@ namespace Legalizaciones.Web.Controllers
                     update = 0;
                 }
                 if (descripcion == string.Empty || descripcion == null)
+                {
                     descripcion = "S/D";
-                if( Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso,tipoDocumento) == 0)
-                model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
-                else
-                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+                }
 
+                int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento);
+                if (existePaso == 0)
+                {
+                    model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
+                }
+                else if (existePaso > 0)
+                {
+                    model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+                }
+
+                if (model.FlujoAprobacion != null)
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
-                ViewBag.TipoDocumento = tipoDocumento;
-
             }
-            else if (clear != string.Empty)
-            {
-                ViewBag.Paso = 0;
-                ViewBag.TipoDocumento = null;
-                model.FlujoAprobacion = null;
-            }
-            else if (model.TipoSeleccionado != "Seleccione..." && model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
+            //LISTA DE PASOS DE APROBACION
+            if (model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
             {
                 model.Aprobadores = GetAprobadores(model.TipoSeleccionado);
                 ViewBag.AprobadoresCount = model.Aprobadores.Count;
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
             }
+            ViewBag.TipoDocumento = tipoDocumento;
+            //FINALIZAR CREACION DE FLUJO DE APROBACION
+            if (clear != string.Empty)
+            {
+                ViewBag.Paso = 0;
+                ViewBag.TipoDocumento = null;
+                model.FlujoAprobacion = null;
+            } 
+            
             if (model.CountDocAsociado > 0)
             {
                 ViewBag.CountDocAsociado = model.CountDocAsociado;
             }
+           
             return View(model);
         }
 
