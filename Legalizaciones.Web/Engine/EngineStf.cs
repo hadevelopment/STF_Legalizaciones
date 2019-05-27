@@ -8,6 +8,7 @@ using Legalizaciones.Model;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
 
+
 namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
@@ -21,7 +22,7 @@ namespace Legalizaciones.Web.Engine
             foreach (DataRow row in dt.Rows)
             {
                 InfoLegalizacion item = new InfoLegalizacion();
-                if (row[0] != DBNull.Value) 
+                if (row[0] != DBNull.Value)
                     item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
                     item.FechaCreacion = row[1].ToString().Substring(0, 10);
@@ -67,5 +68,66 @@ namespace Legalizaciones.Web.Engine
             int n = rnd.Next(1, 999);
             return "000" + n.ToString();
         }
+
+        public List<string> TiposDocumentos(DataTable dt)
+        {
+            List<string> documento = new List<string>();
+            int n = 0;
+            documento.Insert(n, "Seleccione...");
+            n++;
+            foreach (DataRow row in dt.Rows)
+            {
+                string doc = string.Empty;
+                if (row[0] != DBNull.Value)
+                    doc = row[0].ToString();
+                documento.Insert(n, doc);
+                n++;
+            }
+            return documento;
+        }
+
+
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
+        {
+            DataAprobacion Item = new DataAprobacion()
+            {
+                Update = update,
+                Estatus = estatus,
+                TipoSolicitud = tipoDocumento,
+                NombreAprobador = addAprobador,
+                CedulaAprobador = empleado,
+                EmailAprobador = mail,
+                Descripcion = descripcion,
+                Orden = paso
+            };
+
+            EngineDb Metodo = new EngineDb();
+            model.FlujoAprobacion = Metodo.AprobadoresTipoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
+            return model;
+        }
+
+        public bool ReordenarFlujoAprobacion(string tipoDocumento)
+        {
+            bool resultado = false;
+            EngineDb Metodo = new EngineDb();
+            DataTable dt = new DataTable();
+            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion", tipoDocumento);
+            if (dt.Rows.Count > 0)
+                dt = ReordenarPaso(dt);
+            resultado = Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", dt);
+            return resultado;
+        }
+
+        private DataTable ReordenarPaso(DataTable dt)
+        {
+            int n = 1;
+            foreach (DataRow r in dt.Rows)
+            {
+                r["Orden"] = n;
+                n++;
+            }
+            return dt;
+        }
+
     }
 }
