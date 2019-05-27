@@ -12,7 +12,8 @@ namespace Legalizaciones.Web.Controllers
     public class WorkFlowController : Controller
     {
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" )
+        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", 
+                                    string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" )
         {
              if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
@@ -31,7 +32,8 @@ namespace Legalizaciones.Web.Controllers
             }
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
+            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null 
+                                                                      && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;
                 int update = 0;
