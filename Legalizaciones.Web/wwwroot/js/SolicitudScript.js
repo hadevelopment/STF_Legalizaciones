@@ -422,7 +422,7 @@ function LoadProductsData(id) {
 var rowIndex = 0;
 
 function validarGastos() {
-    
+
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -434,9 +434,11 @@ function validarGastos() {
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
+    $('#monto').val('');
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
+            monto = CalcularGastoComida();
             rowIndex = rowIndex + 1;
             var row = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
@@ -466,7 +468,9 @@ function validarGastos() {
             $('td.monto').each(function () {
                 sum += parseFloat(this.innerHTML);
             });
-            $("#txMontoT").val(sum);
+            var v = String(sum);
+            v = v.replace('.', ',');
+            $("#txMontoT").val(v);
             $('#hdfMontoSolicitud').val($("#txMontoT").val());
 
         } else {
@@ -477,7 +481,7 @@ function validarGastos() {
 
     } else {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
-            rowIndex= rowIndex + 1;
+            rowIndex = rowIndex + 1;
             var row2 = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
                     <td class="paisId display-none">${paisId}</td>
@@ -519,7 +523,7 @@ function validarGastos() {
 
 }
 
-function actualizarGastos(){
+function actualizarGastos() {
     var value = $('#hdfRowIndex').val();
 
     var fechaGasto = $("#FechaGasto").val();
@@ -551,14 +555,15 @@ function actualizarGastos(){
     $('td.monto').each(function () {
         sum += parseFloat(this.innerHTML);
     });
-    $("#txMontoT").val(sum);
+    var v = String(sum);
+    v = v.replace('.', ',');
+    $("#txMontoT").val(v);
     $('#hdfMontoSolicitud').val($("#txMontoT").val());
 }
 
 
 
-function ShowModalUpdate(value)
-{
+function ShowModalUpdate(value) {
 
     var fechaGasto = $('.' + value + ' .fechaGasto').text();
     var paisId = $('.' + value + ' .paisId').text();
@@ -594,9 +599,9 @@ function ShowModalUpdate(value)
         $('#divGastosDescripcion').addClass('col-md-12');
         $('#divZonas').addClass('display-none');
     }
-    
+
     $('#gastosModal').modal('show');
-} 
+}
 
 function validarViaje(boton) {
     $('#btnAdd').removeClass('display-none');
@@ -611,7 +616,7 @@ function validarViaje(boton) {
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
-        
+
         return true;
 
     } else {
@@ -938,6 +943,40 @@ function CargarComboAlcrear() {
         }
     });
 
-    
+
+
+}
+
+
+function CalcularGastoComida() {
+    var wServicio = $('#Servicio option:selected').text();
+    var wMonto = $('#Monto').val();
+
+    if (wServicio == "Comida") {
+        var FechaDesde = $("#FechaDesde").val();
+        var FDdia = FechaDesde.substr(0,2);
+        var FDMes = FechaDesde.substr(3, 2);
+        var FDAnno = FechaDesde.substr(6, 4);
+        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+
+        var FechaHasta = $("#FechaHasta").val();
+        var FHdia = FechaHasta.substr(0, 2);
+        var FHMes = FechaHasta.substr(3, 2);
+        var FHAnno = FechaHasta.substr(6, 4);
+        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+
+        var fecha1 = moment(wFDFormato);
+        var fecha2 = moment(wFHFormato);
+     
+        var wDias = fecha2.diff(fecha1, 'days');
+
+        var wMontoTotal = wMonto * parseInt(wDias);
+
+        return wMontoTotal;
+        
+
+    }
+
+    return wMonto;
 
 }

@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Legalizaciones.Model.ConfiguracionGasto>
+@{
+    ViewData["Title"] = "Configuración de Gastos";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    > <strong>Configuración de Gastos</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+
+            <div class="box-header with-border">
+                <span class="fa fa-info-circle"></span>
+                <h1 class="box-title">Gastos Configurados</h1>
+                <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="ConfiguracionGasto" asp-action="Crear">Añadir Nueva Configuración</a>
+            </div>
+
+
+            <div class="box-body">
+                <table id="tblGastos" class="table table-bordered table-hover myDataTable">
+                    <thead>
+                        <tr>
+                            <th> Id </th>
+                            <th> Cargo</th>
+                            <th> Pais</th>
+                            <th> Tipo de Servicio </th>
+                            <th> Origen</th>
+                            <th> Destino</th>
+                            <th> Moneda </th>
+                            <th> ¿Gasto por Día?</th>
+                            <th> Monto</th>
+                            <th> Estatus </th>
+                            @*<th> Acciones</th>*@
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() > 0)
+                        {
+                            @foreach (var item in Model)
+
+                            {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Id)
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.Cargo)
+                            </td>
+                            <td>
+
+                                @Html.DisplayFor(modelItem => item.PaisNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TipoServicio)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrigenNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DestinoNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.MonedaNombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.GastoDiario)
+                            </td>
+                            <td>
+                               @item.Monto.ToString("N2")
+                            </td>
+                            @*<td>
+                                @Html.DisplayFor(modelItem => item.Estatus)
+                            </td>*@
+                            <td>
+                                <a class="item-btn" asp-controller="ConfiguracionGasto" asp-action="Ver" asp-route-id="@item.Id">
+                                    <span class="fa fa-eye"></span>
+                                </a>
+                                <a class="item-btn" asp-controller="ConfiguracionGasto" asp-action="Editar" asp-route-id="@item.Id">
+                                    <span class="fa fa-pencil"></span>
+                                </a>
+                            </td>
+                        </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr class="tableEmpty">
+                                <td colspan="8">
+                                    Actualmente no hay Gastos configurados...
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+                <br />
+                <div class="row">
+                    <div style="float: left;" class="col-md-2">
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportConfiguracionGastosExcel">Exportar Excel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DataTables -->

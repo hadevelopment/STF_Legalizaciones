@@ -1,10 +1,16 @@
 ﻿@model List<Legalizaciones.Model.InfoLegalizacion>
 @{
-    ViewData["Title"] = "Index";
-    string leg = string.Empty ;
-    string vie = string.Empty;
-    string edi = string.Empty;
-}
+    ViewData["Title"] = "Index"; }
+
+<style type="text/css">
+    #divMain {
+        width: 120%
+    }
+
+    body {
+        overflow-x: scroll
+    }
+</style>
 
 <div class="row">
     <div class="col-sm-12">
@@ -12,12 +18,13 @@
             <div class="box-body">
                 <small>
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
-                    > <strong>Anticipos</strong>
+                    > <strong> Legalizaciones </strong>
                 </small>
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-xs-12">
@@ -25,30 +32,68 @@
 
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
-                <h1 class="box-title">Mis Legalizaciones </h1>
+                <h1 class="box-title"> Legalizaciones </h1>
+
             </div>
 
-            <div class="col-md-12">
-                <a class="btn btn-primary" style="float: right;" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Legalizar sin Anticipo</a>
+            <br />
+
+            <div class="row">
+
+                <div style="float: left; margin-left: 20px" class="col-md-3">
+                    <strong>Consultar por historico de fechas:</strong>
+                </div>
+
+                <form asp-controller="Solicitud" asp-action="Filtrar" method="Post">
+
+                    <div style="float: left;" class="col-md-2">
+                        <label>Desde</label>
+                        <input type="date" id="fechaDesde" name="fechaDesde" class="form- control" />
+                    </div>
+                    <div style="float: left;" class="col-md-2">
+                        <label>Hasta</label>
+                        <input type="date" id="fechaHasta" name="fechaHasta" class="form- control" />
+
+                    </div>
+
+                    <div style="float: left;" class="col-md-1">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search"></span> Filtrar
+                        </button>
+                    </div>
+
+                </form>
+
+                <div style="float: left;" class="col-md-4">
+                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0" >Añadir Legalizacion sin anticipo</a>
+                    @*@if (ViewBag.cargo != "3")
+                        {
+                            //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+
+                            <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+                        }*@
+                </div>
             </div>
 
 
             <div class="box-body">
-                <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable">
+                <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable" width="100%">
                     <thead>
                         <tr>
-                            <th> Id </th>
-                            <th> Registro </th>
-                            <th> Concepto </th>
-                            <th> Beneficiario </th>
-                            <th> Estado </th>
-                            <th> Monto </th>
-                            <th> Tasa</th>
-                            <th> Nro. Anticipo UNOEE</th>
-                            <th> Nro. Legalización UNOEE</th>
-                            <th> Entrega </th>
-                            <th> Dias Entrega</th>
-                            <th> Acciones </th>
+                            <th>Id </th>
+                            <th title="Fecha de Registro">Reg.</th>
+                            <th title="Concepto">Concpto</th>
+                            <th title="Cedula Beneficiario">Cedula</th>
+                            <th title="Beneficiario">Benef</th>
+                            <th>Estado</th>
+                            <th>Monto</th>
+                            @*<th>Tasa</th>*@
+                            <th class="hidden"> Nro. Anticipo UNOEE</th>
+                            <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
+                            <th title="Entrega"> Entrega </th>
+                            <th title="Dias de Entrega">Dias Entr.</th>
+                            <th title="Fecha de Vencimiento">Venc.</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,84 +103,178 @@
 
                             @foreach (var item in Model)
                             {
-                                leg = "legalizar";
-                                vie = "view";
-                                edi = "edit";
+                                var wFechaseparada = item.FechaVencimiento.Split("/");
+                                int wFVdia = Convert.ToInt32(wFechaseparada[1]);
+                                int wFVMes = Convert.ToInt32(wFechaseparada[0]);
+                                int wFVAnno = Convert.ToInt32(wFechaseparada[2]);
 
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td>
-                                    <td>
 
-                                        @Html.DisplayFor(modelItem => item.FechaCreacion)
-                                    </td>
-                                    <td>
+                                var wHdia = DateTime.Now.Day;
+                                var wHMes = DateTime.Now.Month;
+                                var wHAnno = DateTime.Now.Year;
 
-                                        @Html.DisplayFor(modelItem => item.Concepto)
-                                    </td>
-                                    <td>
+                                var wvenc = false;
 
-                                        @Html.DisplayFor(modelItem => item.Beneficiario)
-                                    </td>
-                                    <td>
-
-                                        @Html.DisplayFor(modelItem => item.Estado)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
-                                    </td>
-                                    <td>
-                                        @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
-                                        @Html.DisplayFor(modelItem => item.Tasa)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.IdDocErp)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.ConsecutivoErp)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FechaEntrega)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DiasTrascurridos)
-                                    </td>
-                                    <td>
-                                        @if (item.EstadoId == 1)//Sin Legalizar
-                                        {
-                                            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
-                                        }
-                                        else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizada
-                                        {
-                                            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionId">
-                                                <span class="fa fa-eye"></span>
-                                            </a>
-                                        }
-                                        @*else if (item.EstadoId == 3)//Rechazada
+                                if (wFVAnno < wHAnno)
+                                {
+                                    wvenc = true;
+                                }
+                                else
+                                {
+                                    if (wFVAnno == wHAnno && wFVMes < wHMes)
                                     {
-                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
-                                            <span class="fa fa-pencil"></span>
-                                        </a>
-                                    }*@
-                                        @*else if (item.Estado == "Legalizado")
-                                    {
-                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-id="@item.Id">
-                                            <span class="fa fa-eye"></span>
-                                        </a>
-                                    }
-                                    else if (item.Estado == "Rechazado")
-                                    {
-                                        <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-id="@item.Id">
-                                            <span class="fa fa-pencil"></span>
-                                        </a>
+                                        wvenc = true;
                                     }
                                     else
                                     {
-                                        <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
-                                    }*@
-                                    </td>
-                                </tr>
+                                        if (wFVAnno == wHAnno && wFVMes == wHMes && wFVdia < wHdia)
+                                        {
+                                            wvenc = true;
+                                        }
+                                    }
+                                }
+
+                                if (wvenc == true)
+                                {
+
+                                    <tr style="background-color:lavenderblush">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Concepto)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Beneficiario)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Estado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
+                                        </td>
+                                        @*<td>
+                                            @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
+                                            @Html.DisplayFor(modelItem => item.Tasa)
+                                        </td>*@
+                                        <td class="hidden">
+                                            @Html.DisplayFor(modelItem => item.IdDocErp)
+                                        </td>
+                                        <td class="hidden">
+                                            @Html.DisplayFor(modelItem => item.ConsecutivoErp)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FechaEntrega)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DiasTrascurridos)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                        </td>
+                                        <td>
+                                            @if (item.EstadoId == 1)//Sin Legalizar
+                                            {
+                                                <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
+                                            }
+                                            else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizada
+                                            {
+                                                <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionID">
+                                                    <span class="fa fa-eye"></span>
+                                                </a>
+                                                <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                    <span class="fa fa-pencil"></span>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
+                                            }
+                                        </td>
+                                    </tr>
+
+                                }
+                                else
+                                {
+
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Concepto)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Beneficiario)
+                                        </td>
+                                        <td>
+
+                                            @Html.DisplayFor(modelItem => item.Estado)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
+                                        </td>
+                                        @*<td>
+                                            @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
+                                            @Html.DisplayFor(modelItem => item.Tasa)
+                                        </td>*@
+                                        <td class="hidden">
+                                            @Html.DisplayFor(modelItem => item.IdDocErp)
+                                        </td>
+                                        <td class="hidden">
+                                            @Html.DisplayFor(modelItem => item.ConsecutivoErp)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FechaEntrega)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DiasTrascurridos)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                        </td>
+                                        <td>
+                                            @if (item.EstadoId == 1)//Sin Legalizar
+                                            {
+                                                <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id">Legalizar</a>
+                                            }
+                                            else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizada
+                                            {
+                                                <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionID">
+                                                    <span class="fa fa-eye"></span>
+                                                </a>
+                                                <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                    <span class="fa fa-pencil"></span>
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
+                                            }
+                                        </td>
+                                    </tr>}
+
                                 ix++;
                             }
 
@@ -151,43 +290,48 @@
 
                     </tbody>
                 </table>
+
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel">Exportar Excel</a>
+
                     </div>
                 </div>
             </div>
 
 
-            <div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
-                            <div class="box-tools pull-right">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-horizontal">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
-                            </a>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-off"></span> Cerrar
+                </a>
             </div>
         </div>
     </div>
 </div>
+
 
 @section scripts {
     <script src="~/js/select2.min.js"></script>

@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Legalizaciones.Interface;
 using Legalizaciones.Interface.ISolicitud;
-using Legalizaciones.Model;
-using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
-using Legalizaciones.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-using Legalizaciones.Web.Models.ViewModel;
+
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -65,6 +56,7 @@ namespace Legalizaciones.Web.Controllers
                 }
             }
 
+            TempData["Alerta"] = "success - La Zona se registro correctamente.";
             return RedirectToAction("Index", "Zona");
         }
 
@@ -133,6 +125,7 @@ namespace Legalizaciones.Web.Controllers
             zona.Estatus = 0;
             zonaRepository.Update(zona);
 
+            TempData["Alerta"] = "success - Eliminado el registro.";
             return RedirectToAction("Index", "Zona");
         }
 

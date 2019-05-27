@@ -1,0 +1,61 @@
+Private Function EnviarResumen() As Boolean
+        Dim result As Boolean = False
+        Dim msg As MailMessage = New MailMessage()
+        Dim pathArchivo As String = "C:\Dynamics_Reportes\Compras\RqImpresas\ReportCF\" & Me.nombreArchivo
+        Dim pathImage As String = Path.Combine(System.Windows.Forms.Application.StartupPath, "LogBlack.bmp")
+        Dim client As System.Net.Mail.SmtpClient = New System.Net.Mail.SmtpClient()
+        Dim listaAdm As List(Of String) = New List(Of String)
+        Try
+            msg.From = New MailAddress(EmailData("MAIL"))
+            msg.Subject = BodyAsuntoMail("ASUNTO")
+            msg.SubjectEncoding = System.Text.Encoding.UTF8
+            msg.Body = BodyAsuntoMail("BODYIMAGE")
+            msg.BodyEncoding = System.Text.Encoding.UTF8
+            msg.IsBodyHtml = True
+            Dim SQL As String = "SELECT MAIL FROM SSOWEB..ANALISTAMAIL WHERE STATUS = @PARAMETRO1 AND CREDENCIAL IN(@PARAMETRO2 ,@PARAMETRO4 )AND DEPARTAMENTO = @PARAMETRO3"
+            listaAdm = EmailAdministradores(SQL, "MAIL", "ACTIVO", "ADMINISTRADOR", "COMPRAS", "STANDART")
+            For Each item As String In listaAdm
+                msg.To.Add(New MailAddress(item))
+            Next
+            listaAdm.Clear()
+            SQL = "SELECT MAIL FROM SSOWEB..ANALISTAMAIL WHERE USUARIO = @PARAMETRO1"
+            listaAdm = EmailAdministradores(SQL, "MAIL", BodyAsuntoMail("USER"), Nothing, Nothing, Nothing)
+            For Each item As String In listaAdm
+                msg.To.Add(New MailAddress(item))
+            Next
+            listaAdm.Clear()
+            SQL = "SELECT MAIL FROM SSOWEB..ANALISTAMAIL WHERE STATUS = @PARAMETRO1 AND CREDENCIAL = @PARAMETRO2 AND LISTA1= @PARAMETRO3"
+            listaAdm = EmailAdministradores(SQL, "MAIL", "ACTIVO", "INVITADO", "CONTADO_CREDITO", Nothing)
+            For Each item As String In listaAdm
+                msg.To.Add(New MailAddress(item))
+            Next
+
+
+
+            msg.Attachments.Add(New Attachment(pathArchivo))
+            'Imagen //////////////////////////////////////////////////////////////////////////////////////////////////////
+            Dim contentID As String = Path.GetFileName(pathImage).Replace(".", "") & EmailData("ZOFM")
+            Dim attachmentPath As String = pathImage
+            Dim inline As New Attachment(attachmentPath)
+            inline.ContentDisposition.Inline = True
+            inline.ContentDisposition.DispositionType = DispositionTypeNames.Inline
+            inline.ContentId = contentID
+            inline.ContentType.MediaType = EmailData("IMAGEEXT")
+            inline.ContentType.Name = Path.GetFileName(pathImage)
+            msg.Attachments.Add(inline)
+            msg.Body = msg.Body.Replace(EmailData("IMAGE"), EmailData("CID") & contentID) & BodyAsuntoMail("BODY")
+            '/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            client.Credentials = New System.Net.NetworkCredential(EmailData("USUARIO"), EmailData("CLAVE"))
+            client.Port = 587
+            client.Host = EmailData("SMTP")
+            client.EnableSsl = True
+            client.Send(msg)
+            msg.Dispose()
+            result = True
+        Catch ex As Net.Mail.SmtpException
+            cont = cont + 1
+            If cont = 1 Then : result = EnviarResumen()
+            ElseIf cont > 1 Then : cont = 0 : result = False : MessageBox.Show(ex.ToString) : End If
+        End Try
+        Return result
+    End Function

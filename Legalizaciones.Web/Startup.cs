@@ -16,18 +16,25 @@ using DinkToPdf;
 using DinkToPdf.Contracts;
 using Legalizaciones.Web.Helpers;
 using System.IO;
+using Legalizaciones.Data.Repository.Jerarquia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
-
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace Legalizaciones
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IConfigurationBuilder builder;
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            this.builder = new ConfigurationBuilder()
+               .SetBasePath(env.ContentRootPath)
+               .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+               .AddEnvironmentVariables();
         }
 
         public IConfiguration Configuration { get; }
@@ -58,8 +65,10 @@ namespace Legalizaciones
             services.AddTransient<IDestinoRepository, DestinoRepository>();
             services.AddTransient<IMonedaRepository, MonedaRepository>();
             services.AddTransient<IZonaRepository, ZonaRepository>();
+            services.AddTransient<IOrigenDestinoRepository, OrigenDestinoRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+            services.AddTransient<ITasaRepository, TasaRepository>();
             services.AddTransient<IPasoFlujoSolicitudRepository, PasoFlujoSolicitudRepository>();
             //Iempl
             var context = new CustomAssemblyLoadContext();
@@ -77,22 +86,41 @@ namespace Legalizaciones
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder service, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
-                app.UseBrowserLink();
+                service.UseDeveloperExceptionPage();
+                service.UseBrowserLink();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                service.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-            app.UseSession();
-
-            app.UseMvc(routes =>
+            service.UseStaticFiles();
+            service.UseSession();
+            //*********************Cultura: English United State -> Formato Numerico ********************************
+            var infoCultura = new CultureInfo("en-US");
+            service.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture(infoCultura),
+                SupportedCultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                },
+                SupportedUICultures = new List<CultureInfo>
+                {
+                  infoCultura,
+                }
+            });
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            this.builder = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+            //********************************************************************************************************
+            service.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",

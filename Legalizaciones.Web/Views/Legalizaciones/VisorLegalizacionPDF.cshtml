@@ -111,47 +111,90 @@
 
             <br /><br />
 
-            <table class="col-md-12" width="100%">
-                <thead>
-                    <tr>
-                        <td>ID</td>
-                        <td>Fecha</td>
-                        <td>Pais</td>
-                        <td>Servicio</td>
-                        <td>Ciudad</td>
-                        <td>Origen</td>
-                        <td>Destino</td>
-                        <td>Valor</td>
-                        <td>IVA</td>
-                        <td>Reten Servicio</td>
-                        <td>Neto</td>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Model.SolicitudGastos.Count > 0)
+            <div class="form-horizontal">
+                @if (Model.LegalizacionGastos != null)
+                {
+                    if (Model.LegalizacionGastos.Count > 0)
                     {
-                        @foreach (var item in Model.SolicitudGastos)
-                        {
+                        <div class="row ListadoGastos">
+                            <div class="col-md-12">
+                                <table class="tableGastos" id="tbGastos">
+                                    <thead>
+                                        <tr>
+                                            @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
+                                            <td>Item</td>
+                                            <td>Fecha</td>
+                                            <td>Centro Oper.</td>
+                                            <td>Unidad Neg</td>
+                                            <td>Centro Cost</td>
+                                            <td>Fecha Gasto</td>
+                                            <td>Pais</td>
+                                            <td>Ciudad</td>
+                                            <td>Servicio</td>
+                                            <td>Proveedor</td>
+                                            <td>Concepto</td>
+                                            <td>Valor</td>
+                                        </tr>
+                                    </thead>
 
-                            <tr>
-                                <td class="col-md-1 ">@item.Id</td>
-                                <td class="col-md-3 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
-                                <td class="col-md-1 ">@item.Pais</td>
-                                <td class="col-md-1 ">@item.Servicio</td>
-                                <td class="col-md-1 ">@item.Ciudad</td>
-                                <td class="col-md-1 ">@item.Origen</td>
-                                <td class="col-md-1 ">@item.Destino</td>
-                                <td class="col-md-1 ">@item.Monto</td>
-                                <td class="col-md-1 ">@item.IVA</td>
-                                <td class="col-md-1 ">0</td>
-                                <td class="col-md-1 ">@item.Monto</td>
+                                    @if (Model.LegalizacionGastos.Count > 0)
+                                    {
+                                        @foreach (var item in Model.LegalizacionGastos)
+                                        {
+                                            // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
+                                            <tr>
+                                                <td class="col-md-1 ">@item.Id</td>
+                                                <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
+                                                <td class="col-md-2 ">@item.CentroOperacion.Nombre</td>
+                                                <td class="col-md-2 ">@item.UnidadNegocio.Nombre</td>
+                                                <td class="col-md-2 ">@item.CentroCosto.Nombre</td>
+                                                <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
+                                                <td class="col-md-1 ">@item.Pais.Nombre</td>
+                                                <td class="col-md-1 ">@item.Ciudad.Nombre</td>
+                                                <td class="col-md-1 ">
 
-                            </tr>
-                        }
+                                                    @if (@item.TipoServicioId == 1)
+                                                    {
+                                                        <span>Comida</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Transporte</span>
+                                                    }
+                                                </td>
+                                                <td class="col-md-1 ">@item.ProveedorId</td>
+                                                <td class="col-md-1 ">@item.Concepto</td>
+                                                <td class="col-md-1 ">@item.Valor</td>
+
+                                            </tr>
+                                        }
+                                    }
+                                    <tbody id="Items"></tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
                     }
-                </tbody>
-            </table>
+
+                }
+                else
+                {
+                    <div class="row ListadoGastos">
+                        <div class="col-md-12">
+                            Añada un nuevo gasto a Legalizar...
+                        </div>
+                    </div>
+                }
+
+                <div class="row display-none" id="mensajeValidacionGastos">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" role="alert">
+                            <span id="mensajeGastos"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <br /><br />
 
 

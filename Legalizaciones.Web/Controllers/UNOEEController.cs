@@ -15,7 +15,6 @@ namespace Legalizaciones.Web.Controllers
 {
     public class UNOEEController : Controller
     {
-
         private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
 
@@ -137,7 +136,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 1, // ROL Empleado
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com"
             };
 
             Empleados[1] = new Empleado
@@ -151,7 +151,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 2, // ROL Administracion Tesoreria
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "a.betancourt@innova4j.com"
             };
 
             Empleados[2] = new Empleado
@@ -165,7 +166,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 3, // ROL Administracion Contabilidad
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
             };
 
             if (filtroCedula)
@@ -177,6 +179,44 @@ namespace Legalizaciones.Web.Controllers
             }
 
             return Json(Empleados);
+        }
+
+        public JsonResult CargosMaeEdit(int Id)
+        {
+
+            Cargo[] Cargos = new Cargo[3];
+
+            Cargos[0] = new Cargo
+            {
+                Id = 1,
+                Nombre = "Empleado",
+                Descripcion = "Departamento de Ventas",
+                Estatus = 1
+            };
+
+            Cargos[1] = new Cargo
+            {
+                Id = 2,
+                Nombre = "Administracion Tesoreria",
+                Descripcion = "Departamento de Compras",
+                Estatus = 1
+            };
+
+            Cargos[2] = new Cargo
+            {
+                Id = 3,
+                Nombre = "Administracion Contraloria",
+                Descripcion = "Gerente de Ventas",
+                Estatus = 1
+            };
+
+            foreach (var item in Cargos)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(Cargos);
         }
 
         public JsonResult Cargos()

@@ -85,6 +85,18 @@ namespace Legalizaciones.Web.Controllers
             return Json(ListDestinos);
         }
 
+        public JsonResult PaisMaeEdit(int Id)
+        {
+            var ListPaises = paisRepository.All().ToList();
+            foreach (var item in ListPaises)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(ListPaises);
+        }
+
         public JsonResult ZonasDestinosMaeEdit(int Id)
         {
             var ListZonaDestino = destinoRepository.All().ToList();
@@ -125,6 +137,12 @@ namespace Legalizaciones.Web.Controllers
         public JsonResult SolicitudGastos(int wId)
         {
             var wG = solicitudGastosRepository.Find(wId);
+
+            string wFD = wG.FechaGasto.Substring(0, 4);
+            string wFM = wG.FechaGasto.Substring(5, 2);
+            string wFA = wG.FechaGasto.Substring(8, 2);
+
+            wG.FechaGasto = wFD + "-" + wFM + "-" + wFA;
 
             var wResult = Json(wG);
 

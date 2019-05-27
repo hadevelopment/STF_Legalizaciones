@@ -215,27 +215,56 @@
                 <div class="row margin-bottom">
 
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })
+                        @Html.LabelFor(model => model.CentroCostoDescripcion, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.CentroCostoDescripcion, new { @class = "form-control", @Readonly = "Readonly" })
                     </div>
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.EditorFor(model => model.FechaDesde, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde" })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
                         @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.EditorFor(model => model.FechaHasta, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.MonedaId, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
-                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        @if (Model.ConAnticipo == 0)
                         {
-                            @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
+                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
+                            }
+                        }else //sin anticipo
+                        {
+                            @if (ViewBag.MostrarTasa = true)
+                            {
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.MonedaId, htmlAttributes: new { @class = "control-label col-md-12" })
+
+                                </div>
+
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(model => model.Moneda, new { @class = "form-control", @Readonly = "Readonly" })
+
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.ValorTasa, new { @class = "form-control", @Readonly = "Readonly" })
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                @Html.LabelFor(model => model.Moneda, htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(model => model.MonedaId, new { @class = "form-control", @Readonly = "Readonly" })
+
+                            }
+
+
                         }
 
                     </div>
@@ -277,16 +306,26 @@
                         </div>
                         <div class="col-md-3">
                             @Html.LabelFor(model => model.FechaGasto, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.EditorFor(model => model.FechaGasto, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
+                            @Html.TextBoxFor(model => model.FechaGasto, new { @class = "form-control datepicker FechaGasto", @placeholder = "Selecciona Fecha Gasto", id = "FechaGasto" })
                             @Html.ValidationMessageFor(model => model.FechaGasto, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-3">
+    
                             @Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.TextBoxFor(model => model.CentroOperacion, new { @class = "form-control", @Readonly = "Readonly" })
+                            @Html.DropDownListFor(model => model.CentroOperacion, Model.ListaCentroOperacion, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroOperacion, "Seleccione un centro de operacion.", new { @class = "text-danger" })
+                            }
                         </div>
                         <div class="col-md-3">
+        
                             @Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.TextBoxFor(model => model.UnidadNegocio, new { @class = "form-control", @Readonly = "Readonly" })
+                            @Html.DropDownListFor(model => model.UnidadNegocio, Model.ListaUnidadNegocio, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una unidad de negocio.", new { @class = "text-danger" })
+                            }
                         </div>
                     </div>
 
@@ -294,9 +333,15 @@
 
                         <div class="col-md-3">
                             @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })
+                            @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
+                            }
                         </div>
-                        <div class="col-md-3">
+
+
+                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
                             @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
                             @if (Model.ConAnticipo == 0)
                             {
@@ -306,11 +351,29 @@
                             else
                             { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
                         }
+
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
-                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
                             }
-                        </div>
+                        </div>*@
+
+
+                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
+                                @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                                @if (Model.ConAnticipo == 0)
+                                {
+                                    @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
+
+                                }
+                                else
+                                { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
+                            }
+                                @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                                {
+                                    @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
+                                }
+                            </div>*@
 
 
                         <div class="col-md-3">
@@ -318,7 +381,7 @@
                             @Html.DropDownListFor(model => model.PaisId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
-                                @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione un Pais.", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.PaisId, "Seleccione un Pais.", new { @class = "text-danger" })
                             }
                         </div>
 
@@ -327,7 +390,7 @@
                             @Html.DropDownListFor(model => model.CiudadId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
-                                @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una Ciudad.", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.CiudadId, "Seleccione una Ciudad.", new { @class = "text-danger" })
                             }
                         </div>
                     </div>
@@ -339,7 +402,7 @@
                             @Html.DropDownListFor(model => model.TiposervicioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
-                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de servicio.", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.TiposervicioId, "Seleccione un tipo de servicio.", new { @class = "text-danger" })
                             }
                         </div>
                         <div class="col-md-3">
@@ -347,7 +410,7 @@
                             @Html.DropDownListFor(model => model.ProveedorId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
-                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Proveedor.", new { @class = "text-danger" })
+                                @Html.ValidationMessageFor(model => model.ProveedorId, "Seleccione un Proveedor.", new { @class = "text-danger" })
                             }
                         </div>
 
@@ -432,33 +495,24 @@
                             <thead>
                                 <tr>
                                     @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                    <td class="display-none">FechaaGasto</td>
-                                    <td class="display-none">MotivoId</td>
+                                    <td class="display-none">FechaGasto</td>
                                     <td class="display-none">PaisId</td>
                                     <td class="display-none">CiudadId</td>
                                     <td class="display-none">TipoServicioId</td>
                                     <td class="display-none">ProveedorId</td>
                                     <td class="display-none">Concepto</td>
-                                    <td class="display-none">Valor</td>
+                                    <td class="display-none">Concepto</td>
                                     <td>Item</td>
                                     <td>Fecha</td>
                                     <td>Centro Oper.</td>
                                     <td>Unidad Neg</td>
                                     <td>Centro Cost</td>
-                                    <td>Motivo</td>
                                     <td>Pais</td>
                                     <td>Ciudad</td>
                                     <td>Servicio</td>
                                     <td>Proveedor</td>
                                     <td>Concepto Gasto</td>
                                     <td>Valor</td>
-                                    @*<td>IVA</td>
-                                    <td>Ret IVA</td>
-                                    <td>Ret Serv</td>
-                                    <td>Ret Fuent</td>
-                                    <td>ICA</td>
-                                    <td>Neto</td>
-                                    <td>IVA Teoric</td>*@
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
@@ -478,8 +532,10 @@
                                         <h4>Anticipo Entregado:</h4>
                                     </div>
                                     <div class="col-md-5">
-                                        <h4 class="text-right" id="txMontoT"> 0</h4>
-                                        <h4 class="text-right" id="txSaldo"> @Model.Monto</h4>
+                                        <h4 class="" style="color: #fc2525 " id="txMontoFaltante"> 0</h4>
+                                        <h4 class="hide" style="color: #0be52c " id="txMontoSobrante"> 0</h4>
+                                        <h4 class=""> @Model.Monto</h4>
+                                        <input class="hide" type="text" name="txSaldo" id="txSaldo" value="@Model.Monto" />
                                     </div>
                                 </div>
                             </div>
@@ -571,7 +627,8 @@
 
                                                         <tr>
                                                             <td class="col-md-1 ">@item.Id</td>
-                                                            <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
+                                                            @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
+                                                            <td class="col-md-2 ">@item.FechaGasto.Substring(0, 10)</td>
                                                             <td class="col-md-1 ">@item.Pais</td>
                                                             <td class="col-md-1 ">@item.Servicio</td>
                                                             <td class="col-md-1 ">@item.Ciudad</td>
@@ -585,6 +642,7 @@
                                                                 </a>
                                                             </td>
                                                         </tr>
+                                                  
                                                     }
                                                 </tbody>
                                             </table>
@@ -741,6 +799,7 @@
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/moment.min.js"></script>
     <script src="~/js/LegalizacionesScript.js"></script>
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
@@ -748,28 +807,28 @@
 
 
     <script>
-                            //$(function () {
-                            //    $('#tableGastos').DataTable();
+                                    //$(function () {
+                                    //    $('#tableGastos').DataTable();
 
 
-                            //    function cargarGastos() {
-                            //        var table = $('.tableGastos').tableToJSON({
-                            //            ignoreColumns: [16]
-                            //        });
+                                    //    function cargarGastos() {
+                                    //        var table = $('.tableGastos').tableToJSON({
+                                    //            ignoreColumns: [16]
+                                    //        });
 
-                            //        if (table.length > 0) {
-                            //            $("#mensajeRegistro").text("");
-                            //            $('#mensajeValidacionRegistro').hide("slow");
-                            //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                            //            return true;
-                            //        } else {
-                            //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-                            //            $('#mensajeValidacionRegistro').show("slow");
-                            //            return false;
-                            //        }
+                                    //        if (table.length > 0) {
+                                    //            $("#mensajeRegistro").text("");
+                                    //            $('#mensajeValidacionRegistro').hide("slow");
+                                    //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                                    //            return true;
+                                    //        } else {
+                                    //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                                    //            $('#mensajeValidacionRegistro').show("slow");
+                                    //            return false;
+                                    //        }
 
-                            //    }
-                            //});
+                                    //    }
+                                    //});
 
     </script>
 }

@@ -11,7 +11,6 @@
 
 a {
     color: #333;
-    cursor: pointer;
 }
 
 .btn {
@@ -66,6 +65,14 @@ a {
     width: 100%;
 }
 
+.display-none{
+    display:none;
+}
+
+.display{
+    display:block;
+}
+
 .alert{
     margin-top:20px;
 }
@@ -74,37 +81,6 @@ m-bottom-20 {
 margin-bottom:20px;
 }
 
-#AvisoMontoServicio{
-    text-align:center;
-}
-
-#MensajeAviso {
-    font-size: 10px;
-}
-
-.box-title {
-    font-size: 16px !important;
-}
-
-.box-body {
-    font-size: 12px !important;
-}
-
-table thead{
-    background-color:#ddd!important;
-}
-
-.btn {
-    font-size:12px !important;
-}
-
-li.btnMenu {
-    font-size: 12px !important;
-}
-
-li.btnMenu a i  {
-    font-size: 14px !important;
-}
 
 a{
     font-size: 12px !important;

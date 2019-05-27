@@ -4,17 +4,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Legalizaciones.Web.Models.ViewModel
 {
-   
+
     /// <summary>
     /// clase viewmodel para las legalizaciones que interactua entre la vista y el modelo de la bd
     /// </summary>
     public class LegalizacionesViewModel
     {
+
+        //Legalizaciones ID
+        [DisplayName("legalizacionesId")]
+        public int legalizacionesId { get; set; }
+
         //Area de Solicitud de Anticipo
         [DisplayName("ID")]
         public int AnticipoId { get; set; }
@@ -29,16 +35,21 @@ namespace Legalizaciones.Web.Models.ViewModel
         public DateTime FechaVencimiento { get; set; }
 
         [DisplayName("Concepto")]
-        public string  Concepto { get; set; }
+        public string Concepto { get; set; }
 
         [DisplayName("Valor")]
         public decimal Monto { get; set; }
 
         [DisplayName("Centro de Costo")]
-        public string CentroCosto { get; set; }
+        public int CentroCosto { get; set; }
+
+        public string CentroCostoDescripcion { get; set; }
+
+        public SelectList ListaCentroCosto { get; set; }
+
 
         [DisplayName("Fecha desde")]
-        public DateTime  FechaDesde { get; set; }
+        public DateTime FechaDesde { get; set; }
 
         [DisplayName("Fecha hasta")]
         public DateTime FechaHasta { get; set; }
@@ -78,6 +89,11 @@ namespace Legalizaciones.Web.Models.ViewModel
         public int? MonedaId { get; set; }
         public SelectList ListaMoneda { get; set; }
 
+        public string Moneda { get; set; }
+
+        [DisplayName("Tasa")]
+        public string ValorTasa { get; set; }
+
         //Para el registro de gastos
         [DisplayName("ID del item")]
         public int GastosId { get; set; }
@@ -86,10 +102,16 @@ namespace Legalizaciones.Web.Models.ViewModel
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]
-        public string CentroOperacion{ get; set; }
+
+        public int CentroOperacion { get; set; }
+
+        public SelectList ListaCentroOperacion { get; set; }
+
 
         [DisplayName("Unidad de negocio")]
-        public string UnidadNegocio { get; set; }
+        public int UnidadNegocio { get; set; }
+        public SelectList ListaUnidadNegocio { get; set; }
+
 
         [DisplayName("Motivo")]
         public string MotivoId { get; set; }
@@ -112,7 +134,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string ConceptoGasto { get; set; }
 
         [DisplayName("Valor del Gasto")]
-        public double MontoGasto { get; set; }
+        public decimal MontoGasto { get; set; }
 
         [DisplayName("Origen")]
         public string Origen { get; set; }
@@ -152,6 +174,8 @@ namespace Legalizaciones.Web.Models.ViewModel
         [DisplayName("Beneficiario")]
         public string CedulaId { get; set; }
         public int ConAnticipo { get; set; }
+
+        [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }
 
 
     }

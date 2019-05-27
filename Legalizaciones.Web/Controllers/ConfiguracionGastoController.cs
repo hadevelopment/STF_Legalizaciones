@@ -34,7 +34,7 @@ namespace Legalizaciones.Web.Controllers
      
         public IActionResult Index()
         {
-            var ConfiguracionGastos = configuracionGastoRepository.All().ToList();
+            var ConfiguracionGastos = configuracionGastoRepository.All().Where(a =>a.Estatus == 1).ToList();
             return View(ConfiguracionGastos);
         }
 
@@ -45,19 +45,55 @@ namespace Legalizaciones.Web.Controllers
             return View(new ConfiguracionGasto());
         }
 
-        [HttpPost]
-        [Route("Crear")]
-        public ActionResult Guardar(ConfiguracionGasto configuracionGasto)
+        [HttpGet]
+        [Route("Editar")]
+        public ActionResult Editar(int id)
         {
-            if (!ModelState.IsValid)
-            {
+            var conf = configuracionGastoRepository.Find(id);
+            return View(conf);
+        }
 
-            }
-            else
+        [HttpGet]
+        [Route("DetallesConfiguracion")]
+        public ActionResult Ver(int id)
+        {
+            var conf = configuracionGastoRepository.Find(id);
+            return View(conf);
+        }
+
+        [HttpPost]
+        [Route("ActualizarConfiguracion")]
+        public ActionResult Actualizar(ConfiguracionGasto configuracionGasto)
+        {
+            if (ModelState.IsValid)
             {
                 try
                 {
                     configuracionGasto.Estatus = 1;
+                    configuracionGastoRepository.Update(configuracionGasto);
+
+                    TempData["Alerta"] = "success - La Configuración se registro correctamente.";
+                    
+                }
+                catch (System.Exception e)
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la configuración";
+                }
+            }
+
+            return RedirectToAction("Index", "ConfiguracionGasto");
+        }
+
+        [HttpPost]
+        [Route("Crear")]
+        public ActionResult Guardar(ConfiguracionGasto configuracionGasto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    configuracionGasto.Estatus = 1;
+                    configuracionGasto.FechaCreacion = DateTime.Today;
                     configuracionGastoRepository.Insert(configuracionGasto);
 
                     TempData["Alerta"] = "success - La Configuración se registro correctamente.";
@@ -67,10 +103,32 @@ namespace Legalizaciones.Web.Controllers
                 {
                     TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la configuración";
                 }
+            }
+           
+            return View("Crear", configuracionGasto);
+        }
 
+        [HttpPost]
+        [Route("Eliminar")]
+        public ActionResult Eliminar(ConfiguracionGasto configuracionGasto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    configuracionGasto.Estatus = 0;
+                    configuracionGastoRepository.Update(configuracionGasto);
+
+                    TempData["Alerta"] = "success - La Configuración se elimino correctamente.";
+
+                }
+                catch (System.Exception e)
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la configuración";
+                }
             }
 
-            return View("Crear", configuracionGasto);
+            return RedirectToAction("Index", "ConfiguracionGasto");
         }
 
         public JsonResult Destinos()
