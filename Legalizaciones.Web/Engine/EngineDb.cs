@@ -82,7 +82,6 @@ namespace Legalizaciones.Web.Engine
         }
 
     
-
         public List<string> TiposDocumentos(string SpName)
         {
             List<string> documento = new List<string>();
