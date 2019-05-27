@@ -11,9 +11,9 @@ using Legalizaciones.Model.Workflow;
 
 namespace Legalizaciones.Data.Repository
 {
-    public class PasoFlujoSolicitudRepository : BaseRepository<PasoFlujoSolicitud>, IPasoFlujoSolicitudRepository
+    public class HistoricoLegalizacionRepository : BaseRepository<HistoricoLegalizacion>, IHistoricoLegalizacionRepository
     {
-        public PasoFlujoSolicitudRepository(AppDataContext context) :base(context)
+        public HistoricoLegalizacionRepository(AppDataContext context) :base(context)
         {
 
         }

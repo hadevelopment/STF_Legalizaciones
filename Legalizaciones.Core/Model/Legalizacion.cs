@@ -2,7 +2,8 @@
 using Legalizaciones.Model.Base;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using Legalizaciones.Model.Workflow;
+using Legalizaciones.Model.ItemSolicitud;
 
 namespace Legalizaciones.Model
 {
@@ -33,6 +34,14 @@ namespace Legalizaciones.Model
 
         [ForeignKey("Banco")]
         public int BancoId{ get; set; }
+
+        [ForeignKey("PasoFlujoSolicitud")]
+        public int PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud { get; set; }
+
+        [ForeignKey("EstadoLegalizacion")]
+        public int? EstadoId { get; set; }
+        public EstadoLegalizacion EstadoLegalizacion { get; set; }
 
         [NotMapped] public Banco Banco { get; set; }
 

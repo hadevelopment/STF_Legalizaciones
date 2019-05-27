@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Legalizaciones.Model;
+using Legalizaciones.Model.ItemSolicitud;
+using Legalizaciones.Model.Workflow;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
 
@@ -57,6 +59,152 @@ namespace Legalizaciones.Web.Engine
                 item.Beneficiario = empleado.Nombre;
                 list.Insert(n, item);
                 n++;
+            }
+            return list;
+        }
+
+
+        public List<Flujo> ConvertirToListFlujo(DataTable dt)
+        {
+            UNOEE erp = new UNOEE();
+            List<Flujo> list = new List<Flujo>();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                Flujo item = new Flujo();
+                if (row["Id"] != DBNull.Value)
+                    item.Id = Convert.ToInt32(row["Id"]);
+                if (row["Descripcion"] != DBNull.Value)
+                    item.Descripcion = row["Descripcion"].ToString();
+                if (row["CedulaAprobador"] != DBNull.Value)
+                    item.CedulaAprobador = row["CedulaAprobador"].ToString();
+                if (row["NombreAprobador"] != DBNull.Value)
+                    item.NombreAprobador = row["NombreAprobador"].ToString();
+                if (row["EmailAprobador"] != DBNull.Value)
+                    item.EmailAprobador = row["EmailAprobador"].ToString();
+                if (row["Orden"] != DBNull.Value)
+                    item.Orden = Convert.ToInt32(row["Orden"]);
+                if (row["TipoSolicitud"] != DBNull.Value)
+                    item.TipoSolicitud = row["TipoSolicitud"].ToString();
+                if (row["Motivo"] != DBNull.Value)
+                    item.Motivo = row["Motivo"].ToString();
+                if (row["Procesado"] != DBNull.Value)
+                    item.Procesado = Convert.ToInt32(row["Procesado"]);
+
+                list.Insert(n, item);
+                n++;
+            }
+
+            var finalizado = list.Where(m => m.Motivo.Contains("finalizado")).FirstOrDefault();
+            if(finalizado != null)
+            {
+                finalizado.Procesado = 1;
+                list = list.Where(m => m.Orden != finalizado.Orden).ToList();
+                list.Add(finalizado);
+                list = list.OrderBy(m => m.Orden).ToList();
+            }
+
+            return list;
+        }
+
+        public List<PasoFlujoSolicitud> ConvertirToListPasos(DataTable dt)
+        {
+            UNOEE erp = new UNOEE();
+            List<PasoFlujoSolicitud> list = new List<PasoFlujoSolicitud>();
+            foreach (DataRow row in dt.Rows)
+            {
+                PasoFlujoSolicitud item = new PasoFlujoSolicitud();
+                if (row["Id"] != DBNull.Value)
+                    item.Id = Convert.ToInt32(row["Id"]);
+                if (row["Estatus"] != DBNull.Value)
+                    item.Estatus = Convert.ToInt32(row["Estatus"]);
+                if (row["FechaCreacion"] != DBNull.Value)
+                    item.FechaCreacion = Convert.ToDateTime(row["FechaCreacion"]);
+                if (row["Descripcion"] != DBNull.Value)
+                    item.Descripcion = row["Descripcion"].ToString();
+                if (row["Orden"] != DBNull.Value)
+                    item.Orden = Convert.ToInt32(row["Orden"]);
+
+                list.Add(item);
+            }
+            return list;
+        }
+
+        public List<Solicitud> ConvertirToListAnticipos(DataTable dt)
+        {
+            UNOEE erp = new UNOEE();
+            List<Solicitud> list = new List<Solicitud>();
+            foreach (DataRow row in dt.Rows)
+            {
+                Solicitud item = new Solicitud();
+                if (row["Id"] != DBNull.Value)
+                    item.Id = Convert.ToInt32(row["Id"]);
+                if (row["Estatus"] != DBNull.Value)
+                    item.Estatus = Convert.ToInt32(row["Estatus"]);
+                if (row["FechaCreacion"] != DBNull.Value)
+                    item.FechaCreacion = Convert.ToDateTime(row["FechaCreacion"]);
+                if (row["NumeroSolicitud"] != DBNull.Value)
+                    item.NumeroSolicitud = row["NumeroSolicitud"].ToString();
+                if (row["Concepto"] != DBNull.Value)
+                    item.Concepto = row["Concepto"].ToString();
+                if (row["FechaDesde"] != DBNull.Value)
+                    item.FechaDesde = Convert.ToDateTime(row["FechaDesde"]);
+                if (row["FechaHasta"] != DBNull.Value)
+                    item.FechaHasta = Convert.ToDateTime(row["FechaHasta"]);
+
+                if (row["EmpleadoCedula"] != DBNull.Value)
+                    item.EmpleadoCedula = row["EmpleadoCedula"].ToString();
+                if (row["Monto"] != DBNull.Value)
+                    item.Monto = Convert.ToDecimal(row["Monto"]);
+                if (row["FechaCreacion"] != DBNull.Value)
+                    item.FechaCreacion = Convert.ToDateTime(row["FechaCreacion"]);
+                if (row["FechaVencimiento"] != DBNull.Value)
+                    item.FechaVencimiento = Convert.ToDateTime(row["FechaVencimiento"]);
+
+                if (row["EstadoId"] != DBNull.Value)
+                    item.EstadoId = Convert.ToInt32(row["EstadoId"]);
+
+                if (row["EstadoDescripcion"] != DBNull.Value)
+                    item.EstadoSolicitud = new EstadoSolicitud { Descripcion = row["EstadoDescripcion"].ToString() };
+
+                if (row["PasoDescripcion"] != DBNull.Value)
+                    item.PasoFlujoSolicitud = new PasoFlujoSolicitud { Descripcion = row["PasoDescripcion"].ToString() };
+
+                list.Add(item);
+            }
+            return list;
+        }
+
+
+        public List<Legalizacion> ConvertirToListLegalizaciones(DataTable dt)
+        {
+            UNOEE erp = new UNOEE();
+            List<Legalizacion> list = new List<Legalizacion>();
+            foreach (DataRow row in dt.Rows)
+            {
+                Legalizacion item = new Legalizacion();
+                if (row["Id"] != DBNull.Value)
+                    item.Id = Convert.ToInt32(row["Id"]);
+                if (row["Estatus"] != DBNull.Value)
+                    item.Estatus = Convert.ToInt32(row["Estatus"]);
+                if (row["FechaCreacion"] != DBNull.Value)
+                    item.FechaCreacion = Convert.ToDateTime(row["FechaCreacion"]);
+                if (row["SolicitudId"] != DBNull.Value)
+                    item.SolicitudID = Convert.ToInt32(row["SolicitudId"]);
+                if (row["ReciboCaja"] != DBNull.Value)
+                    item.ReciboCaja = Convert.ToInt64(row["ReciboCaja"]);
+                if (row["Consignacion"] != DBNull.Value)
+                    item.Consignacion = Convert.ToInt64(row["Consignacion"]);
+                if (row["Valor"] != DBNull.Value)
+                    item.Valor = row["Valor"].ToString();
+                if (row["EmpleadoCedula"] != DBNull.Value)
+                    item.EmpleadoCedula = row["EmpleadoCedula"].ToString();
+                if (row["PasoFlujoSolicitudId"] != DBNull.Value)
+                    item.PasoFlujoSolicitudId = Convert.ToInt32(row["PasoFlujoSolicitudId"]);
+                if (row["PasoDescripcion"] != DBNull.Value)
+                    item.PasoFlujoSolicitud = new PasoFlujoSolicitud { Descripcion = row["PasoDescripcion"].ToString() };
+
+                list.Add(item);
             }
             return list;
         }

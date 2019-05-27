@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
 using Legalizaciones.Web.Models.ViewModel;
+using Legalizaciones.Web.Engine;
+using Legalizaciones.Model.Workflow;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -21,6 +23,8 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudRepository solicitudRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly ITipoSolicitudRepository tipoSolicitudRepository;
+        private readonly IHistoricoSolicitudRepository historicoSolicitudRepository;
+        private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
         public Solicitud sol;
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
@@ -30,24 +34,29 @@ namespace Legalizaciones.Web.Controllers
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
         public readonly IEstadoSolicitudRepository estatusRepository;
+        EngineDb DB = new EngineDb();
 
         public SolicitudController(
             ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository,
             ITipoSolicitudRepository tipoSolicitudRepository,
+            IHistoricoSolicitudRepository historicoSolicitudRepository,
             IMonedaRepository monedaRepository,
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,
-            IEstadoSolicitudRepository estatusRepository
+            IEstadoSolicitudRepository estatusRepository,
+            IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository
             )
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
             this.tipoSolicitudRepository = tipoSolicitudRepository;
+            this.historicoSolicitudRepository = historicoSolicitudRepository;
             this.monedaRepository = monedaRepository;
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
             this.estatusRepository = estatusRepository;
+            this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
         }
 
         public IActionResult Index()
@@ -153,6 +162,9 @@ namespace Legalizaciones.Web.Controllers
             {
                 try
                 {
+                    
+
+
                     solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
                     List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                     solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
@@ -163,7 +175,10 @@ namespace Legalizaciones.Web.Controllers
 
                     //Calculo Fecha de Vencimiento de la Solicitud
                     var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
-                    solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
+                    solicitud.FechaVencimiento = AddBusinessDays(solicitud.FechaHasta, DiasHabiles);
+
+                    //Se obtiene el paso inicial del flujo configurado
+                    solicitud.PasoFlujoSolicitudId = getPasoInicialFlujo();
 
                     //Se Registra la Solicitud
                     solicitudRepository.Insert(solicitud);
@@ -349,6 +364,13 @@ namespace Legalizaciones.Web.Controllers
             Lista = solicitudGastosRepository.All().Where(x => x.SolicitudId == id).ToList();
 
             res.SolicitudGastos = Lista;
+
+            List<Flujo> lstFlujo = new List<Flujo>();
+            lstFlujo = DB.ObtenerFlujoSolicitud(id);
+
+            if (lstFlujo.Count > 0)
+                res.ListaFlujo = lstFlujo.OrderBy(m => m.Orden).ToList();
+
             return View(res);
         }
 
@@ -586,6 +608,28 @@ namespace Legalizaciones.Web.Controllers
                 {".gif", "image/gif"},
                 {".csv", "text/csv"}
             };
+        }
+
+        private DateTime AddBusinessDays(DateTime dt, int nDays)
+        {
+            int weeks = nDays / 6;
+            nDays %= 6;
+            while (dt.DayOfWeek == DayOfWeek.Sunday)
+                dt = dt.AddDays(1);
+
+            while (nDays-- > 0)
+            {
+                dt = dt.AddDays(1);
+                if (dt.DayOfWeek == DayOfWeek.Sunday)
+                    dt = dt.AddDays(1);
+            }
+            return dt.AddDays(weeks * 7);
+        }
+
+        private int getPasoInicialFlujo()
+        {
+            var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == 1 && m.Estatus == 1).OrderBy(m=>m.Orden).Select(m => m.Id).FirstOrDefault();
+            return paso;
         }
         #endregion
     }

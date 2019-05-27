@@ -99,6 +99,12 @@
         var nombreServicio = $('#Servicio  option:selected').text();
         console.log(nombreServicio);
 
+        if (nombreServicio === "Comida") {
+            $('#divGastosFecha').addClass('display-none');
+        }else {
+            $('#divGastosFecha').removeClass('display-none');
+        }
+
         if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
@@ -644,9 +650,12 @@ function consultarLimiteGasto() {
                                     $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
                                 }
                             });
+
+                            $('#Monto').val(data.monto);
                         } else {
                             $('#AvisoMontoServicio').addClass('display-none');
                             $('#MensajeAviso').text('');
+                            $('#Monto').val('');
 
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
@@ -658,6 +667,7 @@ function consultarLimiteGasto() {
                     } else {
                         $('#AvisoMontoServicio').addClass('display-none');
                         $('#MensajeAviso').text('');
+                        $('#Monto').val('');
 
                         $('#Monto').on('input', function () {
                             var value = $(this).val();
@@ -687,6 +697,7 @@ function consultarLimiteGasto() {
                                     $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
                                 }
                             });
+                            $('#Monto').val(data.monto);
                         } else {
                             $('#AvisoMontoServicio').addClass('display-none');
                             $('#MensajeAviso').text('');
@@ -697,6 +708,7 @@ function consultarLimiteGasto() {
                                     $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
                                 }
                             });
+                            $('#Monto').val('');
                         }
                     } else {
                         $('#AvisoMontoServicio').addClass('display-none');
@@ -708,6 +720,7 @@ function consultarLimiteGasto() {
                                 $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
                             }
                         });
+                        $('#Monto').val('');
                     }
                 }
             });

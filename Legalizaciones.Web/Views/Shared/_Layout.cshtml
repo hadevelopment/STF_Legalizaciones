@@ -20,6 +20,7 @@
     <link href="~/css/toastr.min.css" rel="stylesheet" />
     @*Customize CSS*@
     <link href="~/css/site.css" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="loading">Loading&#8230;</div>
@@ -40,24 +41,24 @@
                             <span>Anticipos</span>
                         </a>
                     </li>
-                    @*<li class="btnMenu">
-                            <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
-                                <i class="glyphicon glyphicon-credit-card"></i> <br />
-                                <span>Anticipos con TDC</span>
-                            </a>
-                        </li>*@
+                    <li class="btnMenu">
+                        <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
+                            <i class="glyphicon glyphicon-credit-card"></i> <br />
+                            <span>Anticipos con TDC</span>
+                        </a>
+                    </li>
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "Legalizaciones")'>
                             <i class="fa fa-archive"></i> <br />
                             <span>Legalizaciones</span>
                         </a>
                     </li>
-                    @*<li class="btnMenu">
-                            <a href='@Url.Action("", "")'>
-                                <i class="fa fa-briefcase"></i> <br />
-                                <span>Servicios</span>
-                            </a>
-                        </li>*@
+                    <li class="btnMenu">
+                        <a href='@Url.Action("Index", "Aprobacion")'>
+                            <i class="fa fa-check-square-o"></i> <br />
+                            <span>Aprobación</span>
+                        </a>
+                    </li>
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "ConfiguracionGasto")'>
                             <i class="fa fa-gear"></i> <br />
@@ -145,14 +146,17 @@
         function ejecutarAlerta(a, b) {
             toastr[a](b);
         }
+
+        $("form").submit(function (e) {
+            $(".loading").show();
+        });
+
         /* Ajax Life Cycle */
         $(document).ajaxStart(function () {
             $('.loading').show();
-            console.log("Start AJAX Call")
         });
         $(document).ajaxStop(function () {
             $('.loading').hide();
-            console.log("Finish AJAX Call")
         });
 
         $(document).ready(function () {

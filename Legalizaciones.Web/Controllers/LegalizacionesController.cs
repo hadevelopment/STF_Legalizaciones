@@ -82,7 +82,7 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult Crear(int id)
         {
             //Usuario_Cedula
-            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cargo").ToString();
+            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cargo");
 
 
             var ListaBanco = bancoRepository.All().ToList();

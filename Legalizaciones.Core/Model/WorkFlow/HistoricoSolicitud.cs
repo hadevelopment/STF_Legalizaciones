@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Legalizaciones.Model
+namespace Legalizaciones.Model.Workflow
 {
     public class HistoricoSolicitud : BaseModel
     {

@@ -275,16 +275,6 @@
                                 <br />
                                 <div class="row">
                                     <div class="display-none" id="divZonas">
-                                        @*<div class="col-md-4">
-                                <label class="control-label">Origen</label>
-                                @Html.DropDownList("ZonaOrigen", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaOrigen" })
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="control-label">Destino</label>
-                                @Html.DropDownList("ZonaDestino", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaDestino" })
-                            </div>*@
-
                                         <div class="col-md-4">
                                             <label class="control-label">Origen</label>
                                             @Html.TextBox("ZonaOrigen", "", new { @class = "form-control zonaAutocomplete", @placeholder = "Indique Origen", id = "ZonaOrigen" })
@@ -296,7 +286,7 @@
                                             @Html.Hidden("hdfZonaDestino",null, new { @id = "hdfZonaDestino", @value = "" })
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="float:right;">
                                         <label class="control-label">Monto</label>
                                         @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto", @type = "number" } })
                                         <div class="display-none" id="AvisoMontoServicio">

@@ -1,4 +1,4 @@
-﻿using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;namespace Legalizaciones.Data.AppDbContext{
+﻿using Legalizaciones.Model;using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;using Legalizaciones.Model.Workflow;namespace Legalizaciones.Data.AppDbContext{
 
 
     public class AppDataContext : DbContext    {        public AppDataContext(DbContextOptions options) : base(options)        {        }
@@ -26,9 +26,11 @@
         public DbSet<FlujoSolicitud> FlujoSolicitud{ get; set; }
         public DbSet<PasoFlujoSolicitud> PasoFlujoSolicitud { get; set; }
         public DbSet<HistoricoSolicitud> HistoricoSolicitud { get; set; }
+        public DbSet<HistoricoLegalizacion> HistoricoLegalizacion { get; set; }
         public DbSet<TipoSolicitud> TipoSolicitud { get; set; }
         public DbSet<TipoPermiso> TipoPermiso{ get; set; }
         public DbSet<EstadoSolicitud> EstadoSolicitud { get; set; }
+        public DbSet<EstadoLegalizacion> EstadoLegalizacion{ get; set; }
         public object Setting { get; private set; }
     }
 }

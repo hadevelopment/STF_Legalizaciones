@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Legalizaciones.Interface
 {
-    public interface IFlujoSolicitudRepository : IRepository<FlujoSolicitud>
+    public interface IHistoricoLegalizacionRepository : IRepository<HistoricoLegalizacion>
     {
     }
 }

@@ -2,6 +2,7 @@
 using Legalizaciones.Model.Empresa;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
+using Legalizaciones.Model.Workflow;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -77,6 +78,10 @@ namespace Legalizaciones.Model
         public int? EstadoId { get; set; }
         public EstadoSolicitud EstadoSolicitud { get; set; }
 
+        [ForeignKey("PasoFlujoSolicitud")]
+        public int? PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud { get; set; }
+
         [NotMapped]
         public string GastosJSON { get; set; }
 
@@ -101,6 +106,9 @@ namespace Legalizaciones.Model
 
         [NotMapped]
         public IFormFile Carta { get; set; }
+
+        [NotMapped]
+        public List<Flujo> ListaFlujo { get; set; }
 
         public string Extracto { get; set; }
 

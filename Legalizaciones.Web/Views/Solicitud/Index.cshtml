@@ -112,19 +112,23 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
-                                                <span class="fa fa-eye"></span>
+                                                <span class="fa fa-eye" title="Detalle"></span>
                                             </a>
 
-                                            <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
-                                                <span class="fa fa-pencil"></span>
-                                            </a>
+                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Finaliza"))
+                                            {
+                                                <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
+                                                    <span class="fa fa-pencil" title="Editar"></span>
+                                                </a>
+                                            }
+
 
                                             @if (!string.IsNullOrEmpty(item.RutaArchivo))
                                             {
                                                 <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
-                                                    <span class="fa fa-file-pdf-o"></span>
+                                                    <span class="fa fa-file-pdf-o" title="Ver Carta"></span>
                                                 </a>
                                             }
                                         </td>

@@ -50,6 +50,7 @@ namespace Legalizaciones
             services.AddTransient<IEmpleadoPermisoRepository, EmpleadoPermisoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
+            services.AddTransient<IHistoricoSolicitudRepository, HistoricoSolicitudRepository>();
             services.AddTransient<ILegalizacionRepository, LegalizacionRepository>();
             services.AddTransient<ILegalizacionGastosRepository, LegalizacionGastosRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
@@ -59,6 +60,7 @@ namespace Legalizaciones
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+            services.AddTransient<IPasoFlujoSolicitudRepository, PasoFlujoSolicitudRepository>();
             //Iempl
             var context = new CustomAssemblyLoadContext();
             context.LoadUnmanagedLibrary(Path.Combine(Directory.GetCurrentDirectory(), "libwkhtmltox.dll"));

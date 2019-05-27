@@ -8,21 +8,20 @@ using System.Text;
 
 namespace Legalizaciones.Model.Workflow
 {
-    public class PasoFlujoSolicitud : BaseModel
+    public class HistoricoLegalizacion : BaseModel
     {
+        [ForeignKey("Legalizacion")]
+        public int LegalizacionId { get; set; }
+        public Legalizacion Legalizacion { get; set; }
+
         [ForeignKey("FlujoSolicitud")]
         public int FlujoSolicitudId { get; set; }
         public FlujoSolicitud FlujoSolicitud { get; set; }
 
+        [ForeignKey("PasoFlujoSolicitud")]
+        public int? PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud{ get; set; }
+
         public string Descripcion { get; set; }
-
-        public int Orden { get; set; }
-
-        public string CedulaAprobador { get; set; }
-
-        public string NombreAprobador { get; set; }
-
-        public string EmailAprobador { get; set; }
-
     }
 }

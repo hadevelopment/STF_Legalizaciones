@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Legalizaciones.Model.SolicitudGastos>
+
+@{
+    ViewData["Title"] = "SolicitudItem";
+}
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.FechaGasto
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ciudad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Origen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Destino)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Monto) 
+            </td>
+        </tr>
+    }
