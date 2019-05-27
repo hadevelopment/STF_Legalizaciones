@@ -141,6 +141,7 @@ function AddAprobador() {
 }
 
 function ClearAll() {
+    $('#descripcion').val('');
     $('#tipoDocumento').val('');
     $('#addAprobador').val('');
     $('#addMail').val('');
@@ -167,8 +168,6 @@ function CloseNewFlujo() {
 
 
 function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSolicitud,proceso) {
-  
-    document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion';
     document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
     $("#modificar").val('Actualizar');
   
@@ -207,11 +206,14 @@ function CloseQuestionModal(proceso) {
 }
 
 function OpenDataModal() {
+    var tipoFlujo = document.getElementById('tipoFlujo').value;
+    document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion ' + tipoFlujo;
     $("#preguntaModal").modal('hide');
     $('#dataModal').modal('show');
 }
 
-function CloseDataModal(){
+function CloseDataModal() {
+
     $("#dataModal").modal('hide');
 }
 

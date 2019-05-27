@@ -14,6 +14,9 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" )
         {
+             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
+                return RedirectToAction("Index", "Home");
+
             model = GetTipoSolicitudes(model);
             if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
                 ViewBag.IndexSollicitud = HttpContext.Session.GetString("IndiceSolicitud");
@@ -26,10 +29,9 @@ namespace Legalizaciones.Web.Controllers
             {
                 model.TipoSeleccionado = tipoDocumento;
             }
-
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty &&  addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty)
+            if (tipoDocumento != string.Empty &&  addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty && descripcion != string.Empty)
             {
                 int estatus = 1;
                 int update = 0;
@@ -43,10 +45,6 @@ namespace Legalizaciones.Web.Controllers
                 else
                 {
                     update = 0;
-                }
-                if (descripcion == string.Empty || descripcion == null)
-                {
-                    descripcion = "S/D";
                 }
 
                 int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento);
@@ -62,6 +60,13 @@ namespace Legalizaciones.Web.Controllers
                 if (model.FlujoAprobacion != null)
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
+            //AGREGAR PASO AL FLUJO DE APROBACION
+            if (addPaso != string.Empty)
+            {
+                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+                if (model.FlujoAprobacion != null)
+                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
+            }
             //LISTA DE PASOS DE APROBACION
             if (model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
             {
@@ -69,13 +74,6 @@ namespace Legalizaciones.Web.Controllers
                 ViewBag.AprobadoresCount = model.Aprobadores.Count;
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
-            }
-            //AGREGAR PASO AL FLUJO DE APROBACION
-            if (addPaso != string.Empty)
-            {
-                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
-                if (model.FlujoAprobacion != null)
-                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
             ViewBag.TipoDocumento = tipoDocumento;
 
@@ -98,6 +96,9 @@ namespace Legalizaciones.Web.Controllers
         [HttpPost]
         public IActionResult Index(string tipo = "" , int n = 0)
         {
+            if (HttpContext.Session.GetString("Usuario_Cedula") == null)
+                return RedirectToAction("Index", "Home");
+
             AprobacionDocumento model = new AprobacionDocumento();
             if (tipo == string.Empty)
                 model.TipoSeleccionado = Request.Form["tipoSolicitud"];
@@ -119,7 +120,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public  IActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" ,string proceso = "")
+        public  IActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" )
         {
             EngineDb Metodo = new EngineDb();
             Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion",id,descripcionT,cedula,nombre,email); 
@@ -129,7 +130,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult EliminarFlujo(int ide = 0, string typee = "", string procesoe = "")
+        public IActionResult EliminarFlujo(int ide = 0, string typee = "")
         {
             EngineDb Metodo = new EngineDb();
             AprobacionDocumento model = new AprobacionDocumento();
