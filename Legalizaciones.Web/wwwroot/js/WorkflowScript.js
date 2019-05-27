@@ -94,7 +94,7 @@ function SetNuevoFlujo()
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
 
-    if (tipo === 'Seleccione...') {
+    if (tipo == 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
@@ -112,7 +112,7 @@ function SetAgregarPasoFlujo()
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
 
-    if (tipo === 'Seleccione...') {
+    if (tipo == 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
