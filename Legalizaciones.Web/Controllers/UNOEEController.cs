@@ -136,7 +136,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 1, // ROL Empleado
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com"
             };
 
             Empleados[1] = new Empleado
@@ -150,7 +151,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 2, // ROL Administracion Tesoreria
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "a.betancourt@innova4j.com"
             };
 
             Empleados[2] = new Empleado
@@ -164,7 +166,8 @@ namespace Legalizaciones.Web.Controllers
                 CargoId = 3, // ROL Administracion Contabilidad
                 CentroOperaciones = "1",
                 CentroCostos = "1",
-                UnidadNegocio = "1"
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
             };
 
             if (filtroCedula)
