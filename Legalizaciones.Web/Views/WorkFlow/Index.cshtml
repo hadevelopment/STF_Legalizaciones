@@ -1,5 +1,9 @@
 ﻿<style>
-
+    .inside{padding-right:2%;
+            padding-left:2%;
+            padding-top:2%;
+            padding-bottom:2%;
+    }
 </style>
 
 @model Legalizaciones.Web.Models.AprobacionDocumento
@@ -122,7 +126,7 @@
 
 <!-- Trigger the modal with a button -->
 <!-- MODAL NUEVO FLUJO -->
-<form id="newFlujo" method="GET">
+<form id="newFlujo" method="GET" action='@Url.Action("Index", "WorkFlow")'>
     <div id="nuevoFlujoModal" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -200,31 +204,31 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <label class="modal-title text-center" id="msjDataUpdate" name="msjDataUpdate"> </label>
                 </div>
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label id="empleo" name="empleo">Empleado</label>
                         <select id="Empleado2" name="Empleado2" style="display:block"> </select>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Nombre Aprobador</label>
                         <input type="text" id="nombre" name="nombre" class="form-control" readonly />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Cedula Aprobador</label>
                         <input type="text" id="cedula" name="cedula" class="form-control" readonly />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
                         <input type="text" id="email" name="email" class="form-control" readonly/>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Descripcion</label>
                         <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
@@ -238,7 +242,7 @@
                     <div class="col-md-12 pb-2"> </div>
                 </div>
                 <br />
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" onclick="CloseDataModal();" />
@@ -267,7 +271,7 @@
                     <div class="col-md-12 pb-2"> </div>
                 </div>
 
-                <div class="row">
+                <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();" />
@@ -279,14 +283,14 @@
 </form>
 
 <!--MODAL PREGUNTA -->
-<div id="preguntaModal" name="preguntaModal" class="modal fade" role="application">
+<div id="preguntaModal" name="preguntaModal" class="modal fade inside" role="application">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content inside">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <label class="modal-title text-center" id="msjPreguntaModal" name="msjPreguntaModal"> </label>
             </div>
-            <div class="row">
+            <div class="row inside">
                 <div class="col-md-12 pb-2">
                     <input type="button" class="btn btn-primary" style="float:right;" id="si" name="si" value="SI" onclick="OpenDataModal();" />
                     <input type="button" class="btn btn-primary" style="float:right;" id="no" name="no" value="NO" onclick="CloseQuestionModal();" />
@@ -299,7 +303,7 @@
 <!--MODAL MENSAJES  -->
 <div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content inside">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
