@@ -93,16 +93,14 @@ function SetNuevoFlujo()
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
-
-    if (tipo == 'Seleccione...') {
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
     }
-    else {
-        document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    else {    
         $("#nuevoFlujoModal").modal('show');
-       
     }
 }
 
@@ -111,14 +109,12 @@ function SetAgregarPasoFlujo()
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
 
-    if (tipo == 'Seleccione...') {
+    if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
-    }
-    else {
-        document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     }
 }
 
@@ -159,6 +155,9 @@ function ClearAll() {
 }
 
 function OpenNewFlujo() {
+    const obj = document.getElementById('solicitud');
+    var tipo = obj.options[obj.selectedIndex].text;
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Flujo de aprobacion ' + tipo;
     $('#nuevoFlujoModal').modal('show');
 }
 
