@@ -31,7 +31,7 @@ namespace Legalizaciones.Web.Controllers
             }
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty &&  addAprobador != string.Empty && addMail != string.Empty && empleado != string.Empty && descripcion != string.Empty)
+            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;
                 int update = 0;
