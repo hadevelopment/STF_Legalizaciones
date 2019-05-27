@@ -203,6 +203,7 @@ function AgregarFilaDatagrid() {
                     <td>Centro de Operacion</td>
                     <td>Unidad de Negocio</td>
                     <td>Centro de Costo</td>
+                    <td>${FechaGasto}</td>
                     <td>${Pais}</td>
                     <td>${Ciudad}</td>
                     <td>${Servicio}</td>

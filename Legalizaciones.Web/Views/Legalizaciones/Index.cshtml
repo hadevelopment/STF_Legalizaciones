@@ -87,7 +87,7 @@
                             <th title="Beneficiario">Benef</th>
                             <th>Estado</th>
                             <th>Monto</th>
-                            <th>Tasa</th>
+                            @*<th>Tasa</th>*@
                             <th class="hidden"> Nro. Anticipo UNOEE</th>
                             <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
                             <th title="Entrega"> Entrega </th>
@@ -164,10 +164,10 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
                                         </td>
-                                        <td>
+                                        @*<td>
                                             @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
                                             @Html.DisplayFor(modelItem => item.Tasa)
-                                        </td>
+                                        </td>*@
                                         <td class="hidden">
                                             @Html.DisplayFor(modelItem => item.IdDocErp)
                                         </td>
@@ -235,10 +235,10 @@
                                         <td>
                                             @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
                                         </td>
-                                        <td>
+                                        @*<td>
                                             @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
                                             @Html.DisplayFor(modelItem => item.Tasa)
-                                        </td>
+                                        </td>*@
                                         <td class="hidden">
                                             @Html.DisplayFor(modelItem => item.IdDocErp)
                                         </td>
@@ -294,7 +294,7 @@
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel">Exportar Excel</a>
 
                     </div>
                 </div>
