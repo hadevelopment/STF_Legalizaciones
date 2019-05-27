@@ -62,14 +62,6 @@ namespace Legalizaciones.Web.Controllers
                 if (model.FlujoAprobacion != null)
                 ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
-
-            //AGREGAR PASO AL FLUJO DE APROBACION
-            if (addPaso != string.Empty)
-            {
-                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
-                if (model.FlujoAprobacion != null)
-                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
-            }
             //LISTA DE PASOS DE APROBACION
             if (model.TipoSeleccionado != string.Empty && model.TipoSeleccionado != null)
             {
@@ -78,8 +70,15 @@ namespace Legalizaciones.Web.Controllers
                 if (model.Aprobadores.Count == 0)
                     model.Aprobadores = null;
             }
-
+            //AGREGAR PASO AL FLUJO DE APROBACION
+            if (addPaso != string.Empty)
+            {
+                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
+                if (model.FlujoAprobacion != null)
+                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
+            }
             ViewBag.TipoDocumento = tipoDocumento;
+
             //FINALIZAR CREACION DE FLUJO DE APROBACION
             if (clear != string.Empty)
             {

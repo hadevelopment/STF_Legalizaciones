@@ -84,7 +84,6 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
-
     $('#flow').css('visibility', 'hidden'); 
 });
 
@@ -101,15 +100,14 @@ function SetNuevoFlujo()
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
     }
     else {
-        $("#nuevoFlujoModal").modal('show');
         document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+        $("#nuevoFlujoModal").modal('show');
+       
     }
-
 }
 
 function SetAgregarPasoFlujo()
 {
-    var addPaso = 'addPaso';
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
@@ -120,11 +118,8 @@ function SetAgregarPasoFlujo()
         document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
     }
     else {
-        $("#nuevoFlujoModal").modal('show');
         document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     }
-
-   
 }
 
 function VerFlujo() {
@@ -146,6 +141,7 @@ function AddAprobador() {
     document.getElementById("addAprobador").value = tip;
     var email = $("#Empleado option:selected").data('email');
     document.getElementById("addMail").value = email;
+    console.log('AddAprobador');
 }
 
 function ClearAll() {

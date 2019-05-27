@@ -6,7 +6,7 @@
 
 @{
     ViewData["Title"] = "Flujo para Aprobacion de Documentos";
-    var paso = ViewBag.Paso;
+   // var paso = ViewBag.Paso;
 }
 <div class="row">
     <div class="col-sm-12">
@@ -335,11 +335,10 @@
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
             }
 
-        let pasoFlujo = '@paso';
-        console.log(pasoFlujo);
-        if (pasoFlujo > 0) {
-            OpenNewFlujo();
-            $("#solicitud").val(IndexSollicitud);
+        let pasoFlujo = '@ViewBag.Paso';
+            if (pasoFlujo > 0) {
+               OpenNewFlujo();
+                $("#solicitud").val(IndexSollicitud);
         }
 
         let countDocAsociado = '@ViewBag.CountDocAsociado'
