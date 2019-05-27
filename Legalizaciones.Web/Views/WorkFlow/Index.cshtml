@@ -1,8 +1,9 @@
 ﻿<style>
-    .inside{padding-right:2%;
-            padding-left:2%;
-            padding-top:2%;
-            padding-bottom:2%;
+    .inside {
+        padding-right: 2%;
+        padding-left: 2%;
+        padding-top: 2%;
+        padding-bottom: 2%;
     }
 </style>
 
@@ -10,7 +11,7 @@
 
 @{
     ViewData["Title"] = "Flujo para Aprobacion de Documentos";
-   // var paso = ViewBag.Paso;
+    // var paso = ViewBag.Paso;
 }
 <div class="row">
     <div class="col-sm-12">
@@ -40,10 +41,12 @@
                                 foreach (var type in Model.TipoSolicitud)
                                 {
                                     if (n == 0)
-                                    {<option value="@n" disabled selected> @type </option>}
+                                    {
+                                        <option value="@n" disabled selected> @type </option>}
                                     else
-                                    { <option value="@n"> @type </option>}
-                                     n++;
+                                    {
+                                        <option value="@n"> @type </option>}
+                                    n++;
                                 }
                             }
 
@@ -74,7 +77,7 @@
     {
         string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
         <label class="control-label"> <strong> @tipoFlujo </strong></label>
-        <input type="hidden" id="tipoFlujo" name="tipoFlujo" value="@Model.TipoSeleccionado"/>
+        <input type="hidden" id="tipoFlujo" name="tipoFlujo" value="@Model.TipoSeleccionado" />
     }
     <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
         <thead>
@@ -133,7 +136,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
-                    <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo" > </label>
+                    <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -185,7 +188,7 @@
                             <input type="hidden" id="addAprobador" name="addAprobador" />
                             <input type="hidden" id="addMail" name="addMail" />
                             <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
-                            <input type ="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
+                            <input type="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
                         </div>
 
                     </div>
@@ -226,7 +229,7 @@
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
-                        <input type="text" id="email" name="email" class="form-control" readonly/>
+                        <input type="text" id="email" name="email" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row inside">
@@ -327,33 +330,27 @@
 
 
     <script>
-
         $(document).ready(function ()
         {
          let IndexSollicitud = '@ViewBag.IndexSollicitud'
          if (IndexSollicitud != '') {
             $("#solicitud").val(IndexSollicitud);
             }
-
         let tipoDoc = '@ViewBag.TipoDocumento';
         if (tipoDoc != '') {
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
             }
-
         let pasoFlujo = '@ViewBag.Paso';
             if (pasoFlujo > 0) {
                OpenNewFlujo();
                 $("#solicitud").val(IndexSollicitud);
         }
-
         let countDocAsociado = '@ViewBag.CountDocAsociado'
         if (countDocAsociado > 0)
         {
             OpenMensajeClienteModal();
         }
         });
-
     </script>
 
 }
-
