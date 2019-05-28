@@ -123,7 +123,7 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            Empleado[] Empleados = new Empleado[3];
+            Empleado[] Empleados = new Empleado[4];
 
             Empleados[0] = new Empleado
             {
@@ -163,7 +163,22 @@ namespace Legalizaciones.Web.Controllers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contraloria
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
+            };
+
+            Empleados[3] = new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "9.845.256.668",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
@@ -329,14 +344,26 @@ namespace Legalizaciones.Web.Controllers
                     OEmpleado.UnidadNegocio = "1";
                     OEmpleado.FechaCreacion = DateTime.Now;
                     break;
+
+
+                case "9.845.256.668":
+                    OEmpleado.Area = "Administracion Contabilidad";
+                    OEmpleado.Nombre = "Luz Marina";
+                    OEmpleado.Cedula = "9.845.256.668";
+                    OEmpleado.Direccion = "Calle 29 No. 13A - 15. Piso 10";
+                    OEmpleado.Ciudad = "Cucuta";
+                    OEmpleado.Telefono = "(1) 560 00100-3";
+                    OEmpleado.CargoId = 4;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
+                    OEmpleado.FechaCreacion = DateTime.Now;
+                    break;
             }
 
             var wresul = Json(OEmpleado);
             return Json(wresul);
         }
-
-
-
 
 
     }

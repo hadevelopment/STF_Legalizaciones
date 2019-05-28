@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Legalizaciones.Model.Workflow;
 using Legalizaciones.Web.Engine;
+using Legalizaciones.Web.Helpers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,7 @@ namespace Legalizaciones.Web.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
+            UNOEE erp = new UNOEE();
             Aprobacion aprobacion = new Aprobacion();
             EngineDb DB = new EngineDb();
 
@@ -30,6 +32,10 @@ namespace Legalizaciones.Web.Controllers
             if (!string.IsNullOrEmpty(usuarioCedula))
             {
                 aprobacion = DB.ObtenerSolicitudesPorAprobar(usuarioCedula);
+                foreach(var item in aprobacion.Anticipos)
+                {
+                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+                }
             }
 
             return View(aprobacion);

@@ -45,7 +45,7 @@ namespace Legalizaciones.Web.Helpers
 
         public Empleado getEmpleadoID(int IdEmpleado)
         {
-            Empleado[] Empleados = new Empleado[3];
+            Empleado[] Empleados = new Empleado[4];
 
 
             Empleados[0] = new Empleado
@@ -84,10 +84,25 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contraloria
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1"
+            };
+
+            Empleados[3] = new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "9.845.256.668",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
             };
 
 
@@ -96,7 +111,7 @@ namespace Legalizaciones.Web.Helpers
         }
         public Empleado getEmpleadoCedula(string cedula)
         {
-            Empleado[] Empleados = new Empleado[3];
+            Empleado[] Empleados = new Empleado[4];
 
             int ind = 1;
             switch (cedula)
@@ -108,6 +123,9 @@ namespace Legalizaciones.Web.Helpers
                     ind = 2;
                     break;
                 case "8.845.256.667":
+                    ind = 3;
+                    break;
+                case "9.845.256.668":
                     ind = 3;
                     break;
                 default:
@@ -152,12 +170,26 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contraloria
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1"
             };
 
+            Empleados[3] = new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "9.845.256.668",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
+            };
 
             return (Empleados.Where(e => e.Cedula == cedula).FirstOrDefault());
         }
@@ -241,15 +273,31 @@ namespace Legalizaciones.Web.Helpers
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contabilidad
+                CargoId = 3, // ROL Administracion Contraloria
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1"
             };
 
+            var Empleado4 = new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "9.845.256.668",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com"
+            };
+
             LisEmpleado.Add(Empleado1);
             LisEmpleado.Add(Empleado2);
             LisEmpleado.Add(Empleado3);
+            LisEmpleado.Add(Empleado4);
 
             return LisEmpleado;
 

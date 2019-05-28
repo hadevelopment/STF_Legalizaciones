@@ -117,7 +117,7 @@
                                                 <span class="fa fa-eye" title="Detalle"></span>
                                             </a>
 
-                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Finaliza"))
+                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Aproba"))
                                             {
                                                 <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
                                                     <span class="fa fa-pencil" title="Editar"></span>
