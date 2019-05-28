@@ -62,7 +62,7 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
-            Task <string> h = UsandoAsync();
+            Task<string> h = UseKactusAsync();
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -87,13 +87,14 @@ namespace Legalizaciones.Web.Controllers
             return View(model);
         }
 
-        private async Task<string> UsandoAsync()
-        {    //*******************************************************
-            //EnviarMensaje();
-            EngineStf Funcion = new EngineStf();
-            var h = await Funcion.UseKactusAsync();
-            return h;
-            //*****************************************************
+        private async Task<string> UseKactusAsync()
+        {
+            DateTime Fecha = DateTime.Now.AddDays(-1);
+            List<KactusEmpleado> KactusEmpleado = new List<KactusEmpleado>();
+            KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-06-05"), "intagata", "KqQ*O3XI*y");
+            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            return resultado;
         }
 
 
