@@ -110,6 +110,10 @@ namespace Legalizaciones.Web.Helpers
                 case "8.845.256.667":
                     ind = 3;
                     break;
+                default:
+                    ind = 3;
+                    cedula = "8.845.256.667";
+                    break;
             }
 
             Empleados[0] = new Empleado

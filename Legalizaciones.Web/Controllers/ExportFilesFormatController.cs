@@ -11,6 +11,7 @@ using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Legalizaciones.Interface.ISolicitud;
 using Legalizaciones.Model.Jerarquia;
+using Legalizaciones.Web.Helpers;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -124,11 +125,17 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public ActionResult ExportDatosSolicitudExcel()
         {
+            UNOEE erp = new UNOEE();
             List<Solicitud> lstSolicitudes = this.solicitudRepository.All().ToList();
             foreach (var item in lstSolicitudes)
             {
-                item.Empleado = empleadoRepository.All().FirstOrDefault(x => x.Cedula == item.EmpleadoCedula);
+                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
             }
+
+            //foreach (var item in lstSolicitudes)
+            //{
+            //    item.Empleado = empleadoRepository.All().FirstOrDefault(x => x.Cedula == item.EmpleadoCedula);
+            //}
 
             string sFileName = "Solicitudes.xls";
             string sWebRootFolder = Directory.GetCurrentDirectory() + "\\wwwroot\\files\\";
@@ -176,6 +183,7 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public ActionResult ExportDatosLegalizacionesExcel()
         {
+            UNOEE erp = new UNOEE();
             List<Legalizacion> lstLegalizaciones = this.legalizacionRepository.All().ToList();
             Solicitud solicitud;
             foreach (var item in lstLegalizaciones)
@@ -222,8 +230,10 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(4).SetCellValue(legalizacion.Banco.Nombre);
 
                     solicitud = solicitudRepository.All().FirstOrDefault(x => x.Id == legalizacion.SolicitudID);
-                    solicitud.Empleado = empleadoRepository.All()
-                        .FirstOrDefault(x => x.Cedula == solicitud.EmpleadoCedula);
+                    //solicitud.Empleado = empleadoRepository.All()
+                    //    .FirstOrDefault(x => x.Cedula == solicitud.EmpleadoCedula);
+
+                    solicitud.Empleado = erp.getEmpleadoCedula(solicitud.EmpleadoCedula);
 
                     row.CreateCell(5).SetCellValue(solicitud.Id);
                     row.CreateCell(6).SetCellValue(solicitud.FechaSolicitud.ToShortDateString());

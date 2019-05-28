@@ -55,10 +55,12 @@ namespace Legalizaciones.Web.Engine
 
                 var empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
 
+               
                 item.IdDocErp = Aleatorio(n);
                 item.ConsecutivoErp = Aleatorio(n + 2);
                 item.Beneficiario = empleado.Nombre;
                 list.Insert(n, item);
+                
                 n++;
             }
             return list;
