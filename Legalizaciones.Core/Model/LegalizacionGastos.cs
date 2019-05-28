@@ -63,7 +63,8 @@ namespace Legalizaciones.Model
         public Motivo Motivo { get; set; }
 
         public string Concepto{ get; set; }
-        public decimal Valor { get; set; }
+
+        public string  Valor { get; set; }
 
 
     }

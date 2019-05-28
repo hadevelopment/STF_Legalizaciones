@@ -14,7 +14,7 @@ namespace Legalizaciones.Web.Engine
     {
         public static string DefaultConnection { get; set; }
         private SqlConnection Conexion = new SqlConnection(EngineDb.DefaultConnection);
-
+        
 
         public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula)
         {
