@@ -51,7 +51,7 @@ namespace Legalizaciones.Web.Controllers
                 string aprobador = usuarioCedula + " - " + usuarioNombre;
                 bool result = DB.GestionAnticipo(Id, (int)TipoAccion.Aprobar, aprobador, "Aprobación de Anticipo");
 
-                if ( result )
+                if (result)
                 {
                     TempData["Alerta"] = "success - El anticipo ha sido aprobado exitosamente.";
                 }
@@ -70,7 +70,8 @@ namespace Legalizaciones.Web.Controllers
         /// </summary>
         /// <param name="Id">identificador del anticipo</param>
         /// <returns></returns>
-        public IActionResult RechazarAnticipo(int Id)
+        [Route("/Aprobacion/RechazarAnticipo/{Id}/{Motivo}")]
+        public IActionResult RechazarAnticipo(int Id, string Motivo)
         {
             EngineDb DB = new EngineDb();
 
@@ -79,11 +80,11 @@ namespace Legalizaciones.Web.Controllers
             if (!string.IsNullOrEmpty(usuarioCedula) && !string.IsNullOrEmpty(usuarioNombre))
             {
                 string aprobador = usuarioCedula + " - " + usuarioNombre;
-                bool result = DB.GestionAnticipo(Id, (int)TipoAccion.Rechazar, aprobador, "Rechazo de Anticipo");
+                bool result = DB.GestionAnticipo(Id, (int)TipoAccion.Rechazar, aprobador, Motivo);
 
                 if (result)
                 {
-                    TempData["Alerta"] = "success - El anticipo ha sido aprobado exitosamente.";
+                    TempData["Alerta"] = "success - El anticipo ha sido rechazado exitosamente.";
                 }
                 else
                 {

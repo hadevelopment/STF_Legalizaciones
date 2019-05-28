@@ -37,19 +37,19 @@
                     <div class="tab-pane active" id="tabAnticipo">
 
                         @*@if (Model.PasosAsignadosAnticipo.Count() > 0)
-                        {
-                            <div class="row">
-                                <span>Pasos asignados para Aprobación de Anticipo</span><br />
-                                @foreach (var item in Model.PasosAsignadosAnticipo)
-                                {
-                                    <div class="col-sm-2">
-                                        @item.Orden
-                                        <span>&nbsp;-&nbsp;</span>
-                                        @item.Descripcion
-                                    </div>
-                                }
-                            </div>
-                        }*@
+                            {
+                                <div class="row">
+                                    <span>Pasos asignados para Aprobación de Anticipo</span><br />
+                                    @foreach (var item in Model.PasosAsignadosAnticipo)
+                                    {
+                                        <div class="col-sm-2">
+                                            @item.Orden
+                                            <span>&nbsp;-&nbsp;</span>
+                                            @item.Descripcion
+                                        </div>
+                                    }
+                                </div>
+                            }*@
 
                         @* Solicitudes de Anticipos *@
                         <table id="tblAnticipos" class="table table-bordered table-hover myDataTable">
@@ -97,22 +97,27 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Monto)
                                             </td>
-                                            <td class='@(item.EstadoSolicitud.Descripcion.Contains("Finaliza") ? "fontGreen" : (item.EstadoSolicitud.Descripcion.Contains("Rechaza") ? "fontRed" : "" ) )'>
+                                            <td class='@(item.EstadoSolicitud.Descripcion.Contains("Aproba") ? "fontGreen" : (item.EstadoSolicitud.Descripcion.Contains("Rechaza") ? "fontRed" : "" ) )'>
                                                 @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.PasoFlujoSolicitud.Descripcion)
                                             </td>
                                             <td class="text-center">
-                                                @if (item.EstadoSolicitud.Descripcion != "Finalizada" && item.EstadoSolicitud.Descripcion != "Rechazada")
+                                                @if (item.EstadoSolicitud.Descripcion != "Aprobada" && item.EstadoSolicitud.Descripcion != "Rechazada")
                                                 {
-                                                    <a class="item-btn" asp-controller="Aprobacion" asp-action="AprobarAnticipo" asp-route-id="@item.Id">
+                                                    <a class="item-btn btnAprobar" data-toggle="modal" data-target="#modalAprobar" id="aprobar-@item.Id">
                                                         <span class="fa fa-check" title="Aprobar"></span>
                                                     </a>
 
-                                                    <a class="item-btn" asp-controller="Aprobacion" asp-action="RechazarAnticipo" asp-route-id="@item.Id">
+                                                    <a class="item-btn btnRechazar" data-toggle="modal" data-target="#modalRechazar" id="rechazar-@item.Id">
                                                         <span class="fa fa-close" title="Rechazar"></span>
                                                     </a>
+
+                                                    <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                        <span class="fa fa-eye" title="Detalle"></span>
+                                                    </a>
+
                                                 }
                                                 else
                                                 {
@@ -120,7 +125,6 @@
                                                         <span class="fa fa-eye" title="Detalle"></span>
                                                     </a>
                                                 }
-
                                             </td>
                                         </tr>
                                     }
@@ -229,6 +233,57 @@
     </div>
 </div>
 
+<!-- The modal -->
+<div class="modal fade" id="modalAprobar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Aprobación</h4>
+            </div>
+            <div class="modal-body">
+                ¿Realmente desea <b>aprobar</b> este Anticipo?
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "AprobarAnticipo", "Aprobacion", new { id = "" }, new { @id = "btnAprobarAnticipo", @class = "btn btn-primary" })
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- The modal -->
+<div class="modal fade" id="modalRechazar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header red">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Rechazo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    ¿Realmente desea <b>rechazar</b> este Anticipo?
+                </div>
+                <div class="col-sm-12">
+                    <label>Motivo</label>
+                    @Html.TextBox("Motivo", null, new {@id="txtMotivo", @class = "form-control", @placeholder = "Especifíque el motivo del rechazo...", @required = "required" })
+                    <br />
+                    @Html.ValidationMessage("Motivo", "Debe especificar el Motivo del Rechazo.", new { @id="msgMotivo", @class = "text-danger display-none" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "RechazarAnticipo", "Aprobacion", new { id = "" }, new { @id="btnRechazarAnticipo", @onclick = "return validaRechazo();", @class="btn btn-primary" } )
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script src="~/js/jquery-ui-1.8.2.js"></script>
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
@@ -289,10 +344,33 @@
                 });
             }
 
-
-
             $('.loading').hide();
+
+            $('.btnAprobar').click(function () {
+                //Acá seteo el id de la solicitud a aprobar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnAprobarAnticipo').attr('href', '/Aprobacion/AprobarAnticipo/' + id);
+            });
+
+            $('.btnRechazar').click(function () {
+                //Acá seteo el id de la solicitud a rechazar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnRechazarAnticipo').attr('href', '/Aprobacion/RechazarAnticipo/' + id);
+            });
         });
+
+        function validaRechazo() {
+            var href = $('#btnRechazarAnticipo').attr('href');
+            var motivo = $('#txtMotivo').val();
+            if (motivo != null && motivo != '') {
+                $('#btnRechazarAnticipo').attr('href', href + '/' + motivo)
+                $('#msgMotivo').addClass('display-none');
+                return true;
+            } else {
+                $('#msgMotivo').removeClass('display-none');
+                return false;
+            }
+        }
     </script>
 }
 

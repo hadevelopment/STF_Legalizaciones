@@ -96,12 +96,21 @@ namespace Legalizaciones.Web.Engine
                 n++;
             }
 
-            var finalizado = list.Where(m => m.Motivo.Contains("finalizado")).FirstOrDefault();
-            if(finalizado != null)
+            var rechazado = list.Where(m => m.Motivo.Contains("Rechazado")).FirstOrDefault();
+            if (rechazado != null)
             {
-                finalizado.Procesado = 1;
-                list = list.Where(m => m.Orden != finalizado.Orden).ToList();
-                list.Add(finalizado);
+                rechazado.Procesado = 3;
+                list = list.Where(m => m.Orden != rechazado.Orden).ToList();
+                list.Add(rechazado);
+                list = list.OrderBy(m => m.Orden).ToList();
+            }
+
+            var aprobado = list.Where(m => m.Motivo.Contains("Aprobado")).FirstOrDefault();
+            if(aprobado != null)
+            {
+                aprobado.Procesado = 1;
+                list = list.Where(m => m.Orden != aprobado.Orden).ToList();
+                list.Add(aprobado);
                 list = list.OrderBy(m => m.Orden).ToList();
             }
 

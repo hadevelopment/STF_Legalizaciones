@@ -62,6 +62,16 @@
                                             <span>@item.Descripcion</span>
                                         </div>
                                     }
+                                    else if (item.Procesado == 3) //Rechazado
+                                    {
+                                        <div class="col-sm-2 arrow_box">
+                                            <i class="fa fa-close red" aria-hidden="true"></i>
+                                            <br />
+                                            <small>Rechazada</small>
+                                            <br />
+                                            <span>@item.Descripcion</span>
+                                        </div>
+                                    }
                                     else //No Iniciado
                                     {
                                         <div class="col-sm-2 arrow_box">

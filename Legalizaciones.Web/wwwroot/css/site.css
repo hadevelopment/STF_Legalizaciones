@@ -219,6 +219,9 @@ body {
     .divFlujo i.orange {
         color: #da8c10;
     }
+    .divFlujo i.red {
+        color: #da1010;
+    }
     .divFlujo i.gray {
         color: gray;
     }
@@ -281,3 +284,14 @@ body {
     color: #a40610;
     font-weight: bold;
 }
+
+.modal-header.green {
+    background-color: #bbffbb;
+    border-bottom: 2px solid #5ebb5e;
+}
+
+.modal-header.red {
+    background-color: #ffbbbb;
+    border-bottom: 2px solid #bb5e5e;
+}
+

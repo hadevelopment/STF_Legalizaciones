@@ -23,7 +23,6 @@ namespace Legalizaciones.Web.Engine
             {
 
                 DataTable dataTabla = new DataTable();
-                SqlConnection Conexion = new SqlConnection(StringConexion);
                 using (Conexion)
                 {
                     Conexion.Open();
@@ -56,7 +55,6 @@ namespace Legalizaciones.Web.Engine
             {
 
                 DataTable dataTabla = new DataTable();
-                SqlConnection Conexion = new SqlConnection(StringConexion);
                 using (Conexion)
                 {
                     Conexion.Open();
@@ -89,7 +87,6 @@ namespace Legalizaciones.Web.Engine
         {
             List<string> documento = new List<string>();
             DataTable dataTabla = new DataTable();
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             using (Conexion)
             {
                 Conexion.Open();
@@ -106,7 +103,6 @@ namespace Legalizaciones.Web.Engine
 
         public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, string tipoSolicitud, int estatus = 1)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             List<DataAprobacion> dataList = new List<DataAprobacion>();
             using (Conexion)
             {
@@ -139,7 +135,6 @@ namespace Legalizaciones.Web.Engine
 
         public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, DataAprobacion model)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             List<DataAprobacion> dataList = new List<DataAprobacion>();
             using (Conexion)
             {
@@ -178,7 +173,6 @@ namespace Legalizaciones.Web.Engine
 
         public bool UpdatePasoFlujoAprobacion(string SpName, int id, string descripcion, string cedulaAprobador, string nombreAprobador, string emailAprobador, int orden = 0)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             bool resultado = false;
             using (Conexion)
             {
@@ -201,7 +195,6 @@ namespace Legalizaciones.Web.Engine
 
         public bool UpdatePasoFlujoAprobacion(string SpName, DataTable dt)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             SqlCommand command = new SqlCommand(SpName, Conexion);
             bool resultado = false;
             using (Conexion)
@@ -227,7 +220,6 @@ namespace Legalizaciones.Web.Engine
 
         public bool DeletePasoFlujoAprobacion(string SpName, int id)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             bool resultado = false;
             using (Conexion)
             {
@@ -245,7 +237,6 @@ namespace Legalizaciones.Web.Engine
 
         public int CountDocAsociado(string SpName, int id, string tipoDocumento)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             int resultado = -1;
             object obj = new object();
             using (Conexion)
@@ -267,7 +258,6 @@ namespace Legalizaciones.Web.Engine
         public DataTable GetPasoFlujoAprobacion(string SpName, string tipoDocumento)
         {
             DataTable dataTabla = new DataTable();
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             using (Conexion)
             {
                 Conexion.Open();
@@ -284,7 +274,6 @@ namespace Legalizaciones.Web.Engine
 
         public int ExistePasoFlujoAprobacion(string SpName, int orden, string tipoDocumento)
         {
-            SqlConnection Conexion = new SqlConnection(StringConexion);
             int resultado = 0;
             object obj = new object();
             using (Conexion)
@@ -300,7 +289,7 @@ namespace Legalizaciones.Web.Engine
                     resultado = Convert.ToInt32(obj);
                 Conexion.Close();
             }
-            return count;
+            return resultado;
 
         }
 
