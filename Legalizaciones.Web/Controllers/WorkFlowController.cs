@@ -157,6 +157,7 @@ namespace Legalizaciones.Web.Controllers
 
         private List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
         {
+            //System.Diagnostics.Process.Start("rasdial.exe", "VPNConnectionName VPNUsername VPNPassword");
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
             model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
