@@ -62,7 +62,7 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
-             AsincronoAsync();
+             Asincrono();
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -90,6 +90,11 @@ namespace Legalizaciones.Web.Controllers
         private async Task AsincronoAsync() {
             EngineStf Funcion = new EngineStf();
             string h = await Funcion.UseKactusAsync();
+        }
+        private void  Asincrono()
+        {
+            EngineStf Funcion = new EngineStf();
+            string h = Funcion.UseKactus();
         }
 
 

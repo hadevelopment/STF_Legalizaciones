@@ -150,6 +150,21 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
+        public string UseKactus()
+        {
+            string userVpn = EngineStf.UserVpn;
+            string passwordVpn = EngineStf.PasswordVpn;
+            string userWcf = EngineStf.UserWcf;
+            string passwordWcf = EngineStf.PasswordWcf;
+            System.Diagnostics.Process.Start("rasdial.exe", userVpn + " " + passwordVpn);
+            DateTime Fecha = DateTime.Now.AddDays(-1);
+            List<KactusEmpleado> KactusEmpleado = new List<KactusEmpleado>();
+            KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
+            var response = wsGhst2Client.ConsultarEmpleadosAsync(499, Fecha, userWcf, passwordWcf);
+            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            return resultado;
+        }
+
 
     }
 }
