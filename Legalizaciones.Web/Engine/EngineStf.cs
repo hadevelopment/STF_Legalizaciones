@@ -14,6 +14,10 @@ namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
     {
+        public static string UserVpn { get; set; }
+        public static string PasswordVpn { get; set; }
+        public static string UserWcf { get; set; }
+        public static  string PasswordWcf { get; set; }
 
         public List<InfoLegalizacion> ConvertirToListSolicitud(DataTable dt)
         {
