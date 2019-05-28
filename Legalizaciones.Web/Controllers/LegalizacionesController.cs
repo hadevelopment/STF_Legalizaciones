@@ -58,13 +58,11 @@ namespace Legalizaciones.Web.Controllers
             this.paisRepository = paisRepository;
             this.tasaRepository = tasaRepository;
             this.env = _env;
-        }
+        } 
 
         public IActionResult Index()
         {
-            //*******************************************************
-            EnviarMensaje();
-            //*****************************************************
+            Task <string> h = UsandoAsync();
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -88,6 +86,16 @@ namespace Legalizaciones.Web.Controllers
 
             return View(model);
         }
+
+        private async Task<string> UsandoAsync()
+        {    //*******************************************************
+            //EnviarMensaje();
+            EngineStf Funcion = new EngineStf();
+            var h = await Funcion.UseKactusAsync();
+            return h;
+            //*****************************************************
+        }
+
 
         [HttpPost]
         [Route("Filtrar")]
