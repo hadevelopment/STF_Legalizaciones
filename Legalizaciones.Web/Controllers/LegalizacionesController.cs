@@ -16,7 +16,7 @@ using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models.ViewModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
-using Legalizaciones.Model.Empresa;
+using KactusIntegration;
 using Microsoft.AspNetCore.Hosting;
 using Newtonsoft.Json.Linq;
 
@@ -62,7 +62,7 @@ namespace Legalizaciones.Web.Controllers
 
         public IActionResult Index()
         {
-             Asincrono();
+            AsincronoAsync();
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
@@ -89,14 +89,10 @@ namespace Legalizaciones.Web.Controllers
 
         private async Task AsincronoAsync() {
             EngineStf Funcion = new EngineStf();
-            string h = await Funcion.UseKactusAsync();
+            List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            KactusEmpleado = await Funcion.UseKactusAsync();
+            int n = 0;
         }
-        private void  Asincrono()
-        {
-            EngineStf Funcion = new EngineStf();
-            string h = Funcion.UseKactus();
-        }
-
 
         [HttpPost]
         [Route("Filtrar")]

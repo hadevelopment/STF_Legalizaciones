@@ -28,4 +28,5 @@ namespace Legalizaciones.Web.Models
         public string TipoSolicitud { get; set; }
         public int Id { get; set; }
     }
+ 
 }

@@ -1,16 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Legalizaciones.Web.Engine;
-using Legalizaciones.Web.Models;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Http;
-
-namespace Legalizaciones.Web.Controllers
-{
-    public class WorkFlowController : Controller
+ public class WorkFlowController : Controller
     {
         [HttpGet]
         public IActionResult Index(AprobacionDocumento model, string tipoDocumento = "", string addAprobador = "", string addMail = "",
@@ -33,7 +21,7 @@ namespace Legalizaciones.Web.Controllers
             }
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null
+            if (tipoDocumento != string.Empty  && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null 
                && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;

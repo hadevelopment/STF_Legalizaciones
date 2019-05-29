@@ -4,18 +4,17 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using System.Xml;
 using Legalizaciones.Model;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
-
-
+using Newtonsoft.Json;
+using KactusIntegration;
 
 namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
     {
-        public static string UserVpn { get; set; }
-        public static string PasswordVpn { get; set; }
         public static string UserWcf { get; set; }
         public static  string PasswordWcf { get; set; }
 
@@ -91,7 +90,7 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
-
+ 
         public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
         {
             DataAprobacion Item = new DataAprobacion()
@@ -135,36 +134,30 @@ namespace Legalizaciones.Web.Engine
 
         }
 
-        public async Task<string> UseKactusAsync()
+        public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
         {
-            string userVpn = EngineStf.UserVpn;
-            string passwordVpn = EngineStf.PasswordVpn;
             string userWcf = EngineStf.UserWcf;
             string passwordWcf = EngineStf.PasswordWcf;
-            System.Diagnostics.Process.Start("rasdial.exe", userVpn + " " + passwordVpn);
-            DateTime Fecha = DateTime.Now.AddDays(-1);
-            List<KactusEmpleado> KactusEmpleado = new List<KactusEmpleado>();
+            DateTime Fecha = DateTime.Now.Date.AddDays(-1);
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Fecha, userWcf, passwordWcf);
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
             string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-            return resultado;
+            XmlCreate(resultado);
+            List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            KactusEmpleado = response.ToList();
+            return KactusEmpleado;
         }
 
-        public string UseKactus()
+        private void XmlCreate (string cadena)
         {
-            string userVpn = EngineStf.UserVpn;
-            string passwordVpn = EngineStf.PasswordVpn;
-            string userWcf = EngineStf.UserWcf;
-            string passwordWcf = EngineStf.PasswordWcf;
-            System.Diagnostics.Process.Start("rasdial.exe", userVpn + " " + passwordVpn);
-            DateTime Fecha = DateTime.Now.AddDays(-1);
-            List<KactusEmpleado> KactusEmpleado = new List<KactusEmpleado>();
-            KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
-            var response = wsGhst2Client.ConsultarEmpleadosAsync(499, Fecha, userWcf, passwordWcf);
-            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-            return resultado;
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            doc.PreserveWhitespace = true;
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore(xmlDeclaration, root);
+            doc = JsonConvert.DeserializeXmlNode(cadena);
+            int n = 0;
         }
-
 
     }
 }

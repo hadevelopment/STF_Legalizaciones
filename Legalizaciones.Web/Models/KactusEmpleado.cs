@@ -7,122 +7,122 @@ namespace Legalizaciones.Web.Models
 {
     public class KactusEmpleado
     {
-        private string CargoField;
+        private string Cargo;
 
-        private string CargoEmpleadoField;
+        private string CargoEmpleado;
 
-        private string CelularField;
+        private string Celular;
 
-        private string CentroCostoField;
+        private string CentroCosto;
 
-        private string CodCiudadExpedicionField;
+        private string CodCiudadExpedicion;
 
-        private string CodCiudadResidenciaField;
+        private string CodCiudadResidencia;
 
-        private string CodDeptoExpedicionField;
+        private string CodDeptoExpedicion;
 
-        private string CodDeptoResidenciaField;
+        private string CodDeptoResidencia;
 
-        private long CodTipoEspPersonaPreliqField;
+        private long CodTipoEspPersonaPreliq;
 
-        private long CodTipoPersonaField;
+        private long CodTipoPersona;
 
-        private long CodUbicacionField;
+        private long CodUbicacion;
 
-        private string CodigoAreaField;
+        private string CodigoArea;
 
-        private short CodigoEmpresaField;
+        private short CodigoEmpresa;
 
-        private string CodigoGrupoField;
+        private string CodigoGrupo;
 
-        private string CodigoNivelField;
+        private string CodigoNivel;
 
-        private int CodigoNivel1Field;
+        private int CodigoNivel1;
 
-        private int CodigoNivel2Field;
+        private int CodigoNivel2;
 
-        private int CodigoNivel3Field;
+        private int CodigoNivel3;
 
-        private int CodigoNivel4Field;
+        private int CodigoNivel4;
 
-        private int CodigoNivel5Field;
+        private int CodigoNivel5;
 
-        private int CodigoNivel6Field;
+        private int CodigoNivel6;
 
-        private int CodigoNivel7Field;
+        private int CodigoNivel7;
 
-        private string DireccionField;
+        private string Direccion;
 
-        private string EmailField;
+        private string Email;
 
-        private string EpsField;
+        private string Eps;
 
-        private string EscalaSalarialField;
+        private string EscalaSalarial;
 
-        private string EstadoEmpleadoField;
+        private string EstadoEmpleado;
 
-        private string ExtensionCompaniaField;
+        private string ExtensionCompania;
 
-        private System.DateTime FecActCargoField;
+        private System.DateTime FecActCargo;
 
-        private System.DateTime FecActContrField;
+        private System.DateTime FecActContr;
 
-        private string FechaInicioContratoField;
+        private string FechaInicioContrato;
 
-        private System.DateTime FechaNacimientoField;
+        private System.DateTime FechaNacimiento;
 
-        private string GanaExtrasField;
+        private string GanaExtras;
 
-        private string GeneroField;
+        private string Genero;
 
-        private string IdentificacionExternaField;
+        private string IdentificacionExterna;
 
-        private string NombreNivelField;
+        private string NombreNivel;
 
-        private string NombreNivel1Field;
+        private string NombreNivel1;
 
-        private string NombreNivel2Field;
+        private string NombreNivel2;
 
-        private string NombreNivel3Field;
+        private string NombreNivel3;
 
-        private string NombreNivel4Field;
+        private string NombreNivel4;
 
-        private string NombreNivel5Field;
+        private string NombreNivel5;
 
-        private string NombreNivel6Field;
+        private string NombreNivel6;
 
-        private string NombreNivel7Field;
+        private string NombreNivel7;
 
-        private string NumeroContratoField;
+        private string NumeroContrato;
 
-        private long NumeroDeIdentificacionField;
+        private long NumeroDeIdentificacion;
 
-        private string PrimerApellidoField;
+        private string PrimerApellido;
 
-        private string PrimerNombreField;
+        private string PrimerNombre;
 
-        private string PuedeSerVisitadoField;
+        private string PuedeSerVisitado;
 
-        private string RhField;
+        private string Rh;
 
-        private string SegundoApellidoField;
+        private string SegundoApellido;
 
-        private string SegundoNombreField;
+        private string SegundoNombre;
 
-        private string TelefonoField;
+        private string Telefono;
 
-        private string TemporalField;
+        private string Temporal;
 
-        private string TipoContratistaField;
+        private string TipoContratista;
 
-        private string TipoDeIdentificacionField;
+        private string TipoDeIdentificacion;
 
-        private string TipoDeSangreField;
+        private string TipoDeSangre;
 
-        private bool TitularField;
+        private bool Titular;
 
-        private string ValidoParaLiqNominaField;
+        private string ValidoParaLiqNomina;
 
-        private long VencimientoAccionField;
+        private long VencimientoAccion;
     }
 }
