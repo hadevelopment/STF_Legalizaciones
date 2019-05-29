@@ -436,6 +436,13 @@ function validarGastos() {
     var monto = $("#Monto").val();
     $('#monto').val('');
 
+    if (monto == 0)
+    {
+        $("#mensajeGastos").text("Monto no puede estar en cero.");
+        $('#mensajeValidacionGastos').show("slow");
+        return false;
+    }
+    
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
             monto = CalcularGastoComida();
