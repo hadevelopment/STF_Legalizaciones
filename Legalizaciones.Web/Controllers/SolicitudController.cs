@@ -490,7 +490,11 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
             List<Solicitud> solicitudes = solicitudRepository.All()
-                .Where(a => a.FechaCreacion >= fechaDesde && a.FechaCreacion <= fechaHasta).ToList();
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).ToList();
+            foreach (var item in solicitudes)
+            {
+                item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);
+            }
             return View("Index", solicitudes);
         }
 
