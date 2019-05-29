@@ -101,6 +101,41 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
+
+        public string [] Destino (string SpName)
+        {
+            DataTable dataTabla = new DataTable();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            EngineStf Funcion = new EngineStf();
+            string [] destino = Funcion.Destino(dataTabla);
+            return destino;
+        }
+
+        public Monedas [] Moneda (string SpName)
+        {
+            DataTable dataTabla = new DataTable();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            EngineStf Funcion = new EngineStf();
+            Monedas [] moneda = Funcion.Moneda(dataTabla);
+            return moneda;
+        }
+
         public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, string tipoSolicitud, int estatus = 1)
         {
             List<DataAprobacion> dataList = new List<DataAprobacion>();

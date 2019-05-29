@@ -245,6 +245,35 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
+        public  string [] Destino (DataTable dt)
+        {
+            string[] destino = new string[dt.Rows.Count];
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                if (row[0] != DBNull.Value)
+                    destino[n] = row[0].ToString();
+                n++;
+            }
+            return destino;
+        }
+
+        public Monedas[] Moneda (DataTable dt)
+        {
+            Monedas [] moneda = new Monedas[dt.Rows.Count];
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                Monedas Item = new Monedas();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Moneda = Convert.ToString(row[1]);
+                n++;
+            }
+            return moneda;
+        }
+
 
         public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
         {

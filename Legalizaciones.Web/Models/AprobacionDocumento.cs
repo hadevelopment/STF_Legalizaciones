@@ -28,4 +28,16 @@ namespace Legalizaciones.Web.Models
         public string TipoSolicitud { get; set; }
         public int Id { get; set; }
     }
+
+    public class Destinos
+    {
+        public int Id { get; set; }
+        public string Destino { get; set; }
+    }
+
+    public class Monedas
+    {
+        public int Id { get; set; }
+        public string Moneda { get; set; }
+    }
 }

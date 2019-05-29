@@ -66,7 +66,64 @@
         var cedula = $("#Empleado2 option:selected").val();
         document.getElementById("cedula").value = cedula;
     }); 
+
+
+    $("#Destino").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+    var arrayDestino = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetDestino",
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Destino").empty();
+            $('#Destino').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayDestino.push(value);
+                $('#Destino').append('<option  value="' + value.id + '">' + value.destino + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+
+    $("#Moneda").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+    var arrayMoneda = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetMoneda",
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Moneda").empty();
+            $('#Moneda').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayMoneda.push(value);
+                $('#Moneda').append('<option  value="' + value.id + '">' + value.moneda + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    }); 
 });
+
+
 
  /*function TipoSolicitudCambio() {
     const obj = document.getElementById('solicitud');

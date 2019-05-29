@@ -12,10 +12,10 @@ namespace Legalizaciones.Web.Controllers
     public class WorkFlowController : Controller
     {
         [HttpGet]
-        public IActionResult Index(AprobacionDocumento model ,string tipoDocumento = "", string addAprobador = "", string addMail = "", 
-                                    string empleado = "", string descripcion = "", int paso = 0, string clear = "",string addPaso ="" )
+        public IActionResult Index(AprobacionDocumento model, string tipoDocumento = "", string addAprobador = "", string addMail = "",
+                                    string empleado = "", string descripcion = "", int paso = 0, string clear = "", string addPaso = "")
         {
-             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
+            if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
 
             model = GetTipoSolicitudes(model);
@@ -32,7 +32,7 @@ namespace Legalizaciones.Web.Controllers
             }
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null 
+            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null
                                                                       && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;
@@ -60,7 +60,7 @@ namespace Legalizaciones.Web.Controllers
                 }
 
                 if (model.FlujoAprobacion != null)
-                ViewBag.Paso = model.FlujoAprobacion.Count + 1;
+                    ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
             //AGREGAR PASO AL FLUJO DE APROBACION
             if (addPaso != string.Empty)
@@ -85,18 +85,18 @@ namespace Legalizaciones.Web.Controllers
                 ViewBag.Paso = 0;
                 ViewBag.TipoDocumento = null;
                 model.FlujoAprobacion = null;
-            } 
+            }
             //ELIMINACION DE PASO EN EL FLUJO DE APROBACION
             if (model.CountDocAsociado > 0)
             {
                 ViewBag.CountDocAsociado = model.CountDocAsociado;
             }
-           
+
             return View(model);
         }
 
         [HttpPost]
-        public IActionResult Index(string tipo = "" , int n = 0)
+        public IActionResult Index(string tipo = "", int n = 0)
         {
             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
@@ -122,10 +122,10 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public  IActionResult UpdateFlujo( int id = 0 ,int orden = 0 ,string descripcionT = "" , string nombre = "", string email ="" , string cedula ="", string type ="" )
+        public IActionResult UpdateFlujo(int id = 0, int orden = 0, string descripcionT = "", string nombre = "", string email = "", string cedula = "", string type = "")
         {
             EngineDb Metodo = new EngineDb();
-            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion",id,descripcionT,cedula,nombre,email); 
+            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", id, descripcionT, cedula, nombre, email);
             AprobacionDocumento model = new AprobacionDocumento();
             model.TipoSeleccionado = type;
             return RedirectToAction("Index", "WorkFlow", model);
@@ -137,7 +137,7 @@ namespace Legalizaciones.Web.Controllers
             EngineDb Metodo = new EngineDb();
             AprobacionDocumento model = new AprobacionDocumento();
             model.TipoSeleccionado = typee;
-            model.CountDocAsociado = Metodo.CountDocAsociado("Sp_GetCountDocAsociadoPaso",ide,typee);
+            model.CountDocAsociado = Metodo.CountDocAsociado("Sp_GetCountDocAsociadoPaso", ide, typee);
             if (model.CountDocAsociado > 0)
             {
                 return RedirectToAction("Index", "WorkFlow", model);
@@ -148,7 +148,7 @@ namespace Legalizaciones.Web.Controllers
             return RedirectToAction("Index", "WorkFlow", model);
         }
 
-        private AprobacionDocumento  GetTipoSolicitudes(AprobacionDocumento model)
+        private AprobacionDocumento GetTipoSolicitudes(AprobacionDocumento model)
         {
             Engine.EngineDb Metodo = new EngineDb();
             model.TipoSolicitud = Metodo.TiposDocumentos("Sp_GetTiposSolicitud");
@@ -162,5 +162,31 @@ namespace Legalizaciones.Web.Controllers
             model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
             return model;
         }
+
+        [HttpGet]
+        public JsonResult GetDestino()
+        {
+            EngineDb Metodo = new EngineDb();
+            string[] destino = Metodo.Destino("Sp_GetDestino");
+            Destinos[] List = new Destinos[destino.Length];
+            for (int i = 0; i <= destino.Length-1;i++)
+            {
+                Destinos K = new Destinos();
+                K.Id = i + 1;
+                K.Destino = destino[i];
+                List[i] = K;
+            }
+            return Json(List);
+        }
+
+        [HttpGet]
+        public JsonResult GetMoneda()
+        {
+            EngineDb Metodo = new EngineDb();
+            Monedas[] List = Metodo.Moneda("Sp_GetMoneda");
+            return Json(List);
+        }
+
+
     }
 }

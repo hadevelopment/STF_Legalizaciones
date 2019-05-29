@@ -34,7 +34,7 @@
 
                     <div class="col-md-12 pb-2">
                         <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                        <select id="solicitud" name="solicitud" placeHolder="Seleccione..." style="width:20%;height:auto; font-size:16px;">
+                        <select id="solicitud" name="solicitud" placeHolder="Seleccione..." style="width:40%;height:30px; font-size:16px;">
                             @{
                                 int n = 0;
                                 foreach (var type in Model.TipoSolicitud)
@@ -138,6 +138,30 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12 pb-2">
+                            <label>Destino</label>
+                            <select id="Destino" name="Destino"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <label>Moneda</label>
+                            <select id="Moneda" name="Monedao"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <label>Monto Minimo</label>
+                            <input type="number" id="Minimo" name="Minimo" class="form-control" maxlength="12" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
+                            <label>Monto Maximo</label>
+                            <input type="number" id="Maximo" name="Maximo" class="form-control" maxlength="12" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 pb-2">
                             <label>Empleado</label>
                             <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
                         </div>
@@ -185,7 +209,7 @@
                             <input type="hidden" id="addAprobador" name="addAprobador" />
                             <input type="hidden" id="addMail" name="addMail" />
                             <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
-                            <input type ="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
+                            <input type="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
                         </div>
 
                     </div>
