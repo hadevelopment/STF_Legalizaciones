@@ -489,11 +489,19 @@ namespace Legalizaciones.Web.Controllers
         [Route("Filtrar")]
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
+            if (fechaDesde > fechaHasta)
+            {
+                TempData["Alerta"] = "error - El rango de fechas no es valido";
+                return RedirectToAction("Index", "Solicitud");
+            }
+
+            UNOEE erp = new UNOEE();
             List<Solicitud> solicitudes = solicitudRepository.All()
-                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).ToList();
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).OrderByDescending(x => x.FechaCreacion).ToList();
             foreach (var item in solicitudes)
             {
                 item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);
+                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
             }
             return View("Index", solicitudes);
         }
