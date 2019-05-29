@@ -167,15 +167,7 @@ namespace Legalizaciones.Web.Controllers
         public JsonResult GetDestino()
         {
             EngineDb Metodo = new EngineDb();
-            string[] destino = Metodo.Destino("Sp_GetDestino");
-            Destinos[] List = new Destinos[destino.Length];
-            for (int i = 0; i <= destino.Length-1;i++)
-            {
-                Destinos K = new Destinos();
-                K.Id = i + 1;
-                K.Destino = destino[i];
-                List[i] = K;
-            }
+            List<Destinos> List = Metodo.Destino("Sp_GetDestino");
             return Json(List);
         }
 

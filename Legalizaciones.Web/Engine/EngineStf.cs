@@ -245,14 +245,18 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
-        public  string [] Destino (DataTable dt)
+        public List<Destinos> Destino (DataTable dt)
         {
-            string[] destino = new string[dt.Rows.Count];
+            List<Destinos> destino = new List<Destinos> ();
             int n = 0;
             foreach (DataRow row in dt.Rows)
             {
+                Destinos Item = new Destinos();
                 if (row[0] != DBNull.Value)
-                    destino[n] = row[0].ToString();
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Destino = Convert.ToString(row[1]);
+                destino.Insert(n, Item);
                 n++;
             }
             return destino;
@@ -269,6 +273,7 @@ namespace Legalizaciones.Web.Engine
                     Item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
                     Item.Moneda = Convert.ToString(row[1]);
+                moneda[n] = Item;
                 n++;
             }
             return moneda;

@@ -102,7 +102,7 @@ namespace Legalizaciones.Web.Engine
         }
 
 
-        public string [] Destino (string SpName)
+        public List<Destinos> Destino (string SpName)
         {
             DataTable dataTabla = new DataTable();
             using (Conexion)
@@ -115,7 +115,7 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Close();
             }
             EngineStf Funcion = new EngineStf();
-            string [] destino = Funcion.Destino(dataTabla);
+            List<Destinos> destino = Funcion.Destino(dataTabla);
             return destino;
         }
 
