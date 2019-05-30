@@ -377,6 +377,13 @@ namespace Legalizaciones.Web.Controllers
         [Route("RegistrarSTDC")]
         public ActionResult RegistrarSTDC()
         {
+            var cargoID = HttpContext.Session.GetString("Usuario_Cargo");
+            if (cargoID.Equals("1"))
+            {
+                TempData["Alerta"] = "error - No tienes acceso a esta opcion";
+                return RedirectToAction("Index", "Home");
+            }
+
             var wSolcitudTDC = new SolicitudTDCViewModel();
             return View(wSolcitudTDC);
         }
