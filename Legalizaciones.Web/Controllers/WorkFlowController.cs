@@ -172,10 +172,10 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpGet]
-        public JsonResult GetMoneda()
+        public JsonResult GetMoneda(int id)
         {
             EngineDb Metodo = new EngineDb();
-            Monedas[] List = Metodo.Moneda("Sp_GetMoneda");
+            Monedas[] List = Metodo.Moneda("Sp_GetMoneda",id);
             return Json(List);
         }
 
