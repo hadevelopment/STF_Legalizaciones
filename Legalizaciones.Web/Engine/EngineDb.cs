@@ -321,7 +321,7 @@ namespace Legalizaciones.Web.Engine
             return dataTabla;
         }
 
-        public int ExistePasoFlujoAprobacion(string SpName, int orden, string tipoDocumento)
+        public int ExistePasoFlujoAprobacion(string SpName, int orden, string tipoDocumento,float montoMinimo,float montoMaximo)
         {
             int resultado = 0;
             object obj = new object();
@@ -333,6 +333,8 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@Orden", orden);
                 command.Parameters.AddWithValue("@TipoDocumento", tipoDocumento);
+                command.Parameters.AddWithValue("@MontoMinimo", montoMinimo);
+                command.Parameters.AddWithValue("@MontoMaximo", montoMaximo);
                 obj = command.ExecuteScalar();
                 if (obj != null)
                     resultado = Convert.ToInt32(obj);

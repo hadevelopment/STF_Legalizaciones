@@ -386,9 +386,15 @@
         if (countDocAsociado > 0) {
             OpenMensajeClienteModal('Existen documentos Asociados a este flujo, No se puede eliminar');
         }
+
         let rangoError = '@ViewBag.RangoError';
          if (rangoError!='') {
             OpenMensajeClienteModal('@ViewBag.RangoError');
+        }
+
+        let campoRequerido = '@ViewBag.CampoRequerido';
+        if (campoRequerido != '') {
+            OpenMensajeClienteModal('@ViewBag.CampoRequerido');
            }
         });
 

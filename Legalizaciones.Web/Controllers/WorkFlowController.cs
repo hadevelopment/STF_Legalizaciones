@@ -32,8 +32,7 @@ namespace Legalizaciones.Web.Controllers
             }
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
-            if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null
-                                                                        && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
+            if (tipoDocumento != string.Empty && tipoDocumento != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;
                 int update = 0;
@@ -49,7 +48,7 @@ namespace Legalizaciones.Web.Controllers
                     update = 0;
                 }
 
-                int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento);
+                int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento,montoMinimo,montoMaximo);
                 if (existePaso == 0)
                 {
                     if (paso == 1)
@@ -66,7 +65,10 @@ namespace Legalizaciones.Web.Controllers
                     }
                     else
                     {
-                        model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso , destinoId, montoMinimo, montoMaximo);
+                        if ( addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null && empleado != string.Empty && empleado != null)
+                            model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso , destinoId, montoMinimo, montoMaximo);
+                        else
+                            ViewBag.CampoRequerido = "Todos los campos son requeridos";
                     }
               
                 }
@@ -77,6 +79,10 @@ namespace Legalizaciones.Web.Controllers
 
                 if (model.FlujoAprobacion != null)
                     ViewBag.Paso = model.FlujoAprobacion.Count + 1;
+            }
+            else
+            {
+                ViewBag.CampoRequerido = "Todos los campos son requeridos";
             }
             //AGREGAR PASO AL FLUJO DE APROBACION
             if (addPaso != string.Empty)

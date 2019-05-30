@@ -166,6 +166,13 @@ function SetNuevoFlujo()
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    var paso = $('#paso').val();
+    if (paso === 0 || paso === '') {
+        $("#Empleado").prop("disabled", true);
+    }
+    else {
+        $("#Empleado").prop("disabled", false);
+    }
     if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
