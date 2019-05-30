@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-    $('#Moneda').hide();
+  
+
     var arrayEmpleadoPermiso = [];
     $.ajax({
         type: "GET",
@@ -95,11 +96,13 @@
         }
     });
 
-    $("#Moneda").select2({
+   /* $("#Moneda").select2({
         multiple: false,
         placeholder: 'Seleccione...'
-    });
-   
+    });*/
+
+    $('#Moneda').hide();
+    $('#Currency').hide();
 });
 
 
@@ -129,7 +132,7 @@ $('#Destino').on('change', function (e) {
     var destino = obj.options[obj.selectedIndex].text;
     var indice = document.getElementById("Destino").selectedIndex;
     $('#destinoId').val(indice);
-    var arrayMoneda = [];
+    /*var arrayMoneda = [];
     $.ajax({
         type: "GET",
         url: "/WorkFlow/GetMoneda",
@@ -151,12 +154,14 @@ $('#Destino').on('change', function (e) {
         complete: function () {
             // console.log(arrayEmpleadoPermiso);
         }
-    }); 
+    });*/ 
 });
 
 
 function SetNuevoFlujo()
 {
+    document.getElementById('montoMaximo').readOnly = false;
+    document.getElementById('montoMinimo').readOnly = false;
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
