@@ -124,6 +124,7 @@ $('#solicitud').on('change', function (e) {
 });
 
 $('#Destino').on('change', function (e) {
+ 
     const ob = document.getElementById('Destino');
     var indice = document.getElementById("Destino").selectedIndex;
     var arrayMoneda = [];
