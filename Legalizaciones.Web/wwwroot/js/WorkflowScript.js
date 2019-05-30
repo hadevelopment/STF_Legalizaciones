@@ -167,7 +167,7 @@ function SetNuevoFlujo()
     document.getElementById('tipoDocumento').value = tipo;
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     var paso = $('#paso').val();
-    if (paso === 0 || paso === '') {
+    if ( paso == '' || paso == 0) {
         $("#Empleado").prop("disabled", true);
     }
     else {
