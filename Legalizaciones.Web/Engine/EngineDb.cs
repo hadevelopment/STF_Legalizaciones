@@ -119,7 +119,7 @@ namespace Legalizaciones.Web.Engine
             return destino;
         }
 
-        public Monedas [] Moneda (string SpName)
+        public Monedas [] Moneda (string SpName,int id)
         {
             DataTable dataTabla = new DataTable();
             using (Conexion)
@@ -127,6 +127,8 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Open();
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@id", id);
                 SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
                 dataAdaptador.Fill(dataTabla);
                 Conexion.Close();

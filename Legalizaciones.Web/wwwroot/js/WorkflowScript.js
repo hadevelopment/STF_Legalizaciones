@@ -99,28 +99,7 @@
         multiple: false,
         placeholder: 'Seleccione...'
     });
-    var arrayMoneda = [];
-    $.ajax({
-        type: "GET",
-        url: "/WorkFlow/GetMoneda",
-        dataType: "json",
-        beforeSend: function () {
-            // console.log("Before Send Request");
-        },
-        success: function (data) {
-            console.log(data);
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $("#Moneda").empty();
-            $('#Moneda').append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arrayMoneda.push(value);
-                $('#Moneda').append('<option  value="' + value.id + '">' + value.moneda + '</option>');
-            });
-        },
-        complete: function () {
-            // console.log(arrayEmpleadoPermiso);
-        }
-    }); 
+   
 });
 
 
@@ -142,6 +121,34 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
     $('#flow').css('visibility', 'hidden'); 
+});
+
+$('#Destino').on('change', function (e) {
+    const ob = document.getElementById('Destino');
+    var indice = document.getElementById("Destino").selectedIndex;
+    var arrayMoneda = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetMoneda",
+        data: { id: indice},
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Moneda").empty();
+            $('#Moneda').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayMoneda.push(value);
+                $('#Moneda').append('<option  value="' + value.id + '">' + value.moneda + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    }); 
 });
 
 
