@@ -197,6 +197,10 @@
         $('#divZonas').addClass('display-none');
     }
 
+    function validarFormTDC() {
+        return false;
+    }
+
     //************************************   I N I C I O  ************************************
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
      * Estado - Pais al cambiar destino o al cambiar pais */

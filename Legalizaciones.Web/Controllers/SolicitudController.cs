@@ -383,47 +383,51 @@ namespace Legalizaciones.Web.Controllers
 
         [HttpPost]
         [Route("RegistrarSTDC")]
-        public ActionResult RegistrarSTDC(SolicitudTDCViewModel solicitudTDC)
+        [ValidateAntiForgeryToken]
+        public ActionResult RegistrarSTDC([Bind] SolicitudTDCViewModel solicitudTDC)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var OSolicitud = new Solicitud
+                try
                 {
-                    NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now),
-                    EmpleadoCedula = solicitudTDC.Cedula,
-                    FechaCreacion = DateTime.Now,
-                    Estatus = 1,
-                    TipoSolicitudID = 2,
-                    FechaVencimiento = DateTime.Now,
-                    Concepto = "Solicitud de Anticipo Con TDC",
-                    DestinoID = 1,
-                    ZonaID = 1,
-                    CentroOperacionId = 1,
-                    UnidadNegocioId = 1,
-                    CentroCostoId = 1,
-                    FechaDesde = DateTime.Now,
-                    FechaHasta = DateTime.Now,
-                    MonedaId = 1,
-                    FechaSolicitud = DateTime.Now,
-                    Banco = solicitudTDC.Banco,
-                    Extracto = solicitudTDC.Extracto,
-                    Monto = solicitudTDC.Monto,
-                    EstadoId = 1,
+                    var OSolicitud = new Solicitud
+                    {
+                        NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now),
+                        EmpleadoCedula = solicitudTDC.Cedula,
+                        FechaCreacion = DateTime.Now,
+                        Estatus = 1,
+                        TipoSolicitudID = 2,
+                        FechaVencimiento = DateTime.Now,
+                        Concepto = "Solicitud de Anticipo Con TDC",
+                        DestinoID = 1,
+                        ZonaID = 1,
+                        CentroOperacionId = 1,
+                        UnidadNegocioId = 1,
+                        CentroCostoId = 1,
+                        FechaDesde = DateTime.Now,
+                        FechaHasta = DateTime.Now,
+                        MonedaId = 1,
+                        FechaSolicitud = DateTime.Now,
+                        Banco = solicitudTDC.Banco,
+                        Extracto = solicitudTDC.Extracto,
+                        Monto = solicitudTDC.Monto,
+                        EstadoId = 1,
 
-                };
+                    };
 
-                solicitudRepository.Insert(OSolicitud);
+                    solicitudRepository.Insert(OSolicitud);
 
 
-                TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
-                return RedirectToAction("RegistrarSTDC", "Solicitud");
+                    TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
+                    return RedirectToAction("RegistrarSTDC", "Solicitud");
+                }
+                catch (System.Exception e)
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+                    return View(solicitudTDC);
+                }
             }
-            catch (System.Exception e)
-            {
-                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
-                return View(solicitudTDC);
-            }
-
+            return View();
         }
 
 
