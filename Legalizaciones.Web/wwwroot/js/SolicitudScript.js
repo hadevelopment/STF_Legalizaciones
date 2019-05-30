@@ -498,24 +498,20 @@ function validarGastos() {
                     </td>
                 </tr>`;
 
-                alert("OK1");
                 $('#Items').append(row);
 
-                alert("OK2");
 
                 //Suma de Montos de Gastos
                 var sum = 0;
                 $('td.monto').each(function () {
                     sum += parseFloat(this.innerHTML);
                 });
-                alert("OK3");
 
                 var v = String(sum);
                 v = v.replace('.', ',');
                 $("#txMontoT").val(v);
                 $('#hdfMontoSolicitud').val($("#txMontoT").val());
 
-                alert("OK4");
 
             } else {
                     $("#mensajeGastos").text("El monto debe ser superior a 0.");
