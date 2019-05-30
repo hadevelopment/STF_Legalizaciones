@@ -36,7 +36,7 @@
                     </div>
                     <div class="col-md-12">
                         @*@Html.TextBoxFor(model => model.Cedula, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese",})*@
-                        <input asp-for="Cedula" class="form-control" />
+                        <input asp-for="Cedula" class="form-control" type="number" maxlength="10" />
                         <span asp-validation-for="Cedula" class="text-danger"></span>
                     </div>
 
