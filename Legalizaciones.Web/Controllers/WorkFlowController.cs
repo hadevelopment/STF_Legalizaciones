@@ -18,6 +18,7 @@ namespace Legalizaciones.Web.Controllers
             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
 
+            bool montosCorrectos = true;
             model = GetTipoSolicitudes(model);
             if (HttpContext.Session.GetString("IndiceSolicitud") != string.Empty && HttpContext.Session.GetString("IndiceSolicitud") != null)
                 ViewBag.IndexSollicitud = HttpContext.Session.GetString("IndiceSolicitud");
@@ -60,6 +61,7 @@ namespace Legalizaciones.Web.Controllers
                         }
                         else
                         {
+                            montosCorrectos = false;
                             ViewBag.RangoError = "El monto maximo debe ser mayor al minimo";
                         }
                     }
@@ -77,13 +79,10 @@ namespace Legalizaciones.Web.Controllers
                     model.FlujoAprobacion = GetAprobadores(tipoDocumento);
                 }
 
-                if (model.FlujoAprobacion != null)
+                if (model.FlujoAprobacion != null && montosCorrectos )
                     ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
-            else
-            {
-                ViewBag.CampoRequerido = "Todos los campos son requeridos";
-            }
+
             //AGREGAR PASO AL FLUJO DE APROBACION
             if (addPaso != string.Empty)
             {
