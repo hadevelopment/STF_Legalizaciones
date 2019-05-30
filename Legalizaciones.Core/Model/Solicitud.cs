@@ -86,12 +86,15 @@ namespace Legalizaciones.Model
         [NotMapped]
         public string GastosJSON { get; set; }
 
+        [Required(ErrorMessage = "Debe indicar cedula del empleado.")]
         public string EmpleadoCedula { get; set; }
 
         [NotMapped]
         public Empleado Empleado { get; set; }
 
         [DisplayName("Monto")]
+        [Range(0.001, float.MaxValue)]
+        [Required(ErrorMessage = "Debe indicar un Monto valido.")]
         public decimal Monto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

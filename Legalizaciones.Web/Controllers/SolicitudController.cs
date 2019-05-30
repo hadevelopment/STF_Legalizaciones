@@ -381,53 +381,64 @@ namespace Legalizaciones.Web.Controllers
         [Route("RegistrarSTDC")]
         public ActionResult RegistrarSTDC()
         {
+            var cargoID = HttpContext.Session.GetString("Usuario_Cargo");
+            if (cargoID.Equals("1"))
+            {
+                TempData["Alerta"] = "error - No tienes acceso a esta opcion";
+                return RedirectToAction("Index", "Home");
+            }
+
             var wSolcitudTDC = new SolicitudTDCViewModel();
             return View(wSolcitudTDC);
         }
 
         [HttpPost]
         [Route("RegistrarSTDC")]
-        public ActionResult RegistrarSTDC(SolicitudTDCViewModel solicitudTDC)
+        [ValidateAntiForgeryToken]
+        public ActionResult RegistrarSTDC([Bind] SolicitudTDCViewModel solicitudTDC)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var OSolicitud = new Solicitud
+                try
                 {
-                    NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now),
-                    EmpleadoCedula = solicitudTDC.Cedula,
-                    FechaCreacion = DateTime.Now,
-                    Estatus = 1,
-                    TipoSolicitudID = 2,
-                    FechaVencimiento = DateTime.Now,
-                    Concepto = "Solicitud de Anticipo Con TDC",
-                    DestinoID = 1,
-                    ZonaID = 1,
-                    CentroOperacionId = 1,
-                    UnidadNegocioId = 1,
-                    CentroCostoId = 1,
-                    FechaDesde = DateTime.Now,
-                    FechaHasta = DateTime.Now,
-                    MonedaId = 1,
-                    FechaSolicitud = DateTime.Now,
-                    Banco = solicitudTDC.Banco,
-                    Extracto = solicitudTDC.Extracto,
-                    Monto = solicitudTDC.Monto,
-                    EstadoId = 1,
+                    var OSolicitud = new Solicitud
+                    {
+                        NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now),
+                        EmpleadoCedula = solicitudTDC.Cedula,
+                        FechaCreacion = DateTime.Now,
+                        Estatus = 1,
+                        TipoSolicitudID = 2,
+                        FechaVencimiento = DateTime.Now,
+                        Concepto = "Solicitud de Anticipo Con TDC",
+                        DestinoID = 1,
+                        ZonaID = 1,
+                        CentroOperacionId = 1,
+                        UnidadNegocioId = 1,
+                        CentroCostoId = 1,
+                        FechaDesde = DateTime.Now,
+                        FechaHasta = DateTime.Now,
+                        MonedaId = 1,
+                        FechaSolicitud = DateTime.Now,
+                        Banco = solicitudTDC.Banco,
+                        Extracto = solicitudTDC.Extracto,
+                        Monto = solicitudTDC.Monto,
+                        EstadoId = 1,
 
-                };
+                    };
 
-                solicitudRepository.Insert(OSolicitud);
+                    solicitudRepository.Insert(OSolicitud);
 
 
-                TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
-                return RedirectToAction("RegistrarSTDC", "Solicitud");
+                    TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
+                    return RedirectToAction("RegistrarSTDC", "Solicitud");
+                }
+                catch (System.Exception e)
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+                    return View(solicitudTDC);
+                }
             }
-            catch (System.Exception e)
-            {
-                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
-                return View(solicitudTDC);
-            }
-
+            return View();
         }
 
 
@@ -493,8 +504,20 @@ namespace Legalizaciones.Web.Controllers
         [Route("Filtrar")]
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
+            if (fechaDesde > fechaHasta)
+            {
+                TempData["Alerta"] = "error - El rango de fechas no es valido";
+                return RedirectToAction("Index", "Solicitud");
+            }
+
+            UNOEE erp = new UNOEE();
             List<Solicitud> solicitudes = solicitudRepository.All()
-                .Where(a => a.FechaCreacion >= fechaDesde && a.FechaCreacion <= fechaHasta).ToList();
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).OrderByDescending(x => x.FechaCreacion).ToList();
+            foreach (var item in solicitudes)
+            {
+                item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);
+                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+            }
             return View("Index", solicitudes);
         }
 

@@ -203,6 +203,10 @@
         $('#divZonas').addClass('display-none');
     }
 
+    function validarFormTDC() {
+        return false;
+    }
+
     //************************************   I N I C I O  ************************************
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
      * Estado - Pais al cambiar destino o al cambiar pais */
@@ -458,6 +462,13 @@ function validarGastos() {
     var monto = $("#Monto").val();
     //$('#monto').val('');
 
+    if (monto == 0)
+    {
+        $("#mensajeGastos").text("Monto no puede estar en cero.");
+        $('#mensajeValidacionGastos').show("slow");
+        return false;
+    }
+    
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
 
         if (servicio !== "" && monto !== "" && monto !== "0" && pais !== "Seleccione..." && ciudad !== "Seleccione..." && servicio !== "Seleccione...") {

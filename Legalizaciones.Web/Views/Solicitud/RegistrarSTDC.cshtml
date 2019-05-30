@@ -20,10 +20,11 @@
 
 
 <form asp-controller="Solicitud" asp-action="RegistrarSTDC" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <section class="">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong>  Registrar solicitud de anticipo con tarjeta de Crédito</strong></h3>
+                <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Registrar solicitud de anticipo con tarjeta de Crédito</strong></h3>
             </div>
 
             <div class="box-body">
@@ -34,8 +35,11 @@
                         <label asp-for="Cedula" id="lbl_Cedula">Cédula del beneficiario</label>
                     </div>
                     <div class="col-md-12">
-                        @Html.TextBoxFor(model => model.Cedula, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                        @*@Html.TextBoxFor(model => model.Cedula, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese",})*@
+                        <input asp-for="Cedula" class="form-control" type="number" maxlength="10" />
+                        <span asp-validation-for="Cedula" class="text-danger"></span>
                     </div>
+
                 </div>
 
 
@@ -45,7 +49,9 @@
                         <label asp-for="Extracto" id="lbl_Extracto">Extracto de la tarjeta de crédito</label>
                     </div>
                     <div class="col-md-12">
-                        @Html.TextBoxFor(model => model.Extracto, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                        @*@Html.TextBoxFor(model => model.Extracto, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
+                        <input asp-for="Extracto" class="form-control" type="number" />
+                        <span asp-validation-for="Extracto" class="text-danger"></span>
                     </div>
                 </div>
 
@@ -54,7 +60,9 @@
                         <label asp-for="Banco">Banco</label>
                     </div>
                     <div class="col-md-12">
-                        @Html.TextBoxFor(model => model.Banco, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                        @*@Html.TextBoxFor(model => model.Banco, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
+                        <input asp-for="Banco" class="form-control" />
+                        <span asp-validation-for="Banco" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -64,7 +72,9 @@
                         <label asp-for="Monto">Monto</label>
                     </div>
                     <div class="col-md-12">
-                        @Html.TextBoxFor(model => model.Monto, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                        @*@Html.TextBoxFor(model => model.Monto, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
+                        <input asp-for="Monto" class="form-control" type="number" />
+                        <span asp-validation-for="Monto" class="text-danger"></span>
                     </div>
 
                 </div>
@@ -80,9 +90,10 @@
 
             </div>
 
-            </div>
+        </div>
 
 
     </section>
+
 </form>
 
