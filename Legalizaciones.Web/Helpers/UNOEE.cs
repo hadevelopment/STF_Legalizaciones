@@ -45,7 +45,7 @@ namespace Legalizaciones.Web.Helpers
 
         public Empleado getEmpleadoID(int IdEmpleado)
         {
-            Empleado[] Empleados = new Empleado[4];
+            Empleado[] Empleados = new Empleado[10];
 
 
             Empleados[0] = new Empleado
@@ -105,13 +105,41 @@ namespace Legalizaciones.Web.Helpers
                 Correo = "d.sanchez@innova4j.com"
             };
 
+            Empleados[4] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrain Mejias",
+                Cedula = "10.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
+            };
+
+            Empleados[5] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Javier Rodriguez",
+                Cedula = "11.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
+            };
+
 
             var result = Empleados.Where(e => e.CargoId == IdEmpleado).FirstOrDefault();
             return (result);
         }
         public Empleado getEmpleadoCedula(string cedula)
         {
-            Empleado[] Empleados = new Empleado[4];
+            Empleado[] Empleados = new Empleado[10];
 
             int ind = 1;
             switch (cedula)
@@ -127,6 +155,12 @@ namespace Legalizaciones.Web.Helpers
                     break;
                 case "9.845.256.668":
                     ind = 3;
+                    break;
+                case "10.845.256.665":
+                    ind = 1;
+                    break;
+                case "11.845.256.665":
+                    ind = 1;
                     break;
                 default:
                     ind = 3;
@@ -189,6 +223,34 @@ namespace Legalizaciones.Web.Helpers
                 CentroCostos = "1",
                 UnidadNegocio = "1",
                 Correo = "d.sanchez@innova4j.com"
+            };
+
+            Empleados[4] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrain Mejias",
+                Cedula = "10.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
+            };
+
+            Empleados[5] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Javier Rodriguez",
+                Cedula = "11.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
             };
 
             return (Empleados.Where(e => e.Cedula == cedula).FirstOrDefault());
@@ -294,10 +356,40 @@ namespace Legalizaciones.Web.Helpers
                 Correo = "d.sanchez@innova4j.com"
             };
 
+            var Empleado5 = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrrain Mejias",
+                Cedula = "10.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
+            };
+
+            var Empleado6 = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Javier Rodriguez",
+                Cedula = "11.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1"
+            };
+
             LisEmpleado.Add(Empleado1);
             LisEmpleado.Add(Empleado2);
             LisEmpleado.Add(Empleado3);
             LisEmpleado.Add(Empleado4);
+            LisEmpleado.Add(Empleado5);
+            LisEmpleado.Add(Empleado6);
 
             return LisEmpleado;
 
