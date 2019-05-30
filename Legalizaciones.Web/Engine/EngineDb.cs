@@ -160,7 +160,10 @@ namespace Legalizaciones.Web.Engine
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
                     data.Id = lector.GetInt32(5);
-                    data.TipoSolicitud = lector.GetString(6);
+                    data.MontoMinimo = lector.GetFloat(6);
+                    data.MontoMaximo = lector.GetFloat(7);
+                    data.Destino = lector.GetString(8);
+                    data.DestinoId = lector.GetInt32(9);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -188,6 +191,9 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
                 command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
                 command.Parameters.AddWithValue("@Orden", model.Orden);
+                command.Parameters.AddWithValue("@DestinoId", model.DestinoId);
+                command.Parameters.AddWithValue("@MontoMaximo", model.MontoMaximo);
+                command.Parameters.AddWithValue("@MontoMinimo", model.MontoMinimo);
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
                 while (lector.Read())
@@ -198,6 +204,12 @@ namespace Legalizaciones.Web.Engine
                     data.EmailAprobador = lector.GetString(2);
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
+                    data.Id = lector.GetInt32(5);
+                    data.MontoMinimo = lector.GetFloat(6);
+                    data.MontoMaximo = lector.GetFloat(7);
+                    data.Destino = lector.GetString(8);
+                    data.DestinoId = lector.GetInt32(9);
+                    dataList.Insert(n, data);
                     dataList.Insert(n, data);
                     n++;
                 }

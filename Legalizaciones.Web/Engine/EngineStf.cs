@@ -221,13 +221,6 @@ namespace Legalizaciones.Web.Engine
             return list;
         }
 
-        public string Aleatorio(int s)
-        {
-            Random rnd = new Random(s);
-            int n = rnd.Next(1, 999);
-            return "000" + n.ToString();
-        }
-
         public List<string> TiposDocumentos(DataTable dt)
         {
             List<string> documento = new List<string>();
@@ -279,8 +272,8 @@ namespace Legalizaciones.Web.Engine
             return moneda;
         }
 
-
-        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado,
+                                                      string descripcion, string mail, int update, int estatus, int paso,int destinoId,float montoMaximo,float montoMinimo)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -291,7 +284,10 @@ namespace Legalizaciones.Web.Engine
                 CedulaAprobador = empleado,
                 EmailAprobador = mail,
                 Descripcion = descripcion,
-                Orden = paso
+                Orden = paso,
+                DestinoId = destinoId,
+                MontoMaximo = montoMaximo,
+                MontoMinimo = montoMinimo
             };
 
             EngineDb Metodo = new EngineDb();
@@ -320,6 +316,23 @@ namespace Legalizaciones.Web.Engine
                 n++;
             }
             return dt;
+        }
+
+        public string Aleatorio(int s)
+        {
+            Random rnd = new Random(s);
+            int n = rnd.Next(1, 999);
+            return "000" + n.ToString();
+        }
+
+        public string []  SimuladorKactusJefeInmediato()
+        {
+            string [] JefeArea = new string[6];
+            JefeArea[0] = "Nombre Jefe Inmediato Area";
+            JefeArea[1] = "11.346.727";
+            JefeArea[2] = "Descripcion Requerida";
+            JefeArea[3] = "studiofnotificaciones@gmail.com";
+            return JefeArea;
         }
 
     }

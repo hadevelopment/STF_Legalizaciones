@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-
+    $('#Moneda').hide();
     var arrayEmpleadoPermiso = [];
     $.ajax({
         type: "GET",
@@ -125,8 +125,10 @@ $('#solicitud').on('change', function (e) {
 
 $('#Destino').on('change', function (e) {
  
-    const ob = document.getElementById('Destino');
+    const obj = document.getElementById('Destino');
+    var destino = obj.options[obj.selectedIndex].text;
     var indice = document.getElementById("Destino").selectedIndex;
+    $('#destinoId').val(indice);
     var arrayMoneda = [];
     $.ajax({
         type: "GET",
@@ -232,7 +234,7 @@ function CloseNewFlujo() {
 }
 
 
-function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSolicitud,proceso) {
+function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSolicitud,montoMinimo,montoMaximo,destinoId,flujoSolicitudId,proceso) {
     document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
     $("#modificar").val('Actualizar');
   
@@ -244,6 +246,9 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSol
     $('#cedula').val(cedula);
     $('#type').val(tipoSolicitud);
     $('#proceso').val(proceso);
+    $('#minimo').val(montoMinimo);
+    $('#maximo').val(montoMaximo);
+    $('#destinoIde').val(destinoId);
     OpenQuestionModal(proceso);
 }
 
@@ -287,8 +292,8 @@ function CloseDataModal2() {
     $("#dataModal2").modal('hide');
 }
 
-function OpenMensajeClienteModal() {
-    document.getElementById("msjClient").innerHTML = 'Existen documentos Asociados a este flujo, No se puede eliminar';
+function OpenMensajeClienteModal(msj) {
+    document.getElementById("msjClient").innerHTML = msj;
     $('#cerrar').show();
     $("#msjClienteModal").modal('show');
 }

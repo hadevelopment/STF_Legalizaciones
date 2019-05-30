@@ -10,7 +10,13 @@
 
 @{
     ViewData["Title"] = "Flujo para Aprobacion de Documentos";
-   // var paso = ViewBag.Paso;
+    float minimo = 0;
+    float maximo = 0;
+    if (@Model.FlujoAprobacion != null)
+    {
+        minimo = @Model.FlujoAprobacion[0].MontoMinimo;
+        maximo = @Model.FlujoAprobacion[0].MontoMaximo;
+    }
 }
 <div class="row">
     <div class="col-sm-12">
@@ -101,8 +107,8 @@
                         <td> @item.Descripcion</td>
                         <td> @item.NombreAprobador</td>
                         <td> @item.EmailAprobador</td>
-                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
-                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
+                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud',@item.MontoMinimo,@item.MontoMaximo,@item.DestinoId,@item.FlujoSolicitudId,'actualizar');" value="Actualizar"> </td>
+                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud',@item.MontoMinimo,@item.MontoMaximo,@item.DestinoId,@item.FlujoSolicitudId'eliminar');" value="Eliminar"> </td>
                     </tr>
                 }
             }
@@ -120,7 +126,6 @@
         {
             <input type="hidden" id="addPaso" name="addPaso" value="addPaso" />
             <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
-
         }
     </form>
 </div>
@@ -145,19 +150,19 @@
                     <div class="row">
                         <div class="col-md-12 pb-2">
                             <label>Moneda</label>
-                            <select id="Moneda" name="Monedao"></select>
+                            <select id="Moneda" name="Moneda"></select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 pb-2">
                             <label>Monto Minimo</label>
-                            <input type="number" id="Minimo" name="Minimo" class="form-control" maxlength="12" />
+                            <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value="@minimo"/>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 pb-2">
                             <label>Monto Maximo</label>
-                            <input type="number" id="Maximo" name="Maximo" class="form-control" maxlength="12" />
+                            <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="@maximo"/>
                         </div>
                     </div>
                     <div class="row">
@@ -204,6 +209,7 @@
                     </table>
                     <div class="row">
                         <div class="modal-footer">
+                            <input type="hidden" id="destinoId" name="destinoId" />
                             <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
                             <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
                             <input type="hidden" id="addAprobador" name="addAprobador" />
@@ -250,7 +256,7 @@
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
-                        <input type="text" id="email" name="email" class="form-control" readonly/>
+                        <input type="text" id="email" name="email" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row inside">
@@ -259,6 +265,10 @@
                         <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
                     </div>
                 </div>
+                <input type="hidden" id="flujoSolicituIde" name="flujoSolicitudIde" />
+                <input type="hidden" id="destinoIde" name="destinoIde" />
+                <input type="hidden" id="maximo" name="maximo" />
+                <input type="hidden" id="minimo" name="minimo" />
                 <input type="hidden" id="id" name="id" />
                 <input type="hidden" id="proceso" name="proceso" />
                 <input type="hidden" id="type" name="type" />
@@ -288,7 +298,10 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
                 </div>
-
+                <input type="hidden" id="flujoSolicituIdee" name="flujoSolicitudIdee" />
+                <input type="hidden" id="destinoIdee" name="destinoIdee" />
+                <input type="hidden" id="maximoe" name="maximoe" />
+                <input type="hidden" id="minimoe" name="minimoe" />
                 <input type="hidden" id="ide" name="ide" />
                 <input type="hidden" id="procesoe" name="procesoe" />
                 <input type="hidden" id="typee" name="typee" />
@@ -352,29 +365,31 @@
 
     <script>
 
-        $(document).ready(function ()
-        {
-         let IndexSollicitud = '@ViewBag.IndexSollicitud'
-         if (IndexSollicitud != '') {
+    $(document).ready(function () {
+        let IndexSollicitud = '@ViewBag.IndexSollicitud'
+        if (IndexSollicitud != '') {
             $("#solicitud").val(IndexSollicitud);
-            }
+        }
 
         let tipoDoc = '@ViewBag.TipoDocumento';
         if (tipoDoc != '') {
             $('#tipoDocumento').val('@ViewBag.TipoDocumento');
-            }
+        }
 
         let pasoFlujo = '@ViewBag.Paso';
-            if (pasoFlujo > 0) {
-               OpenNewFlujo();
-                $("#solicitud").val(IndexSollicitud);
+        if (pasoFlujo > 0) {
+            OpenNewFlujo();
+            $("#solicitud").val(IndexSollicitud);
         }
 
         let countDocAsociado = '@ViewBag.CountDocAsociado'
-        if (countDocAsociado > 0)
-        {
-            OpenMensajeClienteModal();
+        if (countDocAsociado > 0) {
+            OpenMensajeClienteModal('Existen documentos Asociados a este flujo, No se puede eliminar');
         }
+        let rangoError = '@ViewBag.RangoError';
+         if (rangoError!='') {
+            OpenMensajeClienteModal('@ViewBag.RangoError');
+           }
         });
 
     </script>

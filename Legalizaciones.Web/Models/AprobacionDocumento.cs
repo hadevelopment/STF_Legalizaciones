@@ -27,6 +27,11 @@ namespace Legalizaciones.Web.Models
         public int Update { get; set; }
         public string TipoSolicitud { get; set; }
         public int Id { get; set; }
+        public int DestinoId { get; set; }
+        public string Destino { get; set; }
+        public float MontoMinimo { get; set; }
+        public float MontoMaximo { get; set; }
+
     }
 
     public class Destinos

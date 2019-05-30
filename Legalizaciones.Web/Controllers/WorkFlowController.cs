@@ -13,7 +13,7 @@ namespace Legalizaciones.Web.Controllers
     {
         [HttpGet]
         public IActionResult Index(AprobacionDocumento model, string tipoDocumento = "", string addAprobador = "", string addMail = "",
-                                    string empleado = "", string descripcion = "", int paso = 0, string clear = "", string addPaso = "")
+                                    string empleado = "", string descripcion = "", int paso = 0, string clear = "", string addPaso = "", int destinoId = 0 , float montoMinimo = 0 , float montoMaximo = 0)
         {
             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
@@ -33,7 +33,7 @@ namespace Legalizaciones.Web.Controllers
             //CREAR INSERTAR NUEVO PASO
             ViewBag.Paso = 0;
             if (tipoDocumento != string.Empty && tipoDocumento != null && addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null
-                                                                      && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
+                                                                        && empleado != string.Empty && empleado != null && descripcion != string.Empty && descripcion != null)
             {
                 int estatus = 1;
                 int update = 0;
@@ -52,7 +52,23 @@ namespace Legalizaciones.Web.Controllers
                 int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento);
                 if (existePaso == 0)
                 {
-                    model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso);
+                    if (paso == 1)
+                    {
+                        if (montoMaximo > montoMinimo)
+                        {
+                            string[] JefeArea = Funcion.SimuladorKactusJefeInmediato();
+                            model = Funcion.SetCreateAprobador(model, tipoDocumento, JefeArea[0], JefeArea[1], JefeArea[2], JefeArea[3], update, estatus, paso, destinoId, montoMinimo, montoMaximo);
+                        }
+                        else
+                        {
+                            ViewBag.RangoError = "El monto maximo debe ser mayor al minimo";
+                        }
+                    }
+                    else
+                    {
+                        model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso , destinoId, montoMinimo, montoMaximo);
+                    }
+              
                 }
                 else if (existePaso > 0)
                 {
@@ -122,7 +138,8 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateFlujo(int id = 0, int orden = 0, string descripcionT = "", string nombre = "", string email = "", string cedula = "", string type = "")
+        public IActionResult UpdateFlujo(int id = 0, int orden = 0, string descripcionT = "", string nombre = "", string email = "", string cedula = "", string type = "",
+                                         int flujoSolicituIde = 0, int destinoIde = 0, float maximo = 0 ,float  minimo = 0)
         {
             EngineDb Metodo = new EngineDb();
             Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", id, descripcionT, cedula, nombre, email);
@@ -132,7 +149,7 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult EliminarFlujo(int ide = 0, string typee = "")
+        public IActionResult EliminarFlujo(int ide = 0, string typee = "", int flujoSolicituIdee = 0, int destinoIdee = 0, float maximoe = 0, float minimoe = 0)
         {
             EngineDb Metodo = new EngineDb();
             AprobacionDocumento model = new AprobacionDocumento();
