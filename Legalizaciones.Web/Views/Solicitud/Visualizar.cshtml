@@ -2,6 +2,8 @@
 @{
     ViewData["Title"] = "Solicitud";
     int pasoActual = 0;
+    bool rechazado = false;
+    string motivoRechazo = "";
 }
 
 @section styles {
@@ -64,6 +66,8 @@
                                     }
                                     else if (item.Procesado == 3) //Rechazado
                                     {
+                                        rechazado = true;
+                                        motivoRechazo = item.Motivo.Split("con Motivo:")[1];
                                         <div class="col-sm-2 arrow_box">
                                             <i class="fa fa-close red" aria-hidden="true"></i>
                                             <br />
@@ -86,9 +90,17 @@
                             }
                             else
                             {
-                                <h2>Este no tiene flujo</h2>
+                                <h2>No se ha encontrado el flujo asignado a esta solicitud.</h2>
                             }
                         </div>
+
+                        @if (rechazado)
+                        {
+                            <div class="col-sm-12">
+                                <span><b style="margin-bottom:5px;">Motivo del Rechazo:</b><br /></span>
+                                <span style=" font-size:16px;">@motivoRechazo</span>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>

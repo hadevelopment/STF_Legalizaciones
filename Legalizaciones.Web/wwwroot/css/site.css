@@ -206,6 +206,7 @@ body {
     display: flex;
     flex-flow: row;
     justify-content: center;
+    margin-bottom: 30px;
 }
 
 .divFlujo i{

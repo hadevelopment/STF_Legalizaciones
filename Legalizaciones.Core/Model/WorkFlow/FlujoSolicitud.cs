@@ -1,4 +1,5 @@
 ﻿using Legalizaciones.Model.Base;
+using Legalizaciones.Model.Jerarquia;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,5 +14,13 @@ namespace Legalizaciones.Model.Workflow
         [ForeignKey("TipoSolicitud")]
         public int TipoSolicitudId { get; set; }
         public TipoSolicitud TipoSolicitud { get; set; }
+
+        [ForeignKey("Destino")]
+        public int DestinoId { get; set; }
+        public Destino Destino { get; set; }
+
+        public float MontoMinimo { get; set; }
+
+        public float MontoMaximo { get; set; }
     }
 }

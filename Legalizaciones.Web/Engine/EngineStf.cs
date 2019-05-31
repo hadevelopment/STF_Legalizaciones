@@ -107,12 +107,12 @@ namespace Legalizaciones.Web.Engine
                 list = list.OrderBy(m => m.Orden).ToList();
             }
 
-            var aprobado = list.Where(m => m.Motivo.Contains("Aprobado")).FirstOrDefault();
-            if(aprobado != null)
+            var finalizado = list.Where(m => m.Motivo.Contains("finalizado")).FirstOrDefault();
+            if(finalizado != null)
             {
-                aprobado.Procesado = 1;
-                list = list.Where(m => m.Orden != aprobado.Orden).ToList();
-                list.Add(aprobado);
+                finalizado.Procesado = 1;
+                list = list.Where(m => m.Orden != finalizado.Orden).ToList();
+                list.Add(finalizado);
                 list = list.OrderBy(m => m.Orden).ToList();
             }
 

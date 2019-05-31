@@ -34,6 +34,8 @@ using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using 
         public DbSet<EstadoSolicitud> EstadoSolicitud { get; set; }
         public DbSet<EstadoLegalizacion> EstadoLegalizacion{ get; set; }
         public DbSet<OrigenDestino> OrigenDestino { get; set; }
+
+        public DbSet<SolicitudAprobador> SolicitudAprobador { get; set; }
         public object Setting { get; private set; }
     }
 }

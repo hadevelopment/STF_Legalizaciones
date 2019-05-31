@@ -62,10 +62,12 @@ namespace Legalizaciones.Model
 
         [Required(ErrorMessage = "Debe indicar Fecha Desde.")]
         [DisplayName("Fecha Desde")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaDesde { get; set; }
 
         [Required(ErrorMessage = "Debe indicar Fecha Hasta.")]
         [DisplayName("Fecha Hasta")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaHasta { get; set; }
 
         [Required(ErrorMessage = "El campo Concepto es requerido.")]

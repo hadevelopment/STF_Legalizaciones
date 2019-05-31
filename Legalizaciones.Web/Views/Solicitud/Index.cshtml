@@ -109,7 +109,7 @@
                                         <td>
                                             @item.Monto.ToString("N2")
                                         </td>
-                                        <td>
+                                        <td class='@(item.EstadoSolicitud.Descripcion.Contains("Aproba") ? "fontGreen" : (item.EstadoSolicitud.Descripcion.Contains("Rechaza") ? "fontRed" : "" ) )'>
                                             @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
                                         </td>
                                         <td class="text-center">

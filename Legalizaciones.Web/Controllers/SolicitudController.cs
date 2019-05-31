@@ -259,7 +259,7 @@ namespace Legalizaciones.Web.Controllers
                 //    return View(data);
 
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
-                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON);
+                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 data.Monto = listaGastos.Sum(a => a.Monto);
                 solicitudRepository.Update(data);
 

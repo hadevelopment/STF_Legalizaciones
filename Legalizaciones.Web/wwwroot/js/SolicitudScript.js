@@ -1,4 +1,6 @@
-﻿$(document).ready(function () {
+﻿var ciudadActualizar = 0;
+
+$(document).ready(function () {
 
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -101,8 +103,10 @@
 
         if (nombreServicio === "Comida") {
             $('#divGastosFecha').addClass('display-none');
-        }else {
+            $('#FechaGasto').val('N/A');
+        } else {
             $('#divGastosFecha').removeClass('display-none');
+            $('#FechaGasto').val('');
         }
 
         if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
@@ -156,14 +160,7 @@
         $('#ChangeAmount').val(a - b);
     });
 
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        autoclose: true,
-        orientation: 'bottom auto'
-    });
-
-    $(".datepicker").datepicker("update", new Date());
+    
     //$('#Product').select2();
 
     $("#btnModalGastos").click(function () {
@@ -307,7 +304,7 @@
         datatype: "Json",
         success: function (data) {
             $("#Pais").empty();
-            $('#Pais').append('<option selected value="">Seleccione...</option>');
+            $('#Pais').append('<option selected value="" disabled>Seleccione...</option>');
             $.each(data, function (index, value) {
                 //$("#Destino").select2();
                 $('#Pais').append('<option value="' + value.id + '">' + value.nombre + '</option>');
@@ -331,13 +328,21 @@
             data: { paisID: valor },
             success: function (data) {
                 $("#Ciudad").empty();
-                $('#Ciudad').append('<option selected value="">Seleccione...</option>');
+                $('#Ciudad').append('<option value="" disabled>Seleccione...</option>');
                 $.each(data, function (index, value) {
                     $('#Ciudad').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 });
             }
         });
 
+        console.log('ciudad a actulizar: ' + ciudadActualizar);
+
+        //Si viene de una actualizacion
+        if (ciudadActualizar > 0) {
+            $("#Ciudad").val(ciudadActualizar);
+            $('#Ciudad').trigger('change');
+            ciudadActualizar = 0;
+        }
 
         var dataZona = [];
 
@@ -354,6 +359,8 @@
                         //return { label: item.nombre, value: item.id };
                     });
                 }
+
+                console.log(dataZona);
 
                 $("#ZonaOrigen").autocomplete({
                     source: dataZona,
@@ -434,13 +441,18 @@ function validarGastos() {
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
-    $('#monto').val('');
+    console.log(monto);
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
-        if (fechaGasto !== "" && servicio !== "" && monto !== "") {
+        if (fechaGasto !== "" && servicio !== "" && monto !== "" || servicio === "Comida" && fechaGasto !== "" && monto !== "") {
+
+            $("#mensajeGastos").text("");
+            $('#mensajeValidacionGastos').hide("slow");
+
             monto = CalcularGastoComida();
+            console.log(monto);
             rowIndex = rowIndex + 1;
-            var row = `<tr class="rowIndex${rowIndex}">
+            var row = `<tr class="rowIndex-${rowIndex}">se
                     <td class="fechaGasto">${fechaGasto}</td>
                     <td class="paisId display-none">${paisId}</td>
                     <td class="pais">${pais}</td>
@@ -498,7 +510,7 @@ function validarGastos() {
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                          <a class="btn btn-danger btn-sm btnEdit">
-                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex${rowIndex}');" ></span>
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex-${rowIndex}');" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -524,8 +536,8 @@ function validarGastos() {
 }
 
 function actualizarGastos() {
-    var value = $('#hdfRowIndex').val();
 
+    var value = $('#hdfRowIndex').val();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
     var pais = $("#Pais option:selected").text();
@@ -537,19 +549,56 @@ function actualizarGastos() {
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
 
+    if (servicio !== "Movilidad" && servicio !== "Transporte") {
+        if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" || pais !== "" && ciudad !== "" && servicio === "Comida" && fechaGasto !== "" && monto !== "") {
 
-    $('.' + value + ' .fechaGasto').text(fechaGasto);
-    $('.' + value + ' .paisId').text(paisId);
-    $('.' + value + ' .pais').text(pais);
-    $('.' + value + ' .servicioId').text(servicioId);
-    $('.' + value + ' .servicio').text(servicio);
-    $('.' + value + ' .ciudadId').text(ciudadId);
-    $('.' + value + ' .ciudad').text(ciudad);
-    $('.' + value + ' .origen').text(origen);
-    $('.' + value + ' .destino').text(destino);
-    $('.' + value + ' .monto').text(monto);
+            $("#mensajeGastos").text("");
+            $('#mensajeValidacionGastos').hide("slow");
 
-    $('#gastosModal').modal('hide');
+            monto = CalcularGastoComida();
+            $('.' + value + ' .fechaGasto').text(fechaGasto);
+            $('.' + value + ' .paisId').text(paisId);
+            $('.' + value + ' .pais').text(pais);
+            $('.' + value + ' .servicioId').text(servicioId);
+            $('.' + value + ' .servicio').text(servicio);
+            $('.' + value + ' .ciudadId').text(ciudadId);
+            $('.' + value + ' .ciudad').text(ciudad);
+            $('.' + value + ' .origen').text(origen);
+            $('.' + value + ' .destino').text(destino);
+            $('.' + value + ' .monto').text(monto);
+
+            $('#gastosModal').modal('hide');
+
+        } else {
+            $("#mensajeGastos").text("Faltan datos por especificar.");
+            $('#mensajeValidacionGastos').show("slow");
+            return false;
+        }
+
+    } else {
+        if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
+            $("#mensajeGastos").text("");
+            $('#mensajeValidacionGastos').hide("slow");
+
+            $('.' + value + ' .fechaGasto').text(fechaGasto);
+            $('.' + value + ' .paisId').text(paisId);
+            $('.' + value + ' .pais').text(pais);
+            $('.' + value + ' .servicioId').text(servicioId);
+            $('.' + value + ' .servicio').text(servicio);
+            $('.' + value + ' .ciudadId').text(ciudadId);
+            $('.' + value + ' .ciudad').text(ciudad);
+            $('.' + value + ' .origen').text(origen);
+            $('.' + value + ' .destino').text(destino);
+            $('.' + value + ' .monto').text(monto);
+
+            $('#gastosModal').modal('hide');
+
+        } else {
+            $("#mensajeGastos").text("Faltan datos por especificar.");
+            $('#mensajeValidacionGastos').show("slow");
+            return false;
+        }
+    }
 
     var sum = 0;
     $('td.monto').each(function () {
@@ -559,11 +608,13 @@ function actualizarGastos() {
     v = v.replace('.', ',');
     $("#txMontoT").val(v);
     $('#hdfMontoSolicitud').val($("#txMontoT").val());
+    
 }
 
 
 
 function ShowModalUpdate(value) {
+    console.log(value);
 
     var fechaGasto = $('.' + value + ' .fechaGasto').text();
     var paisId = $('.' + value + ' .paisId').text();
@@ -578,10 +629,14 @@ function ShowModalUpdate(value) {
 
     console.log(fechaGasto + ', ' + paisId + ', ' + pais + ', ' + servicioId + ', ' + servicio + ', ' + ciudadId + ', ' + ciudad + ', ' + origen + ', ' + destino + ', ' + monto);
 
+    ciudadActualizar = ciudadId;
+
     $('#FechaGasto').val(fechaGasto);
     $("#Pais").val(paisId);
+    $('#Pais').trigger('change');
+
     $("#Servicio").val(servicioId);
-    $("#Ciudad").val(ciudadId);
+
     $('#ZonaOrigen').val(origen);
     $('#ZonaDestino').val(destino);
     $('#Monto').val(monto);
@@ -613,6 +668,9 @@ function validarViaje(boton) {
     var moneda = $("#Moneda option:selected").val();
 
     if (destino !== "" && zona !== "" && moneda !== "") {
+
+        $('#Pais').val('');
+        $('#Pais').trigger('change');
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
@@ -748,8 +806,15 @@ window.onload = function () {
 }
 
 function CargarCombosAlEditar() {
-    //Obtener DESTINOS
 
+    $('.datepicker').datepicker({
+        format: 'yyyy-MM-dd',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto'
+    });
+
+    //Obtener DESTINOS
     $.ajax({
         type: "GET",
         url: "/Localidad/DestinosEdit" + "?Id=" + $('#Id').val(),
@@ -765,7 +830,6 @@ function CargarCombosAlEditar() {
                     $('#Destino').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 }
             });
-
         }
     });
 
@@ -785,7 +849,6 @@ function CargarCombosAlEditar() {
                     $('#Zona').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 }
             });
-
         }
     });
 
@@ -805,10 +868,8 @@ function CargarCombosAlEditar() {
                     $('#MonedaId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 }
             });
-
         }
     });
-
 
     //Obtener centro de operaciones
     $.ajax({
@@ -822,7 +883,6 @@ function CargarCombosAlEditar() {
             });
         }
     });
-
 
     //Obtener unidades de negocio
     $.ajax({
@@ -853,10 +913,18 @@ function CargarCombosAlEditar() {
     $("#CentroCosto").select2({
         multiple: false
     });
-
 }
 
 function CargarComboAlcrear() {
+
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto'
+    });
+
+    $(".datepicker").datepicker("update", new Date());
 
     //Obtener DESTINOS
     $.ajax({
@@ -952,7 +1020,7 @@ function CalcularGastoComida() {
     var wServicio = $('#Servicio option:selected').text();
     var wMonto = $('#Monto').val();
 
-    if (wServicio == "Comida") {
+    if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();
         var FDdia = FechaDesde.substr(0,2);
         var FDMes = FechaDesde.substr(3, 2);
@@ -969,6 +1037,7 @@ function CalcularGastoComida() {
         var fecha2 = moment(wFHFormato);
      
         var wDias = fecha2.diff(fecha1, 'days');
+        wDias = wDias + 1;
 
         var wMontoTotal = wMonto * parseInt(wDias);
 
