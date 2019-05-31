@@ -298,9 +298,10 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@tipoDoc", tipoDocumento);
                 command.Parameters.AddWithValue("@Id", id);
                 obj = command.ExecuteScalar();
+                Conexion.Close();
                 if (obj != null)
                     resultado = Convert.ToInt32(obj);
-                Conexion.Close();
+              
             }
             return resultado;
         }
