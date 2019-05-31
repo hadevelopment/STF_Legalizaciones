@@ -367,6 +367,9 @@ namespace Legalizaciones.Web.Controllers
             if (lstFlujo.Count > 0)
                 res.ListaFlujo = lstFlujo.OrderBy(m => m.Orden).ToList();
 
+
+            ViewBag.cargoId = HttpContext.Session.GetString("Usuario_Cargo");
+
             return View(res);
         }
 
@@ -380,7 +383,7 @@ namespace Legalizaciones.Web.Controllers
             var cargoID = HttpContext.Session.GetString("Usuario_Cargo");
             if (cargoID.Equals("1"))
             {
-                TempData["Alerta"] = "error - No tienes acceso a esta opcion";
+                TempData["Alerta"] = "error - No tienes acceso a esta opción";
                 return RedirectToAction("Index", "Home");
             }
 
