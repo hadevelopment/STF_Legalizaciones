@@ -69,7 +69,7 @@ namespace Legalizaciones.Web.Controllers
             EngineDb Metodo = new EngineDb();
 
             string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
-            string usuarioCedula = string.Empty;
+            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
 
             //model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
             //    string.Empty);
@@ -143,6 +143,13 @@ namespace Legalizaciones.Web.Controllers
                 ViewBag.MostrarTasa = false;
 
             var ListaBanco = bancoRepository.All().ToList();
+            //var Obanco = new Banco
+            //{
+            //    Id = 0,
+            //    Nombre = "Sin definir"
+            //};
+            //ListaBanco.Add(Obanco);
+
             var ListaMoneda = monedaRepository.All().ToList();
 
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda

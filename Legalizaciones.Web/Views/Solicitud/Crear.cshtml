@@ -72,7 +72,7 @@
                 <label asp-for="Concepto">Concepto del Anticipo*</label>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.TextAreaFor(model => model.Concepto, 4, 140, new { @placeholder = "Explique el concepto del Anticipo (Minímo 50 carácteres)", @style = "width:100%;", @required = "required" })
+                        @Html.TextAreaFor(model => model.Concepto, 4, 140, new { @placeholder = "Explique el concepto del Anticipo (Maximo 50 carácteres)", @style = "width:100%;", @required = "required" })
                         <span asp-validation-for="Concepto" class="text-danger"></span>
                     </div>
                 </div>
@@ -129,14 +129,21 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde"})
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Desde" })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
+                    <div class="hidden">
+                        <input type="text" name="AuxFechaDesde" id="AuxFechaDesde" value="" />
+                        <input type="text" name="TxtCargoFecha" id="TxtCargoFecha" value="N" />
+                    </div>
                     </div>
 
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
-                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta" })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker ", @placeholder = "Selecciona Fecha Hasta" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
+                        <div class="hidden">
+                            <input type="text" name="AuxFechaHasta" id="AuxFechaHasta" value="" />
+                        </div>
                     </div>
                 </div>
                 <div class="row margin-bottom">
@@ -231,6 +238,8 @@
 
     </section>
 </form>
+
+
 <!--modal form-->
 <div class="row">
     <div class="col-md-9">

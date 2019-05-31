@@ -160,8 +160,21 @@ $(document).ready(function () {
         $('#ChangeAmount').val(a - b);
     });
 
-    
-    //$('#Product').select2();
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto'
+    });
+
+    $('.datepicker2').datepicker({
+        format: 'dd/mm/yyyy',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto'
+    });
+
+    $(".datepicker").datepicker("update", new Date());
 
     $("#btnModalGastos").click(function () {
         console.log('prueba de click');
@@ -194,6 +207,10 @@ $(document).ready(function () {
         $('#divZonas').addClass('display-none');
     }
 
+    function validarFormTDC() {
+        return false;
+    }
+
     //************************************   I N I C I O  ************************************
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
      * Estado - Pais al cambiar destino o al cambiar pais */
@@ -201,24 +218,24 @@ $(document).ready(function () {
 
 
     //Obtener EMPLEADOS
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Empleados",
-        datatype: "Json",
-        success: function (data) {
-            $("#Empleado").empty();
-            $('#Empleado').append('<option selected value="">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                //$("#Destino").select2();
-                $('#Empleado').append('<option value="' + value.cedula + '">' + value.nombre + '</option>');
-            });
-        }
-    });
+    //$.ajax({
+    //    type: "GET",
+    //    url: "/UNOEE/Empleados",
+    //    datatype: "Json",
+    //    success: function (data) {
+    //        $("#Empleado").empty();
+    //        $('#Empleado').append('<option selected value="">Seleccione...</option>');
+    //        $.each(data, function (index, value) {
+    //            //$("#Destino").select2();
+    //            $('#Empleado').append('<option value="' + value.cedula + '">' + value.nombre + '</option>');
+    //        });
+    //    }
+    //});
 
-    //Propiedades del dropdown destinos
-    $("#Empleado").select2({
-        multiple: false
-    });
+    ////Propiedades del dropdown destinos
+    //$("#Empleado").select2({
+    //    multiple: false
+    //});
 
 
     //*****************************************************************************************
@@ -291,6 +308,22 @@ $(document).ready(function () {
                 $("#Zona").select2({
                     multiple: false
                 });
+
+                //busco la moneda
+                $.ajax({
+                    type: "GET",
+                    url: "/Localidad/MonedasPorDestino",
+                    datatype: "Json",
+                    data: { wIdDestino: valor },
+                    success: function (data) {
+                        $("#Moneda").empty();
+                        $('#Moneda').append('<option selected value="">Seleccione...</option>');
+                        $.each(data, function (index, value) {
+                            $('#Moneda').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                        });
+                    }
+                });
+
             }
         });
 
@@ -441,8 +474,15 @@ function validarGastos() {
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
-    console.log(monto);
+    //$('#monto').val('');
 
+    if (monto == 0)
+    {
+        $("#mensajeGastos").text("Monto no puede estar en cero.");
+        $('#mensajeValidacionGastos').show("slow");
+        return false;
+    }
+    
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" || servicio === "Comida" && fechaGasto !== "" && monto !== "") {
 
@@ -473,17 +513,26 @@ function validarGastos() {
                     </td>
                 </tr>`;
 
-            $('#Items').append(row);
+                $('#Items').append(row);
 
-            //Suma de Montos de Gastos
-            var sum = 0;
-            $('td.monto').each(function () {
-                sum += parseFloat(this.innerHTML);
-            });
-            var v = String(sum);
-            v = v.replace('.', ',');
-            $("#txMontoT").val(v);
-            $('#hdfMontoSolicitud').val($("#txMontoT").val());
+
+                //Suma de Montos de Gastos
+                var sum = 0;
+                $('td.monto').each(function () {
+                    sum += parseFloat(this.innerHTML);
+                });
+
+                var v = String(sum);
+                v = v.replace('.', ',');
+                $("#txMontoT").val(v);
+                $('#hdfMontoSolicitud').val($("#txMontoT").val());
+
+
+            } else {
+                    $("#mensajeGastos").text("El monto debe ser superior a 0.");
+                    $('#mensajeValidacionGastos').show("slow");
+                    return false
+            }
 
         } else {
             $("#mensajeGastos").text("Faltan datos por especificar.");
@@ -675,7 +724,24 @@ function validarViaje(boton) {
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
 
-        return true;
+        //var wFechaDesde = $("#FechaDesde").val();
+        //var wFechaHasta = $("#FechaHasta").val();
+
+     
+
+        //if (wFechaDesde > wFechaHasta) {
+
+        //    $("#mensajeViaje").html("La fecha Hasta se encuentra incorrecta <strong>Favor Verifique las fechas</strong> para añadir gastos.");
+        //    $('#mensajeValidacionViaje').show("slow");
+        //    return false;
+
+        //} else {
+
+        //    $('#mensajeValidacionViaje').hide("slow");
+        //    $('#gastosModal').modal('show');
+        //    return true;
+
+        //}
 
     } else {
         $("#mensajeViaje").html("Seleccione <strong>Destino, Zona Visitada y Moneda</strong> para añadir gastos.");
@@ -1020,32 +1086,163 @@ function CalcularGastoComida() {
     var wServicio = $('#Servicio option:selected').text();
     var wMonto = $('#Monto').val();
 
-    if (wServicio === "Comida") {
-        var FechaDesde = $("#FechaDesde").val();
-        var FDdia = FechaDesde.substr(0,2);
-        var FDMes = FechaDesde.substr(3, 2);
-        var FDAnno = FechaDesde.substr(6, 4);
-        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+    //if (wServicio == "Comida") {
+    //    var FechaDesde = $("#FechaDesde").val();
+    //    var FDdia = FechaDesde.substr(0,2);
+    //    var FDMes = FechaDesde.substr(3, 2);
+    //    var FDAnno = FechaDesde.substr(6, 4);
+    //    var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
 
-        var FechaHasta = $("#FechaHasta").val();
-        var FHdia = FechaHasta.substr(0, 2);
-        var FHMes = FechaHasta.substr(3, 2);
-        var FHAnno = FechaHasta.substr(6, 4);
-        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+    //    var FechaHasta = $("#FechaHasta").val();
+    //    var FHdia = FechaHasta.substr(0, 2);
+    //    var FHMes = FechaHasta.substr(3, 2);
+    //    var FHAnno = FechaHasta.substr(6, 4);
+    //    var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
 
-        var fecha1 = moment(wFDFormato);
-        var fecha2 = moment(wFHFormato);
+    //    var fecha1 = moment(wFDFormato);
+    //    var fecha2 = moment(wFHFormato);
      
-        var wDias = fecha2.diff(fecha1, 'days');
-        wDias = wDias + 1;
+    //    var wDias = fecha2.diff(fecha1, 'days');
 
-        var wMontoTotal = wMonto * parseInt(wDias);
+    //    var wMontoTotal = wMonto * parseInt(wDias);
 
-        return wMontoTotal;
+    //    return wMontoTotal;
         
 
-    }
+    //}
 
     return wMonto;
 
 }
+
+
+$("#Concepto").keydown(function () {
+    var wConcepto = $("#Concepto").val();
+
+    if (wConcepto.length > 50) {
+        wConcepto = wConcepto.substr(0, 50);
+        $("#Concepto").val(wConcepto);
+        toastr.warning("El concepto no puede ser superior a 50 caracteres.", "Información")
+    }
+
+});
+
+$("#FechaDesde").change(function () {
+
+    var wFechaDesde = $("#FechaDesde").val();
+    var whoy = new Date();
+
+    if (validarFormatoFecha(wFechaDesde)) {
+        if (existeFecha(wFechaDesde)) {
+            if (validarFechaMenorActual(wFechaDesde)) {
+                $("#AuxFechaDesde").val($("#FechaDesde").val());
+            } else {
+                toastr.warning("La fecha desde no puede ser inferior al dia de hoy", "Información")
+                $("#FechaDesde").datepicker("update", new Date());
+                $("#AuxFechaDesde").val($("#FechaDesde").val());
+            }
+        } else {
+            toastr.warning("La fecha no Existe", "Información")
+            $("#FechaDesde").datepicker("update", new Date());
+            $("#AuxFechaDesde").val($("#FechaDesde").val());
+        }
+    } else {
+        toastr.warning("Formato de fecha es incorrecto", "Información")
+        $("#FechaDesde").datepicker("update", new Date());
+        $("#AuxFechaDesde").val($("#FechaDesde").val());
+    }
+
+});
+
+
+$("#FechaHasta").change(function () {
+
+    var wFechaDesde = $("#FechaDesde").val();
+    var wFechaHasta = $("#FechaHasta").val();
+    var whoy = new Date();
+    whoy.setDate(whoy.getDate() + 1);
+
+    if (validarFormatoFecha(wFechaDesde)) {
+        if (existeFecha(wFechaDesde)) {
+            if (validarFechaMenorDesde(wFechaDesde,wFechaHasta)) {
+                $("#AuxFechaHasta").val($("#FechaHasta").val());
+            } else {
+                if ($("#TxtCargoFecha").val() == "N") {
+                    $("#TxtCargoFecha").val("S");
+                } else {
+                    toastr.warning("La fecha hasta no puede ser inferior a la fecha desde", "Información");
+                }
+                $("#FechaHasta").datepicker("update", whoy);
+                $("#AuxFechaHasta").val($("#FechaHasta").val());
+            }
+        } else {
+            toastr.warning("La fecha no Existe", "Información");
+            $("#FechaHasta").datepicker("update", whoy);
+            $("#AuxFechaHasta").val($("#FechaHasta").val());
+        }
+    } else {
+        toastr.warning("Formato de fecha es incorrecto", "Información");
+        $("#FechaHasta").datepicker("update", whoy);
+        $("#AuxFechaHasta").val($("#FechaHasta").val());
+    }
+
+});
+
+
+function validarFormatoFecha(campo) {
+    var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
+    if ((campo.match(RegExPattern)) && (campo != '')) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function existeFecha(fecha) {
+    var fechaf = fecha.split("/");
+    var day = fechaf[0];
+    var month = fechaf[1];
+    var year = fechaf[2];
+    var date = new Date(year, month, '0');
+    if ((day - 0) > (date.getDate() - 0)) {
+        return false;
+    }
+    return true;
+}
+
+function existeFecha2(fecha) {
+    var fechaf = fecha.split("/");
+    var d = fechaf[0];
+    var m = fechaf[1];
+    var y = fechaf[2];
+    return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
+}
+
+function validarFechaMenorActual(date) {
+    var x = new Date();
+    var fecha = date.split("/");
+    x.setFullYear(fecha[2], fecha[1] - 1, fecha[0]);
+    var today = new Date();
+
+    if (x >= today)
+        return true;
+    else
+        return false;
+}
+
+function validarFechaMenorDesde(date,date2) {
+    var x = new Date();
+    var y = new Date();
+
+    var fecha = date.split("/");
+    var fechaH = date2.split("/");
+    x.setFullYear(fecha[2], fecha[1] - 1, fecha[0]);
+    y.setFullYear(fechaH[2], fechaH[1] - 1, fechaH[0]);
+    //var today = new Date();
+
+    if (x >= y)
+        return false;
+    else
+        return true;
+}
+

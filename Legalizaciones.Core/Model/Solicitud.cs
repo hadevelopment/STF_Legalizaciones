@@ -70,6 +70,7 @@ namespace Legalizaciones.Model
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaHasta { get; set; }
 
+
         [Required(ErrorMessage = "El campo Concepto es requerido.")]
         [DisplayName("Moneda")]
         [ForeignKey("Moneda")]
@@ -87,12 +88,15 @@ namespace Legalizaciones.Model
         [NotMapped]
         public string GastosJSON { get; set; }
 
+        [Required(ErrorMessage = "Debe indicar cedula del empleado.")]
         public string EmpleadoCedula { get; set; }
 
         [NotMapped]
         public Empleado Empleado { get; set; }
 
         [DisplayName("Monto")]
+        [Range(0.001, float.MaxValue)]
+        [Required(ErrorMessage = "Debe indicar un Monto valido.")]
         public decimal Monto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
@@ -115,6 +119,14 @@ namespace Legalizaciones.Model
         public string Extracto { get; set; }
 
         public string Banco { get; set; }
+
+
+        [NotMapped]
+        public String AuxFechaDesde { get; set; }
+
+        [NotMapped]
+        public string AuxFechaHasta { get; set; }
+
 
     }
 }

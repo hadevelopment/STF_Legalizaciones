@@ -162,12 +162,20 @@
         }
         @if(alerta != null)
         {
-            @:ejecutarAlerta("@alerta.ToString().Split('-')[0].Trim()", "@alerta.ToString().Split('-')[1].Trim()");
+            if(alerta.ToString().Split('-')[0].Trim() == "success")
+            {
+                @:ejecutarAlerta("@alerta.ToString().Split('-')[0].Trim()", "@alerta.ToString().Split('-')[1].Trim()","Exito!");
+            }
+            else
+            {
+                @:ejecutarAlerta("@alerta.ToString().Split('-')[0].Trim()", "@alerta.ToString().Split('-')[1].Trim()","Error");
+
+            }
         }
 
 
-        function ejecutarAlerta(a, b) {
-            toastr[a](b);
+        function ejecutarAlerta(a, b,c) {
+            toastr[a](b,c);
         }
 
         $("form").submit(function (e) {

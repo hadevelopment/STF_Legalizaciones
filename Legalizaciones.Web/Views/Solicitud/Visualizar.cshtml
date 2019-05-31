@@ -193,7 +193,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-3">
-                            <label asp-for="Monto">Monto Solicitud:</label> &nbsp;<span>@Model.Monto</span>
+                            <label asp-for="Monto">Monto:</label> &nbsp;<span>@Model.Monto</span>
                         </div>
                         @if (!string.IsNullOrEmpty(Model.RutaArchivo))
                         {
@@ -239,11 +239,21 @@
                                 </tbody>
                             </table>
                             <br />
-
-                            <a class="btn btn-primary fa fa-file-pdf-o" asp-controller="ExportFilesFormat" asp-action="CreatePDF" asp-route-id="@Model.Id" style="float:right;">Exportar</a>
+                            
+                            @if (ViewBag.cargoId != "1")
+                            {
+                                <a class="btn btn-primary fa fa-file-pdf-o" 
+                                   asp-controller="ExportFilesFormat" asp-action="CreatePDF" 
+                                   asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
+                                <div style="float:right"></div>
+                            }
+                            else
+                            {
+                                <button class="btn btn-primary fa fa-file-pdf-o" style="float: right;" disabled>Exportar</button>
+                            }
 
                             <a class="btn btn-primary" asp-area="" style="float:right;"
-                               asp-controller="Solicitud" asp-action="Index">< Volver</a>
+                               asp-controller="Solicitud" asp-action="Index">Volver</a>
                             <div style="float:right">    </div>
                         </div>
                     </div>
