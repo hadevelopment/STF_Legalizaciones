@@ -74,11 +74,8 @@ namespace Legalizaciones.Web.Controllers
                     }
               
                 }
-                else if (existePaso > 0)
-                {
-                    model.FlujoAprobacion = GetAprobadores(tipoDocumento);
-                }
-
+  
+                model.FlujoAprobacion = GetAprobadores(tipoDocumento);
                 if (model.FlujoAprobacion != null && montosCorrectos )
                     ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }

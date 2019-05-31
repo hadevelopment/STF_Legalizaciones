@@ -164,6 +164,7 @@ namespace Legalizaciones.Web.Engine
                     data.MontoMaximo = lector.GetFloat(7);
                     data.Destino = lector.GetString(8);
                     data.DestinoId = lector.GetInt32(9);
+                    data.TipoSolicitud = lector.GetString(10);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -209,7 +210,7 @@ namespace Legalizaciones.Web.Engine
                     data.MontoMaximo = lector.GetFloat(7);
                     data.Destino = lector.GetString(8);
                     data.DestinoId = lector.GetInt32(9);
-                    dataList.Insert(n, data);
+                    data.TipoSolicitud = lector.GetString(10);
                     dataList.Insert(n, data);
                     n++;
                 }

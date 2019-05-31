@@ -185,6 +185,7 @@ function SetNuevoFlujo()
 
 function SetAgregarPasoFlujo()
 {
+    $('#Destino').select2(false);
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
@@ -264,13 +265,15 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSol
     OpenQuestionModal(proceso);
 }
 
-function GetDataAprobador2(id,tipoSolicitud, proceso) {
+function GetDataAprobador2(id, tipoSolicitud, montoMinimo, montoMaximo, destinoId, flujoSolicitudId, proceso) {
 
     document.getElementById("msjDataEliminar").innerHTML = 'Desea eliminar los siguientes datos?  SI para continuar , No para cancelar';
-
     $('#ide').val(id);
     $('#typee').val(tipoSolicitud);
     $('#procesoe').val(proceso);
+    $('#minimoe').val(montoMinimo);
+    $('#maximoe').val(montoMaximo);
+    $('#destinoIdee').val(destinoId);
     OpenQuestionModal(proceso);
 }
 
