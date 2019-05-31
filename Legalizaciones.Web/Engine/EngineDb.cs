@@ -245,11 +245,12 @@ namespace Legalizaciones.Web.Engine
 
         public bool UpdatePasoFlujoAprobacion(string SpName, DataTable dt)
         {
-            SqlCommand command = new SqlCommand(SpName, Conexion);
+            SqlConnection cnx = new SqlConnection(EngineDb.DefaultConnection);
+            SqlCommand command = new SqlCommand(SpName, cnx);
             bool resultado = false;
-            using (Conexion)
+            using (cnx)
             {
-                Conexion.Open();
+                cnx.Open();
                 foreach (DataRow R in dt.Rows)
                 {
                     command.CommandType = CommandType.StoredProcedure;
@@ -262,7 +263,7 @@ namespace Legalizaciones.Web.Engine
                     command.Parameters.AddWithValue("@Orden", R["Orden"]);
                     command.ExecuteNonQuery();
                 }
-                Conexion.Close();
+                cnx.Close();
                 resultado = true;
             }
             return resultado;
@@ -271,16 +272,17 @@ namespace Legalizaciones.Web.Engine
         public bool DeletePasoFlujoAprobacion(string SpName, int id)
         {
             bool resultado = false;
-            using (Conexion)
+            SqlConnection cnx = new SqlConnection(EngineDb.DefaultConnection);
+            using (cnx)
             {
-                Conexion.Open();
-                SqlCommand command = new SqlCommand(SpName, Conexion);
+                cnx.Open();
+                SqlCommand command = new SqlCommand(SpName, cnx);
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@Id", id);
                 command.ExecuteNonQuery();
                 resultado = true;
-                Conexion.Close();
+                cnx.Close();
             }
             return resultado;
         }

@@ -123,7 +123,7 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
-    $('#flow').css('visibility', 'hidden'); 
+   // $('#flow').css('visibility', 'hidden'); 
 });
 
 $('#Destino').on('change', function (e) {
@@ -160,8 +160,10 @@ $('#Destino').on('change', function (e) {
 
 function SetNuevoFlujo()
 {
+    $('#Destino').css('visibility', 'show'); 
     document.getElementById('montoMaximo').readOnly = false;
     document.getElementById('montoMinimo').readOnly = false;
+
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
@@ -172,7 +174,10 @@ function SetNuevoFlujo()
     }
     else {
         $("#Empleado").prop("disabled", false);
+        document.getElementById('descripcion').readOnly = false;
     }
+
+
     if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');
         $("#msjClienteModal").modal('show');
@@ -185,11 +190,12 @@ function SetNuevoFlujo()
 
 function SetAgregarPasoFlujo()
 {
-    $('#Destino').select2(false);
+    $('#Destino').css('visibility', 'hidden'); 
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    document.getElementById('descripcion').readOnly = false;
 
     if (tipo === 'Seleccione...') {
         $("#nuevoFlujoModal").modal('hide');

@@ -49,7 +49,7 @@ namespace Legalizaciones.Web.Controllers
                     update = 0;
                 }
 
-                int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento,montoMinimo,montoMaximo);
+                int existePaso = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento, montoMinimo, montoMaximo);
                 if (existePaso == 0)
                 {
                     if (paso == 1)
@@ -67,16 +67,16 @@ namespace Legalizaciones.Web.Controllers
                     }
                     else
                     {
-                        if ( addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null && empleado != string.Empty && empleado != null)
-                            model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso , destinoId, montoMinimo, montoMaximo);
+                        if (addAprobador != string.Empty && addAprobador != null && addMail != string.Empty && addMail != null && empleado != string.Empty && empleado != null)
+                            model = Funcion.SetCreateAprobador(model, tipoDocumento, addAprobador, empleado, descripcion, addMail, update, estatus, paso, destinoId, montoMinimo, montoMaximo);
                         else
                             ViewBag.CampoRequerido = "Todos los campos son requeridos";
                     }
-              
+
                 }
-  
+
                 model.FlujoAprobacion = GetAprobadores(tipoDocumento);
-                if (model.FlujoAprobacion != null && montosCorrectos )
+                if (model.FlujoAprobacion != null && montosCorrectos)
                     ViewBag.Paso = model.FlujoAprobacion.Count + 1;
             }
 
@@ -165,6 +165,18 @@ namespace Legalizaciones.Web.Controllers
             EngineStf Funcion = new EngineStf();
             Funcion.ReordenarFlujoAprobacion(typee);
             return RedirectToAction("Index", "WorkFlow", model);
+        }
+
+        private int ExisteRegistroEnPaso(int paso , string tipoDocumento, float montoMinimo, float montoMaximo)
+        {
+            int resultado = -1;
+            EngineDb Metodo = new EngineDb();
+            if (paso == 0)
+            {
+                if (montoMinimo <= 0 || montoMaximo <= 0 || montoMinimo < montoMaximo) return resultado;
+            }
+            resultado = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento, montoMinimo, montoMaximo);
+            return resultado;
         }
 
         private AprobacionDocumento GetTipoSolicitudes(AprobacionDocumento model)
