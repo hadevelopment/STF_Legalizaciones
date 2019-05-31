@@ -40,21 +40,18 @@
 
                     <div class="col-md-12 pb-2">
                         <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                        <select id="solicitud" name="solicitud" placeHolder="Seleccione..." style="width:40%;height:30px; font-size:16px;">
-                            @{
-                                int n = 0;
-                                foreach (var type in Model.TipoSolicitud)
-                                {
-                                    if (n == 0)
-                                    {<option value="@n" disabled selected> @type </option>}
-                                    else
-                                    { <option value="@n"> @type </option>}
-                                     n++;
-                                }
-                            }
-
-                        </select>
+                        <select id="solicitud" name="solicitud" style="width:40%;height:30px; font-size:16px;"></select>
                     </div>
+                    <div style="height:15px;"></div>
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Rangos / Montos</strong></label>
+                        <select id="flujos" name="flujos" style="width:40%;height:30px; font-size:16px;"></select>
+                        <br /><br />
+                    </div>
+
+
+
+
                     <div>
                         <form method="POST" id="formFlujo">
                             <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
@@ -62,8 +59,8 @@
                             <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
                         </form>
                     </div>
-                        <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>  
-                    </div>
+                    <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
+                </div>
             </div>
         </div>
     </div>

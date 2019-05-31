@@ -96,10 +96,44 @@
         }
     });
 
+
+
+    $("#solicitud").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+    var arraySolicitud = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetDocumentType",
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#solicitud").empty();
+            $('#solicitud').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arraySolicitud.push(value);
+                $('#solicitud').append('<option  value="' + value.id + '">' + value.documento + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+
    /* $("#Moneda").select2({
         multiple: false,
         placeholder: 'Seleccione...'
     });*/
+
+    $("#flujos").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
 
     $('#Moneda').hide();
     $('#Currency').hide();
@@ -124,6 +158,32 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
    // $('#flow').css('visibility', 'hidden'); 
+
+   
+    var arraySolicitud = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetFlujos",
+        data: {id: indice},
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#flujos").empty();
+            $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arraySolicitud.push(value);
+                $('#flujos').append('<option  value="' + value.id + '">' + value.descripcion + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+
 });
 
 $('#Destino').on('change', function (e) {

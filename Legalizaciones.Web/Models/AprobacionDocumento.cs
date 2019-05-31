@@ -45,4 +45,16 @@ namespace Legalizaciones.Web.Models
         public int Id { get; set; }
         public string Moneda { get; set; }
     }
+
+    public class DocumentoTipo
+    {
+        public int Id { get; set; }
+        public string Documento { get; set; }
+    }
+
+    public class FlujoDescripcion
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
+    }
 }

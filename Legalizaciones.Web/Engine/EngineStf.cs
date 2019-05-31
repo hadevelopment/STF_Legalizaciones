@@ -255,6 +255,39 @@ namespace Legalizaciones.Web.Engine
             return destino;
         }
 
+        public List<FlujoDescripcion> DescripcionFlujo(DataTable dt)
+        {
+            List<FlujoDescripcion> flujo = new List<FlujoDescripcion>();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                FlujoDescripcion Item = new FlujoDescripcion();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Descripcion = Convert.ToString(row[1]);
+                flujo.Insert(n, Item);
+                n++;
+            }
+            return flujo;
+        }
+
+        public List<DocumentoTipo> DocumentType(DataTable dt)
+        {
+            List<DocumentoTipo> tipo = new List<DocumentoTipo>();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                DocumentoTipo Item = new DocumentoTipo();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Documento = Convert.ToString(row[1]);
+                tipo.Insert(n, Item);
+                n++;
+            }
+            return tipo;
+        }
         public Monedas[] Moneda (DataTable dt)
         {
             Monedas [] moneda = new Monedas[dt.Rows.Count];

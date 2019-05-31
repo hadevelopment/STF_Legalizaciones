@@ -102,6 +102,43 @@ namespace Legalizaciones.Web.Engine
         }
 
 
+        public List<DocumentoTipo> DocumentType(string SpName)
+        {
+            DataTable dataTabla = new DataTable();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            EngineStf Funcion = new EngineStf();
+            List<DocumentoTipo> tipo = Funcion.DocumentType(dataTabla);
+            return tipo;
+        }
+
+        public List<FlujoDescripcion> DescripcionFlujo(string SpName, int id)
+        {
+            DataTable dataTabla = new DataTable();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Id", id);
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            EngineStf Funcion = new EngineStf();
+            List<FlujoDescripcion> tipo = Funcion.DescripcionFlujo(dataTabla);
+            return tipo;
+        }
+
+
         public List<Destinos> Destino (string SpName)
         {
             DataTable dataTabla = new DataTable();
