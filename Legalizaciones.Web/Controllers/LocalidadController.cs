@@ -59,6 +59,18 @@ namespace Legalizaciones.Web.Controllers
             return Json(monedaRepository.All());
         }
 
+        public JsonResult MonedasPorDestino(int wIdDestino)
+        {
+            if(wIdDestino == 1) //Es nacional
+            {
+                return Json(monedaRepository.All().Where(a=> a.Id == 1).ToList());
+            }
+            else //internacional
+            {
+                return Json(monedaRepository.All().Where(a => a.Id != 1).ToList());
+            }
+        }
+
         public JsonResult Paises()
         {
                 return Json(paisRepository.All());

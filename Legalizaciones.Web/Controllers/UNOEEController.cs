@@ -123,7 +123,7 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            Empleado[] Empleados = new Empleado[4];
+            Empleado[] Empleados = new Empleado[10];
 
             Empleados[0] = new Empleado
             {
@@ -185,6 +185,36 @@ namespace Legalizaciones.Web.Controllers
                 Correo = "d.sanchez@innova4j.com"
             };
 
+            Empleados[4] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrain Mejias",
+                Cedula = "10.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com"
+            };
+
+            Empleados[5] = new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Javier Rodriguez",
+                Cedula = "11.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com"
+            };
+
             if (filtroCedula)
             {
                 var cedula = HttpContext.Session.GetString("Usuario_Cedula");
@@ -225,6 +255,8 @@ namespace Legalizaciones.Web.Controllers
                 Estatus = 1
             };
 
+          
+
             foreach (var item in Cargos)
             {
                 if (item.Id == Id)
@@ -259,6 +291,14 @@ namespace Legalizaciones.Web.Controllers
                 Id = 3,
                 Nombre = "Administracion Contraloria",
                 Descripcion = "Gerente de Ventas",
+                Estatus = 1
+            };
+
+            Cargos[3] = new Cargo
+            {
+                Id = 3,
+                Nombre = "Administracion Contabilidad",
+                Descripcion = "Gerente Contable",
                 Estatus = 1
             };
 
@@ -354,6 +394,35 @@ namespace Legalizaciones.Web.Controllers
                     OEmpleado.Ciudad = "Cucuta";
                     OEmpleado.Telefono = "(1) 560 00100-3";
                     OEmpleado.CargoId = 4;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
+                    OEmpleado.FechaCreacion = DateTime.Now;
+                    break;
+
+
+                case "10.845.256.665":
+                    OEmpleado.Area = "Empleado";
+                    OEmpleado.Nombre = "Efrain Mejias";
+                    OEmpleado.Cedula = "6.845.256.665";
+                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
+                    OEmpleado.Ciudad = "Bogota";
+                    OEmpleado.Telefono = "(1) 560 00100";
+                    OEmpleado.CargoId = 1;
+                    OEmpleado.CentroOperaciones = "1";
+                    OEmpleado.CentroCostos = "1";
+                    OEmpleado.UnidadNegocio = "1";
+                    OEmpleado.FechaCreacion = DateTime.Now;
+                    break;
+
+                case "11.845.256.665":
+                    OEmpleado.Area = "Empleado";
+                    OEmpleado.Nombre = "Javier Rodriguez";
+                    OEmpleado.Cedula = "6.845.256.665";
+                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
+                    OEmpleado.Ciudad = "Bogota";
+                    OEmpleado.Telefono = "(1) 560 00100";
+                    OEmpleado.CargoId = 1;
                     OEmpleado.CentroOperaciones = "1";
                     OEmpleado.CentroCostos = "1";
                     OEmpleado.UnidadNegocio = "1";

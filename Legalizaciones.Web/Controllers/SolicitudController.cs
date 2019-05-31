@@ -164,8 +164,12 @@ namespace Legalizaciones.Web.Controllers
                 solicitud.Estatus = 1;//Activa
                 solicitud.EstadoId = 1;//Estado Sin Legalizar
                 solicitud.TipoSolicitudID = 1;//Anticipo
-                solicitud.FechaDesde = DateTime.Now;
-                solicitud.FechaHasta = DateTime.Now;
+                //como la fecha viene en formato di/mes/AÑo yo le doy el formato mes/dia/añ
+                string wFechaDesde = solicitud.AuxFechaDesde.Substring(3,2) + "/" + solicitud.AuxFechaDesde.Substring(0, 2) + "/" + solicitud.AuxFechaDesde.Substring(6, 4);
+                string wFechaHasta = solicitud.AuxFechaHasta.Substring(3, 2) + "/" + solicitud.AuxFechaHasta.Substring(0, 2) + "/" + solicitud.AuxFechaHasta.Substring(6, 4);
+
+                solicitud.FechaDesde = Convert.ToDateTime(wFechaDesde);
+                solicitud.FechaHasta = Convert.ToDateTime(wFechaHasta);
                 solicitud.FechaSolicitud = DateTime.Now;
 
                 //Calculo Fecha de Vencimiento de la Solicitud
@@ -481,7 +485,7 @@ namespace Legalizaciones.Web.Controllers
                 OSolicitud.Extracto = data.Extracto;
                 solicitudRepository.Update(OSolicitud);
 
-                TempData["Alerta"] = "success - La Solicitud de Tajeta de Crédito se Actualizo correctamente.";
+                TempData["Alerta"] = "Exito - La Solicitud de Tajeta de Crédito se Actualizo correctamente.";
                 return RedirectToAction("Index", "Solicitud");
 
             }

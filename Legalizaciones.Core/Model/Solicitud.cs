@@ -68,6 +68,7 @@ namespace Legalizaciones.Model
         [DisplayName("Fecha Hasta")]
         public DateTime FechaHasta { get; set; }
 
+
         [Required(ErrorMessage = "El campo Concepto es requerido.")]
         [DisplayName("Moneda")]
         [ForeignKey("Moneda")]
@@ -116,6 +117,14 @@ namespace Legalizaciones.Model
         public string Extracto { get; set; }
 
         public string Banco { get; set; }
+
+
+        [NotMapped]
+        public String AuxFechaDesde { get; set; }
+
+        [NotMapped]
+        public string AuxFechaHasta { get; set; }
+
 
     }
 }
