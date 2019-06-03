@@ -68,19 +68,60 @@ namespace Legalizaciones.Web.Controllers
             return resultado;
         }
 
-        private AprobacionDocumento GetTipoSolicitudes(AprobacionDocumento model)
+        /* private AprobacionDocumento GetTipoSolicitudes(AprobacionDocumento model)
+         {
+             Engine.EngineDb Metodo = new EngineDb();
+             model.TipoSolicitud = Metodo.TiposDocumentos("Sp_GetTiposSolicitud");
+             return model;
+         }
+
+         private List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
+         {
+             Engine.EngineDb Metodo = new EngineDb();
+             List<DataAprobacion> model = new List<DataAprobacion>();
+             model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
+             return model;
+         }*/
+
+        [HttpGet]
+        public JsonResult ExisteRangoAprobacion(int destinoId, float montoMaximo, float montoMinimo, int idDocumento)
         {
-            Engine.EngineDb Metodo = new EngineDb();
-            model.TipoSolicitud = Metodo.TiposDocumentos("Sp_GetTiposSolicitud");
-            return model;
+            DataAprobacion model = new DataAprobacion();
+            EngineDb Metodo = new EngineDb();
+            model.Id = Metodo.ExisteRangoAprobacion("Sp_GetExisteRangoAprobacion", destinoId ,montoMinimo, montoMaximo, idDocumento);
+            return Json(model);
         }
 
-        private List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
+        [HttpPost]
+        public JsonResult CreateFlujoDocumento(int paso=0, string tipoDocumento="",int idDocumento=0,string aprobador="",string empleado="",string descripcion="",string mail="",string destino="",int destinoId=0,float montoMaximo=0,float montoMinimo=0)
         {
+            List<Legalizaciones.Web.Models.DataAprobacion> model = new List<Legalizaciones.Web.Models.DataAprobacion>();
+            EngineStf Funcion = new EngineStf();
+            EngineDb Metodo = new EngineDb();
+            int update=0;
+            int estatus=1;
+            if (paso == 1)
+            {
+                update++;
+                string[] JefeArea = Funcion.SimuladorKactusJefeInmediato();
+                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, JefeArea[0], JefeArea[1], JefeArea[2], JefeArea[3], update , estatus, paso, destinoId, montoMaximo, montoMinimo);
+            }
+            else
+            {
+                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, aprobador, empleado,descripcion, mail, update, estatus, paso, destinoId, montoMaximo, montoMinimo);
+            }
+            return Json(model);
+        }
+
+        [HttpGet]
+        public JsonResult GetAprobadores(int idDocumento , int idFlujo , string rango)
+        {
+            EngineStf Funcion = new EngineStf();
+            int destinoId = Funcion.DestinoId(rango);
             Engine.EngineDb Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
-            model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
-            return model;
+            model = Metodo.AprobadoresFlujoSolicitud("Sp_GetFlujoAprobadoresDocumentos", idDocumento , idFlujo, destinoId);
+            return Json(model);
         }
 
         [HttpGet]

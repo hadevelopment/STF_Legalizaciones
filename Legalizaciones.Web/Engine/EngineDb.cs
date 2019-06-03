@@ -211,6 +211,7 @@ namespace Legalizaciones.Web.Engine
             return dataList;
         }
 
+
         public List<DataAprobacion> AprobadoresTipoSolicitud(string SpName, DataAprobacion model)
         {
             List<DataAprobacion> dataList = new List<DataAprobacion>();
@@ -256,6 +257,93 @@ namespace Legalizaciones.Web.Engine
             }
             return dataList;
         }
+
+
+        public List<DataAprobacion> AprobadoresFlujoSolicitud(string SpName, int idDocumento, int idFlujo ,int destinoId, int estatus = 1)
+        {
+            List<DataAprobacion> dataList = new List<DataAprobacion>();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@idDocumento", idDocumento);
+                command.Parameters.AddWithValue("@idFlujo", idFlujo);
+                command.Parameters.AddWithValue("@estatus", estatus);
+                command.Parameters.AddWithValue("@destinoId", destinoId);
+                SqlDataReader lector = command.ExecuteReader();
+                int n = 0;
+                while (lector.Read())
+                {
+                    DataAprobacion data = new DataAprobacion();
+                    data.CedulaAprobador = lector.GetString(0);
+                    data.NombreAprobador = lector.GetString(1);
+                    data.EmailAprobador = lector.GetString(2);
+                    data.Orden = lector.GetInt32(3);
+                    data.Descripcion = lector.GetString(4);
+                    data.Id = lector.GetInt32(5);
+                    data.MontoMinimo = lector.GetFloat(6);
+                    data.MontoMaximo = lector.GetFloat(7);
+                    data.Destino = lector.GetString(8);
+                    data.DestinoId = lector.GetInt32(9);
+                    data.TipoSolicitud = lector.GetString(10);
+                    dataList.Insert(n, data);
+                    n++;
+                }
+                lector.Close();
+                Conexion.Close();
+            }
+            return dataList;
+        }
+
+        public List<Legalizaciones.Web.Models.DataAprobacion> AprobadoresFlujoSolicitud(string SpName, Legalizaciones.Web.Models.DataAprobacion model)
+        {
+            List<DataAprobacion> dataList = new List<DataAprobacion>();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@Update", model.Update);
+                command.Parameters.AddWithValue("@TipoSolicitud", model.TipoSolicitud);
+                command.Parameters.AddWithValue("@Estatus", model.Estatus);
+                command.Parameters.AddWithValue("@FechaCreacion", model.FechaCreacion);
+                command.Parameters.AddWithValue("@Descripcion", model.Descripcion);
+                command.Parameters.AddWithValue("@CedulaAprobador", model.CedulaAprobador);
+                command.Parameters.AddWithValue("@NombreAprobador", model.NombreAprobador);
+                command.Parameters.AddWithValue("@EmailAprobador", model.EmailAprobador);
+                command.Parameters.AddWithValue("@Orden", model.Orden);
+                command.Parameters.AddWithValue("@DestinoId", model.DestinoId);
+                command.Parameters.AddWithValue("@MontoMaximo", model.MontoMaximo);
+                command.Parameters.AddWithValue("@MontoMinimo", model.MontoMinimo);
+                SqlDataReader lector = command.ExecuteReader();
+                int n = 0;
+                while (lector.Read())
+                {
+                    Legalizaciones.Web.Models.DataAprobacion data = new Legalizaciones.Web.Models.DataAprobacion();
+                    data.CedulaAprobador = lector.GetString(0);
+                    data.NombreAprobador = lector.GetString(1);
+                    data.EmailAprobador = lector.GetString(2);
+                    data.Orden = lector.GetInt32(3);
+                    data.Descripcion = lector.GetString(4);
+                    data.Id = lector.GetInt32(5);
+                    data.MontoMinimo = lector.GetFloat(6);
+                    data.MontoMaximo = lector.GetFloat(7);
+                    data.Destino = lector.GetString(8);
+                    data.DestinoId = lector.GetInt32(9);
+                    data.TipoSolicitud = lector.GetString(10);
+                    dataList.Insert(n, data);
+                    n++;
+                }
+                lector.Close();
+                Conexion.Close();
+            }
+            return dataList;
+        }
+
+
 
 
         public bool UpdatePasoFlujoAprobacion(string SpName, int id, string descripcion, string cedulaAprobador, string nombreAprobador, string emailAprobador, int orden = 0)
@@ -376,6 +464,29 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@TipoDocumento", tipoDocumento);
                 command.Parameters.AddWithValue("@MontoMinimo", montoMinimo);
                 command.Parameters.AddWithValue("@MontoMaximo", montoMaximo);
+                obj = command.ExecuteScalar();
+                if (obj != null)
+                    resultado = Convert.ToInt32(obj);
+                Conexion.Close();
+            }
+            return resultado;
+
+        }
+
+        public int ExisteRangoAprobacion(string SpName, int destinoId ,float montoMinimo, float montoMaximo,int idDocumento)
+        {
+            int resultado = 0;
+            object obj = new object();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@IdDocumento", idDocumento);
+                command.Parameters.AddWithValue("@DestinoId", destinoId);
+                command.Parameters.AddWithValue("@MontoMaximo", montoMaximo);
+                command.Parameters.AddWithValue("@MontoMinimo", montoMinimo);
                 obj = command.ExecuteScalar();
                 if (obj != null)
                     resultado = Convert.ToInt32(obj);

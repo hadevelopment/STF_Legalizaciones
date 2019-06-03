@@ -1,107 +1,16 @@
 ﻿$(document).ready(function () {
-  
-
-    var arrayEmpleadoPermiso = [];
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Empleados?filtroCedula=true",
-        datatype: "Json",
-        beforeSend: function () {
-            // console.log("Before Send Request");
-        },
-        success: function (data) {
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $("#Empleado").empty();
-            $('#Empleado').append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arrayEmpleadoPermiso.push(value);
-                $('#Empleado').append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
-            });
-        },
-        complete: function () {
-            // console.log(arrayEmpleadoPermiso);
-        }
-    });
-
-    //Propiedades del dropdown destinos
-    $("#Empleado").select2({
-        multiple: false,
-        placeholder: 'Seleccione...'
-    });
-
-
-    var arrayEmpleadoPermiso2 = [];
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Empleados?filtroCedula=true",
-        datatype: "Json",
-        beforeSend: function () {
-            // console.log("Before Send Request");
-        },
-        success: function (data) {
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $("#Empleado2").empty();
-            $('#Empleado2').append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arrayEmpleadoPermiso2.push(value);
-                $('#Empleado2').append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
-            });
-        },
-        complete: function () {
-            // console.log(arrayEmpleadoPermiso);
-        }
-    });
-
-
-    //Propiedades del dropdown destinos
-    $("#Empleado2").select2({
-        multiple: false,
-        placeholder: 'Seleccione...'
-    });
-
-    $('#Empleado2').on('change', function (e) {
-        var email = $("#Empleado2 option:selected").data('email');
-        document.getElementById("email").value = email;
-        var tipo = this.options[this.selectedIndex].text;
-        document.getElementById("nombre").value = tipo;
-        var cedula = $("#Empleado2 option:selected").val();
-        document.getElementById("cedula").value = cedula;
-    }); 
-
-
-    $("#Destino").select2({
-        multiple: false,
-        placeholder: 'Seleccione...'
-    });
-    var arrayDestino = [];
-    $.ajax({
-        type: "GET",
-        url: "/WorkFlow/GetDestino",
-        dataType: "json",
-        beforeSend: function () {
-            // console.log("Before Send Request");
-        },
-        success: function (data) {
-            console.log(data);
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $("#Destino").empty();
-            $('#Destino').append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arrayDestino.push(value);
-                $('#Destino').append('<option  value="' + value.id + '">' + value.destino + '</option>');
-            });
-        },
-        complete: function () {
-            // console.log(arrayEmpleadoPermiso);
-        }
-    });
-
-
 
     $("#solicitud").select2({
         multiple: false,
         placeholder: 'Seleccione...'
     });
+
+    $("#flujos").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+
+
     var arraySolicitud = [];
     $.ajax({
         type: "GET",
@@ -125,29 +34,122 @@
         }
     });
 
-   /* $("#Moneda").select2({
-        multiple: false,
-        placeholder: 'Seleccione...'
-    });*/
+    /* $("#Moneda").select2({
+         multiple: false,
+         placeholder: 'Seleccione...'
+     });*/
 
-    $("#flujos").select2({
-        multiple: false,
-        placeholder: 'Seleccione...'
-    });
+
+    EmpleadoAprobador();
+    EmpleadoAprobador2();
+    Destinos();
+
+    $('#Empleado2').on('change', function (e) {
+        var email = $("#Empleado2 option:selected").data('email');
+        document.getElementById("email").value = email;
+        var tipo = this.options[this.selectedIndex].text;
+        document.getElementById("nombre").value = tipo;
+        var cedula = $("#Empleado2 option:selected").val();
+        document.getElementById("cedula").value = cedula;
+    }); 
 
     $('#Moneda').hide();
     $('#Currency').hide();
 });
 
+function EmpleadoAprobador() {
+
+    $("#Empleado").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+
+    var arrayEmpleadoPermiso = [];
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/Empleados?filtroCedula=true",
+        datatype: "Json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Empleado").empty();
+            $('#Empleado').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayEmpleadoPermiso.push(value);
+                $('#Empleado').append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+}
 
 
- /*function TipoSolicitudCambio() {
-    const obj = document.getElementById('solicitud');
-    var tipo = obj.options[obj.selectedIndex].text;
-    document.getElementById("tipoSolicitud").value = tipo;
-    document.getElementById("tipoDocumento").value = tipo;
-    document.getElementById("indiceSolicitud").value = $('#solicitud').index; 
-}*/
+function EmpleadoAprobador2() {
+
+    //Propiedades del dropdown destinos
+    $("#Empleado2").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+
+    var arrayEmpleadoPermiso2 = [];
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/Empleados?filtroCedula=true",
+        datatype: "Json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Empleado2").empty();
+            $('#Empleado2').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayEmpleadoPermiso2.push(value);
+                $('#Empleado2').append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+}
+
+function Destinos() {
+
+    $("#Destino").select2({
+        multiple: false,
+        placeholder: 'Seleccione...'
+    });
+
+    var arrayDestino = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetDestino",
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#Destino").empty();
+            $('#Destino').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayDestino.push(value);
+                $('#Destino').append('<option  value="' + value.id + '">' + value.destino + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });}
+
+
 
 $('#solicitud').on('change', function (e) {
  
@@ -186,6 +188,15 @@ $('#solicitud').on('change', function (e) {
 
 });
 
+$('#flujos').on('change', function (e) {
+
+    const obj = document.getElementById('flujos');
+    var tipo = obj.options[obj.selectedIndex].text;
+    var indice = document.getElementById("flujos").selectedIndex;
+    document.getElementById("rango").value = tipo;
+
+});
+
 $('#Destino').on('change', function (e) {
  
     const obj = document.getElementById('Destino');
@@ -220,16 +231,34 @@ $('#Destino').on('change', function (e) {
 
 function SetNuevoFlujo()
 {
+    $("#tblFlujo thead tr").remove();
+    $("#tblFlujo tbody tr").remove();
+    EmpleadoAprobador();
+    Destinos();
     $('#Destino').css('visibility', 'show'); 
+    $("#Destino").prop("disabled", false);
+    $("#Empleado").prop("disabled", true);
+    $("#Destino").val("0");
+    document.getElementById('paso').value = '1';
+    document.getElementById('destinoId').value = '0';
+    document.getElementById('tipoDocumento').value = '';
+    document.getElementById('addAprobador').value = '';
+    document.getElementById('addMail').value = '';
+    document.getElementById('descripcion').value = '';
+    document.getElementById('descripcion').readOnly = true;
     document.getElementById('montoMaximo').readOnly = false;
     document.getElementById('montoMinimo').readOnly = false;
-
+    document.getElementById('paso').value = 1;
+    document.getElementById('descripcion').value = '';
+    document.getElementById('montoMinimo').value = '0';
+    document.getElementById('montoMaximo').value = '0';
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
+    document.getElementById('idDocument').value = obj.selectedIndex;
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     var paso = $('#paso').val();
-    if ( paso == '' || paso == 0) {
+    if (paso == 1) {
         $("#Empleado").prop("disabled", true);
     }
     else {
@@ -254,6 +283,7 @@ function SetAgregarPasoFlujo()
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
+    document.getElementById('idDocument').value = obj.selectedIndex;
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     document.getElementById('descripcion').readOnly = false;
 
@@ -264,16 +294,191 @@ function SetAgregarPasoFlujo()
     }
 }
 
+
+function EnviarDataAprobador()
+{
+    const obj = document.getElementById('Destino');
+    var destino = obj.options[obj.selectedIndex].text;
+    var destinoId = obj.selectedIndex;
+    var paso = document.getElementById('paso').value;
+    var aprobador = document.getElementById('addAprobador').value;
+    var empleado = document.getElementById('Empleado').value;
+    var idDocumento = document.getElementById('idDocument').value;
+    var tipoDocumento = document.getElementById('tipoDocumento').value;
+    var montoMinimo = document.getElementById('montoMinimo').value;
+    var montoMaximo = document.getElementById('montoMaximo').value;
+    var mail = document.getElementById('addMail').value;
+    var descripcion = document.getElementById('descripcion').value;
+    if (montoMinimo <= 0 || montoMaximo <= 0 || montoMinimo >= montoMaximo) {
+        alert('Los montos deben ser especificados de forma correcta');
+        return false;
+    }
+    if (descripcion == '' && paso > 1) {
+        alert('La descripcion es un campo requerido');
+        return false;
+    }
+
+    if (paso == 1) {
+        $.ajax({
+            url: "/WorkFlow/ExisteRangoAprobacion",
+            data: { destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo, idDocumento: idDocumento },
+            dataType: 'json',
+            type: 'GET',
+            cache: false,
+            success: function (data) {
+                console.log(data.id);
+                if (data.id > 0) {
+                    alert('El flujo de aprobacion ya existe');
+                    return false;
+                }
+                else {
+
+                    $.ajax({
+                        url: "/WorkFlow/CreateFlujoDocumento",
+                        data: { paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: empleado, descripcion: descripcion, mail: mail, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo },
+                        dataType: 'json',
+                        type: 'POST',
+                        cache: false,
+                        success: function (data) {
+                            paso = parseInt(paso) + 1;
+                            EmpleadoAprobador();
+                            document.getElementById('paso').value = paso;
+                            document.getElementById('descripcion').value = '';
+                            document.getElementById('montoMaximo').readOnly = true;
+                            document.getElementById('montoMinimo').readOnly = true;
+                            $("#Empleado").prop("disabled", false);
+                            $("#Destino").prop("disabled", true);
+                            document.getElementById('descripcion').readOnly = false;
+                            CreateTablaAprobadores(data);
+                            CreateTablaFlujoAprobadores(data);
+                        },
+                        error: function (d) {
+                            alert("ERROR INESPERADO.");
+                        }
+                    });
+                }
+            },
+            error: function (d) {
+                alert("ERROR INESPERADO.");
+            }
+        });
+    }
+    else {
+        $.ajax({
+            url: "/WorkFlow/CreateFlujoDocumento",
+            data: { paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: empleado, descripcion: descripcion, mail: mail, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo },
+            dataType: 'json',
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                paso = parseInt(paso) + 1;
+                EmpleadoAprobador();
+                document.getElementById('paso').value = paso;
+                document.getElementById('descripcion').value = '';
+                document.getElementById('montoMaximo').readOnly = true;
+                document.getElementById('montoMinimo').readOnly = true;
+                $("#Empleado").prop("disabled", false);
+                $("#Destino").prop("disabled", true);
+                document.getElementById('descripcion').readOnly = false;
+                CreateTablaAprobadores(data);
+                CreateTablaFlujoAprobadores(data);
+            },
+            error: function (d) {
+                alert("ERROR INESPERADO.");
+            }
+        });
+
+    }
+
+}
+
 function VerFlujo() {
-    const obj = document.getElementById('solicitud');
-    var tipo = obj.options[obj.selectedIndex].text;
-    document.getElementById("tipoSolicitud").value = tipo;
-    document.getElementById("tipoDocumento").value = tipo;
-    document.getElementById("indiceSolicitud").value = document.getElementById("solicitud").selectedIndex;
-    if (tipo === 'Seleccione...') {
-        $('#cerrar').hide();
-        $("#msjClienteModal").modal('show');
-        document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
+    const tipoSolicitud = document.getElementById('solicitud');
+    const tipoFlujo = document.getElementById('flujos');
+    var idDocumento = tipoSolicitud.selectedIndex;
+    const obj = document.getElementById('flujos');
+    var idFlujo = tipoFlujo.value;
+    var rango = obj.options[obj.selectedIndex].text;
+    if (idDocumento <= 0 || idFlujo <= 0) { alert('Seleccione tipo de documento y rango del flujo'); return false; }
+    $.ajax({
+        url: "/WorkFlow/GetAprobadores/",
+        data: { idDocumento: idDocumento, idFlujo: idFlujo , rango: rango },
+        dataType: 'json',
+        type: 'GET',
+        cache: false,
+        success: function (data) {
+
+            CreateTablaAprobadores(data);
+        },
+        error: function (d) {
+            alert("ERROR INESPERADO.");
+        }
+    });
+}
+
+function CreateTablaAprobadores(infoAprobadores) {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    if (infoAprobadores !== null) {
+        let title = `<tr>
+                        <th> Orden de Aprobacion </th>
+                        <th> Descripcion </th>
+                        <th> Nombre Aprobador </th>
+                        <th> E-Mail Aprobador</th>
+                        <th> Actualizar </th>
+                        <th> Eliminar </th>
+                                      </tr>`;
+        $("#tblAprobadores thead").append(title); //Se agrega a la nueva tabla
+
+        $("#tblAprobadores tbody tr").remove();
+        $.each(infoAprobadores, function (index, item)
+        {
+            console.log(item);
+            let tr = `  <tr>
+                            <td> ${item.orden}</td>
+                            <td> ${item.descripcion}</td>
+                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.emailAprobador}</td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador(${item.id},${item.orden} ,${item.descripcion},${item.nombreAprobador},${item.EmailAprobador},${item.cedulaAprobador}, ${item.tipoSolicitud} ${item.montoMinimo}, ${item.montoMaximo}, ${item.destinoId}, ${item.lujoSolicitudId},'actualizar');" value="Actualizar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2(${item.id},${item.tipoSolicitud},${item.montoMinimo},${item.montoMaximo},${item.destinoId},${item.flujoSolicitudId},'eliminar');" value="Eliminar"> </td>
+                       
+                                    </tr>`;
+            $("#tblAprobadores tbody").append(tr);
+        });
+    }
+    else {
+        $("#tblAprobadores thead").append('<tr><th><h2 class="noFound">No existe flujo de aprobacion creado</h2></th></tr>');
+    }
+}
+
+function CreateTablaFlujoAprobadores(infoAprobadores) {
+    $("#tblFlujo thead tr").remove();
+    $("#tblFlujo tbody tr").remove();
+    if (infoAprobadores !== null) {
+        let title = `<tr>
+                        <th> Orden de Aprobacion </th>
+                        <th> Descripcion </th>
+                        <th> Nombre Aprobador </th>
+                        <th> E-Mail Aprobador</th>
+                      
+                                      </tr>`;
+        $("#tblFlujo thead").append(title); //Se agrega a la nueva tabla
+
+        $("#tblFlujo tbody tr").remove();
+        $.each(infoAprobadores, function (index, item) {
+            console.log(item);
+            let tr = `  <tr>
+                            <td> ${item.orden}</td>
+                            <td> ${item.descripcion}</td>
+                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.emailAprobador}</td>
+                       
+                                    </tr>`;
+            $("#tblFlujo tbody").append(tr);
+        });
+    }
+    else {
+        $("#tblFlujo thead").append('<tr><th><h2 class="noFound">No existe flujo de aprobacion creado</h2></th></tr>');
     }
 }
 
@@ -287,18 +492,15 @@ function AddAprobador() {
 }
 
 function ClearAll() {
+    $('#paso').val('1');
+    $('#destinoId').val('');
     $('#descripcion').val('');
     $('#tipoDocumento').val('');
     $('#addAprobador').val('');
     $('#addMail').val('');
+    $("#tblFlujo thead tr").remove();
     $("#tblFlujo tbody tr").remove();
     CloseNewFlujo();
-   /*var clear = 'Clear';
-   $.ajax({
-        type: "Get",
-        url: "Index",
-        data: { clear: clear }
-    });*/
 }
 
 function OpenNewFlujo() {

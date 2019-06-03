@@ -306,7 +306,7 @@ namespace Legalizaciones.Web.Engine
         }
 
         public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado,
-                                                      string descripcion, string mail, int update, int estatus, int paso,int destinoId,float montoMaximo,float montoMinimo)
+                                                        string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -328,6 +328,29 @@ namespace Legalizaciones.Web.Engine
             return model;
         }
 
+        public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string addAprobador, string empleado,
+                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
+        {
+            Legalizaciones.Web.Models.DataAprobacion Item = new Legalizaciones.Web.Models.DataAprobacion()
+            {
+                Update = update,
+                Estatus = estatus,
+                TipoSolicitud = tipoDocumento,
+                Id = idDocumento,
+                NombreAprobador = addAprobador,
+                CedulaAprobador = empleado,
+                EmailAprobador = mail,
+                Descripcion = descripcion,
+                Orden = paso,
+                DestinoId = destinoId,
+                MontoMaximo = montoMaximo,
+                MontoMinimo = montoMinimo
+            };
+
+            EngineDb Metodo = new EngineDb();
+            model= Metodo.AprobadoresFlujoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
+            return model;
+        }
         public bool ReordenarFlujoAprobacion(string tipoDocumento)
         {
             bool resultado = false;
@@ -349,6 +372,16 @@ namespace Legalizaciones.Web.Engine
                 n++;
             }
             return dt;
+        }
+
+        public int DestinoId (string r)
+        {
+            int resultado = 0;
+            string[] rango = r.Split("-");
+            string tipo = rango[2].Trim();
+            if (tipo == "Nacional") resultado = 1;
+            else if (tipo == "Internacional") resultado = 2;
+            return resultado;
         }
 
         public string Aleatorio(int s)
