@@ -159,33 +159,7 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
-   // $('#flow').css('visibility', 'hidden'); 
-
-   
-    var arraySolicitud = [];
-    $.ajax({
-        type: "GET",
-        url: "/WorkFlow/GetFlujos",
-        data: {id: indice},
-        dataType: "json",
-        beforeSend: function () {
-            // console.log("Before Send Request");
-        },
-        success: function (data) {
-            console.log(data);
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $("#flujos").empty();
-            $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arraySolicitud.push(value);
-                $('#flujos').append('<option  value="' + value.id + '">' + value.descripcion + '</option>');
-            });
-        },
-        complete: function () {
-            // console.log(arrayEmpleadoPermiso);
-        }
-    });
-
+    FlujosAprobacion(indice);
 });
 
 $('#flujos').on('change', function (e) {
@@ -194,7 +168,7 @@ $('#flujos').on('change', function (e) {
     var tipo = obj.options[obj.selectedIndex].text;
     var indice = document.getElementById("flujos").selectedIndex;
     document.getElementById("rango").value = tipo;
-
+    document.getElementById("rangeId").value = document.getElementById('flujos').value;
 });
 
 $('#Destino').on('change', function (e) {
@@ -202,6 +176,7 @@ $('#Destino').on('change', function (e) {
     const obj = document.getElementById('Destino');
     var destino = obj.options[obj.selectedIndex].text;
     var indice = document.getElementById("Destino").selectedIndex;
+    document.getElementById("destino").value = destino;
     $('#destinoId').val(indice);
     /*var arrayMoneda = [];
     $.ajax({
@@ -227,6 +202,33 @@ $('#Destino').on('change', function (e) {
         }
     });*/ 
 });
+
+function FlujosAprobacion(indice) {
+
+    var arrayFlujos = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetFlujos",
+        data: { id: indice },
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#flujos").empty();
+            $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayFlujos.push(value);
+                $('#flujos').append('<option  value="' + value.id + '">' + value.descripcion + '</option>');
+            });
+        },
+        complete: function () {
+            // console.log(arrayEmpleadoPermiso);
+        }
+    });
+}
 
 
 function SetNuevoFlujo()
@@ -279,43 +281,60 @@ function SetNuevoFlujo()
 
 function SetAgregarPasoFlujo()
 {
-    $('#Destino').css('visibility', 'hidden'); 
-    const obj = document.getElementById('solicitud');
-    var tipo = obj.options[obj.selectedIndex].text;
-    document.getElementById('tipoDocumento').value = tipo;
-    document.getElementById('idDocument').value = obj.selectedIndex;
-    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    EmpleadoAprobador();
+    Destinos();
+    const documento = document.getElementById('solicitud');
+    const descripcion = document.getElementById('flujos');
+    var documentoId = documento.value;
+    var flujoId = descripcion.value;
+    var tipo = documento.options[documento.selectedIndex].text;
+    var txtFlujo = descripcion.options[descripcion.selectedIndex].text;
+    var [min,max,des] = txtFlujo.split("-");
+    min = min.trim();
+    max = max.trim();
+    des = des.trim();
+    document.getElementById('montoMinimo').value = min;
+    document.getElementById('montoMaximo').value = max;
     document.getElementById('descripcion').readOnly = false;
-
-    if (tipo === 'Seleccione...') {
-        $("#nuevoFlujoModal").modal('hide');
-        $("#msjClienteModal").modal('show');
-        document.getElementById("msjClient").innerHTML = 'Debe elejir tipo -> Solicitud Anticipo/Legalizacion';
-    }
+    var indiceDestino = 0;
+    if (des == 'Nacional') { indiceDestino = 1;}
+    else if (des == 'Internacional') { indiceDestino = 2;}
+    document.getElementById("Destino").selectedIndex = indiceDestino;
+    $("#Destino").val(indiceDestino);
+    $("#Destino").prop("disabled", true);
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo + ' - ' + des;
+    document.getElementById('destinoId').value = indiceDestino;
+    document.getElementById('tipoDocumento').value = tipo;
+    document.getElementById('idDocument').value = documentoId;
+    var paso = document.getElementById("tblAprobadores").rows.length; 
+    document.getElementById('paso').value = paso;
+    $("#nuevoFlujoModal").modal('show');
 }
 
 
 function EnviarDataAprobador()
 {
-    const obj = document.getElementById('Destino');
-    var destino = obj.options[obj.selectedIndex].text;
-    var destinoId = obj.selectedIndex;
     var paso = document.getElementById('paso').value;
-    var aprobador = document.getElementById('addAprobador').value;
-    var empleado = document.getElementById('Empleado').value;
-    var idDocumento = document.getElementById('idDocument').value;
     var tipoDocumento = document.getElementById('tipoDocumento').value;
+    var idDocumento = document.getElementById('tipoDocumento').value;
     var montoMinimo = document.getElementById('montoMinimo').value;
     var montoMaximo = document.getElementById('montoMaximo').value;
-    var mail = document.getElementById('addMail').value;
-    var descripcion = document.getElementById('descripcion').value;
-    if (montoMinimo <= 0 || montoMaximo <= 0 || montoMinimo >= montoMaximo) {
-        alert('Los montos deben ser especificados de forma correcta');
-        return false;
-    }
-    if (descripcion == '' && paso > 1) {
-        alert('La descripcion es un campo requerido');
-        return false;
+    var destino = document.getElementById('destino').value;
+    var destinoId = document.getElementById('destinoId').value;
+    if (paso > 1)
+    {
+        var aprobador = document.getElementById('addAprobador').value;
+        var empleado = document.getElementById('Empleado').value;
+        var mail = document.getElementById('addMail').value;
+        var descripcion = document.getElementById('descripcion').value;
+        if (aprobador == '') {
+            alert('El nombre del aprobador es un campo requerido');
+            return false;
+        }
+        if (descripcion == '' ) {
+            alert('La descripcion es un campo requerido');
+            return false;
+        }
     }
 
     if (paso == 1) {
@@ -349,6 +368,11 @@ function EnviarDataAprobador()
                             $("#Empleado").prop("disabled", false);
                             $("#Destino").prop("disabled", true);
                             document.getElementById('descripcion').readOnly = false;
+                            $("#addPasoFlow").remove();
+                            var indice = document.getElementById("solicitud").selectedIndex;
+                            FlujosAprobacion(indice);
+                            var f = document.getElementById('flujos').length;
+                            document.getElementById("flujos").selectedIndex = f - 1;
                             CreateTablaAprobadores(data);
                             CreateTablaFlujoAprobadores(data);
                         },
@@ -380,6 +404,7 @@ function EnviarDataAprobador()
                 $("#Empleado").prop("disabled", false);
                 $("#Destino").prop("disabled", true);
                 document.getElementById('descripcion').readOnly = false;
+                $("#addPasoFlow").remove();
                 CreateTablaAprobadores(data);
                 CreateTablaFlujoAprobadores(data);
             },
@@ -393,6 +418,7 @@ function EnviarDataAprobador()
 }
 
 function VerFlujo() {
+    $("#addPasoFlow").remove();
     const tipoSolicitud = document.getElementById('solicitud');
     const tipoFlujo = document.getElementById('flujos');
     var idDocumento = tipoSolicitud.selectedIndex;
@@ -439,12 +465,16 @@ function CreateTablaAprobadores(infoAprobadores) {
                             <td> ${item.descripcion}</td>
                             <td> ${item.nombreAprobador}r</td>
                             <td> ${item.emailAprobador}</td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador(${item.id},${item.orden} ,${item.descripcion},${item.nombreAprobador},${item.EmailAprobador},${item.cedulaAprobador}, ${item.tipoSolicitud} ${item.montoMinimo}, ${item.montoMaximo}, ${item.destinoId}, ${item.lujoSolicitudId},'actualizar');" value="Actualizar"> </td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2(${item.id},${item.tipoSolicitud},${item.montoMinimo},${item.montoMaximo},${item.destinoId},${item.flujoSolicitudId},'eliminar');" value="Eliminar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}','${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}', '${item.flujoSolicitudId}','actualizar');" value="Actualizar"> </td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('${item.id}','${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}','${item.flujoSolicitudId}','eliminar');" value="Eliminar"> </td>
                        
                                     </tr>`;
             $("#tblAprobadores tbody").append(tr);
         });
+        if (infoAprobadores !== null) {
+            let btn = '<button type="button" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();" id="addPasoFlow" name="addPasoFlow">Agregar Paso de Aprobacion</button>';
+            $("#btnAddPaso").append(btn);
+        }
     }
     else {
         $("#tblAprobadores thead").append('<tr><th><h2 class="noFound">No existe flujo de aprobacion creado</h2></th></tr>');
@@ -515,29 +545,44 @@ function CloseNewFlujo() {
 }
 
 
-function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoSolicitud,montoMinimo,montoMaximo,destinoId,flujoSolicitudId,proceso) {
+function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDocumento,idTipoDocumento,montoMinimo,montoMaximo,destinoId,flujoSolicitudId,proceso) {
     document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
     $("#modificar").val('Actualizar');
-  
-    $('#id').val(id);
-    $('#orden').val(orden);
     $('#descripcionT').val(descripcion);
     $('#nombre').val(nombre);
     $('#email').val(email);
     $('#cedula').val(cedula);
-    $('#type').val(tipoSolicitud);
-    $('#proceso').val(proceso);
-    $('#minimo').val(montoMinimo);
-    $('#maximo').val(montoMaximo);
-    $('#destinoIde').val(destinoId);
+    $('#idPasoFlujoSolicitud').val(id);
+    $('#tipoDocumentoe').val(tipoDocumento);
+    $('#idTipoDocumente').val(idTipoDocumento);
+    $('#pasoe').val(orden);
     OpenQuestionModal(proceso);
 }
 
-function GetDataAprobador2(id, tipoSolicitud, montoMinimo, montoMaximo, destinoId, flujoSolicitudId, proceso) {
+function Actualizar()
+{
+    $.ajax({
+        url: "/WorkFlow/UpdatePasoFlujo",
+        data: {descripcion: descripcion,  cedula: cedula , nombre: nombre, email: email, idPasoFlujoSolicitud: idPasoFlujoSolicitud , idDocumento: idDocumento , idFlujo: idFlujo , rango: rango},
+        dataType: 'json',
+        type: 'POST',
+        cache: false,
+        success: function (data) {
+            $("#addPasoFlow").remove();
+            CreateTablaAprobadores(data);
+
+        },
+        error: function (d) {
+            alert("ERROR INESPERADO.");
+        }
+    });
+}
+
+function GetDataAprobador2(id, tipoDocumento,idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId, proceso) {
 
     document.getElementById("msjDataEliminar").innerHTML = 'Desea eliminar los siguientes datos?  SI para continuar , No para cancelar';
     $('#ide').val(id);
-    $('#typee').val(tipoSolicitud);
+    $('#typee').val(tipoDocumento);
     $('#procesoe').val(proceso);
     $('#minimoe').val(montoMinimo);
     $('#maximoe').val(montoMaximo);
@@ -559,8 +604,12 @@ function CloseQuestionModal(proceso) {
 }
 
 function OpenDataModal() {
-    var tipoFlujo = document.getElementById('tipoFlujo').value;
-    document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion ' + tipoFlujo;
+    const documento = document.getElementById('solicitud');
+    const descripcion = document.getElementById('flujos');
+    var tipo = documento.options[documento.selectedIndex].text;
+    var txtFlujo = descripcion.options[descripcion.selectedIndex].text;
+    document.getElementById("msjDataUpdate").innerHTML = 'Actualizacion de datos para el flujo de aprobacion ' + txtFlujo + ' y tipo de documento ' + tipo;
+    $('#range').val(txtFlujo);
     $("#preguntaModal").modal('hide');
     $('#dataModal').modal('show');
 }

@@ -29,18 +29,19 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateFlujo(int id = 0, int orden = 0, string descripcionT = "", string nombre = "", string email = "", string cedula = "", string type = "",
-                                         int flujoSolicituIde = 0, int destinoIde = 0, float maximo = 0 ,float  minimo = 0)
+        public JsonResult UpdatePasoFlujo(string descripcion, string cedula, string nombre , string email, int idPasoFlujoSolicitud, int idDocumento, int idFlujo, string rango, int orden = 0)
         {
+            EngineStf Funcion = new EngineStf();
+            int destinoId = Funcion.DestinoId(rango);
             EngineDb Metodo = new EngineDb();
-            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", id, descripcionT, cedula, nombre, email);
-            AprobacionDocumento model = new AprobacionDocumento();
-            model.TipoSeleccionado = type;
-            return RedirectToAction("Index", "WorkFlow", model);
+            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", idPasoFlujoSolicitud, descripcion, cedula, nombre, email);
+            List<DataAprobacion> model = new List<DataAprobacion>();
+            model = Metodo.AprobadoresFlujoSolicitud("Sp_GetFlujoAprobadoresDocumentos", idDocumento, idFlujo, destinoId);
+            return Json(model);
         }
 
         [HttpPost]
-        public IActionResult EliminarFlujo(int ide = 0, string typee = "", int flujoSolicituIdee = 0, int destinoIdee = 0, float maximoe = 0, float minimoe = 0)
+        public IActionResult EliminarPasoFlujo(int ide = 0, string typee = "", int flujoSolicituIdee = 0, int destinoIdee = 0, float maximoe = 0, float minimoe = 0)
         {
             EngineDb Metodo = new EngineDb();
             AprobacionDocumento model = new AprobacionDocumento();
@@ -56,33 +57,6 @@ namespace Legalizaciones.Web.Controllers
             return RedirectToAction("Index", "WorkFlow", model);
         }
 
-        private int ExisteRegistroEnPaso(int paso , string tipoDocumento, float montoMinimo, float montoMaximo)
-        {
-            int resultado = -1;
-            EngineDb Metodo = new EngineDb();
-            if (paso == 0)
-            {
-                if (montoMinimo <= 0 || montoMaximo <= 0 || montoMinimo < montoMaximo) return resultado;
-            }
-            resultado = Metodo.ExistePasoFlujoAprobacion("Sp_GetExistePasoFlujo", paso, tipoDocumento, montoMinimo, montoMaximo);
-            return resultado;
-        }
-
-        /* private AprobacionDocumento GetTipoSolicitudes(AprobacionDocumento model)
-         {
-             Engine.EngineDb Metodo = new EngineDb();
-             model.TipoSolicitud = Metodo.TiposDocumentos("Sp_GetTiposSolicitud");
-             return model;
-         }
-
-         private List<DataAprobacion> GetAprobadores(string tipoSolicitud = "")
-         {
-             Engine.EngineDb Metodo = new EngineDb();
-             List<DataAprobacion> model = new List<DataAprobacion>();
-             model = Metodo.AprobadoresTipoSolicitud("Sp_GetFlujoAprobadoresSolicitud", tipoSolicitud);
-             return model;
-         }*/
-
         [HttpGet]
         public JsonResult ExisteRangoAprobacion(int destinoId, float montoMaximo, float montoMinimo, int idDocumento)
         {
@@ -93,7 +67,8 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult CreateFlujoDocumento(int paso=0, string tipoDocumento="",int idDocumento=0,string aprobador="",string empleado="",string descripcion="",string mail="",string destino="",int destinoId=0,float montoMaximo=0,float montoMinimo=0)
+        public JsonResult CreateFlujoDocumento(int paso=0, string tipoDocumento="",int idDocumento=0,string aprobador="",string empleado="",string descripcion="",string mail="",
+                                               string destino="",int destinoId=0,float montoMaximo=0,float montoMinimo=0)
         {
             List<Legalizaciones.Web.Models.DataAprobacion> model = new List<Legalizaciones.Web.Models.DataAprobacion>();
             EngineStf Funcion = new EngineStf();

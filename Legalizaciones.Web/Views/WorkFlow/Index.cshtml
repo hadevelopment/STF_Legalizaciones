@@ -10,14 +10,7 @@
 @model Legalizaciones.Web.Models.AprobacionDocumento
 
 @{
-    ViewData["Title"] = "Flujo para Aprobacion de Documentos";
-    float minimo = 0;
-    float maximo = 0;
-    if (@Model.FlujoAprobacion != null)
-    {
-        minimo = @Model.FlujoAprobacion[0].MontoMinimo;
-        maximo = @Model.FlujoAprobacion[0].MontoMaximo;
-    }
+    ViewData["Title"] = "Configuracion de Flujo para Aprobacion de Documentos";
 }
 <div class="row">
     <div class="col-sm-12">
@@ -50,12 +43,10 @@
                         <br /><br />
                     </div>
                     <div>
-                        <!-- <form method="GET" id="formFlujo">-->
                         <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
                         <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
                         <input type="hidden" id="rango" name="rango" />
                         <button type="button" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
-                        <!-- </form>-->
                     </div>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
                 </div>
@@ -70,10 +61,12 @@
     <tbody></tbody>
 </table>
 
+<div id="btnAddPaso"></div>
+
 
 <!-- Trigger the modal with a button -->
 <!-- MODAL NUEVO FLUJO -->
-<!--<form id="newFlujo" method="GET" action='@Url.Action("Index", "WorkFlow")'>-->
+
 <div id="nuevoFlujoModal" class="modal fade" role="application">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -97,13 +90,13 @@
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Monto Minimo</label>
-                        <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value="@minimo" readonly />
+                        <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value=""  placeholder="0,00" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
                         <label>Monto Maximo</label>
-                        <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="@maximo" readonly />
+                        <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="" placeholder="0,00" readonly />
                     </div>
                 </div>
                 <div class="row">
@@ -126,7 +119,8 @@
                 <div class="row">
                     <div class="modal-footer">
                         <input type="hidden" id="destinoId" name="destinoId" />
-                        <input type="hidden" id="paso" name="paso" value="1"/>
+                        <input type="hidden" id="destino" name="destino" />
+                        <input type="hidden" id="paso" name="paso" value="1" />
                         <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
                         <input type="hidden" id="idDocument" name="idDocument" />
                         <input type="hidden" id="addAprobador" name="addAprobador" />
@@ -141,9 +135,9 @@
 
     </div>
 </div>
-<!-- </form>-->
+
 <!--MODAL ACTUALIZACION DE FLUJO -->
-<form method="POST" action='@Url.Action("UpdateFlujo", "WorkFlow")'>
+
     <div id="dataModal" name="dataModal" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -181,21 +175,23 @@
                         <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
                     </div>
                 </div>
-                <input type="hidden" id="flujoSolicituIde" name="flujoSolicitudIde" />
-                <input type="hidden" id="destinoIde" name="destinoIde" />
-                <input type="hidden" id="maximo" name="maximo" />
-                <input type="hidden" id="minimo" name="minimo" />
-                <input type="hidden" id="id" name="id" />
-                <input type="hidden" id="proceso" name="proceso" />
-                <input type="hidden" id="type" name="type" />
-                <input type="hidden" id="orden" name="orden" />
+                <input type="hidden" id="idPasoFlujoSolicitud" name="idPasoFlujoSolicitud" />
+                <input type="hidden" id="idFlujoSolicitude" name="idFlujoSolicitude" />
+                <input type="hidden" id="destinoe" name="destinoe" />
+                <input type="hidden" id="pasoe" name="pasoe" value="" />
+                <input type="hidden" id="range" name="range" value="" />
+                <input type="hidden" id="rangeId" name="rangeId" />
+                <input type="hidden" id="tipoDocumentoe" name="tipoDocumentoe" />
+                <input type="hidden" id="idTipoDocumente" name="idTipoDocumente" />
+                <input type="hidden" id="addAprobadore" name="addAprobadore" />
+                <input type="hidden" id="addMaile" name="addMaile" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
                 <br />
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" onclick="Actualizar();" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" onclick="CloseDataModal();" />
                     </div>
                 </div>
@@ -203,7 +199,7 @@
             </div>
         </div>
     </div>
-</form>
+
 
 <!-- MODAL ELIMINAR PASO FLUJO-->
 <form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
@@ -214,13 +210,8 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
                 </div>
-                <input type="hidden" id="flujoSolicituIdee" name="flujoSolicitudIdee" />
-                <input type="hidden" id="destinoIdee" name="destinoIdee" />
-                <input type="hidden" id="maximoe" name="maximoe" />
-                <input type="hidden" id="minimoe" name="minimoe" />
+                <input type="hidden" id="orden" name="orden" />
                 <input type="hidden" id="ide" name="ide" />
-                <input type="hidden" id="procesoe" name="procesoe" />
-                <input type="hidden" id="typee" name="typee" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
