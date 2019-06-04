@@ -16,15 +16,12 @@ namespace Legalizaciones.Web.Controllers
         {
             if (HttpContext.Session.GetString("Usuario_Cedula") == null)
                 return RedirectToAction("Index", "Home");
-
-      
             return View(model);
         }
 
         [HttpPost]
         public IActionResult Index(AprobacionDocumento model , string z = "")
         {
-
             return View(model);
         }
 
@@ -42,20 +39,25 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult EliminarPasoFlujo(int ide = 0, string typee = "", int flujoSolicituIdee = 0, int destinoIdee = 0, float maximoe = 0, float minimoe = 0)
+        public JsonResult EliminarPasoFlujo(int idPasoFlujoSolicitud, string tipoDocumento , int idDocumento, int idFlujo , string rango)
         {
-            EngineDb Metodo = new EngineDb();
-            AprobacionDocumento model = new AprobacionDocumento();
-            model.TipoSeleccionado = typee;
-            model.CountDocAsociado = Metodo.CountDocAsociado("Sp_GetCountDocAsociadoPaso", ide, typee);
-            if (model.CountDocAsociado > 0)
-            {
-                return RedirectToAction("Index", "WorkFlow", model);
-            }
-            Metodo.DeletePasoFlujoAprobacion("Sp_DeletePasoAprobacion", ide);
             EngineStf Funcion = new EngineStf();
-            Funcion.ReordenarFlujoAprobacion(typee);
-            return RedirectToAction("Index", "WorkFlow", model);
+            int destinoId = Funcion.DestinoId(rango);
+            EngineDb Metodo = new EngineDb();
+            List<DataAprobacion> model = new List<DataAprobacion>();
+            Metodo.DeletePasoFlujoAprobacion("Sp_DeletePasoAprobacion", idPasoFlujoSolicitud);
+            Funcion.ReordenarFlujoAprobacion(idFlujo);
+            model = Metodo.AprobadoresFlujoSolicitud("Sp_GetFlujoAprobadoresDocumentos", idDocumento, idFlujo, destinoId);
+            return Json(model);
+        }
+
+        [HttpGet]
+        public JsonResult ExisteDocumentosAsociados(int idPasoFlujoSolicitud, string tipoDocumento)
+        {
+            DataAprobacion model = new DataAprobacion();
+            EngineDb Metodo = new EngineDb();
+            model.Id = Metodo.CountDocAsociado("Sp_GetCountDocAsociadoPaso", idPasoFlujoSolicitud, tipoDocumento);
+            return Json(model);
         }
 
         [HttpGet]

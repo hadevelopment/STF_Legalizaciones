@@ -46,6 +46,7 @@
                         <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
                         <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
                         <input type="hidden" id="rango" name="rango" />
+
                         <button type="button" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
                     </div>
                     <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
@@ -202,7 +203,7 @@
 
 
 <!-- MODAL ELIMINAR PASO FLUJO-->
-<form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
+
     <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -212,20 +213,23 @@
                 </div>
                 <input type="hidden" id="orden" name="orden" />
                 <input type="hidden" id="ide" name="ide" />
+                <input type="hidden" id="typee" name="typee" />
+                <input type="hidden" id="idTypee" name="idTypee" />
+                <input type="hidden" id="desRange" name="desRange" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
 
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" onclick="Eliminar();" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</form>
+
 
 <!--MODAL PREGUNTA -->
 <div id="preguntaModal" name="preguntaModal" class="modal fade inside" role="application">
@@ -268,51 +272,6 @@
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
-
-
-    <script>
-
-    $(document).ready(function ()
-    {
-        let IndexSollicitud = '@ViewBag.IndexSollicitud'
-        if (IndexSollicitud != '') {
-            $("#solicitud").val(IndexSollicitud);
-        }
-
-        let tipoDoc = '@ViewBag.TipoDocumento';
-        if (tipoDoc != '') {
-            $('#tipoDocumento').val('@ViewBag.TipoDocumento');
-        }
-
-        let pasoFlujo = '@ViewBag.Paso';
-        if (pasoFlujo > 0) {
-            OpenNewFlujo();
-            $("#solicitud").val(IndexSollicitud);
-        }
-
-        let countDocAsociado = '@ViewBag.CountDocAsociado'
-        if (countDocAsociado > 0) {
-            OpenMensajeClienteModal('Existen documentos Asociados a este flujo, No se puede eliminar');
-        }
-
-        let rangoError = '@ViewBag.RangoError';
-         if (rangoError!='') {
-            OpenMensajeClienteModal('@ViewBag.RangoError');
-        }
-
-        let campoRequerido = '@ViewBag.CampoRequerido';
-        if (campoRequerido != '') {
-            OpenMensajeClienteModal('@ViewBag.CampoRequerido');
-        }
-
-        let existePaso = '@ViewBag.ExistePaso'
-        if (existePaso != '') {
-            OpenMensajeClienteModal('@ViewBag.CampoRequerido');
-        }
-    });
-
-
-    </script>
 
 }
 

@@ -351,12 +351,12 @@ namespace Legalizaciones.Web.Engine
             model= Metodo.AprobadoresFlujoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
             return model;
         }
-        public bool ReordenarFlujoAprobacion(string tipoDocumento)
+        public bool ReordenarFlujoAprobacion(int flujoSolicitudId)
         {
             bool resultado = false;
             EngineDb Metodo = new EngineDb();
             DataTable dt = new DataTable();
-            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion", tipoDocumento);
+            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacionXIdFlujoAprobacion", flujoSolicitudId);
             if (dt.Rows.Count > 0)
                 dt = ReordenarPaso(dt);
             resultado = Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", dt);

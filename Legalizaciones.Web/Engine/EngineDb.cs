@@ -335,6 +335,7 @@ namespace Legalizaciones.Web.Engine
                     data.Destino = lector.GetString(8);
                     data.DestinoId = lector.GetInt32(9);
                     data.TipoSolicitud = lector.GetString(10);
+                    data.IdTipoSolicitud = lector.GetInt32(11);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -444,6 +445,23 @@ namespace Legalizaciones.Web.Engine
                 command.CommandType = CommandType.StoredProcedure;
                 command.Parameters.Clear();
                 command.Parameters.AddWithValue("@tipoDocumento", tipoDocumento);
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTabla);
+                Conexion.Close();
+            }
+            return dataTabla;
+        }
+
+        public DataTable GetPasoFlujoAprobacion(string SpName, int flujoSolicitudId)
+        {
+            DataTable dataTabla = new DataTable();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@flujoSolicitudId", flujoSolicitudId);
                 SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
                 dataAdaptador.Fill(dataTabla);
                 Conexion.Close();
