@@ -273,7 +273,7 @@ function SetNuevoFlujo()
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
     document.getElementById('idDocument').value = $('#solicitud').val();
-    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo Flujo de aprobacion para ' + tipo;
     var paso = $('#paso').val();
     if (paso == 1) {
         $("#Empleado").prop("disabled", true);
@@ -312,7 +312,10 @@ function SetAgregarPasoFlujo()
     document.getElementById('montoMinimo').value = min;
     document.getElementById('montoMaximo').value = max;
     document.getElementById('descripcion').readOnly = false;
-    var indiceDestino = $('#Destino').val();
+    var indiceDestino = 0;
+    if (des == 'Nacional') { indiceDestino = 1; }
+    else if (des == 'Internacional') { indiceDestino = 2; }
+    document.getElementById("Destino").selectedIndex = indiceDestino;
     $("#Destino").val(indiceDestino);
     $("#Destino").prop("disabled", true);
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo + ' - ' + des;
