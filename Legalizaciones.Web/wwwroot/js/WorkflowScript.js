@@ -159,6 +159,9 @@ $('#solicitud').on('change', function (e) {
     document.getElementById("tipoSolicitud").value = tipo;
     document.getElementById("tipoDocumento").value = tipo;
     document.getElementById("indiceSolicitud").value = indice;
+    document.getElementById("tipoDocumentoe").value = obj.value
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
     FlujosAprobacion(indice);
 });
 
@@ -585,11 +588,13 @@ function Actualizar()
         success: function (data) {
             $("#addPasoFlow").remove();
             CreateTablaAprobadores(data);
+            CloseDataModal();
         },
         error: function (d) {
             alert("ERROR INESPERADO.");
         }
     });
+    CloseDataModal();
 }
 
 function GetDataAprobador2(id, tipoDocumento,idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId, proceso) {
