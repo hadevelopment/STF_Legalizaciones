@@ -351,6 +351,11 @@ function EnviarDataAprobador()
     }
 
     if (paso == 1) {
+
+        if (destinoId == 0 || montoMaximo == 0 || montoMinimo == 0) {
+            alert('Debe elegir destino y especificar montos mayores a cero.');
+            return false;
+        }
         $.ajax({
             url: "/WorkFlow/ExisteRangoAprobacion",
             data: { destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo, idDocumento: idDocumento },
@@ -406,6 +411,10 @@ function EnviarDataAprobador()
         });
     }
     else {
+        if (aprobador == ''|| descripcion == '') {
+            alert('Debe especificar los campos aprobador y descripcion');
+            return false;
+        }
         $.ajax({
             url: "/WorkFlow/CreateFlujoDocumento",
             data: { paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: empleado, descripcion: descripcion, mail: mail, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo },
