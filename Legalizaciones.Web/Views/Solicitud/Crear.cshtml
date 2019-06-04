@@ -129,21 +129,14 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Desde" })
-                        @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
-                    <div class="hidden">
-                        <input type="text" name="AuxFechaDesde" id="AuxFechaDesde" value="" />
-                        <input type="text" name="TxtCargoFecha" id="TxtCargoFecha" value="N" />
-                    </div>
+                        @Html.TextBoxFor(model => model.FechaDesde, "{0:dd/mm/yyyy}", new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Desde", @required="required" })
+                        @*@Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })*@
                     </div>
 
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
-                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker ", @placeholder = "Selecciona Fecha Hasta" })
-                        @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
-                        <div class="hidden">
-                            <input type="text" name="AuxFechaHasta" id="AuxFechaHasta" value="" />
-                        </div>
+                        @Html.TextBoxFor(model => model.FechaHasta, "{0:dd/mm/yyyy}", new { @class = "form-control datepicker ", @placeholder = "Selecciona Fecha Hasta", @required = "required" })
+                        @*@Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
                 <div class="row margin-bottom">
@@ -348,7 +341,7 @@
 
     <script>
     //COMA (,) COMO SEPARADOR DECIMAL...
-    $("#Monto").on({
+    /*$("#Monto").on({
         "focus": function (event) {
             this.value = (isNaN(number)) ? '' :
         $(event.target).select();
@@ -361,7 +354,7 @@
                         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
         });
     }
-    });
+    });*/
 
 
 

@@ -62,12 +62,12 @@ namespace Legalizaciones.Model
 
         [Required(ErrorMessage = "Debe indicar Fecha Desde.")]
         [DisplayName("Fecha Desde")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
         public DateTime FechaDesde { get; set; }
 
         [Required(ErrorMessage = "Debe indicar Fecha Hasta.")]
         [DisplayName("Fecha Hasta")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
         public DateTime FechaHasta { get; set; }
 
 
@@ -80,6 +80,10 @@ namespace Legalizaciones.Model
         [ForeignKey("EstadoSolicitud")]
         public int? EstadoId { get; set; }
         public EstadoSolicitud EstadoSolicitud { get; set; }
+
+        [ForeignKey("FlujoSolicitud")]
+        public int? FlujoSolicitudId { get; set; }
+        public FlujoSolicitud FlujoSolicitud { get; set; }
 
         [ForeignKey("PasoFlujoSolicitud")]
         public int? PasoFlujoSolicitudId { get; set; }

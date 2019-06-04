@@ -473,7 +473,8 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int?>("DestinoID")
                         .IsRequired();
 
-                    b.Property<string>("EmpleadoCedula");
+                    b.Property<string>("EmpleadoCedula")
+                        .IsRequired();
 
                     b.Property<int?>("EstadoId");
 
@@ -490,6 +491,8 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<DateTime>("FechaSolicitud");
 
                     b.Property<DateTime>("FechaVencimiento");
+
+                    b.Property<int>("FlujoSolicitudId");
 
                     b.Property<int?>("MonedaId")
                         .IsRequired();
@@ -514,6 +517,8 @@ namespace Legalizaciones.Data.Migrations
                     b.HasIndex("DestinoID");
 
                     b.HasIndex("EstadoId");
+
+                    b.HasIndex("FlujoSolicitudId");
 
                     b.HasIndex("MonedaId");
 
@@ -848,6 +853,11 @@ namespace Legalizaciones.Data.Migrations
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoSolicitud", "EstadoSolicitud")
                         .WithMany()
                         .HasForeignKey("EstadoId");
+
+                    b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("FlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
                         .WithMany()

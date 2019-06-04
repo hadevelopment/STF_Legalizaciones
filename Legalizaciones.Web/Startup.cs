@@ -69,6 +69,7 @@ namespace Legalizaciones
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
             services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
             services.AddTransient<ITasaRepository, TasaRepository>();
+            services.AddTransient<IFlujoSolicitudRepository, FlujoSolicitudRepository>();
             services.AddTransient<IPasoFlujoSolicitudRepository, PasoFlujoSolicitudRepository>();
             //Iempl
             var context = new CustomAssemblyLoadContext();

@@ -24,7 +24,7 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly ITipoSolicitudRepository tipoSolicitudRepository;
         private readonly IHistoricoSolicitudRepository historicoSolicitudRepository;
-        private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
+        
         public Solicitud sol;
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
@@ -34,6 +34,13 @@ namespace Legalizaciones.Web.Controllers
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
         public readonly IEstadoSolicitudRepository estatusRepository;
+
+
+        /*WORKFLOW*/
+        private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
+        private readonly IFlujoSolicitudRepository flujoSolicitudRepository;
+
+        /*DB*/
         EngineDb DB = new EngineDb();
 
         public SolicitudController(
@@ -45,7 +52,8 @@ namespace Legalizaciones.Web.Controllers
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,
             IEstadoSolicitudRepository estatusRepository,
-            IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository
+            IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
+            IFlujoSolicitudRepository flujoSolicitudRepository
             )
         {
             this.solicitudRepository = solicitudRepository;
@@ -57,6 +65,7 @@ namespace Legalizaciones.Web.Controllers
             this.zonaRepository = zonaRepository;
             this.estatusRepository = estatusRepository;
             this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
+            this.flujoSolicitudRepository = flujoSolicitudRepository;
         }
 
         public IActionResult Index()
@@ -154,9 +163,16 @@ namespace Legalizaciones.Web.Controllers
         [Route("Crear")]
         public ActionResult Guardar(Solicitud solicitud, IFormFile file)
         {
-
             try
             {
+                //Se valida que exista un flujo para la solicitud
+                //Se obtiene el paso inicial del flujo configurado
+                if(! getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
+                {
+                    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                    return View("Crear", solicitud);
+                }
+
                 solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                 solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
@@ -164,23 +180,15 @@ namespace Legalizaciones.Web.Controllers
                 solicitud.Estatus = 1;//Activa
                 solicitud.EstadoId = 1;//Estado Sin Legalizar
                 solicitud.TipoSolicitudID = 1;//Anticipo
-                //como la fecha viene en formato di/mes/AÑo yo le doy el formato mes/dia/añ
-                string wFechaDesde = solicitud.AuxFechaDesde.Substring(3,2) + "/" + solicitud.AuxFechaDesde.Substring(0, 2) + "/" + solicitud.AuxFechaDesde.Substring(6, 4);
-                string wFechaHasta = solicitud.AuxFechaHasta.Substring(3, 2) + "/" + solicitud.AuxFechaHasta.Substring(0, 2) + "/" + solicitud.AuxFechaHasta.Substring(6, 4);
-
-                solicitud.FechaDesde = Convert.ToDateTime(wFechaDesde);
-                solicitud.FechaHasta = Convert.ToDateTime(wFechaHasta);
                 solicitud.FechaSolicitud = DateTime.Now;
 
                 //Calculo Fecha de Vencimiento de la Solicitud
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
                 solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
+                
 
-                    //Se obtiene el paso inicial del flujo configurado
-                    solicitud.PasoFlujoSolicitudId = getPasoInicialFlujo();
-
-                    //Se Registra la Solicitud
-                    solicitudRepository.Insert(solicitud);
+                //Se Registra la Solicitud
+                solicitudRepository.Insert(solicitud);
 
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 solicitud.SolicitudGastos = listaGastos;
@@ -249,7 +257,6 @@ namespace Legalizaciones.Web.Controllers
                 TempData["Alerta"] = "error - No se pudo Encontrar la Solicitud";
                 return RedirectToAction("Index", "Home");
             }
-
         }
 
 
@@ -652,10 +659,25 @@ namespace Legalizaciones.Web.Controllers
             return dt.AddDays(weeks * 7);
         }
 
-        private int getPasoInicialFlujo()
+        private bool getPasoInicialFlujo(Solicitud solicitud, int? destino, float monto)
         {
-            var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == 1 && m.Estatus == 1).OrderBy(m=>m.Orden).Select(m => m.Id).FirstOrDefault();
-            return paso;
+            //Obtengo el Id del flujo
+            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
+
+            if(idFlujo != null && idFlujo > 0)
+            {
+                var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => m.Id).FirstOrDefault();
+
+                solicitud.FlujoSolicitudId = idFlujo;
+                solicitud.PasoFlujoSolicitudId = paso;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+            
         }
         #endregion
     }
