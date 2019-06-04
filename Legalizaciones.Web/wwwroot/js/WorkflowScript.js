@@ -391,13 +391,13 @@ function EnviarDataAprobador()
                             document.getElementById('descripcion').readOnly = false;
                             $("#addPasoFlow").remove();
                             var indice = document.getElementById("solicitud").selectedIndex;
-                            FlujosAprobacion(indice);
+                            FlujosAprobacion2(indice);
 
-                            var f = document.getElementById('flujos').length;
+                            /*var f = document.getElementById('flujos').length;
                             var lastChild = $("#flujos option:last-child").val();
                             $("#flujos").val(lastChild);
                             $("#flujos").trigger('change');
-                            $("#flujos").val(f - 1);
+                            $("#flujos").val(f - 1);*/
 
                             CreateTablaAprobadores(data);
                             CreateTablaFlujoAprobadores(data);
@@ -731,4 +731,34 @@ function OpenMensajeClienteModal(msj) {
 
 function CloseMensajeClienteModal() {
     $("#msjClienteModal").modal('hide');
+}
+
+function FlujosAprobacion2(indice) {
+
+    var arrayFlujos = [];
+    $.ajax({
+        type: "GET",
+        url: "/WorkFlow/GetFlujos",
+        data: { id: indice },
+        dataType: "json",
+        beforeSend: function () {
+            // console.log("Before Send Request");
+        },
+        success: function (data) {
+            console.log(data);
+            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
+            $("#flujos").empty();
+            $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                arrayFlujos.push(value);
+                $('#flujos').append('<option  value="' + value.id + '">' + value.descripcion + '</option>');
+            });
+
+            var f = document.getElementById('flujos');
+            f.children[f.children.length - 1].setAttribute('selected', '');
+        },
+        complete: function () {
+        
+        }
+    });
 }
