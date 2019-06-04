@@ -283,6 +283,7 @@ function SetAgregarPasoFlujo()
 {
     EmpleadoAprobador();
     Destinos();
+    $("#Empleado").prop("disabled", false);
     const documento = document.getElementById('solicitud');
     const descripcion = document.getElementById('flujos');
     var documentoId = documento.value;
@@ -561,6 +562,20 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDoc
 
 function Actualizar()
 {
+    var descripcion = $('#descripcionT').val();
+    var cedula = $('#cedula').val();
+    var nombre = $('#nombre').val();
+    var email = $('#email').val();
+    var idPasoFlujoSolicitud = $('#idPasoFlujoSolicitud').val();
+    var idDocumento = $('#idTipoDocumente').val();
+    var idFlujo = $('#rangeId').val();
+    var rango = $('#range').val();
+
+    if (descripcion == '' || cedula == '' || nombre == '' || email == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
+        alert('Todos los campos son requeridos.');
+        return false;
+    }
+    
     $.ajax({
         url: "/WorkFlow/UpdatePasoFlujo",
         data: {descripcion: descripcion,  cedula: cedula , nombre: nombre, email: email, idPasoFlujoSolicitud: idPasoFlujoSolicitud , idDocumento: idDocumento , idFlujo: idFlujo , rango: rango},
@@ -570,7 +585,6 @@ function Actualizar()
         success: function (data) {
             $("#addPasoFlow").remove();
             CreateTablaAprobadores(data);
-
         },
         error: function (d) {
             alert("ERROR INESPERADO.");
