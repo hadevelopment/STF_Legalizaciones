@@ -32,7 +32,7 @@ namespace Legalizaciones.Web.Controllers
             int destinoId = Funcion.DestinoId(rango);
             EngineDb Metodo = new EngineDb();
             Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", idPasoFlujoSolicitud, descripcion, cedula, nombre, email);
-            Metodo = new EngineDb();
+            //Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
             model = Metodo.AprobadoresFlujoSolicitud("Sp_GetFlujoAprobadoresDocumentos", idDocumento, idFlujo, destinoId);
             return Json(model);

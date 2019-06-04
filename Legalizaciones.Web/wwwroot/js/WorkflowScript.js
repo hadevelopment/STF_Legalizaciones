@@ -272,7 +272,7 @@ function SetNuevoFlujo()
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
-    document.getElementById('idDocument').value = obj.selectedIndex;
+    document.getElementById('idDocument').value = $('#solicitud').val();
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo;
     var paso = $('#paso').val();
     if (paso == 1) {
@@ -312,10 +312,7 @@ function SetAgregarPasoFlujo()
     document.getElementById('montoMinimo').value = min;
     document.getElementById('montoMaximo').value = max;
     document.getElementById('descripcion').readOnly = false;
-    var indiceDestino = 0;
-    if (des == 'Nacional') { indiceDestino = 1;}
-    else if (des == 'Internacional') { indiceDestino = 2;}
-    document.getElementById("Destino").selectedIndex = indiceDestino;
+    var indiceDestino = $('#Destino').val();
     $("#Destino").val(indiceDestino);
     $("#Destino").prop("disabled", true);
     document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + tipo + ' - ' + des;
@@ -332,7 +329,7 @@ function EnviarDataAprobador()
 {
     var paso = document.getElementById('paso').value;
     var tipoDocumento = document.getElementById('tipoDocumento').value;
-    var idDocumento = document.getElementById('tipoDocumento').value;
+    var idDocumento = document.getElementById('idDocument').value;
     var montoMinimo = document.getElementById('montoMinimo').value;
     var montoMaximo = document.getElementById('montoMaximo').value;
     var destino = document.getElementById('destino').value;
@@ -363,7 +360,7 @@ function EnviarDataAprobador()
             success: function (data) {
                 console.log(data.id);
                 if (data.id > 0) {
-                    alert('El flujo de aprobacion ya existe');
+                    alert('Ya existe un flujo de aprobacion destino ' + destino + ' con montos entre ' + montoMinimo + ' y ' + montoMaximo + ', debe elegir montos diferentes.' );
                     return false;
                 }
                 else {
