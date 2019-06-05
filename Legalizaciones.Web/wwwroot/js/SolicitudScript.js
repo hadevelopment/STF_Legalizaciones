@@ -2,9 +2,6 @@
 
 $(document).ready(function () {
 
-    var date = new Date();
-    var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
     $("#btnSubmit").click(function () {
 
         var list = [];
@@ -418,8 +415,18 @@ $(document).ready(function () {
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
      * Estado - Pais al cambiar destino o al cambiar pais */
     //*****************************************************************************************
+    /* global setting */
 
-
+    $('.datepicker').datepicker({
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto'
+    }).on("changeDate", function (dateText, inst) {
+        var id = $(this).attr('id');
+        console.log(id);
+    });
 });
 
 //get products details
@@ -671,6 +678,13 @@ function ShowModalUpdate(value) {
     $('#btnUpd').removeClass('display-none');
     $('#hdfRowIndex').val(value);
 
+    if (servicio === "Comida") {
+        $('#divGastosFecha').addClass('display-none');
+        $('#FechaGasto').val('N/A');
+    } else {
+        $('#divGastosFecha').removeClass('display-none');
+    }
+
     if (servicio === "Movilidad" || servicio === "Transporte") {
         $('#divGastosDescripcion').removeClass('col-md-12');
         $('#divGastosDescripcion').addClass('col-md-4');
@@ -700,25 +714,6 @@ function validarViaje(boton) {
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
-
-        //var wFechaDesde = $("#FechaDesde").val();
-        //var wFechaHasta = $("#FechaHasta").val();
-
-     
-
-        //if (wFechaDesde > wFechaHasta) {
-
-        //    $("#mensajeViaje").html("La fecha Hasta se encuentra incorrecta <strong>Favor Verifique las fechas</strong> para añadir gastos.");
-        //    $('#mensajeValidacionViaje').show("slow");
-        //    return false;
-
-        //} else {
-
-        //    $('#mensajeValidacionViaje').hide("slow");
-        //    $('#gastosModal').modal('show');
-        //    return true;
-
-        //}
 
     } else {
         $("#mensajeViaje").html("Seleccione <strong>Destino, Zona Visitada y Moneda</strong> para añadir gastos.");
@@ -850,12 +845,7 @@ window.onload = function () {
 
 function CargarCombosAlEditar() {
 
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        autoclose: true,
-        orientation: 'bottom auto'
-    });
+    
 
     //Obtener DESTINOS
     $.ajax({
@@ -960,13 +950,6 @@ function CargarCombosAlEditar() {
 
 function CargarComboAlcrear() {
 
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
-        todayHighlight: true,
-        autoclose: true,
-        orientation: 'bottom auto'
-    });
-
     $(".datepicker").datepicker("update", new Date());
 
     //Obtener DESTINOS
@@ -1061,19 +1044,10 @@ function CalcularGastoComida() {
 
     if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();
-        var FDdia = FechaDesde.substr(0, 2);
-        var FDMes = FechaDesde.substr(3, 2);
-        var FDAnno = FechaDesde.substr(6, 4);
-        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
-
         var FechaHasta = $("#FechaHasta").val();
-        var FHdia = FechaHasta.substr(0, 2);
-        var FHMes = FechaHasta.substr(3, 2);
-        var FHAnno = FechaHasta.substr(6, 4);
-        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
 
-        var fecha1 = moment(wFDFormato);
-        var fecha2 = moment(wFHFormato);
+        var fecha1 = moment(FechaDesde);
+        var fecha2 = moment(FechaHasta);
 
         var wDias = fecha2.diff(fecha1, 'days');
         console.log('dias ' + wDias);

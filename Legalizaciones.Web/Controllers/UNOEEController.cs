@@ -268,7 +268,7 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Cargos()
         {
-            Cargo[] Cargos = new Cargo[3];
+            Cargo[] Cargos = new Cargo[4];
 
             Cargos[0] = new Cargo
             {

@@ -492,7 +492,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaVencimiento");
 
-                    b.Property<int>("FlujoSolicitudId");
+                    b.Property<int?>("FlujoSolicitudId");
 
                     b.Property<int?>("MonedaId")
                         .IsRequired();
@@ -635,8 +635,6 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<int>("FlujoSolicitudId");
-
                     b.Property<string>("Nombre")
                         .IsRequired();
 
@@ -734,9 +732,17 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("CedulaAprobador");
 
+                    b.Property<string>("CedulaSuplenteDos");
+
+                    b.Property<string>("CedulaSuplenteUno");
+
                     b.Property<string>("Descripcion");
 
                     b.Property<string>("EmailAprobador");
+
+                    b.Property<string>("EmailSuplenteDos");
+
+                    b.Property<string>("EmailSuplenteUno");
 
                     b.Property<int>("Estatus");
 
@@ -745,6 +751,10 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int>("FlujoSolicitudId");
 
                     b.Property<string>("NombreAprobador");
+
+                    b.Property<string>("NombreSuplenteDos");
+
+                    b.Property<string>("NombreSuplenteUno");
 
                     b.Property<int>("Orden");
 
@@ -856,8 +866,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
                         .WithMany()
-                        .HasForeignKey("FlujoSolicitudId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("FlujoSolicitudId");
 
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
                         .WithMany()

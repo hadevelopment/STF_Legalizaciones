@@ -268,10 +268,23 @@ namespace Legalizaciones.Web.Controllers
             {
                 //if (!ModelState.IsValid || data.Id == 0)
                 //    return View(data);
+                
+                //Se valida que exista un flujo para la solicitud
+                //Se obtiene el paso inicial del flujo configurado
+                if (!getPasoInicialFlujo(data, data.DestinoID, (float)data.Monto))
+                {
+                    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                    return RedirectToAction("Editar", "Solicitud", new { id = data.Id });
+                }
+
+                //Calculo Fecha de Vencimiento de la Solicitud en caso de que la hayan modificado
+                var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
+                data.FechaVencimiento = data.FechaHasta.AddDays(DiasHabiles);
 
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 data.Monto = listaGastos.Sum(a => a.Monto);
+
                 solicitudRepository.Update(data);
 
                 //Elimino la tabla de detalles
@@ -294,7 +307,7 @@ namespace Legalizaciones.Web.Controllers
             catch (Exception e)
             {
                 TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de actualizar la solicitud.";
-                return RedirectToAction("Editar", "Solicitud", data.Id);
+                return RedirectToAction("Editar", "Solicitud", new { id = data.Id } );
             }
 
         }
