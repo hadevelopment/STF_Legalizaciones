@@ -642,7 +642,11 @@ function Eliminar() {
     var idFlujo = document.getElementById('flujos').value;
     var rango = $('#desRange').val();
     var idDocumento = $('#idTypee').val();
-    if (rango == '') { $('#flujos option:selected').text();}
+    if (rango == '')
+    {
+        var sel = document.getElementById("flujos");
+        rango = sel.options[sel.selectedIndex].text;
+    }
 
     if (tipoDocumento == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
         alert('Todos los campos son requeridos.');
