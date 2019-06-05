@@ -221,13 +221,6 @@ namespace Legalizaciones.Web.Engine
             return list;
         }
 
-        public string Aleatorio(int s)
-        {
-            Random rnd = new Random(s);
-            int n = rnd.Next(1, 999);
-            return "000" + n.ToString();
-        }
-
         public List<string> TiposDocumentos(DataTable dt)
         {
             List<string> documento = new List<string>();
@@ -245,8 +238,75 @@ namespace Legalizaciones.Web.Engine
             return documento;
         }
 
+        public List<Destinos> Destino (DataTable dt)
+        {
+            List<Destinos> destino = new List<Destinos> ();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                Destinos Item = new Destinos();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Destino = Convert.ToString(row[1]);
+                destino.Insert(n, Item);
+                n++;
+            }
+            return destino;
+        }
 
-        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado, string descripcion, string mail, int update, int estatus, int paso)
+        public List<FlujoDescripcion> DescripcionFlujo(DataTable dt)
+        {
+            List<FlujoDescripcion> flujo = new List<FlujoDescripcion>();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                FlujoDescripcion Item = new FlujoDescripcion();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Descripcion = Convert.ToString(row[1]);
+                flujo.Insert(n, Item);
+                n++;
+            }
+            return flujo;
+        }
+
+        public List<DocumentoTipo> DocumentType(DataTable dt)
+        {
+            List<DocumentoTipo> tipo = new List<DocumentoTipo>();
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                DocumentoTipo Item = new DocumentoTipo();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Documento = Convert.ToString(row[1]);
+                tipo.Insert(n, Item);
+                n++;
+            }
+            return tipo;
+        }
+        public Monedas[] Moneda (DataTable dt)
+        {
+            Monedas [] moneda = new Monedas[dt.Rows.Count];
+            int n = 0;
+            foreach (DataRow row in dt.Rows)
+            {
+                Monedas Item = new Monedas();
+                if (row[0] != DBNull.Value)
+                    Item.Id = Convert.ToInt32(row[0]);
+                if (row[1] != DBNull.Value)
+                    Item.Moneda = Convert.ToString(row[1]);
+                moneda[n] = Item;
+                n++;
+            }
+            return moneda;
+        }
+
+        public AprobacionDocumento SetCreateAprobador(AprobacionDocumento model, string tipoDocumento, string addAprobador, string empleado,
+                                                        string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
         {
             DataAprobacion Item = new DataAprobacion()
             {
@@ -257,7 +317,10 @@ namespace Legalizaciones.Web.Engine
                 CedulaAprobador = empleado,
                 EmailAprobador = mail,
                 Descripcion = descripcion,
-                Orden = paso
+                Orden = paso,
+                DestinoId = destinoId,
+                MontoMaximo = montoMaximo,
+                MontoMinimo = montoMinimo
             };
 
             EngineDb Metodo = new EngineDb();
@@ -265,12 +328,35 @@ namespace Legalizaciones.Web.Engine
             return model;
         }
 
-        public bool ReordenarFlujoAprobacion(string tipoDocumento)
+        public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string addAprobador, string empleado,
+                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
+        {
+            Legalizaciones.Web.Models.DataAprobacion Item = new Legalizaciones.Web.Models.DataAprobacion()
+            {
+                Update = update,
+                Estatus = estatus,
+                TipoSolicitud = tipoDocumento,
+                Id = idDocumento,
+                NombreAprobador = addAprobador,
+                CedulaAprobador = empleado,
+                EmailAprobador = mail,
+                Descripcion = descripcion,
+                Orden = paso,
+                DestinoId = destinoId,
+                MontoMaximo = montoMaximo,
+                MontoMinimo = montoMinimo
+            };
+
+            EngineDb Metodo = new EngineDb();
+            model= Metodo.AprobadoresFlujoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
+            return model;
+        }
+        public bool ReordenarFlujoAprobacion(int flujoSolicitudId)
         {
             bool resultado = false;
             EngineDb Metodo = new EngineDb();
             DataTable dt = new DataTable();
-            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacion", tipoDocumento);
+            dt = Metodo.GetPasoFlujoAprobacion("Sp_GetPasoFlujoAprobacionXIdFlujoAprobacion", flujoSolicitudId);
             if (dt.Rows.Count > 0)
                 dt = ReordenarPaso(dt);
             resultado = Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", dt);
@@ -286,6 +372,33 @@ namespace Legalizaciones.Web.Engine
                 n++;
             }
             return dt;
+        }
+
+        public int DestinoId (string r)
+        {
+            int resultado = 0;
+            string[] rango = r.Split("-");
+            string tipo = rango[2].Trim();
+            if (tipo == "Nacional") resultado = 1;
+            else if (tipo == "Internacional") resultado = 2;
+            return resultado;
+        }
+
+        public string Aleatorio(int s)
+        {
+            Random rnd = new Random(s);
+            int n = rnd.Next(1, 999);
+            return "000" + n.ToString();
+        }
+
+        public string []  SimuladorKactusJefeInmediato()
+        {
+            string [] JefeArea = new string[6];
+            JefeArea[0] = "Nombre Jefe Inmediato Area";
+            JefeArea[1] = "11.346.727";
+            JefeArea[2] = "Descripcion Requerida";
+            JefeArea[3] = "studiofnotificaciones@gmail.com";
+            return JefeArea;
         }
 
     }

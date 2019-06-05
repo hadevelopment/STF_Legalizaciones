@@ -26,6 +26,36 @@ namespace Legalizaciones.Web.Models
         public DateTime FechaCreacion { get { return DateTime.Now; } }
         public int Update { get; set; }
         public string TipoSolicitud { get; set; }
+        public int IdTipoSolicitud { get; set; }
         public int Id { get; set; }
+        public int DestinoId { get; set; }
+        public string Destino { get; set; }
+        public float MontoMinimo { get; set; }
+        public float MontoMaximo { get; set; }
+
+    }
+
+    public class Destinos
+    {
+        public int Id { get; set; }
+        public string Destino { get; set; }
+    }
+
+    public class Monedas
+    {
+        public int Id { get; set; }
+        public string Moneda { get; set; }
+    }
+
+    public class DocumentoTipo
+    {
+        public int Id { get; set; }
+        public string Documento { get; set; }
+    }
+
+    public class FlujoDescripcion
+    {
+        public int Id { get; set; }
+        public string Descripcion { get; set; }
     }
 }

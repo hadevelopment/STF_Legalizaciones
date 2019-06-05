@@ -1,16 +1,16 @@
 ﻿<style>
-    .inside{padding-right:2%;
-            padding-left:2%;
-            padding-top:2%;
-            padding-bottom:2%;
+    .inside {
+        padding-right: 2%;
+        padding-left: 2%;
+        padding-top: 2%;
+        padding-bottom: 2%;
     }
 </style>
 
 @model Legalizaciones.Web.Models.AprobacionDocumento
 
 @{
-    ViewData["Title"] = "Flujo para Aprobacion de Documentos";
-   // var paso = ViewBag.Paso;
+    ViewData["Title"] = "Configuracion de Flujo para Aprobacion de Documentos";
 }
 <div class="row">
     <div class="col-sm-12">
@@ -34,170 +34,111 @@
 
                     <div class="col-md-12 pb-2">
                         <label class="control-label"> <strong> Tipo Solicitud </strong></label>
-                        <select id="solicitud" name="solicitud" placeHolder="Seleccione..." style="width:20%;height:auto; font-size:16px;">
-                            @{
-                                int n = 0;
-                                foreach (var type in Model.TipoSolicitud)
-                                {
-                                    if (n == 0)
-                                    {<option value="@n" disabled selected> @type </option>}
-                                    else
-                                    { <option value="@n"> @type </option>}
-                                     n++;
-                                }
-                            }
-
-                        </select>
+                        <select id="solicitud" name="solicitud" style="width:40%;height:30px; font-size:16px;"></select>
+                    </div>
+                    <div style="height:15px;"></div>
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Rangos / Montos</strong></label>
+                        <select id="flujos" name="flujos" style="width:40%;height:30px; font-size:16px;"></select>
+                        <br /><br />
                     </div>
                     <div>
-                        <form method="POST" id="formFlujo">
-                            <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
-                            <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
-                            <button type="submit" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
-                        </form>
+                        <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
+                        <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
+                        <input type="hidden" id="rango" name="rango" />
+
+                        <button type="button" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
                     </div>
-
-                    @if (ViewBag.AprobadoresCount == 0)
-                    {
-                        <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
-                    }
+                    <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
 
-<div class="box-body">
-    @if (Model.TipoSeleccionado != "Seleccione..." && Model.TipoSeleccionado != string.Empty && Model.Aprobadores != null)
-    {
-        string tipoFlujo = "Flujo para aprobacion de " + Model.TipoSeleccionado;
-        <label class="control-label"> <strong> @tipoFlujo </strong></label>
-        <input type="hidden" id="tipoFlujo" name="tipoFlujo" value="@Model.TipoSeleccionado"/>
-    }
-    <table id="tblEmpleadoPermisos" class="table table-bordered table-hover">
-        <thead>
-            <tr>
-                @if (Model.Aprobadores != null)
-                {
-                    <th> Orden de Aprobacion </th>
-                    <th> Descripcion </th>
-                    <th> Nombre Aprobador </th>
-                    <th> E-Mail Aprobador</th>
-                    <th> Actualizar </th>
-                    <th> Eliminar </th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            @if (Model.Aprobadores != null)
-            {
-                @foreach (var item in Model.Aprobadores)
+<table id="tblAprobadores" class="table table-bordered table-hover">
+    <thead></thead>
+    <tbody></tbody>
+</table>
 
-                {
-                    <tr>
-                        <td> @item.Orden</td>
-                        <td> @item.Descripcion</td>
-                        <td> @item.NombreAprobador</td>
-                        <td> @item.EmailAprobador</td>
-                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('@item.Id','@item.Orden' ,'@item.Descripcion','@item.NombreAprobador','@item.EmailAprobador','@item.CedulaAprobador','@item.TipoSolicitud','actualizar');" value="Actualizar"> </td>
-                        <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('@item.Id','@item.TipoSolicitud','eliminar');" value="Eliminar"> </td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td colspan="3">No existe flujo de aprobacion creado ...</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <br />
-    <form method="GET" id="agregarPaso">
-        @if (ViewBag.AprobadoresCount > 0)
-        {
-            <input type="hidden" id="addPaso" name="addPaso" value="addPaso" />
-            <button type="submit" class="btn btn-primary" style="float:right;" onclick="SetAgregarPasoFlujo();">Agregar Paso</button>
+<div id="btnAddPaso"></div>
 
-        }
-    </form>
-</div>
 
 <!-- Trigger the modal with a button -->
 <!-- MODAL NUEVO FLUJO -->
-<form id="newFlujo" method="GET" action='@Url.Action("Index", "WorkFlow")'>
-    <div id="nuevoFlujoModal" class="modal fade" role="application">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
-                    <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo" > </label>
+
+<div id="nuevoFlujoModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
+                <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label id=" lblDestino">Destino</label>
+                        <select id="Destino" name="Destino"></select>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12 pb-2">
-                            <label>Empleado</label>
-                            <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
-                        </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label id="Currency" Name="Currency">Moneda</label>
+                        <select id="Moneda" name="Moneda"></select>
                     </div>
-                    <div class="row">
-                        <div class="col-md-12 pb-2">
-                            <label>Descripcion</label>
-                            <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="250" />
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Monto Minimo</label>
+                        <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value=""  placeholder="0,00" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Monto Maximo</label>
+                        <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="" placeholder="0,00" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Empleado</label>
+                        <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Descripcion</label>
+                        <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="250" readonly />
+                    </div>
+                </div>
+
+                <table id="tblFlujo" class="table table-bordered table-hover">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <div class="row">
+                    <div class="modal-footer">
+                        <input type="hidden" id="destinoId" name="destinoId" />
+                        <input type="hidden" id="destino" name="destino" />
+                        <input type="hidden" id="paso" name="paso" value="1" />
+                        <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
+                        <input type="hidden" id="idDocument" name="idDocument" />
+                        <input type="hidden" id="addAprobador" name="addAprobador" />
+                        <input type="hidden" id="addMail" name="addMail" />
+                        <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="EnviarDataAprobador();" />
+                        <input type="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
                     </div>
 
-                    <table id="tblFlujo" class="table table-bordered table-hover">
-                        <thead>
-                            <tr>
-                                @if (Model.FlujoAprobacion != null)
-                                {
-                                    <th> Orden de Aprobacion </th>
-                                    <th> Descripcion </th>
-                                    <th> Nombre Aprobador </th>
-                                    <th> E-Mail Aprobador</th>
-                                }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if (Model.FlujoAprobacion != null)
-                            {
-                                @foreach (var iten in Model.FlujoAprobacion)
-
-                                {
-                                    <tr>
-                                        <td> @iten.Orden</td>
-                                        <td> @iten.Descripcion</td>
-                                        <td> @iten.NombreAprobador</td>
-                                        <td> @iten.EmailAprobador</td>
-                                    </tr>
-                                }
-                            }
-
-                        </tbody>
-                    </table>
-                    <div class="row">
-                        <div class="modal-footer">
-                            <input type="hidden" id="paso" name="paso" value="@ViewBag.Paso" />
-                            <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
-                            <input type="hidden" id="addAprobador" name="addAprobador" />
-                            <input type="hidden" id="addMail" name="addMail" />
-                            <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="" />
-                            <input type ="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
-                        </div>
-
-                    </div>
                 </div>
             </div>
-
         </div>
+
     </div>
-</form>
+</div>
 
 <!--MODAL ACTUALIZACION DE FLUJO -->
-<form method="POST" action='@Url.Action("UpdateFlujo", "WorkFlow")'>
+
     <div id="dataModal" name="dataModal" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -226,7 +167,7 @@
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
                         <label>Email Aprobador</label>
-                        <input type="text" id="email" name="email" class="form-control" readonly/>
+                        <input type="text" id="email" name="email" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="row inside">
@@ -235,17 +176,23 @@
                         <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
                     </div>
                 </div>
-                <input type="hidden" id="id" name="id" />
-                <input type="hidden" id="proceso" name="proceso" />
-                <input type="hidden" id="type" name="type" />
-                <input type="hidden" id="orden" name="orden" />
+                <input type="hidden" id="idPasoFlujoSolicitud" name="idPasoFlujoSolicitud" />
+                <input type="hidden" id="idFlujoSolicitude" name="idFlujoSolicitude" />
+                <input type="hidden" id="destinoe" name="destinoe" />
+                <input type="hidden" id="pasoe" name="pasoe" value="" />
+                <input type="hidden" id="range" name="range" value="" />
+                <input type="hidden" id="rangeId" name="rangeId" />
+                <input type="hidden" id="tipoDocumentoe" name="tipoDocumentoe" />
+                <input type="hidden" id="idTipoDocumente" name="idTipoDocumente" />
+                <input type="hidden" id="addAprobadore" name="addAprobadore" />
+                <input type="hidden" id="addMaile" name="addMaile" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
                 <br />
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" onclick="Actualizar();" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" onclick="CloseDataModal();" />
                     </div>
                 </div>
@@ -253,10 +200,10 @@
             </div>
         </div>
     </div>
-</form>
+
 
 <!-- MODAL ELIMINAR PASO FLUJO-->
-<form method="POST" action='@Url.Action("EliminarFlujo", "WorkFlow")'>
+
     <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -264,24 +211,25 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
                 </div>
-
+                <input type="hidden" id="orden" name="orden" />
                 <input type="hidden" id="ide" name="ide" />
-                <input type="hidden" id="procesoe" name="procesoe" />
                 <input type="hidden" id="typee" name="typee" />
+                <input type="hidden" id="idTypee" name="idTypee" />
+                <input type="hidden" id="desRange" name="desRange" />
                 <div class="row">
                     <div class="col-md-12 pb-2"> </div>
                 </div>
 
                 <div class="row inside">
                     <div class="col-md-12 pb-2">
-                        <input type="submit" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" onclick="Eliminar();" />
                         <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</form>
+
 
 <!--MODAL PREGUNTA -->
 <div id="preguntaModal" name="preguntaModal" class="modal fade inside" role="application">
@@ -324,36 +272,6 @@
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
-
-
-    <script>
-
-        $(document).ready(function ()
-        {
-         let IndexSollicitud = '@ViewBag.IndexSollicitud'
-         if (IndexSollicitud != '') {
-            $("#solicitud").val(IndexSollicitud);
-            }
-
-        let tipoDoc = '@ViewBag.TipoDocumento';
-        if (tipoDoc != '') {
-            $('#tipoDocumento').val('@ViewBag.TipoDocumento');
-            }
-
-        let pasoFlujo = '@ViewBag.Paso';
-            if (pasoFlujo > 0) {
-               OpenNewFlujo();
-                $("#solicitud").val(IndexSollicitud);
-        }
-
-        let countDocAsociado = '@ViewBag.CountDocAsociado'
-        if (countDocAsociado > 0)
-        {
-            OpenMensajeClienteModal();
-        }
-        });
-
-    </script>
 
 }
 
