@@ -266,8 +266,8 @@ function SetNuevoFlujo()
     document.getElementById('montoMinimo').readOnly = false;
     document.getElementById('paso').value = 1;
     document.getElementById('descripcion').value = '';
-    document.getElementById('montoMinimo').value = '0';
-    document.getElementById('montoMaximo').value = '0';
+    document.getElementById('montoMaximo').placeholder = '0,00';
+    document.getElementById('montoMinimo').placeholder = '0,00';
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
@@ -576,7 +576,8 @@ function CloseNewFlujo() {
 }
 
 
-function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDocumento,idTipoDocumento,montoMinimo,montoMaximo,destinoId,flujoSolicitudId,proceso) {
+function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDocumento, idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId, proceso) {
+    EmpleadoAprobador();
     document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
     $("#modificar").val('Actualizar');
     $('#descripcionT').val(descripcion);
@@ -685,6 +686,12 @@ function Eliminar() {
             }
         }
     });
+    var paso = document.getElementById("tblAprobadores").rows.length; 
+    if (paso == 2)
+    {
+        var indice = document.getElementById("solicitud").selectedIndex; 
+        FlujosAprobacion(indice);
+    }
     CloseQuestionModal();
 }
 
@@ -755,9 +762,11 @@ function FlujosAprobacion2(indice) {
 
             var f = document.getElementById('flujos');
             f.children[f.children.length - 1].setAttribute('selected', '');
+            //$("#flujos").trigger('change');
         },
         complete: function () {
         
         }
     });
 }
+
