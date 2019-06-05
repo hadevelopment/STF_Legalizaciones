@@ -17,7 +17,7 @@
         url: "/WorkFlow/GetDocumentType",
         dataType: "json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+            
         },
         success: function (data) {
             console.log(data);
@@ -30,7 +30,7 @@
             });
         },
         complete: function () {
-            // console.log(arrayEmpleadoPermiso);
+          
         }
     });
 
@@ -70,7 +70,7 @@ function EmpleadoAprobador() {
         url: "/UNOEE/Empleados?filtroCedula=true",
         datatype: "Json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+         
         },
         success: function (data) {
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
@@ -82,7 +82,7 @@ function EmpleadoAprobador() {
             });
         },
         complete: function () {
-            // console.log(arrayEmpleadoPermiso);
+            
         }
     });
 }
@@ -90,7 +90,6 @@ function EmpleadoAprobador() {
 
 function EmpleadoAprobador2() {
 
-    //Propiedades del dropdown destinos
     $("#Empleado2").select2({
         multiple: false,
         placeholder: 'Seleccione...'
@@ -102,7 +101,7 @@ function EmpleadoAprobador2() {
         url: "/UNOEE/Empleados?filtroCedula=true",
         datatype: "Json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+         
         },
         success: function (data) {
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
@@ -114,7 +113,7 @@ function EmpleadoAprobador2() {
             });
         },
         complete: function () {
-            // console.log(arrayEmpleadoPermiso);
+            
         }
     });
 }
@@ -132,7 +131,7 @@ function Destinos() {
         url: "/WorkFlow/GetDestino",
         dataType: "json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+          
         },
         success: function (data) {
             console.log(data);
@@ -145,7 +144,7 @@ function Destinos() {
             });
         },
         complete: function () {
-            // console.log(arrayEmpleadoPermiso);
+           
         }
     });}
 
@@ -227,7 +226,7 @@ function FlujosAprobacion(indice) {
         data: { id: indice },
         dataType: "json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+           
         },
         success: function (data) {
             console.log(data);
@@ -240,7 +239,7 @@ function FlujosAprobacion(indice) {
             });
         },
         complete: function () {
-            // console.log(arrayEmpleadoPermiso);
+            
         }
     });
 }
@@ -742,7 +741,7 @@ function FlujosAprobacion2(indice) {
         data: { id: indice },
         dataType: "json",
         beforeSend: function () {
-            // console.log("Before Send Request");
+           
         },
         success: function (data) {
             console.log(data);
