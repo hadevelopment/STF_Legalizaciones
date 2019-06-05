@@ -266,8 +266,10 @@ function SetNuevoFlujo()
     document.getElementById('montoMinimo').readOnly = false;
     document.getElementById('paso').value = 1;
     document.getElementById('descripcion').value = '';
-    document.getElementById('montoMaximo').placeholder = '0,00';
+    document.getElementById('montoMinimo').value = '';
+    document.getElementById('montoMaximo').value = '';
     document.getElementById('montoMinimo').placeholder = '0,00';
+    document.getElementById('montoMaximo').placeholder = '0,00';
     const obj = document.getElementById('solicitud');
     var tipo = obj.options[obj.selectedIndex].text;
     document.getElementById('tipoDocumento').value = tipo;
@@ -342,14 +344,11 @@ function EnviarDataAprobador()
         var empleado = document.getElementById('Empleado').value;
         var mail = document.getElementById('addMail').value;
         var descripcion = document.getElementById('descripcion').value;
-        if (aprobador == '') {
-            alert('El nombre del aprobador es un campo requerido');
+        if (aprobador == '' || descripcion == '' ) {
+            alert('Complete todos los campos requeridos.');
             return false;
         }
-        if (descripcion == '' ) {
-            alert('La descripcion es un campo requerido');
-            return false;
-        }
+
     }
 
     if (paso == 1) {
@@ -601,6 +600,7 @@ function Actualizar()
     var idDocumento = $('#idTipoDocumente').val();
     var idFlujo = $('#rangeId').val();
     var rango = $('#range').val();
+    if (idFlujo == '') { idFlujo = document.getElementById('flujos').value;}
 
     if (descripcion == '' || cedula == '' || nombre == '' || email == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
         alert('Todos los campos son requeridos.');
@@ -642,6 +642,7 @@ function Eliminar() {
     var idFlujo = document.getElementById('flujos').value;
     var rango = $('#desRange').val();
     var idDocumento = $('#idTypee').val();
+    if (rango == '') { $('#flujos option:selected').text();}
 
     if (tipoDocumento == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
         alert('Todos los campos son requeridos.');
@@ -690,7 +691,8 @@ function Eliminar() {
     if (paso == 2)
     {
         var indice = document.getElementById("solicitud").selectedIndex; 
-        FlujosAprobacion(indice);
+        setTimeout(FlujosAprobacion(indice), 2000);
+        
     }
     CloseQuestionModal();
 }
