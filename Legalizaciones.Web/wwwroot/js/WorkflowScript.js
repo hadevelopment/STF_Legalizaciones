@@ -689,15 +689,17 @@ function Eliminar() {
                     }
                 });
             }
+        },
+        complete: function ()
+        {
+            var paso = document.getElementById("tblAprobadores").rows.length;
+            if (paso == 2) {
+                var indice = document.getElementById("solicitud").selectedIndex;
+                setTimeout(FlujosAprobacion(indice), 2000);
+            }
         }
     });
-    var paso = document.getElementById("tblAprobadores").rows.length; 
-    if (paso == 2)
-    {
-        var indice = document.getElementById("solicitud").selectedIndex; 
-        setTimeout(FlujosAprobacion(indice), 2000);
-        
-    }
+
     CloseQuestionModal();
 }
 
