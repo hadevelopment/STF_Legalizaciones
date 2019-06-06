@@ -35,17 +35,5 @@ namespace Legalizaciones.Model.Workflow
 
         public string EmailSuplenteDos { get; set; }
 
-        public string CedulaSuplenteUno { get; set; }
-
-        public string NombreSuplenteUno{ get; set; }
-
-        public string EmailSuplenteUno { get; set; }
-
-        public string CedulaSuplenteDos { get; set; }
-
-        public string NombreSuplenteDos { get; set; }
-
-        public string EmailSuplenteDos { get; set; }
-
     }
 }
