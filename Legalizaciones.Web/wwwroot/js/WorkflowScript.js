@@ -257,11 +257,17 @@ function SetNuevoFlujo() {
     Aprobadores('#nuevoSuplente2');
     Destinos();
     $("#Destino").prop("disabled", false);
-    $("#Empleado").prop("disabled", false);
-    document.getElementById('descripcion').readOnly = false;
+    var paso = $('#paso').val();
+    if (paso == 1) {
+        $("#Empleado").prop("disabled", true);
+        document.getElementById('descripcion').readOnly = true;
+    }
+    else {
+        $("#Empleado").prop("disabled", false);
+        document.getElementById('descripcion').readOnly = false;
+    }
     document.getElementById('montoMaximo').readOnly = false;
     document.getElementById('montoMinimo').readOnly = false;
-    $('#paso').val(1);
     document.getElementById('descripcion').value = '';
     document.getElementById('montoMinimo').value = '';
     document.getElementById('montoMaximo').value = '';
@@ -280,6 +286,12 @@ function EnviarDataAprobador() {
     var montoMaximo = document.getElementById('montoMaximo').value;
     var destino = document.getElementById('destino').value;
     var destinoId = document.getElementById('destinoId').value;
+    var aprobadorSuplente1 = document.getElementById('aprobadorSuplente1').value;
+    var cedulaSuplente1 = document.getElementById('cedulaSuplente1').value;
+    var emailSuplente1 = document.getElementById('emailSuplente1').value;
+    var aprobadorSuplente2 = document.getElementById('aprobadorSuplente2').value;
+    var cedulaSuplente2 = document.getElementById('cedulaSuplente2').value;
+    var emailSuplente2 = document.getElementById('emailSuplente2').value;
     if (paso > 1) {
         var aprobador = document.getElementById('aprobador').value;
         var cedulaAprobador = document.getElementById('cedulaAprobador').value;
@@ -316,14 +328,15 @@ function EnviarDataAprobador() {
                         url: "/WorkFlow/CreateFlujoDocumento",
                         data: {
                             paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: cedulaAprobador,
-                            descripcion: descripcion, mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo
+                            descripcion: descripcion, mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
+                            aprobadorSuplente1: aprobadorSuplente1, cedulaSuplente1: cedulaSuplente1, emailSuplente1: emailSuplente1, aprobadorSuplente2: aprobadorSuplente2, cedulaSuplente2: cedulaSuplente2, emailSuplente2: emailSuplente2
                         },
                         dataType: 'json',
                         type: 'POST',
                         cache: false,
                         success: function (data) {
                             paso = parseInt(paso) + 1;
-                            EmpleadoAprobador();
+                            Aprobadores('#Empleado');
                             document.getElementById('paso').value = paso;
                             document.getElementById('descripcion').value = '';
                             document.getElementById('montoMaximo').readOnly = true;
@@ -333,7 +346,7 @@ function EnviarDataAprobador() {
                             document.getElementById('descripcion').readOnly = false;
                             $("#addPasoFlow").remove();
                             var indice = document.getElementById("solicitud").selectedIndex;
-                            FlujosAprobacion2(indice);
+                            GetFlujosAprobacion2(indice);
 
                             /*var f = document.getElementById('flujos').length;
                             var lastChild = $("#flujos option:last-child").val();
@@ -364,7 +377,8 @@ function EnviarDataAprobador() {
             url: "/WorkFlow/CreateFlujoDocumento",
             data: {
                 paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: cedulaAprobador, descripcion: descripcion,
-                mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo
+                mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
+                aprobadorSuplente1: aprobadorSuplente1, cedulaSuplente1: cedulaSuplente1, emailSuplente1: emailSuplente1, aprobadorSuplente2: aprobadorSuplente2, cedulaSuplente2: cedulaSuplente2, emailSuplente2: emailSuplente2
             },
             dataType: 'json',
             type: 'POST',
