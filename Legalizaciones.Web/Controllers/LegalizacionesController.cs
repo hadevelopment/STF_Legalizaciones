@@ -38,6 +38,10 @@ namespace Legalizaciones.Web.Controllers
         private readonly ITasaRepository tasaRepository;
         private readonly IHostingEnvironment env;
 
+        /*WORKFLOW*/
+        private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
+        private readonly IFlujoSolicitudRepository flujoSolicitudRepository;
+
         public UNOEE objUNOEE = new UNOEE();
 
         public LegalizacionesController(ISolicitudRepository solicitudRepository,
@@ -45,6 +49,8 @@ namespace Legalizaciones.Web.Controllers
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
             IEmpleadoRepository empleadoRepository, ICiudadRepository ciudadRepository, ITasaRepository tasaRepository,
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
+            IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
+            IFlujoSolicitudRepository flujoSolicitudRepository,
             IHostingEnvironment _env)
         {
             this.solicitudRepository = solicitudRepository;
@@ -57,6 +63,8 @@ namespace Legalizaciones.Web.Controllers
             this.ciudadRepository = ciudadRepository;
             this.paisRepository = paisRepository;
             this.tasaRepository = tasaRepository;
+            this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
+            this.flujoSolicitudRepository = flujoSolicitudRepository;
             this.env = _env;
         }
 
@@ -76,29 +84,36 @@ namespace Legalizaciones.Web.Controllers
 
             if (usuarioCargo == "3")
             {
-                model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-                    string.Empty);
+                model = Metodo.SolicitudesAntPendientesLegalizacion(string.Empty);
             }
             else
             {
                 if (usuarioCedula != string.Empty)
-                    model = Metodo.SolicitudesAntPendientesLegalizacion(
-                        "Sp_GetSolicitudesAnticiposPendientesLegalizacion", usuarioCedula);
+                    model = Metodo.SolicitudesAntPendientesLegalizacion(usuarioCedula);
             }
 
             return View(model);
         }
 
         [HttpPost]
-        [Route("Filtrar")]
+        [Route("")]
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
-            model = Metodo.SolicitudesAntPendientesLegalizacionFiltrar("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-                fechaDesde, fechaHasta);
-            return View("Index",model);
+            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
+
+            if (!string.IsNullOrEmpty(usuarioCedula))
+            {
+                model = Metodo.SolicitudesAntPendientesLegalizacionFiltrar(usuarioCedula, fechaDesde, fechaHasta);
+                return View("Index", model);
+            }
+            else
+            {
+                TempData["Alerta"] = "error - No se pudo completar el filtro, no se obtuvo el dato cédula de la session.";
+                return View("Index", null);
+            }
         }
 
         private void EnviarMensaje()
@@ -246,9 +261,7 @@ namespace Legalizaciones.Web.Controllers
                 };
 
                 return View(OLegalizaciones);
-
             }
-
 
         }
 
@@ -270,7 +283,16 @@ namespace Legalizaciones.Web.Controllers
                     BancoId = legalizacion.BancoId,
                     EmpleadoCedula = legalizacion.CedulaId != null ? legalizacion.CedulaId : null
                 };
-                legalizacionRepository.Insert(OLegalizacionHeader);
+
+                //Se valida que exista un flujo para la solicitud
+                //Se obtiene el paso inicial del flujo configurado
+                //if (!getPasoInicialFlujo(OLegalizacionHeader, solicitud.DestinoID, (float)solicitud.Monto))
+                //{
+                //    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                //    return View("Crear", solicitud);
+                //}
+
+                //legalizacionRepository.Insert(OLegalizacionHeader);
 
 
                 //Se actualiza el estado de la solicitud a Legalizada
@@ -302,7 +324,7 @@ namespace Legalizaciones.Web.Controllers
                         ProveedorId = item.ProveedorId
 
                     };
-                    legalizacionGastosRepository.Insert(wOLegalizacionGasto);
+                    //legalizacionGastosRepository.Insert(wOLegalizacionGasto);
 
                 }
 
@@ -564,6 +586,26 @@ namespace Legalizaciones.Web.Controllers
             return View(legalizacion);
         }
 
-        
+
+        private bool getPasoInicialFlujo(Legalizacion legalizacion, int? destino, float monto)
+        {
+            //Obtengo el Id del flujo
+            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
+
+            if (idFlujo != null && idFlujo > 0)
+            {
+                var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => m.Id).FirstOrDefault();
+
+                legalizacion.FlujoSolicitudId = idFlujo;
+                legalizacion.PasoFlujoSolicitudId = paso;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
     }
 }

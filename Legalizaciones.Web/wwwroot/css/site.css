@@ -13,6 +13,11 @@ a {
     color: #333;
 }
 
+
+table thead {
+    font-size:12px !important; 
+}
+
 .btn {
     margin-bottom:15px !important;
 }

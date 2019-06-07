@@ -43,7 +43,7 @@ function Seleccionar(Id) {
                     success: function (data) {
                         $("#PaisId").empty();
                         $.each(data, function (index, value) {
-                            if (value.id == wPais) {
+                            if (value.id === wPais) {
                                 $('#PaisId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
                             } else {
                                 $('#PaisId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
@@ -61,7 +61,7 @@ function Seleccionar(Id) {
                     success: function (data) {
                         $("#CiudadId").empty();
                         $.each(data, function (index, value) {
-                            if (value.id == wCiudad) {
+                            if (value.id === wCiudad) {
                                 $('#CiudadId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
                             } else {
                                 $('#CiudadId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
@@ -77,7 +77,7 @@ function Seleccionar(Id) {
                     success: function (data) {
                         $("#Servicio").empty();
                         $.each(data, function (index, value) {
-                            if (value.id == wServicio) {
+                            if (value.id === wServicio) {
                                 $('#TiposervicioId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
                             } else {
                                 $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
@@ -117,16 +117,12 @@ function AgregarFilaDatagrid() {
 
     $('#tbGastos tbody tr').each(function () {
         $projectName = $(this).find('td:eq(0)').text();
-        if ($projectName == Id) {
+        if ($projectName === Id) {
             alert('Este gasto ya esta agregado');
             return;
         }
     });
 
-    var PaisId = $("#PaisId").val();
-    var Pais = "Colombia";
-    var CiudadId = $("#CiudadId").val();
-    var Ciudad = "Cali";
     var Monto = $("#MontoGasto").val();
     var FechaGasto = $("#FechaGasto").val();
 
@@ -141,7 +137,6 @@ function AgregarFilaDatagrid() {
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
 
-
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -153,15 +148,13 @@ function AgregarFilaDatagrid() {
 
     var ProveedorId = $("#ProveedorId").val();
     var Proveedor = "";
-    if (ProveedorId == 1) {
+    if (ProveedorId === 1) {
         Proveedor = "Proveedor Uno";
     } else {
         Proveedor = "Proveedor Dos";
     }
 
     var Monto = CalcularGastoComidaLegalizacion();
-
-                 
 
     //los primero campos que indican display-none no se muestran pero son los campos que necesito que se llenen con valores 
     //para poder realizar la serializacion de json cuando le envie el datagrid con los nombre verdaderos de la clase y con sus id
@@ -366,6 +359,26 @@ $(".datepicker").datepicker("update", new Date());
 
 function remove(tr) {
     $(tr).parent().parent().remove();
+    var sum = 0;
+    $('td.monto').each(function () {
+        sum += parseFloat(this.innerHTML);
+    });
+
+
+    $("#txMontoSobrante").val(sum);
+
+    var wSaldo = parseFloat($('#txSaldo').val());
+    var wDiferencia = wSaldo - sum;
+
+    if (wDiferencia > 0) {
+        funcion_InVisible($("#txMontoSobrante"));
+        funcion_Visible($("#txMontoFaltante"));
+        $('#txMontoFaltante').text(sum);
+    } else {
+        funcion_InVisible($("#txMontoFaltante"));
+        funcion_Visible($("#txMontoSobrante"));
+        $('#txMontoSobrante').text(sum);
+    }
     return false;
 }
 
@@ -374,7 +387,7 @@ function CalcularGastoComidaLegalizacion() {
     var wServicio = $('#TiposervicioId option:selected').text();
     var wMonto = $('#MontoGasto').val();
 
-    if (wServicio == "Comida") {
+    if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();
         var FDdia = FechaDesde.substr(0, 2);
         var FDMes = FechaDesde.substr(3, 2);

@@ -16,7 +16,7 @@ namespace Legalizaciones.Web.Engine
         private SqlConnection Conexion = new SqlConnection(EngineDb.DefaultConnection);
         
 
-        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string SpName,string empleadoCedula)
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacion (string empleadoCedula)
         {
             List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
             try
@@ -26,7 +26,7 @@ namespace Legalizaciones.Web.Engine
                 using (Conexion)
                 {
                     Conexion.Open();
-                    SqlCommand command = new SqlCommand(SpName, Conexion);
+                    SqlCommand command = new SqlCommand("Sp_GetSolicitudesAnticiposPendientesLegalizacion", Conexion);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@EmpleadoCedula", empleadoCedula);
@@ -47,24 +47,25 @@ namespace Legalizaciones.Web.Engine
             return InfoLegalizacion;
         }
 
-        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacionFiltrar(string SpName, 
-                                        DateTime fechaDesde, DateTime fechaHasta)
+        public List<InfoLegalizacion> SolicitudesAntPendientesLegalizacionFiltrar(string cedula, DateTime fechaDesde, DateTime fechaHasta)
         {
             List<InfoLegalizacion> InfoLegalizacion = new List<InfoLegalizacion>();
             try
             {
-
                 DataTable dataTabla = new DataTable();
                 using (Conexion)
                 {
                     Conexion.Open();
-                    SqlCommand command = new SqlCommand(SpName, Conexion);
+                    SqlCommand command = new SqlCommand("Sp_GetSolicitudesAnticiposPendientesLegalizacion", Conexion);
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Clear();
+                    command.Parameters.Add(new SqlParameter("@EmpleadoCedula", SqlDbType.VarChar));
                     command.Parameters.Add(new SqlParameter("@fechaDesde", SqlDbType.DateTime));
                     command.Parameters.Add(new SqlParameter("@fechaHasta", SqlDbType.DateTime));
-                    command.Parameters[0].Value = fechaDesde;
-                    command.Parameters[1].Value = fechaHasta;
+                    command.Parameters[0].Value = cedula;
+                    command.Parameters[1].Value = fechaDesde;
+                    command.Parameters[2].Value = fechaHasta;
+                    
 
                     SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
                     dataAdaptador.Fill(dataTabla);

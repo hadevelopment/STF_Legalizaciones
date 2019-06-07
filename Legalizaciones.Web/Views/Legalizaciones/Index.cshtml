@@ -33,48 +33,37 @@
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
                 <h1 class="box-title"> Legalizaciones </h1>
-
             </div>
 
             <br />
 
             <div class="row">
-
-                <div style="float: left; margin-left: 20px" class="col-md-3">
-                    <strong>Consultar por historico de fechas:</strong>
-                </div>
-
-                <form asp-controller="Solicitud" asp-action="Filtrar" method="Post">
-
-                    <div style="float: left;" class="col-md-2">
-                        <label>Desde</label>
-                        <input type="date" id="fechaDesde" name="fechaDesde" class="form- control" />
+                <form asp-controller="Legalizaciones" asp-action="Filtrar" method="Post">
+                    <div style="float: left; margin-left: 20px" class="col-md-3">
+                        <strong>Consultar por historico de fechas:</strong>
                     </div>
                     <div style="float: left;" class="col-md-2">
-                        <label>Hasta</label>
-                        <input type="date" id="fechaHasta" name="fechaHasta" class="form- control" />
-
+                        <input id="fechaDesde" name="fechaDesde" class="form- control datepicker" required="required" autocomplete="off" placeholder="Fecha Desde" />
                     </div>
-
+                    <div style="float: left;" class="col-md-2">
+                        <input id="fechaHasta" name="fechaHasta" class="form- control datepicker" required="required" autocomplete="off" placeholder="Fecha Hasta" />
+                    </div>
                     <div style="float: left;" class="col-md-1">
                         <button type="submit" class="btn btn-primary">
-                            <span class="fa fa-search"></span> Filtrar
+                            <span class="fa fa-search"></span>
                         </button>
                     </div>
-
                 </form>
-
-                <div style="float: left;" class="col-md-4">
-                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0" >Añadir Legalizacion sin anticipo</a>
-                    @*@if (ViewBag.cargo != "3")
-                        {
-                            //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
-
-                            <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
-                        }*@
-                </div>
             </div>
+            <div class="col-md-12">
+                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Añadir Legalizacion sin anticipo</a>
+                @*@if (ViewBag.cargo != "3")
+                {
+                    //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
 
+                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+                }*@
+            </div>
 
             <div class="box-body">
                 <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable" width="100%">

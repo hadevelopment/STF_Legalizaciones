@@ -123,7 +123,7 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            Empleado[] Empleados = new Empleado[10];
+            Empleado[] Empleados = new Empleado[6];
 
             Empleados[0] = new Empleado
             {

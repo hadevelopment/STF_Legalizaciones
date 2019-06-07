@@ -95,22 +95,7 @@ namespace Legalizaciones.Web.Controllers
             //Si es administrador puede ver todas las solicitudes
             if (cargo == "3")
             {
-                 solicitudes = solicitudRepository.All().ToList();
-                //var q = from sol in dbContext.Solicitud
-                //        join es in dbContext.EstadoSolicitud on sol.Estatus  equals es.Id 
-                //        join emp in dbContext.Empleado on sol.EmpleadoCedula equals emp.Cedula
-                //    select new { Id = sol.Id,
-                //                 NumeroSolicitud = sol.NumeroSolicitud,
-                //                 FechaSolicitud  = sol.FechaSolicitud,
-                //                 Concepto        = sol.Concepto,
-                //                 CedulaBenefi    = sol.EmpleadoCedula,
-                //                 Beneficiario    = emp.Nombre + ' ' + emp.Apellido,
-                //                 Monto           = sol.Monto.ToString(),
-                //                 EstadoSoli      = es.Descripcion,
-                //                 FechaPago       = sol.FechaVencimiento
-                //    };
-
-
+                solicitudes = solicitudRepository.All().ToList();
 
                 foreach (var item in solicitudes)
                 {
@@ -524,18 +509,29 @@ namespace Legalizaciones.Web.Controllers
 *     Autor: Javier Rodriguez    
       **************************************************************************** */
         [HttpPost]
-        [Route("Filtrar")]
+        [Route("")]
         public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
         {
             if (fechaDesde > fechaHasta)
             {
-                TempData["Alerta"] = "error - El rango de fechas no es valido";
+                TempData["Alerta"] = "error - Fecha Desde no puede ser mayor a la Fecha Hasta.";
                 return RedirectToAction("Index", "Solicitud");
             }
 
             UNOEE erp = new UNOEE();
+            var cedula = "";
+            var cargo = "";
+
+            // Obtenemos datos del empleado en Session
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            {
+                cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+            }
+
             List<Solicitud> solicitudes = solicitudRepository.All()
-                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).OrderByDescending(x => x.FechaCreacion).ToList();
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta && a.EmpleadoCedula == cedula).OrderByDescending(x => x.FechaCreacion).ToList();
+
             foreach (var item in solicitudes)
             {
                 item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);

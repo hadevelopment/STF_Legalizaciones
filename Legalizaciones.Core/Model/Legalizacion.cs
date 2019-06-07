@@ -35,6 +35,10 @@ namespace Legalizaciones.Model
         [ForeignKey("Banco")]
         public int BancoId{ get; set; }
 
+        [ForeignKey("FlujoSolicitud")]
+        public int? FlujoSolicitudId { get; set; }
+        public FlujoSolicitud FlujoSolicitud { get; set; }
+
         [ForeignKey("PasoFlujoSolicitud")]
         public int PasoFlujoSolicitudId { get; set; }
         public PasoFlujoSolicitud PasoFlujoSolicitud { get; set; }

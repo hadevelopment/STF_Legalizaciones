@@ -495,7 +495,6 @@
                             <thead>
                                 <tr>
                                     @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                    <td class="display-none">FechaGasto</td>
                                     <td class="display-none">PaisId</td>
                                     <td class="display-none">CiudadId</td>
                                     <td class="display-none">TipoServicioId</td>
@@ -507,6 +506,7 @@
                                     <td>Centro Oper.</td>
                                     <td>Unidad Neg</td>
                                     <td>Centro Cost</td>
+                                    <td>Fecha Gasto</td>
                                     <td>Pais</td>
                                     <td>Ciudad</td>
                                     <td>Servicio</td>
@@ -628,7 +628,7 @@
                                                         <tr>
                                                             <td class="col-md-1 ">@item.Id</td>
                                                             @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
-                                                            <td class="col-md-2 ">@item.FechaGasto.Substring(0, 10)</td>
+                                                            <td class="col-md-2 ">@item.FechaGasto</td>
                                                             <td class="col-md-1 ">@item.Pais</td>
                                                             <td class="col-md-1 ">@item.Servicio</td>
                                                             <td class="col-md-1 ">@item.Ciudad</td>

@@ -148,18 +148,20 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult SolicitudGastos(int wId)
         {
+
             var wG = solicitudGastosRepository.Find(wId);
 
-            string wFD = wG.FechaGasto.Substring(0, 4);
-            string wFM = wG.FechaGasto.Substring(5, 2);
-            string wFA = wG.FechaGasto.Substring(8, 2);
+            if(wG.FechaGasto != "N/A")
+            {
+                string wFD = wG.FechaGasto.Substring(0, 4);
+                string wFM = wG.FechaGasto.Substring(5, 2);
+                string wFA = wG.FechaGasto.Substring(8, 2);
 
-            wG.FechaGasto = wFD + "-" + wFM + "-" + wFA;
+                wG.FechaGasto = wFD + "-" + wFM + "-" + wFA;
+            }
 
             var wResult = Json(wG);
-
             return wResult;
-
         }
 
     }
