@@ -346,12 +346,12 @@ namespace Legalizaciones.Web.Engine
                 DestinoId = destinoId,
                 MontoMaximo = montoMaximo,
                 MontoMinimo = montoMinimo,
-                AprobadorSuplente1 = aprobadorSuplente1,
-                CedulaSuplente1 = cedulaSuplente1,
-                EmailSuplente1 = emailSuplente1,
-                AprobadorSuplente2 = aprobadorSuplente2,
-                CedulaSuplente2 = cedulaSuplente2,
-                EmailSuplente2 = emailSuplente2
+                NombreSuplenteUno = aprobadorSuplente1,
+                CedulaSuplenteUno = cedulaSuplente1,
+                EmailSuplenteUno = emailSuplente1,
+                NombreSuplenteDos = aprobadorSuplente2,
+                CedulaSuplenteDos = cedulaSuplente2,
+                EmailSuplenteDos = emailSuplente2
             };
     
             EngineDb Metodo = new EngineDb();

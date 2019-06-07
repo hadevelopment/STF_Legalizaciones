@@ -32,7 +32,7 @@
                 <div class="col-md-12">
 
                     <div class="col-md-12 pb-2">
-                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                        <label class="control-label"> <strong> Tipo Documento </strong></label>
                         <select id="solicitud" name="solicitud" style="width:40%;height:30px; font-size:16px;"></select>
                     </div>
                     <div style="height:15px;"></div>
@@ -70,32 +70,32 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <label id=" lblDestino">Destino</label>
+                        <label id=" lblDestino">* Destino</label>
                         <select id="Destino" name="Destino"></select>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <label>Monto Minimo</label>
+                        <label>* Monto Minimo</label>
                         <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value="" placeholder="0,00" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <label>Monto Maximo</label>
+                        <label>* Monto Maximo</label>
                         <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="" placeholder="0,00" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <label>Descripcion</label>
+                        <label>* Descripcion</label>
                         <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="250" readonly />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12 pb-2">
-                        <label>Nombre Aprobador</label>
+                        <label>* Nombre Aprobador</label>
                         <select id="Empleado" name="Empleado"> </select>
                     </div>
                 </div>
@@ -275,6 +275,7 @@
     <input type="hidden" id="aprobadorSuplente2" name="aprobadorSuplente2" />
     <input type="hidden" id="cedulaSuplente2" name="cedulaSuplente2" />
     <input type="hidden" id="emailSuplente2" name="emailSuplente2" />
+    <input type="hidden" id="idx" name="idx" />
 </div>
 
 
