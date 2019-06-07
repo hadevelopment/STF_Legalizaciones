@@ -32,7 +32,12 @@ namespace Legalizaciones.Web.Models
         public string Destino { get; set; }
         public float MontoMinimo { get; set; }
         public float MontoMaximo { get; set; }
-
+        public string AprobadorSuplente1 { get; set; }
+        public string CedulaSuplente1 { get; set; }
+        public string EmailSuplente1 { get; set; }
+        public string AprobadorSuplente2 { get; set; }
+        public string CedulaSuplente2 { get; set; }
+        public string EmailSuplente2 { get; set; }
     }
 
     public class Destinos

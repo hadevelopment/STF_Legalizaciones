@@ -319,6 +319,12 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@DestinoId", model.DestinoId);
                 command.Parameters.AddWithValue("@MontoMaximo", model.MontoMaximo);
                 command.Parameters.AddWithValue("@MontoMinimo", model.MontoMinimo);
+                command.Parameters.AddWithValue("@AprobadorSuplente1", model.AprobadorSuplente1);
+                command.Parameters.AddWithValue("@CedulaSuplente1", model.CedulaSuplente1);
+                command.Parameters.AddWithValue("@EmailSuplento1", model.EmailSuplente1);
+                command.Parameters.AddWithValue("@AprobadorSuplente2", model.AprobadorSuplente2);
+                command.Parameters.AddWithValue("@CedulaSuplente2", model.CedulaSuplente2);
+                command.Parameters.AddWithValue("@EmailSuplento2", model.EmailSuplente2);
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
                 while (lector.Read())

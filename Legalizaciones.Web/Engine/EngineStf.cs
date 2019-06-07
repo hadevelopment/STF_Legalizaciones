@@ -329,7 +329,8 @@ namespace Legalizaciones.Web.Engine
         }
 
         public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string addAprobador, string empleado,
-                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
+                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo, string aprobadorSuplente1 = "", string cedulaSuplente1 = "",
+                                               string emailSuplente1 = "", string aprobadorSuplente2 = "", string cedulaSuplente2 = "", string emailSuplente2 = "")
         {
             Legalizaciones.Web.Models.DataAprobacion Item = new Legalizaciones.Web.Models.DataAprobacion()
             {
@@ -344,9 +345,15 @@ namespace Legalizaciones.Web.Engine
                 Orden = paso,
                 DestinoId = destinoId,
                 MontoMaximo = montoMaximo,
-                MontoMinimo = montoMinimo
+                MontoMinimo = montoMinimo,
+                AprobadorSuplente1 = aprobadorSuplente1,
+                CedulaSuplente1 = cedulaSuplente1,
+                EmailSuplente1 = emailSuplente1,
+                AprobadorSuplente2 = aprobadorSuplente2,
+                CedulaSuplente2 = cedulaSuplente2,
+                EmailSuplente2 = emailSuplente2
             };
-
+    
             EngineDb Metodo = new EngineDb();
             model= Metodo.AprobadoresFlujoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
             return model;
