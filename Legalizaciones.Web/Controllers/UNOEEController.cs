@@ -123,9 +123,9 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            Empleado[] Empleados = new Empleado[6];
+            List<Empleado> Empleados = new List<Empleado>();
 
-            Empleados[0] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Eliezer Vargas",
@@ -137,10 +137,10 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com"
-            };
+                Correo = "e.vargas@innova4j.com"
+            });
 
-            Empleados[1] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Administracion Tesoreria",
                 Nombre = "Angelica Betancourt",
@@ -153,9 +153,9 @@ namespace Legalizaciones.Web.Controllers
                 CentroCostos = "1",
                 UnidadNegocio = "1",
                 Correo = "a.betancourt@innova4j.com"
-            };
+            });
 
-            Empleados[2] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Administracion Contraloria",
                 Nombre = "Daniel Sanchez",
@@ -168,9 +168,9 @@ namespace Legalizaciones.Web.Controllers
                 CentroCostos = "1",
                 UnidadNegocio = "1",
                 Correo = "d.sanchez@innova4j.com"
-            };
+            });
 
-            Empleados[3] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Administracion Contabilidad",
                 Nombre = "Luz Marina",
@@ -182,10 +182,10 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com"
-            };
+                Correo = "l.marina@innova4j.com"
+            });
 
-            Empleados[4] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Efrain Mejias",
@@ -198,9 +198,9 @@ namespace Legalizaciones.Web.Controllers
                 CentroCostos = "1",
                 UnidadNegocio = "1",
                 Correo = "e.mejias@innova4j.com"
-            };
+            });
 
-            Empleados[5] = new Empleado
+            Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Javier Rodriguez",
@@ -212,8 +212,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com"
-            };
+                Correo = "j.rodriguez@innova4j.com"
+            });
 
             if (filtroCedula)
             {

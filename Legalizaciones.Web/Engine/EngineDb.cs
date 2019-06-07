@@ -290,6 +290,12 @@ namespace Legalizaciones.Web.Engine
                     data.DestinoId = lector.GetInt32(9);
                     data.TipoSolicitud = lector.GetString(10);
                     data.IdTipoSolicitud = lector.GetInt32(11);
+                    data.CedulaSuplenteUno = lector.GetString(12);
+                    data.NombreSuplenteUno = lector.GetString(13);
+                    data.EmailSuplenteUno = lector.GetString(14);
+                    data.CedulaSuplenteDos = lector.GetString(15);
+                    data.NombreSuplenteDos = lector.GetString(16);
+                    data.EmailSuplenteDos = lector.GetString(17);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -320,6 +326,20 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@DestinoId", model.DestinoId);
                 command.Parameters.AddWithValue("@MontoMaximo", model.MontoMaximo);
                 command.Parameters.AddWithValue("@MontoMinimo", model.MontoMinimo);
+                if (model.CedulaSuplenteDos == null) model.CedulaSuplenteDos = " ";
+                command.Parameters.AddWithValue("@CedulaSuplenteDos", model.CedulaSuplenteDos);
+                if (model.CedulaSuplenteUno == null) model.CedulaSuplenteUno = " ";
+                command.Parameters.AddWithValue("@CedulaSuplenteUno", model.CedulaSuplenteUno);
+                if (model.EmailSuplenteDos == null) model.EmailSuplenteDos = " ";
+                command.Parameters.AddWithValue("@EmailSuplenteDos", model.EmailSuplenteDos);
+                if (model.EmailSuplenteUno == null) model.EmailSuplenteUno = " ";
+                command.Parameters.AddWithValue("@EmailSuplenteUno", model.EmailSuplenteUno);
+                if (model.NombreSuplenteDos == null) model.NombreSuplenteDos = " ";
+                command.Parameters.AddWithValue("@NombreSuplenteDos", model.NombreSuplenteDos);
+                if (model.NombreSuplenteUno == null) model.NombreSuplenteUno = " ";
+                command.Parameters.AddWithValue("@NombreSuplenteUno", model.NombreSuplenteUno);
+
+
                 SqlDataReader lector = command.ExecuteReader();
                 int n = 0;
                 while (lector.Read())
@@ -337,6 +357,12 @@ namespace Legalizaciones.Web.Engine
                     data.DestinoId = lector.GetInt32(9);
                     data.TipoSolicitud = lector.GetString(10);
                     data.IdTipoSolicitud = lector.GetInt32(11);
+                    data.CedulaSuplenteUno = lector.GetString(12);
+                    data.NombreSuplenteUno = lector.GetString(13);
+                    data.EmailSuplenteUno = lector.GetString(14);
+                    data.CedulaSuplenteDos = lector.GetString(15);
+                    data.NombreSuplenteDos = lector.GetString(16);
+                    data.EmailSuplenteDos = lector.GetString(17);
                     dataList.Insert(n, data);
                     n++;
                 }
@@ -349,7 +375,8 @@ namespace Legalizaciones.Web.Engine
 
 
 
-        public bool UpdatePasoFlujoAprobacion(string SpName, int id, string descripcion, string cedulaAprobador, string nombreAprobador, string emailAprobador, int orden = 0)
+        public bool UpdatePasoFlujoAprobacion(string SpName, int id, string descripcion, string cedulaAprobador, string nombreAprobador, string emailAprobador, int orden = 0, string aprobadorSuplente1 = "", string cedulaSuplente1 = "",
+                                               string emailSuplente1 = "", string aprobadorSuplente2 = "", string cedulaSuplente2 = "", string emailSuplente2 = "")
         {
             bool resultado = false;
             using (Conexion)
@@ -364,6 +391,18 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@NombreAprobador", nombreAprobador);
                 command.Parameters.AddWithValue("@EmailAprobador", emailAprobador);
                 command.Parameters.AddWithValue("@Orden", orden);
+                if (cedulaSuplente2 == null) cedulaSuplente2 = " ";
+                command.Parameters.AddWithValue("@CedulaSuplenteDos",cedulaSuplente2);
+                if (cedulaSuplente1 == null) cedulaSuplente1 = " ";
+                command.Parameters.AddWithValue("@CedulaSuplenteUno",cedulaSuplente1);
+                if (emailSuplente2 == null) emailSuplente2 = " ";
+                command.Parameters.AddWithValue("@EmailSuplenteDos",emailSuplente2);
+                if (emailSuplente1 == null) emailSuplente1 = " ";
+                command.Parameters.AddWithValue("@EmailSuplenteUno",emailSuplente1);
+                if (aprobadorSuplente2 == null) aprobadorSuplente2 = " ";
+                command.Parameters.AddWithValue("@NombreSuplenteDos",aprobadorSuplente2);
+                if (aprobadorSuplente1 == null) aprobadorSuplente1 = " ";
+                command.Parameters.AddWithValue("@NombreSuplenteUno",aprobadorSuplente1);
                 command.ExecuteNonQuery();
                 resultado = true;
                 Conexion.Close();
@@ -389,6 +428,12 @@ namespace Legalizaciones.Web.Engine
                     command.Parameters.AddWithValue("@NombreAprobador", R["NombreAprobador"]);
                     command.Parameters.AddWithValue("@EmailAprobador", R["EmailAprobador"]);
                     command.Parameters.AddWithValue("@Orden", R["Orden"]);
+                    command.Parameters.AddWithValue("@CedulaSuplenteDos", R["CedulaSuplenteDos"]);
+                    command.Parameters.AddWithValue("@CedulaSuplenteUno", R["CedulaSuplenteUno"]);
+                    command.Parameters.AddWithValue("@EmailSuplenteDos", R["EmailSuplenteDos"]);
+                    command.Parameters.AddWithValue("@EmailSuplenteUno", R["EmailSuplenteUno"]);
+                    command.Parameters.AddWithValue("@NombreSuplenteDos", R["NombreSuplenteDos"]);
+                    command.Parameters.AddWithValue("@NombreSuplenteUno", R["NombreSuplenteUno"]);
                     command.ExecuteNonQuery();
                 }
                 cnx.Close();
