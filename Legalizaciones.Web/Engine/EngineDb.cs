@@ -326,17 +326,18 @@ namespace Legalizaciones.Web.Engine
                 command.Parameters.AddWithValue("@DestinoId", model.DestinoId);
                 command.Parameters.AddWithValue("@MontoMaximo", model.MontoMaximo);
                 command.Parameters.AddWithValue("@MontoMinimo", model.MontoMinimo);
-                if (model.CedulaSuplenteDos == null) model.CedulaSuplenteDos = " ";
+                string stringempty = " ";
+                if (model.CedulaSuplenteDos == null) model.CedulaSuplenteDos = stringempty;
                 command.Parameters.AddWithValue("@CedulaSuplenteDos", model.CedulaSuplenteDos);
-                if (model.CedulaSuplenteUno == null) model.CedulaSuplenteUno = " ";
+                if (model.CedulaSuplenteUno == null) model.CedulaSuplenteUno = stringempty;
                 command.Parameters.AddWithValue("@CedulaSuplenteUno", model.CedulaSuplenteUno);
-                if (model.EmailSuplenteDos == null) model.EmailSuplenteDos = " ";
+                if (model.EmailSuplenteDos == null) model.EmailSuplenteDos = stringempty;
                 command.Parameters.AddWithValue("@EmailSuplenteDos", model.EmailSuplenteDos);
-                if (model.EmailSuplenteUno == null) model.EmailSuplenteUno = " ";
+                if (model.EmailSuplenteUno == null) model.EmailSuplenteUno = stringempty;
                 command.Parameters.AddWithValue("@EmailSuplenteUno", model.EmailSuplenteUno);
-                if (model.NombreSuplenteDos == null) model.NombreSuplenteDos = " ";
+                if (model.NombreSuplenteDos == null) model.NombreSuplenteDos = stringempty;
                 command.Parameters.AddWithValue("@NombreSuplenteDos", model.NombreSuplenteDos);
-                if (model.NombreSuplenteUno == null) model.NombreSuplenteUno = " ";
+                if (model.NombreSuplenteUno == null) model.NombreSuplenteUno = stringempty;
                 command.Parameters.AddWithValue("@NombreSuplenteUno", model.NombreSuplenteUno);
 
 

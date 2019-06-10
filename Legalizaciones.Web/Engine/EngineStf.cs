@@ -15,7 +15,8 @@ namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
     {
-
+        public static string UserWcf { get; set; }
+        public static string PasswordWcf { get; set; }
         public List<InfoLegalizacion> ConvertirToListSolicitud(DataTable dt)
         {
             UNOEE erp = new UNOEE();
@@ -406,6 +407,31 @@ namespace Legalizaciones.Web.Engine
             JefeArea[2] = "Descripcion Requerida";
             JefeArea[3] = "studiofnotificaciones@gmail.com";
             return JefeArea;
+        }
+
+        public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
+        {
+            string userWcf = EngineStf.UserWcf;
+            string passwordWcf = EngineStf.PasswordWcf;
+            DateTime Fecha = DateTime.Now.Date.AddDays(-1);
+            KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
+            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            XmlCreate(resultado);
+            List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            KactusEmpleado = response.ToList();
+            return KactusEmpleado;
+        }
+
+        private void XmlCreate(string cadena)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            doc.PreserveWhitespace = true;
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore(xmlDeclaration, root);
+            doc = JsonConvert.DeserializeXmlNode(cadena);
+            int n = 0;
         }
 
     }
