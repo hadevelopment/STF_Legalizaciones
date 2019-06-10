@@ -4,12 +4,13 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using System.Xml;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
-
+using Newtonsoft.Json;
 
 namespace Legalizaciones.Web.Engine
 {
@@ -266,7 +267,7 @@ namespace Legalizaciones.Web.Engine
                 if (row[0] != DBNull.Value)
                     Item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
-                    Item.Descripcion = Convert.ToString(row[1]);
+                    Item.Descripcion = Convert.ToString(row[1]).Replace(".",",");
                 flujo.Insert(n, Item);
                 n++;
             }
@@ -411,6 +412,7 @@ namespace Legalizaciones.Web.Engine
 
         public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
         {
+            //Convert.ToDateTime("2019-04-26")
             string userWcf = EngineStf.UserWcf;
             string passwordWcf = EngineStf.PasswordWcf;
             DateTime Fecha = DateTime.Now.Date.AddDays(-1);

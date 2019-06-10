@@ -71,7 +71,8 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             //*******************************************************
-            EnviarMensaje();
+            AsincronoAsync();
+            // EnviarMensaje();
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -114,6 +115,13 @@ namespace Legalizaciones.Web.Controllers
                 TempData["Alerta"] = "error - No se pudo completar el filtro, no se obtuvo el dato cédula de la session.";
                 return View("Index", null);
             }
+        }
+
+        private async Task AsincronoAsync()
+        {
+            EngineStf Funcion = new EngineStf();
+            List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            KactusEmpleado = await Funcion.UseKactusAsync();
         }
 
         private void EnviarMensaje()
