@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Legalizaciones.ERP
+namespace Legalizaciones.Erp.Models
 {
     //WS_PROVEEDORES
     [XmlRoot(ElementName = "Resultado")]
@@ -52,7 +52,7 @@ namespace Legalizaciones.ERP
 
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListUnidadNegocio
+    public class ListSuppliers
     {
         [XmlElement(ElementName = "Resultado")]
         public List<Suppliers> Resultado { get; set; }

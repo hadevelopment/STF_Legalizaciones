@@ -52,7 +52,7 @@ namespace Legalizaciones.Model.ERP
 
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListUnidadNegocio
+    public class ListSuppliers
     {
         [XmlElement(ElementName = "Resultado")]
         public List<Suppliers> Resultado { get; set; }

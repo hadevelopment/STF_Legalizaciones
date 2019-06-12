@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Legalizaciones.ERP
+namespace Legalizaciones.Model.ERP
 {
     //WS_CENTROS_COSTOS
     [XmlRoot(ElementName = "Resultado")]
-    public class CostCenter
+    public class CostCenters
     {
         [XmlElement(ElementName = "idCentroCosto")]
         public string IdCentroCosto { get; set; }
@@ -21,9 +21,9 @@ namespace Legalizaciones.ERP
     }
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListCostCenter
+    public class ListCostCenters
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListCostCenter> Resultado { get; set; }
+        public List<ListCostCenters> Resultado { get; set; }
     }
 }

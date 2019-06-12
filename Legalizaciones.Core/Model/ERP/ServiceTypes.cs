@@ -8,7 +8,7 @@ namespace Legalizaciones.Model.ERP
 {
     //WS_TIPOS_SERVICIOS
     [XmlRoot(ElementName = "Resultado")]
-    public class ServiceType
+    public class ServiceTypes
     {
         [XmlElement(ElementName = "idTipoServicio")]
         public string IdTipoServicio { get; set; }
@@ -27,9 +27,9 @@ namespace Legalizaciones.Model.ERP
     }
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListServiceType
+    public class ListServiceTypes
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListServiceType> Resultado { get; set; }
+        public List<ListServiceTypes> Resultado { get; set; }
     }
 }

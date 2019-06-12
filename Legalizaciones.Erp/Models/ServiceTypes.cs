@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Legalizaciones.ERP
+namespace Legalizaciones.Erp.Models
 {
     //WS_TIPOS_SERVICIOS
     [XmlRoot(ElementName = "Resultado")]
-    public class ServiceType
+    public class ServiceTypes
     {
         [XmlElement(ElementName = "idTipoServicio")]
         public string IdTipoServicio { get; set; }
@@ -27,9 +27,9 @@ namespace Legalizaciones.ERP
     }
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListServiceType
+    public class ListServiceTypes
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListServiceType> Resultado { get; set; }
+        public List<ListServiceTypes> Resultado { get; set; }
     }
 }

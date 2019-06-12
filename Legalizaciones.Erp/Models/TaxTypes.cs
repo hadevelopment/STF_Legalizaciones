@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace Legalizaciones.ERP
+namespace Legalizaciones.Erp.Models
 {
     //WS_IMPUESTO_TIPOS_SERVICIOS
     [XmlRoot(ElementName = "Resultado")]

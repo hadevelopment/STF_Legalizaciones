@@ -2,7 +2,7 @@
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace Legalizaciones.ERP
+namespace Legalizaciones.Erp.Models
 {
     //WS_UNIDADES_NEGOCIO
     [XmlRoot(ElementName = "Resultado")]

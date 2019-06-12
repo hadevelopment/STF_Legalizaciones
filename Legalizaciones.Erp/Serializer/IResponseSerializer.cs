@@ -2,62 +2,63 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Legalizaciones.Erp.Serializer
 {
-    class IResponseSerializer
+    public interface IResponseSerializer 
     {
         #region BussniseUnit Method Interfaces
 
-        Task<ListBussinesUnit> ListBussniseUnitsAsync<ListBussinesUnit>();
-        Task<IEnumerable<XElement>> ListBussniseUnitsXMLAsync<UnidadNegocio>();
-        Task<UnidadNegocio> GetBussniseUnitAsync<UnidadNegocio>(string IdBussniseUnit);
-        Task<XElement> GetBussniseUnitXMLAsync<UnidadNegocio>(string IdBussniseUnit);
+        Task<Models.BusinessUnit> GetBussinesUnitAsync<BusinessUnit>(string IdBussniseUnit);
+        Task<Models.ListBussinesUnit> ListBussniseUnitsAsync<ListBussinesUnit>();
+        Task<IEnumerable<XElement>> ListBussniseUnitsXMLAsync<ListBussinesUnit>();
+        Task<XElement> GetBussniseUnitXMLAsync<BusinessUnit>(string IdBussniseUnit);
 
         #endregion
 
         #region OperationCenter Method Interfaces
 
-        Task<ListOperationCenter> ListOperationCenterAsync<ListOperationCenter>();
-        Task<IEnumerable<XElement>> ListOperationCenterXMLAsync<OperationCenter>();
-        Task<OperationCenter> GetOperationCenterAsync<OperationCenter>(string IdOperationCenter);
+        Task<Models.ListOperationCenter> ListOperationCenterAsync<ListOperationCenter>();
+        Task<IEnumerable<XElement>> ListOperationCenterXMLAsync<ListOperationCenter>();
+        Task<Models.OperationCenter> GetOperationCenterAsync<OperationCenter>(string IdOperationCenter);
         Task<XElement> GetOperationCenterXMLAsync<OperationCenter>(string IdOperationCenter);
 
         #endregion
 
         #region TaxtypesServices Method Interfaces
 
-        Task<ListTaxtypesServices> ListTaxtypesServicesAsync<ListTaxtypesServices>();
-        Task<IEnumerable<XElement>> ListTaxtypesServicesXMLAsync<ListTaxtypesServices>();
-        Task<TaxtypesServices> GetTaxtypesServicesAsync<TaxtypesServices>(string IdTaxtypesServices);
-        Task<XElement> GetTaxtypesServicesXMLAsync<TaxtypesServices>(string IdTaxtypesServices);
+        Task<Models.ListTaxType> ListTaxtypesServicesAsync<ListTaxType>();
+        Task<IEnumerable<XElement>> ListTaxtypesServicesXMLAsync<ListTaxType>();
+        Task<Models.TaxTypes> GetTaxtypesServicesAsync<TaxTypes>(string IdTaxtypesServices);
+        Task<XElement> GetTaxtypesServicesXMLAsync<TaxTypes>(string IdTaxtypesServices);
 
         #endregion
 
         #region Suppliers Method Interfaces
 
-        Task<ListSuppliersAsync> ListSuppliersAsync<ListSuppliersAsync>();
-        Task<IEnumerable<XElement>> ListSuppliersXMLAsync<UnidadNegocio>();
-        Task<UnidadNegocio> GetSuppliersAsync<UnidadNegocio>(string IdSuppliers);
-        Task<XElement> GetSuppliersXMLAsync<UnidadNegocio>(string IdSuppliers);
+        Task<Models.ListSuppliers> ListSuppliersAsync<ListSuppliers>();
+        Task<IEnumerable<XElement>> ListSuppliersXMLAsync<Suppliers>();
+        Task<Models.Suppliers> GetSuppliersAsync<Suppliers>(string IdSuppliers);
+        Task<XElement> GetSuppliersXMLAsync<Suppliers>(string IdSuppliers);
 
         #endregion
 
         #region ServicesTypes Method Interfaces
 
-        Task<ListServicesTypes> ListServicesTypesAsync<ListServicesTypes>();
-        Task<IEnumerable<XElement>> ListServicesTypesXMLAsync<UnidadNegocio>();
-        Task<UnidadNegocio> GetServicesTypesAsync<UnidadNegocio>(string IdServicesTypes);
-        Task<XElement> GetServicesTypesXMLAsync<UnidadNegocio>(string IdServicesTypes);
+        Task<Models.ListServiceTypes> ListServicesTypesAsync<ListServicesTypes>();
+        Task<IEnumerable<XElement>> ListServicesTypesXMLAsync<ServiceTypes>();
+        Task<Models.ServiceTypes> GetServicesTypesAsync<ServiceTypes>(string IdServicesTypes);
+        Task<XElement> GetServicesTypesXMLAsync<ServiceTypes>(string IdServicesTypes);
 
         #endregion
 
         #region CostCenters Method Interfaces
 
-        Task<ListCostCenters> ListCostCentersAsync<ListCostCenters>();
-        Task<IEnumerable<XElement>> ListCostCentersXMLAsync<UnidadNegocio>();
-        Task<UnidadNegocio> GetCostCentersAsync<UnidadNegocio>(string IdCostCenters);
-        Task<XElement> GetCostCentersXMLAsync<UnidadNegocio>(string IdCostCenters);
+        Task<Models.ListCostCenters> ListCostCentersAsync<ListCostCenters>();
+        Task<IEnumerable<XElement>> ListCostCentersXMLAsync<CostCenters>();
+        Task<Models.CostCenters> GetCostCentersAsync<CostCenters>(string IdCostCenters);
+        Task<XElement> GetCostCentersXMLAsync<CostCenters>(string IdCostCenters);
 
         #endregion
     }

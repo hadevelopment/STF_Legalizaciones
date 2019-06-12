@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Legalizaciones.Erp.Serializer;
+using Legalizaciones.Erp.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +12,7 @@ using UNOEWebService;
 
 namespace Legalizaciones.Erp
 {
-    class ResponseSerializer
+    public class ResponseSerializer : IResponseSerializer
     {
         BaseSerializer BaseSerializer = new BaseSerializer();
         WSUNOEESoapClient WSUNOEE = new WSUNOEESoapClient(WSUNOEESoapClient.EndpointConfiguration.WSUNOEESoap);
@@ -23,28 +25,24 @@ namespace Legalizaciones.Erp
             }
         }
 
-        public async Task<UnidadNegocio> GetBussniseUnitAsync<UnidadNegocio>(string IdBussniseUnit)
+        public async Task<Models.BusinessUnit> GetBussinesUnitAsync<BusinessUnit>(string IdBussniseUnit)
         {
-
             BaseSerializer.BuildRequest("WS_UNIDADES_NEGOCIO", IdBussniseUnit);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
-            var d = ReadXmlString<UnidadNegocio>(s);
-
+            var d = ReadXmlString<Models.BusinessUnit>(s);
             return d;
         }
 
-        public async Task<ListBussinesUnit> ListBussniseUnitsAsync<ListBussinesUnit>()//1
+        public async Task<Models.ListBussinesUnit> ListBussniseUnitsAsync<ListBussinesUnit>()
         {
 
             BaseSerializer.BuildRequest("WS_UNIDADES_NEGOCIO");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListBussinesUnit>(s);
+            var d = ReadXmlString<Models.ListBussinesUnit>(s);
 
             return d;
         }
@@ -53,57 +51,46 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_UNIDADES_NEGOCIO");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants();
-
             return s;
         }
 
-        public async Task<XElement> GetBussniseUnitXMLAsync<UnidadNegocio>(string IdBussniseUnit)
+        public async Task<XElement> GetBussniseUnitXMLAsync<BusinessUnit>(string IdBussniseUnit)
         {
             BaseSerializer.BuildRequest("WS_UNIDADES_NEGOCIO", IdBussniseUnit);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault();
-
             return s;
         }
 
-        public async Task<ListOperationCenter> ListOperationCenterAsync<ListOperationCenter>()//2
+        public async Task<Models.ListOperationCenter> ListOperationCenterAsync<ListOperationCenter>()
         {
             BaseSerializer.BuildRequest("WS_CENTROS_OPERACION");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListOperationCenter>(s);
-
+            var d = ReadXmlString<Models.ListOperationCenter>(s);
             return d;
-
         }
 
         public async Task<IEnumerable<XElement>> ListOperationCenterXMLAsync<ListOperationCenter>()
         {
             BaseSerializer.BuildRequest("WS_CENTROS_OPERACION");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants();
-
             return s;
         }
 
-        public async Task<OperationCenter> GetOperationCenterAsync<OperationCenter>(string IdOperationCenter)
+        public async Task<Models.OperationCenter> GetOperationCenterAsync<OperationCenter>(string IdOperationCenter)
         {
             BaseSerializer.BuildRequest("WS_CENTROS_OPERACION", IdOperationCenter);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<OperationCenter>(s);
-
+            var d = ReadXmlString<Models.OperationCenter>(s);
             return d;
         }
 
@@ -111,26 +98,24 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_CENTROS_OPERACION", IdOperationCenter);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault();
-
             return s;
         }
 
-        public async Task<ListTaxtypesServices> ListTaxtypesServicesAsync<ListTaxtypesServices>()
+        public async Task<Models.ListTaxType> ListTaxtypesServicesAsync<ListTaxType>()
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListTaxtypesServices>(s);
+            var d = ReadXmlString<Models.ListTaxType>(s);
 
             return d;
         }
 
-        public async Task<IEnumerable<XElement>> ListTaxtypesServicesXMLAsync<ListTaxtypesServices>()
+        public async Task<IEnumerable<XElement>> ListTaxtypesServicesXMLAsync<ListTaxType>()
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
@@ -141,43 +126,38 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<ListUnidadNegocio> GetTaxtypesServicesAsync<ListUnidadNegocio>(string IdTaxtypesServices)
+        public async Task<Models.TaxTypes> GetTaxtypesServicesAsync<TaxTypes>(string IdTaxtypesServices)
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS", IdTaxtypesServices);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-
-            var d = ReadXmlString<ListUnidadNegocio>(s);
-
+            var d = ReadXmlString<Models.TaxTypes>(s);
             return d;
         }
 
-        public async Task<XElement> GetTaxtypesServicesXMLAsync<UnidadNegocio>(string IdTaxtypesServices)
+        public async Task<XElement> GetTaxtypesServicesXMLAsync<TaxTypes>(string IdTaxtypesServices)
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS", IdTaxtypesServices);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault();
-
             return s;
         }
 
-        public async Task<ListSuppliersAsync1> ListSuppliersAsync<ListSuppliersAsync1>()
+        public async Task<Models.ListSuppliers> ListSuppliersAsync<ListSuppliers>()
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES");
             var a = BaseSerializer.xmlRequest;
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListSuppliersAsync1>(s);
+            var d = ReadXmlString<Models.ListSuppliers>(s);
 
             return d;
         }
 
-        public async Task<IEnumerable<XElement>> ListSuppliersXMLAsync<UnidadNegocio>()
+        public async Task<IEnumerable<XElement>> ListSuppliersXMLAsync<Suppliers>()
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES");
             var a = BaseSerializer.xmlRequest;
@@ -188,8 +168,7 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-
-        public async Task<UnidadNegocio> GetSuppliersAsync<UnidadNegocio>(string IdSuppliers)
+        public async Task<Models.Suppliers> GetSuppliersAsync<Suppliers>(string IdSuppliers)
         {
 
             BaseSerializer.BuildRequest("WS_PROVEEDORES", IdSuppliers);
@@ -197,12 +176,12 @@ namespace Legalizaciones.Erp
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<UnidadNegocio>(s);
+            var d = ReadXmlString<Models.Suppliers>(s);
 
             return d;
         }
 
-        public async Task<XElement> GetSuppliersXMLAsync<UnidadNegocio>(string IdSuppliers)
+        public async Task<XElement> GetSuppliersXMLAsync<Suppliers>(string IdSuppliers)
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES", IdSuppliers);
             var a = BaseSerializer.xmlRequest;
@@ -213,19 +192,19 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<ListServicesTypes> ListServicesTypesAsync<ListServicesTypes>()
+        public async Task<Models.ListServiceTypes> ListServicesTypesAsync<ListServicesTypes>()
         {
             BaseSerializer.BuildRequest("WS_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListServicesTypes>(s);
+            var d = ReadXmlString<Models.ListServiceTypes>(s);
 
             return d;
         }
 
-        public async Task<IEnumerable<XElement>> ListServicesTypesXMLAsync<UnidadNegocio>()
+        public async Task<IEnumerable<XElement>> ListServicesTypesXMLAsync<ServiceTypes>()
         {
             BaseSerializer.BuildRequest("WS_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
@@ -236,18 +215,18 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<UnidadNegocio> GetServicesTypesAsync<UnidadNegocio>(string IdServicesTypes)
+        public async Task<Models.ServiceTypes> GetServicesTypesAsync<ServiceTypes>(string IdServicesTypes)
         {
             BaseSerializer.BuildRequest("WS_TIPOS_SERVICIOS", IdServicesTypes);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<UnidadNegocio>(s);
+            var d = ReadXmlString<Models.ServiceTypes>(s);
 
             return d;
         }
 
-        public async Task<XElement> GetServicesTypesXMLAsync<UnidadNegocio>(string IdServicesTypes)
+        public async Task<XElement> GetServicesTypesXMLAsync<ServiceTypes>(string IdServicesTypes)
         {
             BaseSerializer.BuildRequest("WS_TIPOS_SERVICIOS", IdServicesTypes);
             var a = BaseSerializer.xmlRequest;
@@ -258,19 +237,19 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<ListCostCenters> ListCostCentersAsync<ListCostCenters>()
+        public async Task<Models.ListCostCenters> ListCostCentersAsync<ListCostCenters>()
         {
             BaseSerializer.BuildRequest("WS_CENTROS_COSTOS");
             var a = BaseSerializer.xmlRequest;
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<ListCostCenters>(s);
+            var d = ReadXmlString<Models.ListCostCenters>(s);
 
             return d;
         }
 
-        public async Task<IEnumerable<XElement>> ListCostCentersXMLAsync<UnidadNegocio>()
+        public async Task<IEnumerable<XElement>> ListCostCentersXMLAsync<CostCenters>()
         {
             BaseSerializer.BuildRequest("WS_CENTROS_COSTOS");
             var a = BaseSerializer.xmlRequest;
@@ -281,18 +260,18 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<UnidadNegocio> GetCostCentersAsync<UnidadNegocio>(string IdCostCenters)
+        public async Task<Models.CostCenters> GetCostCentersAsync<CostCenters>(string IdCostCenters)
         {
             BaseSerializer.BuildRequest("WS_CENTROS_COSTOS", IdCostCenters);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<UnidadNegocio>(s);
+            var d = ReadXmlString<Models.CostCenters>(s);
 
             return d;
         }
 
-        public async Task<XElement> GetCostCentersXMLAsync<UnidadNegocio>(string IdCostCenters)
+        public async Task<XElement> GetCostCentersXMLAsync<CostCenters>(string IdCostCenters)
         {
             BaseSerializer.BuildRequest("WS_CENTROS_COSTOS", IdCostCenters);
             var a = BaseSerializer.xmlRequest;
