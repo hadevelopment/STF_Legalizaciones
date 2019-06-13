@@ -28,7 +28,7 @@ namespace Legalizaciones.Erp.Serializer
 
         #region TaxtypesServices Method Interfaces
 
-        Task<Models.ListTaxType> ListTaxtypesServicesAsync<ListTaxType>();
+        Task<Models.ListTaxTypes> ListTaxtypesServicesAsync<ListTaxType>();
         Task<IEnumerable<XElement>> ListTaxtypesServicesXMLAsync<ListTaxType>();
         Task<Models.TaxTypes> GetTaxtypesServicesAsync<TaxTypes>(string IdTaxtypesServices);
         Task<XElement> GetTaxtypesServicesXMLAsync<TaxTypes>(string IdTaxtypesServices);

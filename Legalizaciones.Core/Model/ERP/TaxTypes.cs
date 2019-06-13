@@ -24,9 +24,9 @@ namespace Legalizaciones.Model.ERP
     }
 
     [XmlRoot(ElementName = "NewDataSet")]
-    public class ListTaxType
+    public class ListTaxTypes
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListTaxType> Resultado { get; set; }
+        public List<ListTaxTypes> Resultado { get; set; }
     }
 }

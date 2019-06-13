@@ -21,7 +21,7 @@ namespace Legalizaciones.Erp
         {
             using (var sw = new StringReader(xmlString))
             {
-                return (ObjectType)new XmlSerializer(typeof(ObjectType)).Deserialize(sw);
+              return (ObjectType)new XmlSerializer(typeof(ObjectType)).Deserialize(sw);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Legalizaciones.Erp
             BaseSerializer.BuildRequest("WS_CENTROS_OPERACION", IdOperationCenter);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].FirstNode.ToString();
+            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.OperationCenter>(s);
             return d;
         }
@@ -103,14 +103,14 @@ namespace Legalizaciones.Erp
             return s;
         }
 
-        public async Task<Models.ListTaxType> ListTaxtypesServicesAsync<ListTaxType>()
+        public async Task<Models.ListTaxTypes> ListTaxtypesServicesAsync<ListTaxTypes>()
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
 
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
-            var d = ReadXmlString<Models.ListTaxType>(s);
+            var d = ReadXmlString<Models.ListTaxTypes>(s);
 
             return d;
         }
