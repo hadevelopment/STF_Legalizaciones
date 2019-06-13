@@ -259,6 +259,7 @@ namespace Legalizaciones.Erp
         {
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
+            int K = 0;
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.CostCenters>(s);
             return d;
