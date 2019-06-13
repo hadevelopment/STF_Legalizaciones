@@ -216,9 +216,8 @@ namespace Legalizaciones.Erp
             BaseSerializer.BuildRequest("WS_TIPOS_SERVICIOS", IdServicesTypes);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].FirstNode.ToString();
+            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.ServiceTypes>(s);
-
             return d;
         }
 
@@ -258,12 +257,10 @@ namespace Legalizaciones.Erp
 
         public async Task<Models.CostCenters> GetCostCentersAsync<CostCenters>(string IdCostCenters)
         {
-            BaseSerializer.BuildRequest("WS_CENTROS_COSTOS", IdCostCenters);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].FirstNode.ToString();
+            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.CostCenters>(s);
-
             return d;
         }
 

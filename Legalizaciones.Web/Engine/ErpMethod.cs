@@ -50,5 +50,26 @@ namespace Legalizaciones.Web.Engine
             Suppliers proveedores = await GetSuppliersAsync<Suppliers>(id);
             return proveedores;
         }
+
+        public async Task<ListServiceTypes> TiposServiciosCollectionAsync()
+        {
+            ListServiceTypes tipoServicios = await ListServicesTypesAsync<ListServiceTypes>();
+            return tipoServicios;
+        }
+        public async Task<ServiceTypes> TipoServiciosSingleAsync(string id)
+        {
+            ServiceTypes tipoServicios = await GetServicesTypesAsync<ServiceTypes>(id);
+            return tipoServicios;
+        }
+        public async Task<ListCostCenters> CentroCostosCollectionAsync()
+        {
+            ListCostCenters centroCosto = await ListCostCentersAsync<ListCostCenters>();
+            return centroCosto;
+        }
+        public async Task<CostCenters> CentroCostosSingleAsync(string id)
+        {
+            CostCenters centroCosto = await GetCostCentersAsync<CostCenters>(id);
+            return centroCosto;
+        }
     }
 }
