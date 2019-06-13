@@ -27,7 +27,7 @@ namespace Legalizaciones.Web.Controllers
             //var tipoServicio = Servicio.TipoServiciosSingleAsync("AF001");
             //var tipoServicio = Servicio.TiposServiciosCollectionAsync();
            // var centroCosto = Servicio.CentroCostosCollectionAsync();
-            var centroCosto = Servicio.CentroCostosSingleAsync("020111");
+           // var centroCosto = Servicio.CentroCostosSingleAsync("020111");
             return View();
         }
     }
