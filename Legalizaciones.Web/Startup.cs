@@ -85,6 +85,9 @@ namespace Legalizaciones
 
             //services.Configure<ProjectSettings>(Configuration.GetSection("ProjectSettings"));
             EngineDb.DefaultConnection = Configuration["ConnectionStrings:Default"];
+            EngineDb.DefaultConnection = Configuration["ConnectionStrings:Default"];
+            EngineStf.UserWcf = Configuration["KeyConnect:UserWcf"];
+            EngineStf.PasswordWcf = Configuration["KeyConnect:PasswordWcf"];
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

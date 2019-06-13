@@ -4,18 +4,20 @@ using System.Data;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using System.Xml;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
 using Legalizaciones.Web.Helpers;
 using Legalizaciones.Web.Models;
-
+using Newtonsoft.Json;
 
 namespace Legalizaciones.Web.Engine
 {
     public class EngineStf
     {
-
+        public static string UserWcf { get; set; }
+        public static string PasswordWcf { get; set; }
         public List<InfoLegalizacion> ConvertirToListSolicitud(DataTable dt)
         {
             UNOEE erp = new UNOEE();
@@ -268,7 +270,7 @@ namespace Legalizaciones.Web.Engine
                 if (row[0] != DBNull.Value)
                     Item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
-                    Item.Descripcion = Convert.ToString(row[1]);
+                    Item.Descripcion = Convert.ToString(row[1]).Replace(".",",");
                 flujo.Insert(n, Item);
                 n++;
             }
@@ -332,7 +334,8 @@ namespace Legalizaciones.Web.Engine
         }
 
         public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string addAprobador, string empleado,
-                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo)
+                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo, string aprobadorSuplente1 = "", string cedulaSuplente1 = "",
+                                               string emailSuplente1 = "", string aprobadorSuplente2 = "", string cedulaSuplente2 = "", string emailSuplente2 = "")
         {
             Legalizaciones.Web.Models.DataAprobacion Item = new Legalizaciones.Web.Models.DataAprobacion()
             {
@@ -347,9 +350,15 @@ namespace Legalizaciones.Web.Engine
                 Orden = paso,
                 DestinoId = destinoId,
                 MontoMaximo = montoMaximo,
-                MontoMinimo = montoMinimo
+                MontoMinimo = montoMinimo,
+                NombreSuplenteUno = aprobadorSuplente1,
+                CedulaSuplenteUno = cedulaSuplente1,
+                EmailSuplenteUno = emailSuplente1,
+                NombreSuplenteDos = aprobadorSuplente2,
+                CedulaSuplenteDos = cedulaSuplente2,
+                EmailSuplenteDos = emailSuplente2
             };
-
+    
             EngineDb Metodo = new EngineDb();
             model= Metodo.AprobadoresFlujoSolicitud("Sp_CreateFlujoAprobadoresSolicitud", Item);
             return model;
@@ -402,6 +411,32 @@ namespace Legalizaciones.Web.Engine
             JefeArea[2] = "Descripcion Requerida";
             JefeArea[3] = "studiofnotificaciones@gmail.com";
             return JefeArea;
+        }
+
+        public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
+        {
+            //Convert.ToDateTime("2019-04-26")
+            string userWcf = EngineStf.UserWcf;
+            string passwordWcf = EngineStf.PasswordWcf;
+            DateTime Fecha = DateTime.Now.Date.AddDays(-1);
+            KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
+            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            XmlCreate(resultado);
+            List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            KactusEmpleado = response.ToList();
+            return KactusEmpleado;
+        }
+
+        private void XmlCreate(string cadena)
+        {
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            doc.PreserveWhitespace = true;
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore(xmlDeclaration, root);
+            doc = JsonConvert.DeserializeXmlNode(cadena);
+            int n = 0;
         }
 
     }

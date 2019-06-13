@@ -26,12 +26,14 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult UpdatePasoFlujo(string descripcion, string cedula, string nombre , string email, int idPasoFlujoSolicitud, int idDocumento, int idFlujo, string rango, int orden = 0)
+        public JsonResult UpdatePasoFlujo(string descripcion, string cedula, string nombre , string email, int idPasoFlujoSolicitud, int idDocumento, int idFlujo, string rango, int orden = 0, 
+            string aprobadorSuplente1 = "", string cedulaSuplente1 = "",string emailSuplente1 = "", string aprobadorSuplente2 = "", string cedulaSuplente2 = "", string emailSuplente2 = "")
         {
             EngineStf Funcion = new EngineStf();
             int destinoId = Funcion.DestinoId(rango);
             EngineDb Metodo = new EngineDb();
-            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", idPasoFlujoSolicitud, descripcion, cedula, nombre, email);
+            Metodo.UpdatePasoFlujoAprobacion("Sp_UpdatePasoAprobacion", idPasoFlujoSolicitud, descripcion, cedula, nombre, email,orden, aprobadorSuplente1, cedulaSuplente1,
+                                               emailSuplente1,aprobadorSuplente2,cedulaSuplente2,emailSuplente2);
             Metodo = new EngineDb();
             List<DataAprobacion> model = new List<DataAprobacion>();
             model = Metodo.AprobadoresFlujoSolicitud("Sp_GetFlujoAprobadoresDocumentos", idDocumento, idFlujo, destinoId);
@@ -71,7 +73,8 @@ namespace Legalizaciones.Web.Controllers
 
         [HttpPost]
         public JsonResult CreateFlujoDocumento(int paso=0, string tipoDocumento="",int idDocumento=0,string aprobador="",string empleado="",string descripcion="",string mail="",
-                                               string destino="",int destinoId=0,float montoMaximo=0,float montoMinimo=0)
+                                               string destino="",int destinoId=0,float montoMaximo=0,float montoMinimo=0, string aprobadorSuplente1 = "", string cedulaSuplente1= "",
+                                               string emailSuplente1 = "" , string aprobadorSuplente2 = "", string cedulaSuplente2 = "",string  emailSuplente2 = "")
         {
             List<Legalizaciones.Web.Models.DataAprobacion> model = new List<Legalizaciones.Web.Models.DataAprobacion>();
             EngineStf Funcion = new EngineStf();
@@ -82,11 +85,13 @@ namespace Legalizaciones.Web.Controllers
             {
                 update++;
                 string[] JefeArea = Funcion.SimuladorKactusJefeInmediato();
-                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, JefeArea[0], JefeArea[1], JefeArea[2], JefeArea[3], update , estatus, paso, destinoId, montoMaximo, montoMinimo);
+                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, JefeArea[0], JefeArea[1], JefeArea[2], JefeArea[3], update , estatus, paso, destinoId, montoMaximo, montoMinimo,
+                     aprobadorSuplente1, cedulaSuplente1, emailSuplente1, aprobadorSuplente2, cedulaSuplente2 , emailSuplente2);
             }
             else
             {
-                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, aprobador, empleado,descripcion, mail, update, estatus, paso, destinoId, montoMaximo, montoMinimo);
+                model = Funcion.SetCreateAprobadorFlujo(model, tipoDocumento,idDocumento, aprobador, empleado,descripcion, mail, update, estatus, paso, destinoId, montoMaximo, montoMinimo ,
+                    aprobadorSuplente1, cedulaSuplente1, emailSuplente1, aprobadorSuplente2, cedulaSuplente2, emailSuplente2);
             }
             return Json(model);
         }

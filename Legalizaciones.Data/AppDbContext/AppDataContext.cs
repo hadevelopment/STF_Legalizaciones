@@ -1,16 +1,29 @@
 using Legalizaciones.Model;
-using Legalizaciones.Model.Empresa;using Legalizaciones.Model.Jerarquia;using Legalizaciones.Model.ItemSolicitud;using Microsoft.EntityFrameworkCore;using Legalizaciones.Model.Workflow;namespace Legalizaciones.Data.AppDbContext{
+using Legalizaciones.Model.Empresa;
+using Legalizaciones.Model.Jerarquia;
+using Legalizaciones.Model.ItemSolicitud;
+using Microsoft.EntityFrameworkCore;
+using Legalizaciones.Model.Workflow;
+
+namespace Legalizaciones.Data.AppDbContext
+{
 
 
-    public class AppDataContext : DbContext    {
+    public class AppDataContext : DbContext
+    {
      
-        public AppDataContext(DbContextOptions options) : base(options)        {        }
+        public AppDataContext(DbContextOptions options) : base(options)
+        {
+        }
 
         //Configuracion
         public DbSet<ConfiguracionGasto> ConfiguracionGasto { get; set; }
 
         //Localidades
-        public DbSet<Pais> Pais { get; set; }        public DbSet<Ciudad> Ciudad { get; set; }        public DbSet<Destino> Destino { get; set; }        public DbSet<Zona> Zona { get; set; }
+        public DbSet<Pais> Pais { get; set; }
+        public DbSet<Ciudad> Ciudad { get; set; }
+        public DbSet<Destino> Destino { get; set; }
+        public DbSet<Zona> Zona { get; set; }
 
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }

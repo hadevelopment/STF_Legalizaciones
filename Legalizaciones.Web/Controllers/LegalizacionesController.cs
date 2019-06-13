@@ -72,8 +72,7 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             //*******************************************************
-
-            //email.SendEmail("d.sanchez@innova4j.com", "Daniel Sanchez", "SL000000001", "CC Paseo Garibaldi.");
+            EnviarMensaje();
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -118,7 +117,33 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
-        
+        private void EnviarMensaje()
+        {
+            List<string> listaDestino = new List<string>();
+            //listaDestino.Add("d.sanchez@innova4j.com");
+            //listaDestino.Add("efrainmejiasc@gmail.com");
+            listaDestino.Add("e.mejias@innova4j.com");
+            //listaDestino.Add("ha.development.org@gmail.com");
+            //listaDestino.Add("abetancourt@innova4j.com");
+
+            Email model = new Email
+            {
+                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
+                NombreDestinatario = "Angelica Betancourt",
+                NumeroDocumento ="0005896",
+                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
+            };
+            //****************************************************************************************************
+            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
+            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
+            bool resultado = Enviar.EnviarMail();
+            //*****************************************************************************************************
+            string msjGet = string.Empty;
+            if (resultado)
+                msjGet = "Notificacion enviada satisfactoriamente";
+            else
+                msjGet = Enviar.ErrorEnviando();
+        }
 
         [HttpGet]
         [Route("Crear")]
