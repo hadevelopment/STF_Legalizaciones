@@ -17,7 +17,7 @@ namespace Legalizaciones.Model
         public int? LegalizacionId { get; set; }
         public Legalizacion Legalizacion { get; set; }
 
-        public DateTime FechaGasto { get; set; }
+        public string FechaGasto { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Operaciones.")]
         public int CentroOperacionId { get; set; }

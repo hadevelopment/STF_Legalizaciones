@@ -36,11 +36,12 @@ namespace Legalizaciones.Web.Controllers
         private readonly ILegalizacionRepository legalizacionRepository;
         private readonly ILegalizacionGastosRepository legalizacionGastosRepository;
         private readonly ITasaRepository tasaRepository;
-        private readonly IHostingEnvironment env;
 
         /*WORKFLOW*/
         private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
         private readonly IFlujoSolicitudRepository flujoSolicitudRepository;
+
+        private readonly IEmail email;
 
         public UNOEE objUNOEE = new UNOEE();
 
@@ -51,7 +52,7 @@ namespace Legalizaciones.Web.Controllers
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
             IFlujoSolicitudRepository flujoSolicitudRepository,
-            IHostingEnvironment _env)
+            IEmail email)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -65,13 +66,14 @@ namespace Legalizaciones.Web.Controllers
             this.tasaRepository = tasaRepository;
             this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
             this.flujoSolicitudRepository = flujoSolicitudRepository;
-            this.env = _env;
+            this.email = email;
         }
 
         public IActionResult Index()
         {
             //*******************************************************
-            EnviarMensaje();
+
+            //email.SendEmail("d.sanchez@innova4j.com", "Daniel Sanchez", "SL000000001", "CC Paseo Garibaldi.");
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -116,43 +118,23 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
-        private void EnviarMensaje()
-        {
-            List<string> listaDestino = new List<string>();
-            //listaDestino.Add("d.sanchez@innova4j.com");
-            //listaDestino.Add("efrainmejiasc@gmail.com");
-            listaDestino.Add("e.mejias@innova4j.com");
-            //listaDestino.Add("ha.development.org@gmail.com");
-            //listaDestino.Add("abetancourt@innova4j.com");
-
-            Email model = new Email
-            {
-                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
-                NombreDestinatario = "Angelica Betancourt",
-                NumeroDocumento ="0005896",
-                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
-            };
-            //****************************************************************************************************
-            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
-            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
-            bool resultado = Enviar.EnviarMail();
-            //*****************************************************************************************************
-            string msjGet = string.Empty;
-            if (resultado)
-                msjGet = "Notificacion enviada satisfactoriamente";
-            else
-                msjGet = Enviar.ErrorEnviando();
-        }
+        
 
         [HttpGet]
         [Route("Crear")]
         public ActionResult Crear(int id)
         {
-            //Usuario_Cedula
-            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cedula").ToString();
-            string wUsuarioCargo = HttpContext.Session.GetString("Usuario_Cargo").ToString();
+            // Obtenemos datos del empleado en Session
 
-            if (wUsuarioCargo == "2")
+            string cedula = "";
+            string cargo = "";
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            {
+                cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+            }
+
+            if (cargo == "2")
                 ViewBag.MostrarTasa = true;
             else
                 ViewBag.MostrarTasa = false;
@@ -169,7 +151,6 @@ namespace Legalizaciones.Web.Controllers
 
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
-
                 var ListaCentroCosto = new List<CentroCosto>();
                 var ListaCentroOperaciones = new List<CentroOperacion>();
                 var ListaUnidadNegocio = new List<UnidadNegocio>();
@@ -182,7 +163,7 @@ namespace Legalizaciones.Web.Controllers
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
                     ConAnticipo = 0,
-                    CedulaId = wCedulaUsuariopordefecto,
+                    CedulaId = cedula,
                     ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
                     ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
                     ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
@@ -250,6 +231,9 @@ namespace Legalizaciones.Web.Controllers
                     Cargo = wCargo,
                     Area = OEmpleado.Area,
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                    ReciboCaja = 0,
+                    Consignacion = 0,
+                    Valor = "0",
                     //ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     MonedaId = Osolicitud.MonedaId,
                     Moneda = OMoneda.Nombre,
@@ -306,6 +290,9 @@ namespace Legalizaciones.Web.Controllers
                     }
                 }
 
+                //Aplico Formato JSON a los thead que vienen de la tabla
+                legalizacion.GastosJSON = TableToJSON(legalizacion.GastosJSON);
+
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
                 var LegalizacionGastos = JsonConvert.DeserializeObject<List<DecerializeLegalizacionGasto>>(legalizacion.GastosJSON);
                 foreach (var item in LegalizacionGastos)
@@ -325,17 +312,16 @@ namespace Legalizaciones.Web.Controllers
 
                     };
                     //legalizacionGastosRepository.Insert(wOLegalizacionGasto);
-
                 }
 
 
-                TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
+                TempData["Alerta"] = "success - La Legalización se proceso correctamente.";
                 return RedirectToAction("Index", "Legalizaciones");
 
             }
             catch (System.Exception e)
             {
-                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de procesar la Legalización.";
             }
 
 
@@ -391,13 +377,13 @@ namespace Legalizaciones.Web.Controllers
 
                 }
 
-                TempData["Alerta"] = "success - La Solicitud se ha actualizado correctamente.";
+                TempData["Alerta"] = "success - La Legalización se ha actualizado correctamente.";
                 return RedirectToAction("Index", "Legalizaciones");
 
             }
             catch (System.Exception e)
             {
-                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de actualizar la Legalización";
             }
 
 
@@ -604,6 +590,15 @@ namespace Legalizaciones.Web.Controllers
             {
                 return false;
             }
+        }
+
+        private string TableToJSON(string json)
+        {
+            json = json.Replace("Centro Operación", "CentroOperacion")
+                        .Replace("Unidad Negocio", "UnidadNegocio")
+                        .Replace("Centro Costo", "CentroCosto")
+                        .Replace("Fecha Gasto", "FechaGasto");
+            return json;
         }
 
 

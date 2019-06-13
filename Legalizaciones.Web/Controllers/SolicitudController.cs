@@ -40,6 +40,9 @@ namespace Legalizaciones.Web.Controllers
         private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
         private readonly IFlujoSolicitudRepository flujoSolicitudRepository;
 
+        //Email
+        private readonly IEmail email;
+
         /*DB*/
         EngineDb DB = new EngineDb();
 
@@ -53,7 +56,8 @@ namespace Legalizaciones.Web.Controllers
             IZonaRepository zonaRepository,
             IEstadoSolicitudRepository estatusRepository,
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
-            IFlujoSolicitudRepository flujoSolicitudRepository
+            IFlujoSolicitudRepository flujoSolicitudRepository,
+            IEmail email
             )
         {
             this.solicitudRepository = solicitudRepository;
@@ -66,6 +70,7 @@ namespace Legalizaciones.Web.Controllers
             this.estatusRepository = estatusRepository;
             this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
             this.flujoSolicitudRepository = flujoSolicitudRepository;
+            this.email = email;
         }
 
         public IActionResult Index()
@@ -150,9 +155,8 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-                //Se valida que exista un flujo para la solicitud
-                //Se obtiene el paso inicial del flujo configurado
-                if(! getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
+                //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
+                if (!getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
                 {
                     TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
                     return View("Crear", solicitud);
@@ -170,7 +174,7 @@ namespace Legalizaciones.Web.Controllers
                 //Calculo Fecha de Vencimiento de la Solicitud
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
                 solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
-                
+
 
                 //Se Registra la Solicitud
                 solicitudRepository.Insert(solicitud);
@@ -199,6 +203,8 @@ namespace Legalizaciones.Web.Controllers
                     }
                 }
 
+                email.SendEmail(solicitud.EmailAprobador, solicitud.Empleado.Nombre, solicitud.NumeroSolicitud, solicitud.Empleado.Direccion);
+
                 TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
                 return RedirectToAction("Index", "Solicitud");
             }
@@ -208,9 +214,6 @@ namespace Legalizaciones.Web.Controllers
 
                 return View("Crear", solicitud);
             }
-
-
-
         }
 
         [HttpGet]
@@ -389,8 +392,15 @@ namespace Legalizaciones.Web.Controllers
         [Route("RegistrarSTDC")]
         public ActionResult RegistrarSTDC()
         {
-            var cargoID = HttpContext.Session.GetString("Usuario_Cargo");
-            if (cargoID.Equals("1"))
+            var cargo = "";
+
+            // Obtenemos datos del empleado en Session
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            {
+                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+            }
+
+            if (cargo == "1")
             {
                 TempData["Alerta"] = "error - No tienes acceso a esta opción";
                 return RedirectToAction("Index", "Home");
@@ -675,10 +685,11 @@ namespace Legalizaciones.Web.Controllers
 
             if(idFlujo != null && idFlujo > 0)
             {
-                var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => m.Id).FirstOrDefault();
+                var obj = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => new { m.Id, m.EmailAprobador}).FirstOrDefault();
 
                 solicitud.FlujoSolicitudId = idFlujo;
-                solicitud.PasoFlujoSolicitudId = paso;
+                solicitud.PasoFlujoSolicitudId = obj.Id;
+                solicitud.EmailAprobador = obj.EmailAprobador;
                 return true;
             }
             else

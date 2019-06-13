@@ -2,7 +2,7 @@
 
 $(document).ready(function () {
 
-    $("#btnSubmit").click(function () {
+    /*$("#btnSubmit").click(function () {
 
         var list = [];
         $('#Items tr').each(function (index, ele) {
@@ -53,19 +53,14 @@ $(document).ready(function () {
                 console.log(error);
             }
         });
-    });
+    });*/
 
     //remove button click event
     $('#Items').on('click', '.btnDelete', function () {
         $(this).parents('tr').remove();
 
         //Suma de Montos de Gastos
-        var sum = 0;
-        $('td.monto').each(function () {
-            sum += parseFloat(this.innerHTML);
-        });
-        $("#txMontoT").val(sum);
-        $('#hdfMontoSolicitud').val($("#txMontoT").val());
+        CalcularMonto();
     });
 
     //Propiedades del dropdown unidades de negocio
@@ -464,7 +459,7 @@ function validarGastos() {
     var ciudad = $("#Ciudad option:selected").text();
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
-    var monto = $("#Monto").val();
+    var monto = $("#Monto").maskMoney('unmasked')[0];
     //$('#monto').val('');
 
     if (monto === 0)
@@ -492,7 +487,7 @@ function validarGastos() {
                     <td class="ciudad">${ciudad}</td>
                     <td class="origen">N/A</td>
                     <td class="destino">N/A</td>
-                    <td class="monto">${monto}</td>
+                    <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${monto}"</td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
@@ -505,17 +500,12 @@ function validarGastos() {
 
             $('#Items').append(row);
 
+            //Se aplica Formato Moneda al monto
+            $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $('#monto-' + rowIndex).focus();
 
             //Suma de Montos de Gastos
-            var sum = 0;
-            $('td.monto').each(function () {
-                sum += parseFloat(this.innerHTML);
-            });
-
-            var v = String(sum);
-            v = v.replace('.', ',');
-            $("#txMontoT").val(v);
-            $('#hdfMontoSolicitud').val($("#txMontoT").val());
+            CalcularMonto();
 
         } else {
             $("#mensajeGastos").text("Faltan datos por especificar.");
@@ -537,7 +527,7 @@ function validarGastos() {
                     <td class="ciudad">${ciudad}</td>
                     <td class="origen">${origen}</td>
                     <td class="destino">${destino}</td>
-                    <td class="monto">${monto}</td>
+                    <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${monto}"</td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
@@ -550,13 +540,12 @@ function validarGastos() {
 
             $('#Items').append(row2);
 
+            //Se aplica Formato Moneda al monto
+            $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $('#monto-' + rowIndex).focus();
+
             //Suma de Montos de Gastos
-            var sum2 = 0;
-            $('td.monto').each(function () {
-                sum2 += parseFloat(this.innerHTML);
-            });
-            $("#txMontoT").val(sum2);
-            $('#hdfMontoSolicitud').val($("#txMontoT").val());
+            CalcularMonto();
 
         } else {
             $("#mensajeGastos").text("Faltan datos por especificar.");
@@ -580,7 +569,7 @@ function actualizarGastos() {
     var ciudad = $("#Ciudad option:selected").text();
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
-    var monto = $("#Monto").val();
+    var monto = $("#Monto").maskMoney('unmasked')[0];
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" || pais !== "" && ciudad !== "" && servicio === "Comida" && fechaGasto !== "" && monto !== "") {
@@ -634,13 +623,7 @@ function actualizarGastos() {
     }
 
     var sum = 0;
-    $('td.monto').each(function () {
-        sum += parseFloat(this.innerHTML);
-    });
-    var v = String(sum);
-    v = v.replace('.', ',');
-    $("#txMontoT").val(v);
-    $('#hdfMontoSolicitud').val($("#txMontoT").val());
+    CalcularMonto();
     
 }
 
@@ -673,6 +656,7 @@ function ShowModalUpdate(value) {
     $('#ZonaOrigen').val(origen);
     $('#ZonaDestino').val(destino);
     $('#Monto').val(monto);
+    $('#Monto').focus();
 
     $('#btnAdd').addClass('display-none');
     $('#btnUpd').removeClass('display-none');
@@ -743,7 +727,8 @@ function consultarLimiteGasto() {
                     if (data !== null) {
                         if (data.monto > 0 && data.monto !== '') {
                             $('#AvisoMontoServicio').removeClass('display-none');
-                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+                            $('#MensajeAviso').val(data.monto);
+                            $("#MensajeAviso").focus();
 
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
@@ -753,9 +738,10 @@ function consultarLimiteGasto() {
                             });
 
                             $('#Monto').val(data.monto);
+                            $('#Monto').focus();
                         } else {
                             $('#AvisoMontoServicio').addClass('display-none');
-                            $('#MensajeAviso').text('');
+                            $('#MensajeAviso').val('');
                             $('#Monto').val('');
 
                             $('#Monto').on('input', function () {
@@ -767,7 +753,7 @@ function consultarLimiteGasto() {
                         }
                     } else {
                         $('#AvisoMontoServicio').addClass('display-none');
-                        $('#MensajeAviso').text('');
+                        $('#MensajeAviso').val('');
                         $('#Monto').val('');
 
                         $('#Monto').on('input', function () {
@@ -790,7 +776,8 @@ function consultarLimiteGasto() {
                     if (data !== null) {
                         if (data.monto > 0 && data.monto !== '') {
                             $('#AvisoMontoServicio').removeClass('display-none');
-                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+                            $('#MensajeAviso').val(data.monto);
+                            $("#MensajeAviso").focus();
 
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
@@ -799,9 +786,10 @@ function consultarLimiteGasto() {
                                 }
                             });
                             $('#Monto').val(data.monto);
+                            $('#Monto').focus();
                         } else {
                             $('#AvisoMontoServicio').addClass('display-none');
-                            $('#MensajeAviso').text('');
+                            $('#MensajeAviso').val();
 
                             $('#Monto').on('input', function () {
                                 var value = $(this).val();
@@ -813,7 +801,7 @@ function consultarLimiteGasto() {
                         }
                     } else {
                         $('#AvisoMontoServicio').addClass('display-none');
-                        $('#MensajeAviso').text('');
+                        $('#MensajeAviso').val('');
 
                         $('#Monto').on('input', function () {
                             var value = $(this).val();
@@ -1038,9 +1026,21 @@ function CargarComboAlcrear() {
     });
 }
 
+function CalcularMonto() {
+    //Suma de Montos de Gastos
+    var sum = 0;
+    $('td.monto input').each(function () {
+        sum += parseFloat($(this).maskMoney('unmasked')[0]);
+    });
+    $("#txMontoT").val(sum);
+    $('#txMontoT' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+    $("#txMontoT").focus();
+    $('#hdfMontoSolicitud').val($("#txMontoT").val());
+}
+
 function CalcularGastoComida() {
     var wServicio = $('#Servicio option:selected').text();
-    var wMonto = $('#Monto').val();
+    var wMonto = $('#Monto').maskMoney('unmasked')[0];
 
     if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();

@@ -48,7 +48,7 @@
             @*informacion de la solicitud anticipo*@
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
+                    <h3 class="box-title"><i class="fa fa-id-card"></i>Información del Anticipo</h3>
                 </div>
                 @Html.HiddenFor(model => model.AnticipoId, null)
                 <div class="box-body">
@@ -111,11 +111,11 @@
             @*informacion del empleado*@
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del Empleado</strong> </h3>
+                    <h3 class="box-title"><i class="fa fa-info-circle"></i>Información del Empleado</h3>
                 </div>
 
                 <div class="box-body">
-                    @Html.LabelFor(model => model.CedulaId, htmlAttributes: new { @class = "control-label col-md-12" })
+                    <label class="control-label">Cédula</label>
                     @Html.DropDownListFor(model => model.CedulaId, Model.ListaEmpleado, new { @class = "form-control" })
                     @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                     {
@@ -179,7 +179,7 @@
         @*Esta es la parte de legalizaciones*@
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-archive"></i><strong> Formulario de Legalización</strong> </h3>
+                <h3 class="box-title"><i class="fa fa-archive"></i>Formulario de Legalización</h3>
             </div>
 
             @*formulario de legalizacion header*@
@@ -187,45 +187,43 @@
 
                 <div class="row margin-bottom">
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.ReciboCaja, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Recibo Caja</label>
                         @Html.TextBoxFor(model => model.ReciboCaja, new { @class = "form-control", @required = "required" })
                         @Html.ValidationMessageFor(model => model.ReciboCaja, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.Consignacion, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Consignación</label>
                         @Html.TextBoxFor(model => model.Consignacion, new { @class = "form-control", @required = "required" })
                         @Html.ValidationMessageFor(model => model.Consignacion, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "control-label col-md-12" })
-                        @Html.TextBoxFor(model => model.Valor, new { @class = "form-control", @required = "required" })
+                        <label class="control-label">Valor</label>
+                        @Html.TextBoxFor(model => model.Valor, new { @class = "form-control maskMoney", @required = "required" })
                         @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.BancoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Banco</label>
                         @Html.DropDownListFor(model => model.BancoId, Model.ListaBanco, new { @class = "form-control" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
                             @Html.ValidationMessageFor(model => model.BancoId, "Seleccione un Banco.", new { @class = "text-danger" })
                         }
                     </div>
-
                 </div>
 
                 <div class="row margin-bottom">
-
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.CentroCostoDescripcion, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Centro de Costo</label>
                         @Html.TextBoxFor(model => model.CentroCostoDescripcion, new { @class = "form-control", @Readonly = "Readonly" })
                     </div>
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Fecha Desde</label>
                         @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde" })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
-                        @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-12" })
+                        <label class="control-label">Fecha Hasta</label>
                         @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
@@ -238,33 +236,27 @@
                             {
                                 @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
                             }
-                        }else //sin anticipo
+                        }
+                        else //sin anticipo
                         {
                             @if (ViewBag.MostrarTasa = true)
                             {
                                 <div class="col-md-12">
-                                    @Html.LabelFor(model => model.MonedaId, htmlAttributes: new { @class = "control-label col-md-12" })
-
+                                    <label class="control-label">Moneda</label>
                                 </div>
 
                                 <div class="col-md-8">
                                     @Html.TextBoxFor(model => model.Moneda, new { @class = "form-control", @Readonly = "Readonly" })
-
                                 </div>
                                 <div class="col-md-4">
                                     @Html.TextBoxFor(model => model.ValorTasa, new { @class = "form-control", @Readonly = "Readonly" })
-
                                 </div>
-
                             }
                             else
                             {
-                                @Html.LabelFor(model => model.Moneda, htmlAttributes: new { @class = "control-label col-md-12" })
+                                <label class="control-label">Moneda</label>
                                 @Html.TextBoxFor(model => model.MonedaId, new { @class = "form-control", @Readonly = "Readonly" })
-
                             }
-
-
                         }
 
                     </div>
@@ -289,29 +281,26 @@
 
             </div>
 
-
             @*formulario de legalizacion de gastos*@
             <div class="hide" id="RegistroDatos">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class=""></i><strong> Registro de Datos</strong> </h3>
+                    <h3 class="box-title"><i class="fa fa-money"></i>Registro de Gastos</h3>
                 </div>
-
+                @*<span class="field-required display-none">*</span>*@
                 <div class="box-body">
-
                     <div class="row margin-bottom">
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.GastosId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Item ID</label>
                             @Html.EditorFor(model => model.GastosId, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.GastosId, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-3">
-                            @Html.LabelFor(model => model.FechaGasto, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.TextBoxFor(model => model.FechaGasto, new { @class = "form-control datepicker FechaGasto", @placeholder = "Selecciona Fecha Gasto", id = "FechaGasto" })
+                        <div class="col-md-3" id="divFechaGasto">
+                            <label class="control-label">Fecha Gasto</label>
+                            @Html.TextBoxFor(model => model.FechaGasto, new { @class = "form-control datepicker FechaGasto", @placeholder = "Selecciona Fecha Gasto", id = "FechaGasto", @autocomplete = "false" })
                             @Html.ValidationMessageFor(model => model.FechaGasto, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-3">
-    
-                            @Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Centro Operación</label>
                             @Html.DropDownListFor(model => model.CentroOperacion, Model.ListaCentroOperacion, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -319,8 +308,7 @@
                             }
                         </div>
                         <div class="col-md-3">
-        
-                            @Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Unidad Negocio</label>
                             @Html.DropDownListFor(model => model.UnidadNegocio, Model.ListaUnidadNegocio, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -332,7 +320,7 @@
                     <div class="row margin-bottom">
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Centro Costo</label>
                             @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -341,43 +329,8 @@
                         </div>
 
 
-                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
-                            @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @if (Model.ConAnticipo == 0)
-                            {
-                                @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
-
-                            }
-                            else
-                            { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
-                        }
-
-                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                            {
-                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
-                            }
-                        </div>*@
-
-
-                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
-                                @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
-                                @if (Model.ConAnticipo == 0)
-                                {
-                                    @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
-
-                                }
-                                else
-                                { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
-                            }
-                                @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                                {
-                                    @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
-                                }
-                            </div>*@
-
-
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.PaisId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">País</label>
                             @Html.DropDownListFor(model => model.PaisId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -386,7 +339,7 @@
                         </div>
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.CiudadId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Ciudad</label>
                             @Html.DropDownListFor(model => model.CiudadId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -398,7 +351,7 @@
                     <div class="row margin-bottom">
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.TiposervicioId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Tipo Servicio</label>
                             @Html.DropDownListFor(model => model.TiposervicioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
                             @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                             {
@@ -415,27 +368,28 @@
                         </div>
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.ConceptoGasto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Concepto Gasto</label>
                             @Html.EditorFor(model => model.ConceptoGasto, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.ConceptoGasto, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.MontoGasto, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.EditorFor(model => model.MontoGasto, new { htmlAttributes = new { @class = "form-control" } })
+                            <label class="control-label">Monto Gasto</label>
+                            @Html.EditorFor(model => model.MontoGasto, new { htmlAttributes = new { @class = "form-control maskMoney" } })
                             @Html.ValidationMessageFor(model => model.MontoGasto, "", new { @class = "text-danger" })
+                            <span class="display-none" id="mensajeComida"><small><b>Nota:</b>&nbsp;Este monto hace referencia al gasto total por concepto <i>COMIDA</i> de todo el viaje.</small></span>
                         </div>
                     </div>
 
-                    <div class="row margin-bottom">
+                    <div class="row margin-bottom" id="divOrigenDestino">
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.Origen, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Origen</label>
                             @Html.EditorFor(model => model.Origen, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
                         </div>
 
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.Destino, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <label class="control-label">Destino</label>
                             @Html.EditorFor(model => model.Destino, new { htmlAttributes = new { @class = "form-control" } })
                             @Html.ValidationMessageFor(model => model.Destino, "", new { @class = "text-danger" })
                         </div>
@@ -451,17 +405,15 @@
                         </div>
                     </div>
                     <div class="row margin-bottom">
-                        @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosSolicitud" })
+                        @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosLegalizacion" })
                     </div>
-                    <div class="row display-none" id="mensajeValidacionViaje">
+                    <div class="row display-none" id="mensajeValidacionGastos">
                         <div class="col-sm-12">
                             <div class="alert alert-warning" role="alert">
-                                <span id="mensajeViaje"></span>
+                                <span id="mensajeGastos"></span>
                             </div>
                         </div>
                     </div>
-
-
 
                     @*para el boton guardar legalizacion de gastos*@
                     <div class="row margin-bottom">
@@ -500,19 +452,18 @@
                                     <td class="display-none">TipoServicioId</td>
                                     <td class="display-none">ProveedorId</td>
                                     <td class="display-none">Concepto</td>
-                                    <td class="display-none">Concepto</td>
                                     <td>Item</td>
                                     <td>Fecha</td>
-                                    <td>Centro Oper.</td>
-                                    <td>Unidad Neg</td>
-                                    <td>Centro Cost</td>
+                                    <td>Centro Operación</td>
+                                    <td>Unidad Negocio</td>
+                                    <td>Centro Costo</td>
                                     <td>Fecha Gasto</td>
                                     <td>Pais</td>
                                     <td>Ciudad</td>
                                     <td>Servicio</td>
                                     <td>Proveedor</td>
                                     <td>Concepto Gasto</td>
-                                    <td>Valor</td>
+                                    <td class="maskMoney">Valor</td>
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
@@ -534,7 +485,7 @@
                                     <div class="col-md-5">
                                         <h4 class="" style="color: #fc2525 " id="txMontoFaltante"> 0</h4>
                                         <h4 class="hide" style="color: #0be52c " id="txMontoSobrante"> 0</h4>
-                                        <h4 class=""> @Model.Monto</h4>
+                                        <input type="text" class="form-control maskMoney" value="@Model.Monto" />
                                         <input class="hide" type="text" name="txSaldo" id="txSaldo" value="@Model.Monto" />
                                     </div>
                                 </div>
@@ -591,8 +542,6 @@
                         </div>
                     </div>
 
-
-
                     <div class="class=" row margin-bottom"">
                         <p>
                             <br />
@@ -613,7 +562,7 @@
                                                         <td>ID</td>
                                                         <td>Fecha</td>
                                                         <td>Pais</td>
-                                                        <td>servicio</td>
+                                                        <td>Servicio</td>
                                                         <td>Ciudad</td>
                                                         <td>Origen</td>
                                                         <td>Destino</td>
@@ -634,15 +583,15 @@
                                                             <td class="col-md-1 ">@item.Ciudad</td>
                                                             <td class="col-md-1 ">@item.Origen</td>
                                                             <td class="col-md-1 ">@item.Destino</td>
-                                                            <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                                            <td class="col-md-1 maskMoney"><small>@item.Monto</small></td>
                                                             <td class="col-md-1 ">
                                                                 @*<a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen.ToString().Replace("/",""),@item.Destino.ToString().Replace("/",""),@item.Monto);">*@
                                                                 <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id);">
-                                                                    <small><small><small>Seleccionar</small></small></small>
+                                                                    <small>Seleccionar</small>
                                                                 </a>
                                                             </td>
                                                         </tr>
-                                                  
+
                                                     }
                                                 </tbody>
                                             </table>
@@ -794,41 +743,34 @@
 
 
 @section scripts {
-    <script src="~/js/jquery-ui-1.8.2.js"></script>
-    <script src="~/js/select2.min.js"></script>
-    <link href="~/css/select2.min.css" rel="stylesheet" />
-    <script src="~/js/bootstrap-datepicker.js"></script>
-    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
     <script src="~/js/moment.min.js"></script>
     <script src="~/js/LegalizacionesScript.js"></script>
     <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
     <script src="~/js/tableToJSON.js"></script>
 
-
     <script>
-                                    //$(function () {
-                                    //    $('#tableGastos').DataTable();
+            $(function () {
+                $('#tableGastos').DataTable();
 
+                function cargarGastos() {
+                    var table = $('.tableGastos').tableToJSON({
+                        ignoreColumns: [16]
+                    });
 
-                                    //    function cargarGastos() {
-                                    //        var table = $('.tableGastos').tableToJSON({
-                                    //            ignoreColumns: [16]
-                                    //        });
+                    if (table.length > 0) {
+                        $("#mensajeRegistro").text("");
+                        $('#mensajeValidacionRegistro').hide("slow");
+                        $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                        return true;
+                    } else {
+                        $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                        $('#mensajeValidacionRegistro').show("slow");
+                        return false;
+                    }
 
-                                    //        if (table.length > 0) {
-                                    //            $("#mensajeRegistro").text("");
-                                    //            $('#mensajeValidacionRegistro').hide("slow");
-                                    //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                                    //            return true;
-                                    //        } else {
-                                    //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-                                    //            $('#mensajeValidacionRegistro').show("slow");
-                                    //            return false;
-                                    //        }
-
-                                    //    }
-                                    //});
+                }
+            });
 
     </script>
 }

@@ -82,27 +82,29 @@ namespace Legalizaciones.Web.Controllers
 
 
         [HttpGet]
-        [Route("/Home/Cambiar")]
-        public IActionResult Cambiar(string wCedula)
+        public IActionResult CambiarUsuario(string Cedula)
         {
             UNOEE erp = new UNOEE();
-            var Oempleado = erp.getEmpleadoCedula(wCedula);
-            HttpContext.Session.SetString("Usuario_Nombre", Oempleado.Nombre);
-            HttpContext.Session.SetString("Usuario_Area", Oempleado.Area);
-            HttpContext.Session.SetString("Usuario_Cedula", Oempleado.Cedula);
-            HttpContext.Session.SetString("Usuario_Cargo", Oempleado.CargoId.ToString());
-            HttpContext.Session.SetString("Usuario_Telefono", Oempleado.Telefono);
-            HttpContext.Session.SetString("Usuario_Ciudad", Oempleado.Ciudad);
-            HttpContext.Session.SetString("Usuario_Direccion", Oempleado.Direccion);
+
+            if (ModelState.IsValid){
+                var Oempleado = erp.getEmpleadoCedula(Cedula);
+                HttpContext.Session.SetString("Usuario_Nombre", Oempleado.Nombre);
+                HttpContext.Session.SetString("Usuario_Area", Oempleado.Area);
+                HttpContext.Session.SetString("Usuario_Cedula", Oempleado.Cedula);
+                HttpContext.Session.SetString("Usuario_Cargo", Oempleado.CargoId.ToString());
+                HttpContext.Session.SetString("Usuario_Telefono", Oempleado.Telefono);
+                HttpContext.Session.SetString("Usuario_Ciudad", Oempleado.Ciudad);
+                HttpContext.Session.SetString("Usuario_Direccion", Oempleado.Direccion);
+            }
 
             return RedirectToAction("Index");
         }
 
-    public IActionResult Error()
+        public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        
+
         /*Json que retorna los coneptos*/
         public JsonResult Conceptos()
         {

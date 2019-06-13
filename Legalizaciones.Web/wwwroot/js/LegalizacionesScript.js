@@ -1,4 +1,38 @@
-﻿
+﻿$(document).ready(function () {
+    $("#TiposervicioId").change(function () {
+        var idServicio = $('#TiposervicioId  option:selected').val();
+        var nombreServicio = $('#TiposervicioId  option:selected').text();
+
+        console.log(nombreServicio);
+        if (nombreServicio === "Comida") {
+            $('#divFechaGasto').addClass('display-none');
+            $('#divOrigenDestino').addClass('display-none');
+            $('#FechaGasto').val('N/A');
+            $('#Origen').val('N/A');
+            $('#Destino').val('N/A');
+            $('#mensajeComida').removeClass('display-none');
+        } else {
+            $('#mensajeComida').addClass('display-none');
+            $('#divFechaGasto').removeClass('display-none');
+            $('#FechaGasto').val('');
+            $('#Origen').val('');
+            $('#Destino').val('');
+
+            if (nombreServicio === "Transporte" || nombreServicio === "Movilidad") {
+                $('#divOrigenDestino').removeClass('display-none');
+            } else {
+                $('#Origen').val('N/A');
+                $('#Destino').val('N/A');
+                $('#divOrigenDestino').addClass('display-none');
+            }
+        }
+    });
+
+
+    
+});
+
+
 //funcion que me muestra la pantalla modal con los gastos
 function AnadirGastos(boton) {
         $('#gastosModal').modal('show');
@@ -16,8 +50,6 @@ function ImprimirReporte(boton) {
 
 //Funcion cuando selecciona un item del listado pantalla modal
 function Seleccionar(Id) {
-    //var wFecha = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-
     $.ajax({
         type: "GET",
         url: "/Localidad/SolicitudGastos",
@@ -26,6 +58,19 @@ function Seleccionar(Id) {
         success: function (data) {
             console.log(data);
             if (data !== null) {
+
+                if (data.servicio === "Comida") {
+                    $('#divFechaGasto').addClass('display-none');
+                    $('#divOrigenDestino').addClass('display-none');
+                    $('#mensajeComida').removeClass('display-none');
+
+                } else {
+                    $('#divFechaGasto').removeClass('display-none');
+                    $('#divOrigenDestino').removeClass('display-none');
+                    $('#mensajeComida').addClass('display-none');
+
+                }
+
                 $("#GastosId").val(Id);
                 $("#MontoGasto").val(data.monto);
                 $("#Origen").val(data.origen);
@@ -36,70 +81,35 @@ function Seleccionar(Id) {
                 var wCiudad = data.ciudadId;
                 var wServicio = data.servicioId;
 
-                $.ajax({
-                    type: "GET",
-                    url: "/Localidad/Paises",
-                    datatype: "Json",
-                    success: function (data) {
-                        $("#PaisId").empty();
-                        $.each(data, function (index, value) {
-                            if (value.id === wPais) {
-                                $('#PaisId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-                            } else {
-                                $('#PaisId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                            }
-                        });
-                    }
-                });
-
-
-                $.ajax({
-                    type: "GET",
-                    url: "/Localidad/CiudadesPais",
-                    datatype: "Json",
-                    data: { paisID: wPais },
-                    success: function (data) {
-                        $("#CiudadId").empty();
-                        $.each(data, function (index, value) {
-                            if (value.id === wCiudad) {
-                                $('#CiudadId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-                            } else {
-                                $('#CiudadId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                            }
-                        });
-                    }
-                });
-
-                $.ajax({
-                    type: "GET",
-                    url: "/UNOEE/Servicios",
-                    datatype: "Json",
-                    success: function (data) {
-                        $("#Servicio").empty();
-                        $.each(data, function (index, value) {
-                            if (value.id === wServicio) {
-                                $('#TiposervicioId').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
-                            } else {
-                                $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                            }
-                        });
-                    }
-                });
-
-
-
-
+                $('#PaisId').val(wPais);
+                CargarCiudad(wPais);
+                $('#CiudadId').val(wCiudad);
+                $('#TiposervicioId').val(wServicio);
             }
-            
         }
     });
-
 
     funcion_Visible($('#RegistroDatos'));
 
 }
 
 function AddNuevoGasto() {
+    $('#GastosId').val('');
+    $('#PaisId').val('');
+    $('#CiudadId').val('');
+    $('#TiposervicioId').val('');
+    $('#ProveedorId').val('');
+    $('#ConceptoGasto').val('');
+    $('#MontoGasto').val('');
+
+    $('#divFechaGasto').removeClass('display-none');
+    $('#divOrigenDestino').removeClass('display-none');
+    $('#mensajeComida').addClass('display-none');
+    $('#FechaGasto').val('');
+    $('#Origen').val('');
+    $('#Destino').val('');
+
+    $('#gastosModal').modal('hide');
     funcion_Visible($('#RegistroDatos'));
 }
 
@@ -137,6 +147,10 @@ function AgregarFilaDatagrid() {
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
 
+    var CentroOperacion = $("#CentroOperacion option:selected").val();
+    var UnidadNegocio = $("#UnidadNegocio option:selected").val();
+    var CentroCosto = $("#CentroCosto option:selected").val();
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -154,48 +168,23 @@ function AgregarFilaDatagrid() {
         Proveedor = "Proveedor Dos";
     }
 
-    var Monto = CalcularGastoComidaLegalizacion();
+    if (Servicio === "Comida") {
+        Monto = CalcularGastoComidaLegalizacion();
+    }
 
-    //los primero campos que indican display-none no se muestran pero son los campos que necesito que se llenen con valores 
-    //para poder realizar la serializacion de json cuando le envie el datagrid con los nombre verdaderos de la clase y con sus id
-    //para mostrar coloco los textos
-    //tiene que estar en orden con el header del datagrid
-    //    <td class="display-none">FechaaGasto</td>
-    //    <td class="display-none">PaisId</td>
-    //    <td class="display-none">CiudadId</td>
-    //    <td class="display-none">TipoServicioId</td>
-    //    <td class="display-none">ProveedorId</td>
-    //    <td class="display-none">Concepto</td>
-    //    <td class="display-none">Valor</td>
-    //    <td>Item</td>
-    //    <td>Fecha</td>
-    //    <td>Centro Oper.</td>
-    //    <td>Unidad Neg</td>
-    //    <td>Centro Cost</td>
-    //    <td>Pais</td>
-    //    <td>Ciudad</td>
-    //    <td>Servicio</td>
-    //    <td>Proveedor</td>
-    //    <td>Concepto Gasto</td>
-    //    <td>Valor</td>
-    //    <td>Acciones</td>
-
-//las primeras son para el mapeo
+    //las primeras son para el mapeo
     //las demas son para mostrar
     var row = `<tr>  
-                    <td class="display-none">${today}</td>
                     <td class="display-none">${PaisId}</td> 
                     <td class="display-none">${CiudadId}</td> 
                     <td class="display-none">${ServicioId}</td> 
                     <td class="display-none">${ProveedorId}</td>
                     <td class="display-none">${ConceptoGasto}</td>
-                    <td class="display-none">${Monto}</td>
-
                     <td>${Id}</td>
                     <td>${today}</td>
-                    <td>Centro de Operacion</td>
-                    <td>Unidad de Negocio</td>
-                    <td>Centro de Costo</td>
+                    <td>${CentroOperacion}</td>
+                    <td>${UnidadNegocio}</td>
+                    <td>${CentroCosto}</td>
                     <td>${FechaGasto}</td>
                     <td>${Pais}</td>
                     <td>${Ciudad}</td>
@@ -233,13 +222,57 @@ function AgregarFilaDatagrid() {
         funcion_Visible($("#txMontoSobrante"));
         $('#txMontoSobrante').text(sum);
     }
-        
-
 }
 
 
 function GuardarGastos() {
-    AgregarFilaDatagrid();
+    if (ValidarGastos()) {
+        AgregarFilaDatagrid();
+    }
+}
+
+function ValidarGastos() {
+    var FechaGasto = $('#FechaGasto').val();
+    var CentroOperacion = $('#CentroOperacion').val();
+    var UnidadNegocio = $('#UnidadNegocio').val();
+    var CentroCosto = $('#CentroCosto').val();
+    var Pais = $('#PaisId').val();
+    var Ciudad = $('#CiudadId').val();
+    var ServicioId = $('#TiposervicioId  option:selected').val();
+    var Servicio = $('#TiposervicioId  option:selected').text();
+    var Proveedor = $('#ProveedorId').val();
+    var Concepto = $('#ConceptoGasto').val();
+    var Valor = $('#MontoGasto').val();
+
+    var Origen = $('#Origen').val();
+    var Destino = $('#Destino').val();
+
+    if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "") {
+        //Validacion de Transporte
+        if (Servicio === "Transporte" || Servicio === "Movilidad") {
+            if (Origen === "" || Destino === "") {
+                $("#mensajeGastos").text("Debe específicar la ruta del transporte.");
+                $('#mensajeValidacionGastos').show("slow");
+                return false;
+            } else if (FechaGasto === "") {
+                $("#mensajeGastos").text("Debe específicar la fecha del gasto.");
+                $('#mensajeValidacionGastos').show("slow");
+                return false;
+            } else {
+                $("#mensajeGastos").text("");
+                $('#mensajeValidacionGastos').hide("slow");
+                return true;
+            }
+        }
+
+        $("#mensajeGastos").text("");
+        $('#mensajeValidacionGastos').hide("slow");
+        return true;
+    } else {
+        $("#mensajeGastos").text("Faltan datos por especificar.");
+        $('#mensajeValidacionGastos').show("slow");
+        return false;
+    } 
 }
 
 
@@ -261,7 +294,7 @@ function cargarGastos() {
     if (table.length > 0) {
         $("#mensajeRegistro").text("");
         $('#mensajeValidacionRegistro').hide("slow");
-        $('#hdfGastosSolicitud').val(JSON.stringify(table));
+        $('#hdfGastosLegalizacion').val(JSON.stringify(table));
         return true;
     } else {
         $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
@@ -310,11 +343,47 @@ function CargarCiudad(valor) {
     });
 }
 
+function CargarListas() {
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/Servicios",
+        datatype: "Json",
+        success: function (data) {
+            $("#TiposervicioId").empty();
+            $('#TiposervicioId').append('<option selected value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
 
-function CargarTipoServicio() {
-    $('#TiposervicioId').append('<option value="1">Comida</option>');
-    $('#TiposervicioId').append('<option value="2">transporte</option>');
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/Paises",
+        datatype: "Json",
+        success: function (data) {
+            $("#PaisId").empty();
+            $.each(data, function (index, value) {
+                $('#PaisId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
 
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/CiudadesPais",
+        datatype: "Json",
+        data: { paisID: "" },
+        success: function (data) {
+            $("#CiudadId").empty();
+            $.each(data, function (index, value) {
+                $('#CiudadId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    CargarProveedor();
+    CargarMotivos ();
 }
 
 
@@ -336,10 +405,9 @@ function CargarProveedor() {
 //Cuando carga la pantalla
 window.onload = function () {
 
-    CargarTipoServicio();
-    CargarProveedor();
+    CargarListas();
     //CargarMotivos();
-    CargarPais();
+    //CargarPais();
 
     var w = $('#txSaldo').val();
     w = w.replace(",", ".");
@@ -349,11 +417,15 @@ window.onload = function () {
 
 
 $('.datepicker').datepicker({
-    format: 'dd/mm/yyyy',
+    language: 'es',
+    format: 'yyyy-mm-dd',
     todayHighlight: true,
     autoclose: true,
     orientation: 'bottom auto'
-});
+}).on("changeDate", function (dateText, inst) {
+    var id = $(this).attr('id');
+    console.log(id);
+    });
 
 $(".datepicker").datepicker("update", new Date());
 
@@ -389,31 +461,52 @@ function CalcularGastoComidaLegalizacion() {
 
     if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();
-        var FDdia = FechaDesde.substr(0, 2);
-        var FDMes = FechaDesde.substr(3, 2);
-        var FDAnno = FechaDesde.substr(6, 4);
-        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
-
         var FechaHasta = $("#FechaHasta").val();
-        var FHdia = FechaHasta.substr(0, 2);
-        var FHMes = FechaHasta.substr(3, 2);
-        var FHAnno = FechaHasta.substr(6, 4);
-        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
 
-        var fecha1 = moment(wFDFormato);
-        var fecha2 = moment(wFHFormato);
+        var fecha1 = moment(FechaDesde);
+        var fecha2 = moment(FechaHasta);
 
         var wDias = fecha2.diff(fecha1, 'days');
+        console.log('dias ' + wDias);
+        wDias = wDias + 1;
 
-        if (wDias > 1) {
-            var wMontoTotal = wMonto * parseInt(wDias);
+        var wMontoTotal = wMonto * parseInt(wDias);
 
-            return wMontoTotal;
-        }
-
-
+        return wMontoTotal;
     }
 
     return wMonto;
+
+    //var wServicio = $('#TiposervicioId option:selected').text();
+    //var wMonto = $('#MontoGasto').val();
+
+    //if (wServicio === "Comida") {
+    //    var FechaDesde = $("#FechaDesde").val();
+    //    var FDdia = FechaDesde.substr(0, 2);
+    //    var FDMes = FechaDesde.substr(3, 2);
+    //    var FDAnno = FechaDesde.substr(6, 4);
+    //    var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+
+    //    var FechaHasta = $("#FechaHasta").val();
+    //    var FHdia = FechaHasta.substr(0, 2);
+    //    var FHMes = FechaHasta.substr(3, 2);
+    //    var FHAnno = FechaHasta.substr(6, 4);
+    //    var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+
+    //    var fecha1 = moment(wFDFormato);
+    //    var fecha2 = moment(wFHFormato);
+
+    //    var wDias = fecha2.diff(fecha1, 'days');
+
+    //    if (wDias > 1) {
+    //        var wMontoTotal = wMonto * parseInt(wDias);
+
+    //        return wMontoTotal;
+    //    }
+
+
+    //}
+
+    //return wMonto;
 
 }

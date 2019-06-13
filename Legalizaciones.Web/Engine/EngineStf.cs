@@ -21,13 +21,14 @@ namespace Legalizaciones.Web.Engine
             UNOEE erp = new UNOEE();
             List<InfoLegalizacion> list = new List<InfoLegalizacion>();
             int n = 0;
+            string[] formatFecha = null;
             foreach (DataRow row in dt.Rows)
             {
                 InfoLegalizacion item = new InfoLegalizacion();
                 if (row[0] != DBNull.Value)
                     item.Id = Convert.ToInt32(row[0]);
                 if (row[1] != DBNull.Value)
-                    item.FechaCreacion = row[1].ToString().Substring(0, 10);
+                    item.FechaCreacion = Convert.ToDateTime(row[1].ToString());
                 if (row[2] != DBNull.Value)
                     item.NumeroSolicitud = row[2].ToString();
                 if (row[3] != DBNull.Value)
@@ -41,9 +42,11 @@ namespace Legalizaciones.Web.Engine
                 if (row[7] != DBNull.Value)
                     item.EmpleadoCedula = row[7].ToString();
                 if (row[8] != DBNull.Value)
-                    item.FechaEntrega = row[8].ToString().Substring(0, 10);
+                    item.FechaEntrega = Convert.ToDateTime(row[8].ToString());
                 if (row[9] != DBNull.Value)
-                    item.FechaVencimiento = row[9].ToString().Substring(0, 10);
+                    //formatFecha = row[9].ToString().Split(" ")[0].Split("/");
+                    //item.FechaVencimiento = formatFecha[1] + "/" + formatFecha[0] + "/" + formatFecha[2];
+                    item.FechaVencimiento = Convert.ToDateTime(row[9].ToString());
                 if (row[10] != DBNull.Value)
                     item.DiasTrascurridos = Convert.ToInt32(row[10]);
                 if (row[11] != DBNull.Value)

@@ -131,6 +131,9 @@ namespace Legalizaciones.Model
         [NotMapped]
         public string AuxFechaHasta { get; set; }
 
+        [NotMapped]
+        public string EmailAprobador { get; set; }
+
 
     }
 }

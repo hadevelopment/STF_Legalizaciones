@@ -22,7 +22,7 @@
     <section class="">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <h3 class="box-title"><i class="fa fa-info-circle"></i>Información del empleado</h3>
                 <div class="box-tools pull-right">
                     <label>Fecha de Registro: @String.Format("{0:dd-MM-yyy}", DateTime.Now)</label>
                 </div>
@@ -63,7 +63,7 @@
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <h3 class="box-title"><i class="fa fa-plane"></i>Información del viaje</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -161,7 +161,7 @@
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-money"></i> Registro de Gastos</h3>
+                <h3 class="box-title"><i class="fa fa-money"></i>Registro de Gastos</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
@@ -197,17 +197,11 @@
                 </div>
 
                 <div class="row" style="margin-top: 10px;">
-                    <div class="col-md-8">
-
-                    </div>
-                    <div class="col-md-2">
+                    <div class="col-md-12 text-right">
                         <h3>Monto Total:</h3>
+                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
                     </div>
-                    <div class="col-md-2">
-                        @Html.HiddenFor(model => model.Monto, new { @class = "form-control", id = "hdfMontoSolicitud" })
-                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
-                    </div>
-
+                    @Html.HiddenFor(model => model.Monto, new { @class = "form-control", id = "hdfMontoSolicitud" })
                 </div>
             </div>
         </div>
@@ -257,11 +251,6 @@
                                         <label class="control-label">Ciudad</label>
                                         @Html.DropDownList("Ciudad", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Ciudad" })
                                     </div>
-                                    @*<div class="col-md-4">
-                                            <label class="control-label">Proveedor</label>
-                                            @Html.DropDownList("Proveedor", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Proveedor" })
-                                        </div>*@
-
                                 </div>
                                 <br />
                                 <div class="row">
@@ -290,10 +279,10 @@
                                     </div>
                                     <div class="col-md-4" style="float:right;">
                                         <label class="control-label">Monto</label>
-                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto", @type = "number" } })
-                                        <label style="color:silver;font-size:12px">ej: 1985,89</label>
+                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control maskMoney", id = "Monto", @type = "text", @pattern= @"^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?\.\d{1,2}$" } })
+                                        @*<label style="color:silver;font-size:12px">ej: 1,234.00 $</label>*@
                                         <div class="display-none" id="AvisoMontoServicio">
-                                            <label class="" id="MensajeAviso"></label>
+                                            <label>Limite establecido:</label>  <input type="text" class="form-control txtLabel maskMoney" id="MensajeAviso" readonly="readonly"></input>
                                         </div>
                                     </div>
                                 </div>
@@ -325,8 +314,6 @@
 </div>
 
 
-
-
 @section scripts {
     <script src="~/js/moment.min.js"></script>
     <script src="~/js/SolicitudScript.js"></script>
@@ -335,25 +322,6 @@
     <script src="~/js/tableToJSON.js"></script>
 
     <script>
-        //COMA (,) COMO SEPARADOR DECIMAL...
-        /*$("#Monto").on({
-            "focus": function (event) {
-                this.value = (isNaN(number)) ? '' :
-            $(event.target).select();
-        },
-            "keyup": function (event) {
-                debugger;
-                $(event.target).val(function (index, value) {
-                return value.replace(/\D/g, "")
-                            .replace(/([0-9])([0-9]{2})$/, '$1,$2')
-                            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
-            });
-        }
-        });*/
-
-
-
-
         $(function () {
             $('#tableGastos').DataTable();
 
@@ -374,9 +342,21 @@
 
         function cargarGastos() {
             debugger;
+
+            var DataJSON = $(".tableGastos").find('input').serializeArray();
+
             var table = $('.tableGastos').tableToJSON({
+                textExtractor: function (cellIndex, $cell) {
+                    // get text from an input or select inside table cells;
+                    // if empty or non-existent, get the cell text
+                    return $cell.find('input, select').val() || $cell.text();
+                },
                 ignoreColumns: [10]
             });
+
+            console.log(table);
+            console.log(JSON.stringify(table));
+            console.log(JSON.stringify(DataJSON));
 
             if (table.length > 0) {
                 $("#mensajeRegistro").text("");

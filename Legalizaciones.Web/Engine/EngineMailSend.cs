@@ -23,7 +23,7 @@ namespace Legalizaciones.Web.Engine
 
         public EngineMailSend() { }
 
-        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo ,Models.Email model)
+        public EngineMailSend( string subject, string body , string pathAdjunto, List<string> msjTo , Helpers.Structure model)
         {
 
             this.Asunto = subject;
@@ -91,7 +91,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
-        private string ReplaceParameters(Models.Email model,string cuerpo)
+        private string ReplaceParameters(Helpers.Structure model, string cuerpo)
         {
             cuerpo = cuerpo.Replace("@Model.Fecha", model.Fecha);
             cuerpo = cuerpo.Replace("@Model.NombreDestinatario", model.NombreDestinatario);

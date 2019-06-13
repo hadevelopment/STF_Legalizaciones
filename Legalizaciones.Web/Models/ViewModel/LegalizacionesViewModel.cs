@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
@@ -99,6 +100,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public int GastosId { get; set; }
 
         [DisplayName("Fecha del gasto")]
+        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]
@@ -124,7 +126,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         [DisplayName("Ciudad")]
         public int CiudadId { get; set; }
 
-        [DisplayName("Tio de servicio")]
+        [DisplayName("Tipo de servicio")]
         public int TiposervicioId { get; set; }
 
         [DisplayName("Proveedor")]

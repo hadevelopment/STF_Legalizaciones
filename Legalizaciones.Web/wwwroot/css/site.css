@@ -15,7 +15,8 @@ a {
 
 
 table thead {
-    font-size:12px !important; 
+    font-size: 12px !important;
+    font-weight: bold;
 }
 
 .btn {
@@ -68,14 +69,6 @@ table thead {
 
 .lst100 {
     width: 100%;
-}
-
-.display-none{
-    display:none;
-}
-
-.display{
-    display:block;
 }
 
 .alert{
@@ -301,3 +294,28 @@ body {
     border-bottom: 2px solid #bb5e5e;
 }
 
+.field-required {
+    color: red;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+#AvisoMontoServicio {
+    color: silver;
+    position: unset;
+    font-size: 12px;
+    margin-top:10px;
+}
+
+.txtLabel.maskMoney {
+    background-color: transparent;
+    border: none;
+    text-align: right;
+    padding: 0;
+    margin-top: -10px;
+    width:150px;
+}
+
+td.monto{
+    width:150px;
+}
