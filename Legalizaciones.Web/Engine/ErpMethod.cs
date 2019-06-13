@@ -34,16 +34,21 @@ namespace Legalizaciones.Web.Engine
             return centroOperaciones;
         }
 
-        public async Task<ListTaxTypes> TipoImpuestosCollectionAsync()
-        {
-            ListTaxTypes tipoImpuesto = await ListTaxtypesServicesAsync<ListTaxTypes>();
-            return tipoImpuesto;
-        }
-
         public async Task<TaxTypes> TipoImpuestosSingleAsync(string id)
         {
             TaxTypes tipoImpuesto = await GetTaxtypesServicesAsync<TaxTypes>(id);
             return tipoImpuesto;
+        }
+
+        public async Task<ListSuppliers> ProveedoresCollectionAsync()
+        {
+            ListSuppliers proveedores = await ListSuppliersAsync<ListSuppliers>();
+            return proveedores;
+        }
+        public async Task<Suppliers> ProveedoresSingleAsync(string id)
+        {
+            Suppliers proveedores = await GetSuppliersAsync<Suppliers>(id);
+            return proveedores;
         }
     }
 }

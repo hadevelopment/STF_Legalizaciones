@@ -21,7 +21,7 @@ namespace Legalizaciones.Erp
         {
             using (var sw = new StringReader(xmlString))
             {
-              return (ObjectType)new XmlSerializer(typeof(ObjectType)).Deserialize(sw);
+               return (ObjectType)new XmlSerializer(typeof(ObjectType)).Deserialize(sw);
             }
         }
 
@@ -131,7 +131,7 @@ namespace Legalizaciones.Erp
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS", IdTaxtypesServices);
             var a = BaseSerializer.xmlRequest;
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].FirstNode.ToString();
+            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.TaxTypes>(s);
             return d;
         }
@@ -149,7 +149,6 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
             var d = ReadXmlString<Models.ListSuppliers>(s);
@@ -161,7 +160,6 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants();
 
@@ -173,11 +171,9 @@ namespace Legalizaciones.Erp
 
             BaseSerializer.BuildRequest("WS_PROVEEDORES", IdSuppliers);
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].FirstNode.ToString();
+            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.Suppliers>(s);
-
             return d;
         }
 

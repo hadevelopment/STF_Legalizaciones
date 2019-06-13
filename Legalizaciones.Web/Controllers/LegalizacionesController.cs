@@ -72,7 +72,7 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             //*******************************************************
-            EnviarMensaje();
+            //EnviarMensaje();
             //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
@@ -117,7 +117,7 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
-        private void EnviarMensaje()
+       /* private void EnviarMensaje()
         {
             List<string> listaDestino = new List<string>();
             //listaDestino.Add("d.sanchez@innova4j.com");
@@ -143,7 +143,7 @@ namespace Legalizaciones.Web.Controllers
                 msjGet = "Notificacion enviada satisfactoriamente";
             else
                 msjGet = Enviar.ErrorEnviando();
-        }
+        }*/
 
         [HttpGet]
         [Route("Crear")]
