@@ -259,13 +259,6 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_CENTROS_COSTOS");
             var a = BaseSerializer.xmlRequest;
-            try
-            {
-                var rr = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            }catch(Exception ex)
-            {
-                string k = ex.ToString();
-            }
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
             var d = ReadXmlString<Models.CostCenters>(s);
