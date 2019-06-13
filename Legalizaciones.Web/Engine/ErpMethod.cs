@@ -16,6 +16,7 @@ namespace Legalizaciones.Web.Engine
             ListBussinesUnit unidadNegocio = await ListBussniseUnitsAsync<ListBussinesUnit>();
             return unidadNegocio;
         }
+
         public async Task<BusinessUnit> UnidadNegocioSingleAsync(string id)
         {
             BusinessUnit unidadNegocio = await GetBussinesUnitAsync<BusinessUnit>(id);
