@@ -421,19 +421,11 @@ namespace Legalizaciones.Web.Engine
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
             wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0);
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
-            try
-            {
-                var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
-                resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-                KactusEmpleado = response.ToList();
-            }
-            catch (Exception ex)
-            {
-                string n = ex.ToString();
-            }
-            XmlDocument doc = new XmlDocument();
-            doc = XmlCreate(resultado);
 
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-1), userWcf, passwordWcf);
+            resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            KactusEmpleado = response.ToList();
+            XmlDocument doc = XmlCreate(resultado);
             return KactusEmpleado;
         }
 
@@ -441,16 +433,21 @@ namespace Legalizaciones.Web.Engine
         {
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            XmlElement root = doc.DocumentElement;
+            
             try
             {
-                doc.PreserveWhitespace = true;
-                XmlElement root = doc.DocumentElement;
                 doc.InsertBefore(xmlDeclaration, root);
-                doc = JsonConvert.DeserializeXmlNode(cadena);
-            }catch (Exception ex)
-            {
-                string n = ex.ToString();
+                doc.LoadXml(cadena);
+
+                string json = JsonConvert.SerializeXmlNode(doc);
+                //doc = JsonConvert.DeserializeXmlNode(cadena);
             }
+            catch (Exception ex)
+            {
+                string h = ex.ToString();
+            }
+            //doc.Save("C://ruta//xml_ejemplo.xml");
             return doc;
         }
 
