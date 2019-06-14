@@ -415,15 +415,17 @@ namespace Legalizaciones.Web.Engine
 
         public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
         {
-            //Convert.ToDateTime("2019-04-26")
+            DateTime init = DateTime.Now;
+            string resultado = string.Empty;
             string userWcf = EngineStf.UserWcf;
             string passwordWcf = EngineStf.PasswordWcf;
-            DateTime Fecha = DateTime.Now.Date.AddDays(-1);
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
-            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-            XmlCreate(resultado);
+            wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0); 
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
+            resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            DateTime finish = DateTime.Now;
+            int n = 0;
             KactusEmpleado = response.ToList();
             return KactusEmpleado;
         }

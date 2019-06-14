@@ -16,6 +16,8 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             ErpMethod Servicio = new ErpMethod();
+            EngineStf Funcion = new EngineStf();
+            var resultado = Funcion.UseKactusAsync();
             // var UnidadNegocio = Servicio.UnidadNegocioSingleAsync("01");
             // var UnidadesNegocios = Servicio.UnidadNegocioCollectionAsync();
             // var centroOperacion = Servicio.CentroOperacionesSingleAsync("27");
