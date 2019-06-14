@@ -419,13 +419,21 @@ namespace Legalizaciones.Web.Engine
             string userWcf = EngineStf.UserWcf;
             string passwordWcf = EngineStf.PasswordWcf;
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
-            wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0); 
+            wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0);
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-1), userWcf, passwordWcf);
-            resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+            try
+            {
+                var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
+                resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
+                KactusEmpleado = response.ToList();
+            }
+            catch (Exception ex)
+            {
+                string n = ex.ToString();
+            }
             XmlDocument doc = new XmlDocument();
             doc = XmlCreate(resultado);
-            KactusEmpleado = response.ToList();
+
             return KactusEmpleado;
         }
 
@@ -433,10 +441,16 @@ namespace Legalizaciones.Web.Engine
         {
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-            doc.PreserveWhitespace = true;
-            XmlElement root = doc.DocumentElement;
-            doc.InsertBefore(xmlDeclaration, root);
-            doc = JsonConvert.DeserializeXmlNode(cadena);
+            try
+            {
+                doc.PreserveWhitespace = true;
+                XmlElement root = doc.DocumentElement;
+                doc.InsertBefore(xmlDeclaration, root);
+                doc = JsonConvert.DeserializeXmlNode(cadena);
+            }catch (Exception ex)
+            {
+                string n = ex.ToString();
+            }
             return doc;
         }
 
