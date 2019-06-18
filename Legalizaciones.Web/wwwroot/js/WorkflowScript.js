@@ -170,6 +170,11 @@ function GetVerFlujo() {
 }
 
 $('#solicitud').on('change', function (e) {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
+    $('#flujoId').val(0);
+    $('#flujoDescripcion').val('');
     var tipoDocumentoId = $('#solicitud').val();
     var tipoDocumento = $("#solicitud :selected").text();
     $('#tipoDocumentoId').val(tipoDocumentoId);
@@ -432,8 +437,8 @@ function SetAgregarPasoFlujo() {
     min = min.trim();
     max = max.trim();
     des = des.trim();
-    document.getElementById('montoMinimo').value = min;
-    document.getElementById('montoMaximo').value = max;
+    document.getElementById('montoMinimo').value = parseFloat(min).toFixed(2);
+    document.getElementById('montoMaximo').value = parseFloat(max).toFixed(2);
     document.getElementById('descripcion').readOnly = false;
     var indiceDestino = 0;
     if (des == 'Nacional') { indiceDestino = 1; }
@@ -467,6 +472,8 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDoc
     $('#aprobador').val(nombre);
     $('#suplent1').val(nombreSuplenteUno);
     $('#suplent2').val(nombreSuplenteDos);
+    $('#aprobadorSuplente1').val(nombreSuplenteUno);
+    $('#aprobadorSuplente2').val(nombreSuplenteDos);
     $('#cedulaAprobador').val(cedula);
     $('#cedulaSuplente1').val(cedulaSuplenteUno);
     $('#cedulaSuplente2').val(cedulaSuplenteDos);
@@ -660,7 +667,7 @@ function CreateTablaAprobadores(infoAprobadores) {
                             <td> ${item.nombreSuplenteDos}</td>
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}',
                                                                                           '${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}', '${item.flujoSolicitudId}',
-                                                                                   '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.nombreSuplenteUno}', '${item.nombreSuplenteDos}',
+                                                                                   '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.emailSuplenteUno}', '${item.emailSuplenteDos}',
                                                                                   'actualizar');" value="Actualizar"> </td>
 
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('${item.id}','${item.orden}','${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}',
