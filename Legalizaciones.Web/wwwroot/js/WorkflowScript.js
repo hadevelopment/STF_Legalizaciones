@@ -546,7 +546,7 @@ function Aprobadores(objeto) {
             $(objeto).append('<option selected disabled value="-1">Seleccione...</option>');
             $.each(data, function (index, value) {
                 arrayEmpleadoPermiso.push(value);
-                $(objeto).append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
+                $(objeto).append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.cargo + '</option>');
             });
         },
         complete: function () {
@@ -639,10 +639,10 @@ function CreateTablaAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Nombre Aprobador </th>
+                        <th> Cargo del Aprobador </th>
                         <th> E-Mail Aprobador </th>
-                        <th> E-Mail Suplente 1 </th>
-                        <th> E-Mail Suplente 2 </th>
+                        <th> Cargo Suplente 1 </th>
+                        <th> Cargo Suplente 2 </th>
                         <th> Actualizar </th>
                         <th> Eliminar </th>
                                       </tr>`;
@@ -654,13 +654,13 @@ function CreateTablaAprobadores(infoAprobadores) {
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.nombreAprobador}</td>
                             <td> ${item.emailAprobador}</td>
-                            <td> ${item.emailSuplenteUno}</td>
-                            <td> ${item.emailSuplenteDos}</td>
+                            <td> ${item.nombreSuplenteUno}</td>
+                            <td> ${item.nombreSuplenteDos}</td>
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}',
                                                                                           '${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}', '${item.flujoSolicitudId}',
-                                                                                   '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.emailSuplenteUno}', '${item.emailSuplenteDos}',
+                                                                                   '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.nombreSuplenteUno}', '${item.nombreSuplenteDos}',
                                                                                   'actualizar');" value="Actualizar"> </td>
 
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('${item.id}','${item.orden}','${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}',
@@ -686,7 +686,7 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Nombre Aprobador </th>
+                        <th> Cargo del Aprobador </th>
                         <th> E-Mail Aprobador</th>            
                                       </tr>`;
         $("#tblFlujo thead").append(title); //Se agrega a la nueva tabla
@@ -697,7 +697,7 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.nombreAprobador}</td>
                             <td> ${item.emailAprobador}</td>
                                     </tr>`;
             $("#tblFlujo tbody").append(tr);

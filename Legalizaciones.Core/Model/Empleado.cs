@@ -13,15 +13,25 @@ namespace Legalizaciones.Model
     {
         [Required]
         public string Cedula { get; set; }
+
         public string Nombre { get; set; }
+
         public string Apellido { get; set; }
+
         public int? CargoId { get; set; }
+
         public string Area { get; set; }
+
         public string Telefono { get; set; }
+
         public string Correo { get; set; }
+
         public string Direccion { get; set; }
+
         public string Ciudad { get; set; }
+
         public string NombreSupervisor { get; set; }
+
         public int SupervisorId { get; set; }
 
         public string CentroOperacion { get; set; }
@@ -34,5 +44,6 @@ namespace Legalizaciones.Model
 
         public string UnidadNegocios { get; set; }
 
+        public string Cargo { get; set; }
     }
 }

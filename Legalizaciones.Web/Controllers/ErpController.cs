@@ -18,12 +18,12 @@ namespace Legalizaciones.Web.Controllers
             ErpMethod Servicio = new ErpMethod();
             EngineStf Funcion = new EngineStf();
             //var resultado = Funcion.UseKactusAsync();
-            var UnidadNegocio = Servicio.UnidadNegocioSingleAsync("01");
+            //var UnidadNegocio = Servicio.UnidadNegocioSingleAsync("01");
             // var UnidadesNegocios = Servicio.UnidadNegocioCollectionAsync();
             // var centroOperacion = Servicio.CentroOperacionesSingleAsync("27");
             // var centroOperacion = Servicio.CentroOperacionesCollectionAsync();
             //var tipoImpuesto = Servicio.TipoImpuestosSingleAsync("01");
-            //var tipoImpuesto = Servicio.TipoImpuestosSingleAsync("CS098");
+            var tipoImpuesto = Servicio.TipoImpuestosSingleAsync("CS098");
             //var proveedor = Servicio.ProveedoresSingleAsync("1130609205");
             //var proveedor = Servicio.ProveedoresCollectionAsync();
             //var tipoServicio = Servicio.TipoServiciosSingleAsync("AF001");

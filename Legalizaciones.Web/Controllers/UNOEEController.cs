@@ -137,7 +137,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.vargas@innova4j.com"
+                Correo = "e.vargas@innova4j.com",
+                Cargo ="Jefe Directo"
             });
 
             Empleados.Add(new Empleado
@@ -152,7 +153,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "a.betancourt@innova4j.com"
+                Correo = "a.betancourt@innova4j.com",
+                Cargo = "Director General"
             });
 
             Empleados.Add(new Empleado
@@ -167,7 +169,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com"
+                Correo = "d.sanchez@innova4j.com",
+                Cargo = "Gerente General"
             });
 
             Empleados.Add(new Empleado
@@ -182,14 +185,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "l.marina@innova4j.com"
+                Correo = "l.marina@innova4j.com",
+                Cargo = "Presidencia"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Efrain Mejias",
-                Cedula = "10.845.256.665",
+                Cedula = "11.346.727",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -197,14 +201,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com"
+                Correo = "e.mejias@innova4j.com",
+                Cargo = "VicePresidencia"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Javier Rodriguez",
-                Cedula = "11.845.256.665",
+                Cedula = "11.845.256",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -212,7 +217,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "j.rodriguez@innova4j.com"
+                Correo = "j.rodriguez@innova4j.com",
+                Cargo = "Jefe Directo"
             });
 
             if (filtroCedula)
