@@ -183,6 +183,9 @@ $('#solicitud').on('change', function (e) {
 }); 
 
 $('#flujos').on('change', function (e) {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
     var flujoId = $('#flujos').val();
     var flujoDescripcion = $("#flujos :selected").text();
     $('#flujoId').val(flujoId);
@@ -256,6 +259,9 @@ $('#suplente22').on('change', function (e) {
 
 
 function SetNuevoFlujo() {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
     $('#paso').val(1);
     var flag = $('#solicitud').val();
     console.log(flag);
@@ -263,9 +269,6 @@ function SetNuevoFlujo() {
         alert('Seleccione tipo de documento');
         return false;
     }
-    $("#tblFlujo thead tr").remove();
-    $("#tblFlujo tbody tr").remove();
-    $('#addPasoFlow').remove();
     Aprobadores('#Empleado');
     Aprobadores('#nuevoSuplente1');
     Aprobadores('#nuevoSuplente2');
@@ -628,7 +631,7 @@ function Eliminar() {
             var paso = document.getElementById("tblAprobadores").rows.length;
             if (paso == 2) {
                 var indice = document.getElementById("solicitud").selectedIndex;
-                setTimeout(FlujosAprobacion(indice), 2000);
+                setTimeout(GetFlujosAprobacion(indice), 2000);
             }
         }
     });
