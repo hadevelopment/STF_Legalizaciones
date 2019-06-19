@@ -425,7 +425,7 @@ namespace Legalizaciones.Web.Engine
             var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
             resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
             KactusEmpleado = response.ToList();
-            XmlDocument doc = XmlCreate(resultado);
+           // XmlDocument doc = XmlCreate(resultado);
             return KactusEmpleado;
         }
 
