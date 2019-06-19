@@ -768,6 +768,7 @@ namespace Legalizaciones.Web.Engine
                     command.ExecuteNonQuery();
                 }
                 Conexion.Close();
+                resultado = true;
             }
             return resultado;
         }

@@ -125,7 +125,7 @@ namespace Legalizaciones.Web.Controllers
             List<KactusIntegration.Empleado> empleado = new List<KactusIntegration.Empleado>();
             empleado = await Funcion.EmpleadoKactusAsync();
             EngineDb Metodo = new EngineDb();
-            Metodo.InsertKactusEmpleados("", empleado);
+            Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", empleado);
             return empleado;
         }
 
