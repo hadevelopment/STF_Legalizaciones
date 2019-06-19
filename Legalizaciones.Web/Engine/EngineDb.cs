@@ -705,9 +705,11 @@ namespace Legalizaciones.Web.Engine
                 Conexion.Open();
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
+                int nueva = 0;
                 foreach (KactusIntegration.Empleado m in model)
                 {
                     command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Nueva", nueva);
                     command.Parameters.AddWithValue("@Cargo", m.Cargo);
                     command.Parameters.AddWithValue("@CargoEmpleado", m.CargoEmpleado);
                     command.Parameters.AddWithValue("@Celular", m.Celular);
@@ -718,7 +720,7 @@ namespace Legalizaciones.Web.Engine
                     command.Parameters.AddWithValue("@CodDeptoResidencia", m.CodDeptoResidencia);
                     command.Parameters.AddWithValue("@CodTipoEspPersonaPreliq", m.CodTipoEspPersonaPreliq);
                     command.Parameters.AddWithValue("@CodTipoPersona", m.CodTipoPersona);
-                    command.Parameters.AddWithValue("@odUbicacion", m.CodUbicacion);
+                    command.Parameters.AddWithValue("@CodUbicacion", m.CodUbicacion);
                     command.Parameters.AddWithValue("@CodigoArea", m.CodigoArea);
                     command.Parameters.AddWithValue("@CodigoEmpresa", m.CodigoEmpresa);
                     command.Parameters.AddWithValue("@CodigoGrupo", m.CodigoGrupo);
@@ -766,6 +768,7 @@ namespace Legalizaciones.Web.Engine
                     command.Parameters.AddWithValue("@ValidoParaLiqNomina", m.ValidoParaLiqNomina);
                     command.Parameters.AddWithValue("@VencimientoAccion", m.VencimientoAccion);
                     command.ExecuteNonQuery();
+                    nueva++;
                 }
                 Conexion.Close();
                 resultado = true;
