@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Http;
 using Legalizaciones.Web.Models.ViewModel;
 using Legalizaciones.Web.Engine;
 using Legalizaciones.Model.Workflow;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -34,6 +35,7 @@ namespace Legalizaciones.Web.Controllers
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
         public readonly IEstadoSolicitudRepository estatusRepository;
+        private readonly IBancoRepository bancoRepository;
 
 
         /*WORKFLOW*/
@@ -57,7 +59,8 @@ namespace Legalizaciones.Web.Controllers
             IEstadoSolicitudRepository estatusRepository,
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
             IFlujoSolicitudRepository flujoSolicitudRepository,
-            IEmail email
+            IEmail email,
+            IBancoRepository bancoRepository
             )
         {
             this.solicitudRepository = solicitudRepository;
@@ -71,6 +74,7 @@ namespace Legalizaciones.Web.Controllers
             this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
             this.flujoSolicitudRepository = flujoSolicitudRepository;
             this.email = email;
+            this.bancoRepository = bancoRepository;
         }
 
         public IActionResult Index()
@@ -170,11 +174,11 @@ namespace Legalizaciones.Web.Controllers
                 solicitud.EstadoId = 1;//Estado Sin Legalizar
                 solicitud.TipoSolicitudID = 1;//Anticipo
                 solicitud.FechaSolicitud = DateTime.Now;
+                solicitud.Area = solicitud.Empleado.Area;
 
                 //Calculo Fecha de Vencimiento de la Solicitud
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
                 solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
-
 
                 //Se Registra la Solicitud
                 solicitudRepository.Insert(solicitud);
@@ -190,15 +194,15 @@ namespace Legalizaciones.Web.Controllers
                 }
 
                 //Se guarda la carta de descuento en el directorio en caso de que exista
-                if (solicitud.Carta != null)
+                if (solicitud.Archivo != null)
                 {
-                    if (solicitud.Carta.FileName != "")
+                    if (solicitud.Archivo.FileName != "")
                     {
                         //Se sube al directorio
-                        SubirArchivo(solicitud.Carta, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
 
                         //Se actualiza la ruta en BD
-                        solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
                         solicitudRepository.Update(solicitud);
                     }
                 }
@@ -247,55 +251,70 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("Editar")]
-        public ActionResult Editar(Solicitud data)
+        public ActionResult Editar(Solicitud solicitud)
         {
             try
             {
-                //if (!ModelState.IsValid || data.Id == 0)
-                //    return View(data);
-                
-                //Se valida que exista un flujo para la solicitud
-                //Se obtiene el paso inicial del flujo configurado
-                if (!getPasoInicialFlujo(data, data.DestinoID, (float)data.Monto))
+                if (!ModelState.IsValid || solicitud.Id == 0)
+                    return View(solicitud);
+
+                //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
+                if (!getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
                 {
                     TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
-                    return RedirectToAction("Editar", "Solicitud", new { id = data.Id });
+                    return RedirectToAction("Editar", "Solicitud", new { id = solicitud.Id });
                 }
 
                 //Calculo Fecha de Vencimiento de la Solicitud en caso de que la hayan modificado
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
-                data.FechaVencimiento = data.FechaHasta.AddDays(DiasHabiles);
+                solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
 
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
-                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
-                data.Monto = listaGastos.Sum(a => a.Monto);
+                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
+                solicitud.Monto = listaGastos.Sum(a => a.Monto);
 
-                solicitudRepository.Update(data);
+                solicitudRepository.Update(solicitud);
 
                 //Elimino la tabla de detalles
-                var LisGastosRegistrados = solicitudGastosRepository.All().Where(a => a.SolicitudId == data.Id).ToList();
-                foreach (var item in LisGastosRegistrados)
+                var LisGastosRegistrados = solicitudGastosRepository.All().Where(a => a.SolicitudId == solicitud.Id).ToList();
+                if(listaGastos != LisGastosRegistrados)
                 {
-                    solicitudGastosRepository.Delete(item);
+                    foreach (var item in LisGastosRegistrados)
+                    {
+                        solicitudGastosRepository.Delete(item);
+                    }
+
+                    //Ahora voy a agregar el detalle de las solicitudes
+                    foreach (var item in listaGastos)
+                    {
+                        item.SolicitudId = solicitud.Id;
+                        solicitudGastosRepository.Insert(item);
+                    }
                 }
-                //Ahora voy a agregar el detalle de las solicitudes
-                foreach (var item in listaGastos)
+
+                //Se guarda la carta de descuento en el directorio en caso de que exista
+                if (solicitud.Archivo != null)
                 {
-                    item.SolicitudId = data.Id;
-                    solicitudGastosRepository.Insert(item);
+                    if (solicitud.Archivo.FileName != "")
+                    {
+                        //Se sube al directorio
+                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+
+                        //Se actualiza la ruta en BD
+                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        solicitudRepository.Update(solicitud);
+                    }
                 }
 
                 TempData["Alerta"] = "success - La Solicitud se Actualizo correctamente.";
                 return RedirectToAction("Index", "Solicitud");
-
             }
             catch (Exception e)
             {
                 TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de actualizar la solicitud.";
-                return RedirectToAction("Editar", "Solicitud", new { id = data.Id } );
+                return RedirectToAction("Editar", "Solicitud", new { id = solicitud.Id } );
             }
 
         }
@@ -333,10 +352,10 @@ namespace Legalizaciones.Web.Controllers
             UNOEE erp = new UNOEE();
             var res = solicitudRepository.Find(id);
 
-            res.CentroCosto = erp.getCentroCosto(res.CentroCostoId);
-            res.CentroOperacion = erp.getCentroOperacion(res.CentroOperacionId);
+            res.CentroCosto = res.CentroCosto;
+            res.CentroOperacion = res.CentroOperacion;
             res.Moneda = Get_moneda(res.MonedaId);
-            res.UnidadNegocio = erp.getUnidadNegocio(res.UnidadNegocioId);
+            res.UnidadNegocio = res.UnidadNegocio;
             res.Empleado = erp.getEmpleadoCedula(res.EmpleadoCedula);
             res.Destino = Get_Destino(res.DestinoID);
             res.Zona = Get_Zona(res.ZonaID);
@@ -354,19 +373,29 @@ namespace Legalizaciones.Web.Controllers
          *     Autor: Joan Marchant    
                **************************************************************************** */
         [HttpGet]
-        [Route("Visualizar")]
+        [Route("Detalle")]
         public ActionResult Visualizar(int id)
         {
             UNOEE erp = new UNOEE();
             var res = solicitudRepository.Find(id);
 
-            res.CentroCosto = erp.getCentroCosto(res.CentroCostoId); 
-            res.CentroOperacion = erp.getCentroOperacion(res.CentroOperacionId);
+            if (res.CentroCostoId != null)
+                res.CentroCosto = res.CentroCosto;
+
+            if (res.CentroOperacionId != null)
+                res.CentroOperacion = res.CentroOperacion;
+
             res.Moneda = Get_moneda(res.MonedaId);
-            res.UnidadNegocio = erp.getUnidadNegocio(res.UnidadNegocioId);
+            if (res.UnidadNegocioId != null)
+                res.UnidadNegocio = res.UnidadNegocio;
+
             res.Empleado = erp.getEmpleadoCedula(res.EmpleadoCedula);
-            res.Destino = Get_Destino(res.DestinoID);
-            res.Zona = Get_Zona(res.ZonaID);
+
+            if (res.DestinoID != null)
+                res.Destino = Get_Destino(res.DestinoID);
+
+            if (res.ZonaID != null)
+                res.Zona = Get_Zona(res.ZonaID);
 
             List<SolicitudGastos> Lista = new List<SolicitudGastos>();
             Lista = solicitudGastosRepository.All().Where(x => x.SolicitudId == id).ToList();
@@ -393,6 +422,8 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult RegistrarSTDC()
         {
             var cargo = "";
+            var ListaBanco = bancoRepository.All().ToList();
+            var ListaDestino = destinoRepository.All().ToList();
 
             // Obtenemos datos del empleado en Session
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
@@ -406,46 +437,74 @@ namespace Legalizaciones.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var wSolcitudTDC = new SolicitudTDCViewModel();
+            var wSolcitudTDC = new SolicitudTDCViewModel {
+                ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                ListaDestino = new SelectList(ListaDestino,"Id", "Nombre")
+            };
             return View(wSolcitudTDC);
         }
 
         [HttpPost]
         [Route("RegistrarSTDC")]
-        [ValidateAntiForgeryToken]
-        public ActionResult RegistrarSTDC([Bind] SolicitudTDCViewModel solicitudTDC)
+        public ActionResult RegistrarSTDC(SolicitudTDCViewModel solicitudTDC)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
+                    UNOEE erp = new UNOEE();
+                    var Empleado = erp.getEmpleadoCedula(solicitudTDC.Cedula);
+
                     var OSolicitud = new Solicitud
                     {
                         NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now),
                         EmpleadoCedula = solicitudTDC.Cedula,
                         FechaCreacion = DateTime.Now,
                         Estatus = 1,
-                        TipoSolicitudID = 2,
+                        TipoSolicitudID = 1,
                         FechaVencimiento = DateTime.Now,
                         Concepto = "Solicitud de Anticipo Con TDC",
-                        DestinoID = 1,
-                        ZonaID = 1,
-                        CentroOperacionId = 1,
-                        UnidadNegocioId = 1,
-                        CentroCostoId = 1,
+                        DestinoID = Convert.ToInt32(solicitudTDC.DestinoId),
+                        ZonaID = null,
+                        CentroOperacionId = Convert.ToInt32(Empleado.CentroOperacion),
+                        UnidadNegocioId = Convert.ToInt32(Empleado.UnidadNegocio),
+                        CentroCostoId = Convert.ToInt32(Empleado.CentroCostos),
                         FechaDesde = DateTime.Now,
                         FechaHasta = DateTime.Now,
                         MonedaId = 1,
                         FechaSolicitud = DateTime.Now,
-                        Banco = solicitudTDC.Banco,
+                        Banco = solicitudTDC.BancoId,
                         Extracto = solicitudTDC.Extracto,
                         Monto = solicitudTDC.Monto,
                         EstadoId = 1,
-
+                        Archivo = solicitudTDC.Archivo
                     };
+
+                    //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
+                    if (!getPasoInicialFlujo(OSolicitud, OSolicitud.DestinoID, (float)OSolicitud.Monto))
+                    {
+                        TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                        return View("RegistrarSTDC", OSolicitud);
+                    }
 
                     solicitudRepository.Insert(OSolicitud);
 
+                    if(OSolicitud.Id != null)
+                    {
+                        //Se guarda la carta de descuento en el directorio en caso de que exista
+                        if (OSolicitud.Archivo != null)
+                        {
+                            if (OSolicitud.Archivo.FileName != "")
+                            {
+                                //Se sube al directorio
+                                SubirArchivo(OSolicitud.Archivo, "files\\solicitudTDC\\", OSolicitud.EmpleadoCedula, OSolicitud.Id.ToString());
+
+                                //Se actualiza la ruta en BD
+                                OSolicitud.RutaArchivo = getRuta(OSolicitud.Archivo, "files/solicitudTDC/", OSolicitud.EmpleadoCedula, OSolicitud.Id.ToString());
+                                solicitudRepository.Update(OSolicitud);
+                            }
+                        }
+                    }
 
                     TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
                     return RedirectToAction("RegistrarSTDC", "Solicitud");
@@ -470,7 +529,7 @@ namespace Legalizaciones.Web.Controllers
                 var OsolicitudTDC = new SolicitudTDCViewModel
                 {
                     Cedula = OSolicitud.EmpleadoCedula,
-                    Banco = OSolicitud.Banco,
+                    BancoId = OSolicitud.Banco,
                     Extracto = OSolicitud.Extracto,
                     Monto = OSolicitud.Monto,
                     id = OSolicitud.Id
@@ -483,7 +542,6 @@ namespace Legalizaciones.Web.Controllers
                 TempData["Alerta"] = "error - No se pudo Encontrar la Solicitud de tajeta de Crédito";
                 return RedirectToAction("Index", "Home");
             }
-
         }
 
 
@@ -495,7 +553,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 var OSolicitud = solicitudRepository.Find(data.id);
                 OSolicitud.EmpleadoCedula = data.Cedula;
-                OSolicitud.Banco = data.Banco;
+                OSolicitud.Banco = data.BancoId;
                 OSolicitud.Monto = data.Monto;
                 OSolicitud.Extracto = data.Extracto;
                 solicitudRepository.Update(OSolicitud);
@@ -509,7 +567,6 @@ namespace Legalizaciones.Web.Controllers
                 TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de actualizar la solicitud de Tarjeta de Crédito.";
                 return View(data);
             }
-
         }
 
 
@@ -601,6 +658,11 @@ namespace Legalizaciones.Web.Controllers
             {
                 Directory.CreateDirectory(path);
             }
+            //else
+            //{
+            //    Directory.Delete(path);
+            //    Directory.CreateDirectory(path);
+            //}
 
             using (var stream = new FileStream(pathFile, FileMode.Create))
             {
@@ -687,6 +749,15 @@ namespace Legalizaciones.Web.Controllers
             {
                 var obj = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => new { m.Id, m.EmailAprobador}).FirstOrDefault();
 
+                if (solicitud.FlujoSolicitud != null && solicitud.PasoFlujoSolicitudId != null)
+                {
+                    //Si el flujo y el paso de la solicitud son distintos a los anteriores se debe ejecutar el trigger de la base da datos
+                    if (solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != obj.Id)
+                    {
+                        DB.TriggerActualizacionSolicitud(solicitud.Id);
+                    }
+                }
+
                 solicitud.FlujoSolicitudId = idFlujo;
                 solicitud.PasoFlujoSolicitudId = obj.Id;
                 solicitud.EmailAprobador = obj.EmailAprobador;
@@ -696,8 +767,6 @@ namespace Legalizaciones.Web.Controllers
             {
                 return false;
             }
-
-            
         }
         #endregion
     }

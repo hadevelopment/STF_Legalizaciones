@@ -20,17 +20,16 @@
 
 <form asp-controller="Solicitud" asp-action="Guardar" method="post" enctype="multipart/form-data">
     <section class="">
+        @*informacion del empleado*@
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-info-circle"></i>Información del empleado</h3>
                 <div class="box-tools pull-right">
-                    <label>Fecha de Registro: @String.Format("{0:dd-MM-yyy}", DateTime.Now)</label>
+                    <label>Fecha de Registro: @String.Format("{0:dd/MM/yyy}", DateTime.Now)</label>
                 </div>
             </div>
-
             <div class="box-body">
-
-                <table class="tableSolicitud">
+                <table class="tableEmpleado">
                     <thead>
                         <tr>
                             <th>Área</th>
@@ -52,12 +51,6 @@
                         </tr>
                     </tbody>
                 </table>
-                @*Lista con los empleados del ERP
-                        <div class="col-md-3">
-                        <label class="control-label">Empleado</label>
-                        @Html.DropDownListFor(model => model.Empleado.Cedula, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Empleado" })
-                    </div>*@
-
             </div>
         </div>
 
@@ -100,6 +93,7 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroOperacionId">Centro de Operación</label>
+                        @Html.HiddenFor(model => model.CentroOperacion, new { @class = "form-control", id = "hdfCentroOperacion" })
                         @Html.DropDownListFor(model => model.CentroOperacionId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroOperacion" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
@@ -112,6 +106,7 @@
 
                     <div class="col-md-3">
                         <label asp-for="UnidadNegocio">Unidad de Negocio</label>
+                        @Html.HiddenFor(model => model.UnidadNegocio, new { @class = "form-control", id = "hdfUnidadNegocio" })
                         @Html.DropDownListFor(model => model.UnidadNegocioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "UnidadNegocio" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
@@ -120,6 +115,7 @@
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroCosto">Centro de Costo</label>
+                        @Html.HiddenFor(model => model.CentroCosto, new { @class = "form-control", id = "hdfCentroCosto" })
                         @Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroCosto" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
@@ -135,15 +131,15 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
-                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Hasta", @required = "required", @type="date" })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Hasta", @required = "required", @type = "date" })
                         @*@Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })*@
                     </div>
                 </div>
                 <div class="row margin-bottom">
                     <div class="col-sm-12">
-                        <label asp-for="Carta">Carta Descuento</label>
-                        @Html.TextBoxFor(model => model.Carta, new { type = "file" })
-                        @Html.ValidationMessageFor(model => model.Carta)
+                        <label asp-for="Archivo">Carta Descuento</label>
+                        @Html.TextBoxFor(model => model.Archivo, new { type = "file" })
+                        @Html.ValidationMessageFor(model => model.Archivo)
                     </div>
                 </div>
                 <div class="row margin-bottom">
@@ -341,10 +337,6 @@
         });
 
         function cargarGastos() {
-            debugger;
-
-            var DataJSON = $(".tableGastos").find('input').serializeArray();
-
             var table = $('.tableGastos').tableToJSON({
                 textExtractor: function (cellIndex, $cell) {
                     // get text from an input or select inside table cells;
@@ -353,10 +345,6 @@
                 },
                 ignoreColumns: [10]
             });
-
-            console.log(table);
-            console.log(JSON.stringify(table));
-            console.log(JSON.stringify(DataJSON));
 
             if (table.length > 0) {
                 $("#mensajeRegistro").text("");

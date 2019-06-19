@@ -42,7 +42,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public decimal Monto { get; set; }
 
         [DisplayName("Centro de Costo")]
-        public int CentroCosto { get; set; }
+        public int? CentroCosto { get; set; }
 
         public string CentroCostoDescripcion { get; set; }
 
@@ -55,20 +55,8 @@ namespace Legalizaciones.Web.Models.ViewModel
         [DisplayName("Fecha hasta")]
         public DateTime FechaHasta { get; set; }
 
-
-        //area del Empleado
-        [DisplayName("Beneficiario del Anticipo")]
-        public string Nombre { get; set; }
-
-        [DisplayName("Cédula de Ciudadanía")]
-        public string Cedula { get; set; }
-
-        [DisplayName("Área")]
-        public string Area { get; set; }
-
-        [DisplayName("Cargo")]
-        public string Cargo { get; set; }
-
+        //Objeto Empleado
+        public Empleado Empleado { get; set; }
 
         //area de legalizacion
         [DisplayName("Recibo de Caja")]
@@ -95,23 +83,19 @@ namespace Legalizaciones.Web.Models.ViewModel
         [DisplayName("Tasa")]
         public string ValorTasa { get; set; }
 
-        //Para el registro de gastos
-        [DisplayName("ID del item")]
-        public int GastosId { get; set; }
-
         [DisplayName("Fecha del gasto")]
         [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]
 
-        public int CentroOperacion { get; set; }
+        public int? CentroOperacion { get; set; }
 
         public SelectList ListaCentroOperacion { get; set; }
 
 
         [DisplayName("Unidad de negocio")]
-        public int UnidadNegocio { get; set; }
+        public int? UnidadNegocio { get; set; }
         public SelectList ListaUnidadNegocio { get; set; }
 
 
@@ -173,8 +157,12 @@ namespace Legalizaciones.Web.Models.ViewModel
         //para a legalizacion de gastos sin anticipo
         public SelectList ListaEmpleado { get; set; }
 
-        [DisplayName("Beneficiario")]
-        public string CedulaId { get; set; }
+        public decimal MontoAnticipoEntregado { get; set; }
+
+        public decimal MontoGastosReportados { get; set; }
+
+        public decimal MontoSaldo { get; set; }
+
         public int ConAnticipo { get; set; }
 
         [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }

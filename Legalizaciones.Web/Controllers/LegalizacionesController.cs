@@ -29,6 +29,7 @@ namespace Legalizaciones.Web.Controllers
         private readonly ICiudadRepository ciudadRepository;
         //private readonly IMotivoRepository motivoRepository;
         private readonly ISolicitudRepository solicitudRepository;
+        private readonly IEstadoSolicitudRepository estadoSolicitudRepository;
         private readonly IEmpleadoRepository empleadoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly IBancoRepository bancoRepository;
@@ -52,7 +53,8 @@ namespace Legalizaciones.Web.Controllers
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
             IFlujoSolicitudRepository flujoSolicitudRepository,
-            IEmail email)
+            IEmail email,
+            IEstadoSolicitudRepository estadoSolicitudRepository)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -67,21 +69,16 @@ namespace Legalizaciones.Web.Controllers
             this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
             this.flujoSolicitudRepository = flujoSolicitudRepository;
             this.email = email;
+            this.estadoSolicitudRepository = estadoSolicitudRepository;
         }
 
         public IActionResult Index()
         {
-            //*******************************************************
-            EnviarMensaje();
-            //*****************************************************
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
             string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
             string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-
-            //model = Metodo.SolicitudesAntPendientesLegalizacion("Sp_GetSolicitudesAnticiposPendientesLegalizacion",
-            //    string.Empty);
 
             if (usuarioCargo == "3")
             {
@@ -117,40 +114,11 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
-        private void EnviarMensaje()
-        {
-            List<string> listaDestino = new List<string>();
-            //listaDestino.Add("d.sanchez@innova4j.com");
-            //listaDestino.Add("efrainmejiasc@gmail.com");
-            listaDestino.Add("e.mejias@innova4j.com");
-            //listaDestino.Add("ha.development.org@gmail.com");
-            //listaDestino.Add("abetancourt@innova4j.com");
-
-            Email model = new Email
-            {
-                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
-                NombreDestinatario = "Angelica Betancourt",
-                NumeroDocumento ="0005896",
-                Direccion = "Medellin - Antioquia - Colombia, Tlf : +57 031 3458902 "
-            };
-            //****************************************************************************************************
-            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
-            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino,model);
-            bool resultado = Enviar.EnviarMail();
-            //*****************************************************************************************************
-            string msjGet = string.Empty;
-            if (resultado)
-                msjGet = "Notificacion enviada satisfactoriamente";
-            else
-                msjGet = Enviar.ErrorEnviando();
-        }
-
         [HttpGet]
         [Route("Crear")]
         public ActionResult Crear(int id)
         {
             // Obtenemos datos del empleado en Session
-
             string cedula = "";
             string cargo = "";
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
@@ -159,28 +127,27 @@ namespace Legalizaciones.Web.Controllers
                 cargo = HttpContext.Session.GetString("Usuario_Cargo");
             }
 
+            /*Validar Perfil*/
             if (cargo == "2")
                 ViewBag.MostrarTasa = true;
             else
                 ViewBag.MostrarTasa = false;
 
-            var ListaBanco = bancoRepository.All().ToList();
-            //var Obanco = new Banco
-            //{
-            //    Id = 0,
-            //    Nombre = "Sin definir"
-            //};
-            //ListaBanco.Add(Obanco);
 
-            var ListaMoneda = monedaRepository.All().ToList();
+            /*Cargar Listas*/
+            var ListaBanco = bancoRepository.All().ToList();
+            var ListaCentroCosto = objUNOEE.getCentroCostos();
+            var ListaCentroOperaciones = objUNOEE.getCentroOperaciones();
+            var ListaUnidadNegocio = objUNOEE.getUnidadNegocios();
+
 
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
-                var ListaCentroCosto = new List<CentroCosto>();
-                var ListaCentroOperaciones = new List<CentroOperacion>();
-                var ListaUnidadNegocio = new List<UnidadNegocio>();
-
+                var ListaMoneda = monedaRepository.All().ToList();
                 var ListaEmpleado = objUNOEE.EmpleadoAll();
+
+                var OEmpleado = objUNOEE.getEmpleadoCedula(cedula);
+
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
                     DocumentoERPID = 11111,
@@ -188,11 +155,10 @@ namespace Legalizaciones.Web.Controllers
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
                     ConAnticipo = 0,
-                    CedulaId = cedula,
+                    Empleado = OEmpleado,
                     ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
                     ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
                     ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
-
                 };
                 return View(OLegalizaciones);
             }
@@ -201,17 +167,6 @@ namespace Legalizaciones.Web.Controllers
                 var Osolicitud = solicitudRepository.Find(id);
                 var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
                 var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
-                var OCentroCosto = objUNOEE.getCentroCosto(Osolicitud.CentroCostoId);
-                var OCentroOperaciones = objUNOEE.getCentroOperacion(Osolicitud.CentroOperacionId);
-                var OUnidadNegocio = objUNOEE.getUnidadNegocio(Osolicitud.UnidadNegocioId);
-                //var ListaMotivo = objUNOEE.GetListMotivos(Osolicitud.CentroCostoId);
-
-                var ListaCentroCosto = new List<CentroCosto>();
-                var ListaCentroOperaciones = new List<CentroOperacion>();
-                var ListaUnidadNegocio = new List<UnidadNegocio>();
-                ListaCentroCosto.Add(OCentroCosto);
-                ListaCentroOperaciones.Add(OCentroOperaciones);
-                ListaUnidadNegocio.Add(OUnidadNegocio);
 
                 string wCargo = "Empleado";
                 switch (OEmpleado.CargoId)
@@ -235,14 +190,13 @@ namespace Legalizaciones.Web.Controllers
 
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
-
                     AnticipoId = Osolicitud.Id,
                     DocumentoERPID = 11111,
                     FechaRegistro = Osolicitud.FechaSolicitud,
                     FechaVencimiento = Osolicitud.FechaVencimiento,
                     Concepto = Osolicitud.Concepto,
                     Monto = Osolicitud.Monto,
-                    CentroCostoDescripcion = OCentroCosto.Nombre,
+                    CentroCostoDescripcion = Osolicitud.CentroCosto,
                     CentroCosto = Osolicitud.CentroCostoId,
                     CentroOperacion = Osolicitud.CentroOperacionId,
                     UnidadNegocio = Osolicitud.UnidadNegocioId,
@@ -251,22 +205,17 @@ namespace Legalizaciones.Web.Controllers
                     ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
                     FechaDesde = Osolicitud.FechaDesde,
                     FechaHasta = Osolicitud.FechaHasta,
-                    Nombre = OEmpleado.Nombre,
-                    Cedula = OEmpleado.Cedula,
-                    Cargo = wCargo,
-                    Area = OEmpleado.Area,
+                    Empleado = OEmpleado,
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
                     ReciboCaja = 0,
                     Consignacion = 0,
                     Valor = "0",
-                    //ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     MonedaId = Osolicitud.MonedaId,
                     Moneda = OMoneda.Nombre,
                     ValorTasa = wTasa,
-                    //ListaMotivo = new SelectList(ListaMotivo, "Id", "Nombre"),
                     SolicitudGastos = ListsolicitudGastos,
-                    ConAnticipo = 1
-
+                    ConAnticipo = 1,
+                    MontoAnticipoEntregado = Osolicitud.Monto
                 };
 
                 return View(OLegalizaciones);
@@ -290,27 +239,32 @@ namespace Legalizaciones.Web.Controllers
                     Consignacion = legalizacion.Consignacion,
                     Valor = legalizacion.Valor,
                     BancoId = legalizacion.BancoId,
-                    EmpleadoCedula = legalizacion.CedulaId != null ? legalizacion.CedulaId : null
+                    EmpleadoCedula = legalizacion.Empleado.Cedula != null ? legalizacion.Empleado.Cedula : null,
+                    MontoAnticipoEntregado = legalizacion.MontoAnticipoEntregado,
+                    MontoGastosReportados = legalizacion.MontoGastosReportados,
+                    MontoSaldo = legalizacion.MontoSaldo,
+                    EstadoId = 1 // En proceso
                 };
 
-                //Se valida que exista un flujo para la solicitud
+                var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
+
+                //Se valida que exista un flujo para la legalización
                 //Se obtiene el paso inicial del flujo configurado
-                //if (!getPasoInicialFlujo(OLegalizacionHeader, solicitud.DestinoID, (float)solicitud.Monto))
-                //{
-                //    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
-                //    return View("Crear", solicitud);
-                //}
+                if (!getPasoInicialFlujo(OLegalizacionHeader, solicitud.DestinoID, (float)OLegalizacionHeader.MontoGastosReportados))
+                {
+                    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                    return View("Crear", solicitud);
+                }
 
                 //legalizacionRepository.Insert(OLegalizacionHeader);
-
 
                 //Se actualiza el estado de la solicitud a Legalizada
                 if (OLegalizacionHeader.Id > 0)
                 {
                     if(legalizacion.AnticipoId > 0)
                     {
-                        var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
-                        solicitud.EstadoId = 2; //Legalizada
+                        var estadoId = estadoSolicitudRepository.All().Where(m => m.Descripcion == "Legalizada" && m.Estatus == 1).Select(z => z.Id).FirstOrDefault();
+                        solicitud.EstadoId = estadoId; //Legalizada
                         solicitudRepository.Update(solicitud);
                     }
                 }
@@ -326,19 +280,23 @@ namespace Legalizaciones.Web.Controllers
                     {
                         FechaGasto = item.FechaGasto,
                         LegalizacionId = OLegalizacionHeader.Id,
-                        CentroOperacionId = 1,
-                        UnidadNegocioId = 1,
-                        CentroCostosId = 1,
-                        MotivoId = 1,
+                        CentroOperacionId = item.CentroOperacionId,
+                        UnidadNegocioId = item.UnidadNegocioId,
+                        CentroCostoId = item.CentroCostoId,
+                        CentroOperacion = item.CentroOperacion,
+                        UnidadNegocio = item.UnidadNegocio,
+                        CentroCosto = item.CentroCosto,
+                        MotivoId = 0,
                         PaisId = item.PaisId,
+                        Pais = item.Pais,
                         CiudadId = item.CiudadId,
+                        Ciudad = item.Ciudad,
                         TipoServicioId = item.TipoServicioId,
+                        Servicio = item.Servicio,
                         ProveedorId = item.ProveedorId
-
                     };
                     //legalizacionGastosRepository.Insert(wOLegalizacionGasto);
                 }
-
 
                 TempData["Alerta"] = "success - La Legalización se proceso correctamente.";
                 return RedirectToAction("Index", "Legalizaciones");
@@ -371,7 +329,7 @@ namespace Legalizaciones.Web.Controllers
                     Consignacion = legalizacion.Consignacion,
                     Valor = legalizacion.Valor,
                     BancoId = legalizacion.BancoId,
-                    EmpleadoCedula = legalizacion.CedulaId != null ? legalizacion.CedulaId : null
+                    EmpleadoCedula = legalizacion.Empleado.Cedula != null ? legalizacion.Empleado.Cedula : null
                 };
 
                 legalizacionRepository.Update(OLegalizacionHeader);
@@ -390,7 +348,7 @@ namespace Legalizaciones.Web.Controllers
                         LegalizacionId = OLegalizacionHeader.Id,
                         CentroOperacionId = 1,
                         UnidadNegocioId = 1,
-                        CentroCostosId = 1,
+                        CentroCostoId = 1,
                         MotivoId = 1,
                         PaisId = item.PaisId,
                         CiudadId = item.CiudadId,
@@ -416,8 +374,8 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpGet]
-        [Route("LegalizacionDetalles")]
-        public ActionResult Ver(int Id)
+        [Route("Detalle")]
+        public ActionResult Visualizar(int Id)
         {
             Legalizacion legalizacion = legalizacionRepository.Find(Id);
             legalizacion.Solicitud = solicitudRepository.Find(legalizacion.SolicitudID);
@@ -425,28 +383,6 @@ namespace Legalizaciones.Web.Controllers
             legalizacion.LegalizacionGastos =
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == Id).ToList();
             legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
-
-            foreach (var item in legalizacion.LegalizacionGastos)
-            {
-                item.Pais = paisRepository.Find(item.PaisId);
-                item.Ciudad = ciudadRepository.Find(item.CiudadId);
-                item.CentroOperacion = new CentroOperacion
-                {
-                    Id = 1,
-                    Nombre = "Centro Operacion"
-                };
-                item.CentroCosto = new CentroCosto
-                {
-                    Id = 1,
-                    Nombre = "Centro de Costo 1"
-                };
-                item.UnidadNegocio = new UnidadNegocio
-                {
-                    Id = 1,
-                    Nombre = "Unidad Neg 1"
-                };
-                //item.Motivo = motivoRepository.Find(long.Parse(item.MotivoId.ToString()));
-            }
 
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol  = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
@@ -462,11 +398,16 @@ namespace Legalizaciones.Web.Controllers
             return View(CargarDataComun(Id, legaId));
         }
 
-
         private LegalizacionesViewModel CargarDataComun(int id, int legaId)
         {
-            //Usuario_Cedula
-            string wCedulaUsuariopordefecto = HttpContext.Session.GetString("Usuario_Cargo").ToString();
+            //Usuario_Cedulastring cedula = "";
+            string cedula = "";
+            string cargo = "";
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            {
+                cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+            }
 
             var ListaBanco = bancoRepository.All().ToList();
             var ListaMoneda = monedaRepository.All().ToList();
@@ -474,6 +415,8 @@ namespace Legalizaciones.Web.Controllers
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
                 var ListaEmpleado = objUNOEE.EmpleadoAll();
+                var OEmpleado = objUNOEE.getEmpleadoCedula(cedula);
+
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
                     DocumentoERPID = 11111,
@@ -481,7 +424,7 @@ namespace Legalizaciones.Web.Controllers
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
                     ConAnticipo = 0,
-                    CedulaId = wCedulaUsuariopordefecto
+                    Empleado = OEmpleado
 
                 };
                 return OLegalizaciones;
@@ -491,27 +434,6 @@ namespace Legalizaciones.Web.Controllers
                 var Osolicitud = solicitudRepository.Find(id);
                 //var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
                 var ListLegalizacionGastos = legalizacionGastosRepository.All().Where(a => a.LegalizacionId == legaId).ToList();
-                foreach (var item in ListLegalizacionGastos)
-                {
-                    item.Pais   = paisRepository.Find(item.PaisId);
-                    item.Ciudad = ciudadRepository.Find(item.CiudadId);
-                    item.CentroOperacion = new CentroOperacion
-                    {
-                        Id = 1,
-                        Nombre = "Centro Operacion"
-                    };
-                    item.CentroCosto = new CentroCosto
-                    {
-                        Id = 1,
-                        Nombre = "Centro de Costo 1"
-                    };
-                    item.UnidadNegocio = new UnidadNegocio
-                    {
-                        Id = 1,
-                        Nombre = "Unidad Neg 1"
-                    };
-                    //item.Motivo = motivoRepository.Find(long.Parse(item.MotivoId.ToString()));
-                }
                 var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
 
                 string wCargo = "Empleado";
@@ -538,10 +460,7 @@ namespace Legalizaciones.Web.Controllers
                     Monto = Osolicitud.Monto,
                     FechaDesde = Osolicitud.FechaDesde,
                     FechaHasta = Osolicitud.FechaHasta,
-                    Nombre = OEmpleado.Nombre,
-                    Cedula = OEmpleado.Cedula,
-                    Cargo = wCargo,
-                    Area = OEmpleado.Area,
+                    Empleado = OEmpleado,
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     MonedaId = Osolicitud.MonedaId,
@@ -568,28 +487,6 @@ namespace Legalizaciones.Web.Controllers
             legalizacion.LegalizacionGastos =
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == id).ToList();
             legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
-
-            foreach (var item in legalizacion.LegalizacionGastos)
-            {
-                item.Pais = paisRepository.Find(item.PaisId);
-                item.Ciudad = ciudadRepository.Find(item.CiudadId);
-                item.CentroOperacion = new CentroOperacion
-                {
-                    Id = 1,
-                    Nombre = "Centro Operacion"
-                };
-                item.CentroCosto = new CentroCosto
-                {
-                    Id = 1,
-                    Nombre = "Centro de Costo 1"
-                };
-                item.UnidadNegocio = new UnidadNegocio
-                {
-                    Id = 1,
-                    Nombre = "Unidad Neg 1"
-                };
-                //item.Motivo = motivoRepository.Find(long.Parse(item.MotivoId.ToString()));
-            }
 
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));

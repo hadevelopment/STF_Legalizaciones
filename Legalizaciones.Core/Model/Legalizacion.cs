@@ -21,7 +21,7 @@ namespace Legalizaciones.Model
         [ForeignKey("Solicitud")]
         public int SolicitudID { get; set; }
 
-        [NotMapped]  public string EmpleadoCedula { get; set; }
+        [NotMapped] public string EmpleadoCedula { get; set; }
 
         [Required(ErrorMessage = "Recibo de caja es requerido.")]
         public long ReciboCaja { get; set; }
@@ -33,7 +33,7 @@ namespace Legalizaciones.Model
         public string Valor { get; set; }
 
         [ForeignKey("Banco")]
-        public int BancoId{ get; set; }
+        public int BancoId { get; set; }
 
         [ForeignKey("FlujoSolicitud")]
         public int? FlujoSolicitudId { get; set; }
@@ -47,6 +47,12 @@ namespace Legalizaciones.Model
         public int? EstadoId { get; set; }
         public EstadoLegalizacion EstadoLegalizacion { get; set; }
 
+        public decimal MontoAnticipoEntregado { get; set; }
+
+        public decimal MontoGastosReportados { get; set; }
+
+        public decimal MontoSaldo { get; set; }
+
         [NotMapped] public Banco Banco { get; set; }
 
         [NotMapped] public Solicitud Solicitud { get; set; }
@@ -56,16 +62,6 @@ namespace Legalizaciones.Model
         [NotMapped] public List<SolicitudGastos> SolicitudGastos { get; set; }
 
         [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        //public virtual Solicitud Solicitud { get; set; }
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        //public virtual ICollection<SolicitudGastos> SolicitudGastos { get; set; }
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        //public virtual ICollection<LegalizacionGastos> LegalizacionGastos { get; set; }
-
 
     }
 }

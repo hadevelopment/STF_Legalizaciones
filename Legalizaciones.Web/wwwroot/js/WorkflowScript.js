@@ -654,7 +654,7 @@ function CreateTablaAprobadores(infoAprobadores) {
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.nombreAprobador}</td>
                             <td> ${item.emailAprobador}</td>
                             <td> ${item.emailSuplenteUno}</td>
                             <td> ${item.emailSuplenteDos}</td>
@@ -697,7 +697,7 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}r</td>
+                            <td> ${item.nombreAprobador}</td>
                             <td> ${item.emailAprobador}</td>
                                     </tr>`;
             $("#tblFlujo tbody").append(tr);

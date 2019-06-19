@@ -108,73 +108,39 @@
 
         }
 
-        @if (Model.ConAnticipo == 0)
-        {
-            @*informacion del empleado*@
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del Empleado</strong> </h3>
-                </div>
-
-                <div class="box-body">
-                    @Html.LabelFor(model => model.CedulaId, htmlAttributes: new { @class = "control-label col-md-12" })
-                    @Html.DropDownListFor(model => model.CedulaId, Model.ListaEmpleado, new { @class = "form-control" })
-                    @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                    {
-                        @Html.ValidationMessageFor(model => model.CedulaId, "Seleccione un Empleado.", new { @class = "text-danger" })
-                    }
+        @*informacion del empleado*@
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i>Información del empleado</h3>
+                <div class="box-tools pull-right">
+                    <label>Fecha de Registro: @String.Format("{0:dd-MM-yyy}", DateTime.Now)</label>
                 </div>
             </div>
-        }
-        else
-        {
-            @*informacion del empleado*@
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del Empleado</strong> </h3>
-                </div>
-
-                <div class="box-body">
-
-                    <table class="tableSolicitud" id="TablaEmpleado">
-                        <thead>
-                            <tr>
-                                <th class="col-md-4">
-                                    @Html.DisplayNameFor(modelItem => modelItem.Nombre)
-                                </th>
-                                <th class="col-md-3">
-                                    @Html.DisplayNameFor(modelItem => modelItem.Cedula)
-                                </th>
-                                <th class="col-md-2">
-                                    @Html.DisplayNameFor(modelItem => modelItem.Area)
-                                </th>
-                                <th class="col-md-2">
-                                    @Html.DisplayNameFor(modelItem => modelItem.Cargo)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    @Html.DisplayFor(modelItem => modelItem.Nombre)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => modelItem.Cedula)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => modelItem.Area)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => modelItem.Cargo)
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-
-                </div>
+            <div class="box-body">
+                <table class="tableSolicitud">
+                    <thead>
+                        <tr>
+                            <th>Área</th>
+                            <th>Nombre completo</th>
+                            <th>Cédula</th>
+                            <th>Dirección</th>
+                            <th>Ciudad</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        }
+        </div>
 
 
 
@@ -273,11 +239,6 @@
 
                     <div class="row margin-bottom">
                         <div class="col-md-3">
-                            @Html.LabelFor(model => model.GastosId, htmlAttributes: new { @class = "control-label col-md-12" })
-                            @Html.EditorFor(model => model.GastosId, new { htmlAttributes = new { @class = "form-control" } })
-                            @Html.ValidationMessageFor(model => model.GastosId, "", new { @class = "text-danger" })
-                        </div>
-                        <div class="col-md-3">
                             @Html.LabelFor(model => model.FechaGasto, htmlAttributes: new { @class = "control-label col-md-12" })
                             @Html.EditorFor(model => model.FechaGasto, new { htmlAttributes = new { @class = "form-control", @required = "required" } })
                             @Html.ValidationMessageFor(model => model.FechaGasto, "", new { @class = "text-danger" })
@@ -299,20 +260,20 @@
                             @Html.TextBoxFor(model => model.CentroCosto, new { @class = "form-control", @Readonly = "Readonly" })
                         </div>
                         @*<div class="col-md-3">
-                                @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
-                                @if (Model.ConAnticipo == 0)
-                                {
-                                    @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
+                            @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @if (Model.ConAnticipo == 0)
+                            {
+                                @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
 
-                                }
-                                else
-                                { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
-                                }
-                                @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
-                                {
-                                    @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
-                                }
-                            </div>*@
+                            }
+                            else
+                            { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
+                            }
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
+                            }
+                        </div>*@
 
 
                         <div class="col-md-3">
@@ -447,46 +408,46 @@
                                     <td>Acciones</td>
                                 </tr>
                             </thead>
-                            
-                                @if (Model.LegalizacionGastos.Count > 0)
-                                {
-                                    @foreach (var item in Model.LegalizacionGastos)
-                                    {
-                                        // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
-                                        <tr>
-                                            <td class="col-md-1 ">@item.Id</td>
-                                            <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
-                                            <td class="col-md-2 ">@item.CentroOperacion.Nombre</td>
-                                            <td class="col-md-2 ">@item.UnidadNegocio.Nombre</td>
-                                            <td class="col-md-2 ">@item.CentroCosto.Nombre</td>
-                                            <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
-                                            @*<td class="col-md-1 ">0</td>*@
-                                            <td class="col-md-1 ">@item.Pais.Nombre</td>
-                                            <td class="col-md-1 ">@item.Ciudad.Nombre</td>
-                                            <td class="col-md-1 ">
 
-                                                @if (@item.TipoServicioId == 1)
-                                                {
-                                                    <span>Comida</span>
-                                                }
-                                                else
-                                                {
-                                                    <span>Transporte</span>
-                                                }
-                                            </td>
-                                            <td class="col-md-1 ">@item.ProveedorId</td>
-                                            <td class="col-md-1 ">@item.Concepto</td>
-                                            <td class="col-md-1 ">@item.Valor</td>
-                                            <td>
-                                                <a class="btn btn-danger btn-sm btnDelete" onclick="remove(this);">
-                                                    <span class="glyphicon glyphicon-trash"></span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    }
+                            @if (Model.LegalizacionGastos.Count > 0)
+                            {
+                                @foreach (var item in Model.LegalizacionGastos)
+                                {
+                                    // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
+                                    <tr>
+                                        <td class="col-md-1 ">@item.Id</td>
+                                        <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
+                                        <td class="col-md-2 ">@item.CentroOperacion</td>
+                                        <td class="col-md-2 ">@item.UnidadNegocio</td>
+                                        <td class="col-md-2 ">@item.CentroCosto</td>
+                                        <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
+                                        @*<td class="col-md-1 ">0</td>*@
+                                        <td class="col-md-1 ">@item.Pais</td>
+                                        <td class="col-md-1 ">@item.Ciudad</td>
+                                        <td class="col-md-1 ">
+
+                                            @if (@item.TipoServicioId == 1)
+                                            {
+                                                <span>Comida</span>
+                                            }
+                                            else
+                                            {
+                                                <span>Transporte</span>
+                                            }
+                                        </td>
+                                        <td class="col-md-1 ">@item.ProveedorId</td>
+                                        <td class="col-md-1 ">@item.Concepto</td>
+                                        <td class="col-md-1 ">@item.Valor</td>
+                                        <td>
+                                            <a class="btn btn-danger btn-sm btnDelete" onclick="remove(this);">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </td>
+                                    </tr>
                                 }
+                            }
                             <tbody id="Items"></tbody>
-                            
+
 
                         </table>
                     </div>

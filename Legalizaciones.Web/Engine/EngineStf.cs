@@ -375,6 +375,7 @@ namespace Legalizaciones.Web.Engine
             return resultado;
         }
 
+
         private DataTable ReordenarPaso(DataTable dt)
         {
             int n = 1;
@@ -406,10 +407,10 @@ namespace Legalizaciones.Web.Engine
         public string []  SimuladorKactusJefeInmediato()
         {
             string [] JefeArea = new string[6];
-            JefeArea[0] = "Nombre Jefe Inmediato Area";
-            JefeArea[1] = "11.346.727";
-            JefeArea[2] = "Descripcion Requerida";
-            JefeArea[3] = "studiofnotificaciones@gmail.com";
+            JefeArea[0] = "Daniel Sanchez";
+            JefeArea[1] = "8.845.256.667";
+            JefeArea[2] = "En Espera de Aprobación JD";
+            JefeArea[3] = "d.sanchez@innova4j.com";
             return JefeArea;
         }
 

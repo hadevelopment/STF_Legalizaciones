@@ -16,6 +16,7 @@ namespace Legalizaciones.Model
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public int? CargoId { get; set; }
+        public string Cargo { get; set; }
         public string Area { get; set; }
         public string Telefono { get; set; }
         public string Correo { get; set; }

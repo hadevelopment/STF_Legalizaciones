@@ -21,12 +21,6 @@ namespace Legalizaciones.Model
         public string Origen { get; set; }
         public string Destino { get; set; }
         public Decimal Monto { get; set; }
-        public string IVA { get; set; }
-        public string ReteIVA { get; set; }
-        public string ReteServicio { get; set; }
-        public string ICA { get; set; }
-        public string Neto { get; set; }
-        public string IVATeorico { get; set; }
         //public string Zona { get; set; }
 
         [ForeignKey("Solicitud")]

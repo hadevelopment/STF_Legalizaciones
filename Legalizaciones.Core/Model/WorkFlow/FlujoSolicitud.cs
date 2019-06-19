@@ -19,8 +19,8 @@ namespace Legalizaciones.Model.Workflow
         public int DestinoId { get; set; }
         public Destino Destino { get; set; }
 
-        public float MontoMinimo { get; set; }
+        public long MontoMinimo { get; set; }
 
-        public float MontoMaximo { get; set; }
+        public long MontoMaximo { get; set; }
     }
 }

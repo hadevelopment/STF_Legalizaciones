@@ -19,71 +19,64 @@
 </div>
 
 
-<form asp-controller="Solicitud" asp-action="RegistrarSTDC" method="post">
+<form asp-controller="Solicitud" asp-action="RegistrarSTDC" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <section class="">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Registrar solicitud de anticipo con tarjeta de Crédito</strong></h3>
+                <h3 class="box-title"><i class="fa fa-credit-card"></i>Registrar solicitud de anticipo con tarjeta de Crédito</h3>
             </div>
 
             <div class="box-body">
-                <div class="row margin-bottom"></div>
-
-                <div class="row margin-bottom">
-                    <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6">
                         <label asp-for="Cedula" id="lbl_Cedula">Cédula del beneficiario</label>
-                    </div>
-                    <div class="col-md-12">
-                        @*@Html.TextBoxFor(model => model.Cedula, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese",})*@
-                        <input asp-for="Cedula" class="form-control" type="number" maxlength="10" />
+                        @Html.TextBoxFor(model => model.Cedula, new { @class = "form-control", @required = "required", @autocomplete = "off" })
                         <span asp-validation-for="Cedula" class="text-danger"></span>
                     </div>
-
-                </div>
-
-
-
-                <div class="row margin-bottom">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <label asp-for="Extracto" id="lbl_Extracto">Extracto de la tarjeta de crédito</label>
-                    </div>
-                    <div class="col-md-12">
-                        @*@Html.TextBoxFor(model => model.Extracto, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
-                        <input asp-for="Extracto" class="form-control" type="number" />
+                        @Html.TextBoxFor(model => model.Extracto, new { @class = "form-control creditCard", @required = "required", @id = "card_number", @autocomplete = "off", @placeholder = "1234 5678 9012 3456" })
+                        <small class="help">
+                            <p>
+                                Este campo soporta Visa, Visa Electrónica, Maestro, MasterCard y Discover.
+                            </p>
+                        </small>
                         <span asp-validation-for="Extracto" class="text-danger"></span>
                     </div>
                 </div>
-
-                <div class="row margin-bottom">
-                    <div class="col-md-12">
-                        <label asp-for="Banco">Banco</label>
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="DestinoId" id="lbl_destino">Destino</label>
+                        @Html.DropDownListFor(model => model.DestinoId, Model.ListaDestino, new { @class = "form-control", id = "Destino" })
+                        @Html.ValidationMessageFor(model => model.DestinoId, "", new { @class = "text-danger" })
                     </div>
-                    <div class="col-md-12">
-                        @*@Html.TextBoxFor(model => model.Banco, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
-                        <input asp-for="Banco" class="form-control" />
-                        <span asp-validation-for="Banco" class="text-danger"></span>
+                    <div class="col-md-6">
+                        <label asp-for="BancoId">Banco</label>
+                        @Html.DropDownListFor(model => model.BancoId, Model.ListaBanco, new { @class = "form-control" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.BancoId, "Seleccione un Banco.", new { @class = "text-danger" })
+                        }
+                        <span asp-validation-for="BancoId" class="text-danger"></span>
                     </div>
-
                 </div>
-
-                <div class="row margin-bottom">
-                    <div class="col-md-12">
+                <div class="row" style="margin-top:20px;">
+                    <div class="col-md-6">
                         <label asp-for="Monto">Monto</label>
-                    </div>
-                    <div class="col-md-12">
-                        @*@Html.TextBoxFor(model => model.Monto, new {@class = "col-md-12 lbl100", @placeholder = "Ingrese"})*@
-                        <input asp-for="Monto" class="form-control" type="number" />
+                        @Html.TextBoxFor(model => model.Monto, new { @class = "form-control maskMoney", @required = "required", @autocomplete = "off" })
                         <span asp-validation-for="Monto" class="text-danger"></span>
                     </div>
-
+                    <div class="col-sm-6">
+                        <label asp-for="Archivo">Documento</label>
+                        @Html.TextBoxFor(model => model.Archivo, new { type = "file" })
+                        @Html.ValidationMessageFor(model => model.Archivo)
+                    </div>
                 </div>
-
-                <div class="row margin-bottom"></div>
 
                 <div class="box-tools pull-right">
                     <button type="submit" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-floppy-save"></span> Registrar
+                        <span class="fa fa-floppy-o"></span> Registrar
                     </button>
                 </div>
 
@@ -91,9 +84,11 @@
             </div>
 
         </div>
-
-
     </section>
 
 </form>
+
+@section scripts {
+    <script src="~/js/CreditCardScript.js"></script>
+}
 

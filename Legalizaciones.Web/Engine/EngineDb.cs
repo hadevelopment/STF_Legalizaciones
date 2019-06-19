@@ -696,5 +696,34 @@ namespace Legalizaciones.Web.Engine
 
             return result;
         }
+
+
+        public bool TriggerActualizacionSolicitud(int SolicitudId)
+        {
+            bool result = false;
+            DataTable dataTable = new DataTable();
+
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand("Sp_UpdateTriggerSolicitud", Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Clear();
+                command.Parameters.AddWithValue("@SolicitudId", SolicitudId);
+                SqlDataAdapter dataAdaptador = new SqlDataAdapter(command);
+                dataAdaptador.Fill(dataTable);
+                Conexion.Close();
+            }
+
+            string res = dataTable.Rows[0]["Respuesta"].ToString();
+            if (res.Contains("Success"))
+                result = true;
+
+            if (res.Contains("Error"))
+                result = false;
+
+            return result;
+        }
+
     }
 }

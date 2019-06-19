@@ -28,6 +28,8 @@
         }
     });
 
+    $('.maskMoney').focus();
+
 
     
 });
@@ -35,8 +37,9 @@
 
 //funcion que me muestra la pantalla modal con los gastos
 function AnadirGastos(boton) {
-        $('#gastosModal').modal('show');
-
+    $("#mensajeRegistro").text("");
+    $('#mensajeValidacionRegistro').hide("slow");
+    $('#gastosModal').modal('show');
 }
 
 function EnviarReporte(boton) {
@@ -71,8 +74,8 @@ function Seleccionar(Id) {
 
                 }
 
-                $("#GastosId").val(Id);
                 $("#MontoGasto").val(data.monto);
+                $("#MontoGasto").focus();
                 $("#Origen").val(data.origen);
                 $("#Destino").val(data.destino);
                 $("#FechaGasto").val(data.fechaGasto);
@@ -94,7 +97,6 @@ function Seleccionar(Id) {
 }
 
 function AddNuevoGasto() {
-    $('#GastosId').val('');
     $('#PaisId').val('');
     $('#CiudadId').val('');
     $('#TiposervicioId').val('');
@@ -121,9 +123,8 @@ function getDescCiudad(wID) {
 
 }
 
+var rowIndex = 0;
 function AgregarFilaDatagrid() {
-
-    var Id = $("#GastosId").val();
 
     $('#tbGastos tbody tr').each(function () {
         $projectName = $(this).find('td:eq(0)').text();
@@ -133,7 +134,7 @@ function AgregarFilaDatagrid() {
         }
     });
 
-    var Monto = $("#MontoGasto").val();
+    var Monto = $("#MontoGasto").maskMoney('unmasked')[0];
     var FechaGasto = $("#FechaGasto").val();
 
     var PaisId = $("#PaisId option:selected").val();
@@ -142,21 +143,24 @@ function AgregarFilaDatagrid() {
     var CiudadId = $("#CiudadId option:selected").val();
     var Ciudad = $("#CiudadId option:selected").text();
 
-    //var Monto = $("#MontoGasto").val();
-
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
 
-    var CentroOperacion = $("#CentroOperacion option:selected").val();
-    var UnidadNegocio = $("#UnidadNegocio option:selected").val();
-    var CentroCosto = $("#CentroCosto option:selected").val();
+    var CentroOperacionId = $("#CentroOperacion option:selected").val();
+    var CentroOperacion = $("#CentroOperacion option:selected").text();
+
+    var UnidadNegocioId = $("#UnidadNegocio option:selected").val();
+    var UnidadNegocio = $("#UnidadNegocio option:selected").text();
+
+    var CentroCostoId = $("#CentroCosto option:selected").val();
+    var CentroCosto = $("#CentroCosto option:selected").text();
 
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = today.getFullYear();
 
-    today = mm + '/' + dd + '/' + yyyy;
+    today = dd + '/' + mm + '/' + yyyy;
 
     var ConceptoGasto = $("#ConceptoGasto").val();
 
@@ -168,30 +172,33 @@ function AgregarFilaDatagrid() {
         Proveedor = "Proveedor Dos";
     }
 
-    if (Servicio === "Comida") {
-        Monto = CalcularGastoComidaLegalizacion();
-    }
+    //if (Servicio === "Comida") {
+    //    Monto = CalcularGastoComidaLegalizacion();
+    //}
+    rowIndex = rowIndex + 1;
 
     //las primeras son para el mapeo
     //las demas son para mostrar
-    var row = `<tr>  
+    var row = `<tr class="rowIndex-${rowIndex}">  
                     <td class="display-none">${PaisId}</td> 
                     <td class="display-none">${CiudadId}</td> 
                     <td class="display-none">${ServicioId}</td> 
                     <td class="display-none">${ProveedorId}</td>
                     <td class="display-none">${ConceptoGasto}</td>
-                    <td>${Id}</td>
+                    <td class="display-none">${CentroOperacionId}</td>
+                    <td class="display-none">${UnidadNegocioId}</td>
+                    <td class="display-none">${CentroCostoId}</td>
                     <td>${today}</td>
-                    <td>${CentroOperacion}</td>
-                    <td>${UnidadNegocio}</td>
-                    <td>${CentroCosto}</td>
+                    <td class="display-none">${CentroOperacion}</td>
+                    <td class="display-none">${UnidadNegocio}</td>
+                    <td class="display-none">${CentroCosto}</td>
                     <td>${FechaGasto}</td>
                     <td>${Pais}</td>
                     <td>${Ciudad}</td>
                     <td>${Servicio}</td>
                     <td>${Proveedor}</td>
                     <td>${ConceptoGasto}</td>
-                    <td class="Monto">${Monto}</td>                
+                    <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
                             <span class="glyphicon glyphicon-trash"></span>
@@ -201,27 +208,12 @@ function AgregarFilaDatagrid() {
 
     $('#Items').append(row);
 
+    //Se aplica Formato Moneda al monto
+    $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+    $('#monto-' + rowIndex).focus();
 
-    //Suma de Montos de Gastos legalizados
-    var sum = 0;
-    $('td.Monto').each(function () {
-        sum += parseFloat(this.innerHTML);
-    });
 
-    //$("#txMontoT").text(sum);
-    
-    var wSaldo = parseFloat($('#txSaldo').val());
-    var wDiferencia = wSaldo - sum; 
-
-    if (wDiferencia > 0) {
-        funcion_InVisible($("#txMontoSobrante"));
-        funcion_Visible($("#txMontoFaltante"));
-        $('#txMontoFaltante').text(sum);
-    } else {
-        funcion_InVisible($("#txMontoFaltante"));
-        funcion_Visible($("#txMontoSobrante"));
-        $('#txMontoSobrante').text(sum);
-    }
+    CalcularMontos();
 }
 
 
@@ -242,7 +234,7 @@ function ValidarGastos() {
     var Servicio = $('#TiposervicioId  option:selected').text();
     var Proveedor = $('#ProveedorId').val();
     var Concepto = $('#ConceptoGasto').val();
-    var Valor = $('#MontoGasto').val();
+    var Valor = $('#MontoGasto').maskMoney('unmasked')[0];
 
     var Origen = $('#Origen').val();
     var Destino = $('#Destino').val();
@@ -410,9 +402,7 @@ window.onload = function () {
     //CargarPais();
 
     var w = $('#txSaldo').val();
-    w = w.replace(",", ".");
     $('#txSaldo').val(w); 
-
 }
 
 
@@ -431,33 +421,14 @@ $(".datepicker").datepicker("update", new Date());
 
 function remove(tr) {
     $(tr).parent().parent().remove();
-    var sum = 0;
-    $('td.monto').each(function () {
-        sum += parseFloat(this.innerHTML);
-    });
-
-
-    $("#txMontoSobrante").val(sum);
-
-    var wSaldo = parseFloat($('#txSaldo').val());
-    var wDiferencia = wSaldo - sum;
-
-    if (wDiferencia > 0) {
-        funcion_InVisible($("#txMontoSobrante"));
-        funcion_Visible($("#txMontoFaltante"));
-        $('#txMontoFaltante').text(sum);
-    } else {
-        funcion_InVisible($("#txMontoFaltante"));
-        funcion_Visible($("#txMontoSobrante"));
-        $('#txMontoSobrante').text(sum);
-    }
+    CalcularMontos();
     return false;
 }
 
 
 function CalcularGastoComidaLegalizacion() {
     var wServicio = $('#TiposervicioId option:selected').text();
-    var wMonto = $('#MontoGasto').val();
+    var wMonto = $('#MontoGasto').maskMoney('unmasked')[0];
 
     if (wServicio === "Comida") {
         var FechaDesde = $("#FechaDesde").val();
@@ -477,36 +448,36 @@ function CalcularGastoComidaLegalizacion() {
 
     return wMonto;
 
-    //var wServicio = $('#TiposervicioId option:selected').text();
-    //var wMonto = $('#MontoGasto').val();
+}
 
-    //if (wServicio === "Comida") {
-    //    var FechaDesde = $("#FechaDesde").val();
-    //    var FDdia = FechaDesde.substr(0, 2);
-    //    var FDMes = FechaDesde.substr(3, 2);
-    //    var FDAnno = FechaDesde.substr(6, 4);
-    //    var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+function CalcularMontos() {
+    //Suma de Montos de Gastos legalizados
+    var montoGastos = 0;
+    $('td.monto input').each(function () {
+        montoGastos += parseFloat($(this).maskMoney('unmasked')[0]);
+    });
 
-    //    var FechaHasta = $("#FechaHasta").val();
-    //    var FHdia = FechaHasta.substr(0, 2);
-    //    var FHMes = FechaHasta.substr(3, 2);
-    //    var FHAnno = FechaHasta.substr(6, 4);
-    //    var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+    $('#txMontoFaltante').val(montoGastos);
+    $('#txMontoFaltante').focus();
 
-    //    var fecha1 = moment(wFDFormato);
-    //    var fecha2 = moment(wFHFormato);
+    var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
 
-    //    var wDias = fecha2.diff(fecha1, 'days');
+    if (montoGastos > montoAnticipo) {
+        $('#txSaldo').removeClass('fontGreen');
+        $('#txSaldo').addClass('fontRed');
+        $('#mensajeSaldo').text('Saldo a Favor del Empleado');
+    } else if (montoGastos < montoAnticipo && montoGastos > 0) {
+        $('#txSaldo').removeClass('fontRed');
+        $('#txSaldo').addClass('fontGreen');
+        $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
+    } else if (montoGastos === 0){
+        $('#txSaldo').removeClass('fontRed');
+        $('#txSaldo').removeClass('fontGreen');
+        $('#mensajeSaldo').text('');
+    }
 
-    //    if (wDias > 1) {
-    //        var wMontoTotal = wMonto * parseInt(wDias);
+    var saldo = montoAnticipo - montoGastos;
 
-    //        return wMontoTotal;
-    //    }
-
-
-    //}
-
-    //return wMonto;
-
+    $('#txSaldo').val(saldo);
+    $('#txSaldo').focus();
 }

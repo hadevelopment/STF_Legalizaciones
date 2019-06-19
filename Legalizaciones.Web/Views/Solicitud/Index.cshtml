@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Legalizaciones.Model.Solicitud>
 @{
-    ViewData["Title"] = "Mis Solicitudes";
+    ViewData["Title"] = "Anticipos";
 }
 
 <div class="row">
@@ -45,7 +45,7 @@
                 </form>
             </div>
             <div style="float: left;" class="col-md-12">
-                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear" method="get">Añadir Solicitud</a>
+                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear" method="get">Crear Solicitud</a>
                 @*@if (ViewBag.cargo != "3")
                 {
                     //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
@@ -108,7 +108,7 @@
                                                 <span class="fa fa-eye" title="Detalle"></span>
                                             </a>
 
-                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Aproba"))
+                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Aproba") && !item.EstadoSolicitud.Descripcion.Contains("Legaliza"))
                                             {
                                                 <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
                                                     <span class="fa fa-pencil" title="Editar"></span>
@@ -184,7 +184,6 @@
             ruta = ruta.replace("~", "");
             $('#iframePDF').attr('src', ruta);
             $('#pdfModal').modal('show');
-            console.log(ruta);
         }
 </script>
 <!-- DataTables -->

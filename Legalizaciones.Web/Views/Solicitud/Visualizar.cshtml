@@ -67,7 +67,7 @@
                                     else if (item.Procesado == 3) //Rechazado
                                     {
                                         rechazado = true;
-                                        motivoRechazo = item.Motivo.Split("con Motivo:")[1];
+                                        motivoRechazo = item.Motivo.Split("con motivo:")[1];
                                         <div class="col-sm-2 arrow_box">
                                             <i class="fa fa-close red" aria-hidden="true"></i>
                                             <br />
@@ -114,23 +114,27 @@
                 </div>
 
                 <div class="box-body">
-                    <table class="tableSolicitud">
-                        <tr>
-                            <th>Área</th>
-                            <th>Nombre completo</th>
-                            <th>Cedula de ciudadanía</th>
-                            <th>Dirección</th>
-                            <th>Ciudad</th>
-                            <th>Teléfono</th>
-                        </tr>
-                        <tr>
-                            <td>@Model.Empleado.Area</td>
-                            <td>@Model.Empleado.Nombre</td>
-                            <td>@Model.Empleado.Cedula</td>
-                            <td>@Model.Empleado.Direccion</td>
-                            <td>@Model.Empleado.Ciudad</td>
-                            <td>@Model.Empleado.Telefono</td>
-                        </tr>
+                    <table class="tableEmpleado">
+                        <thead>
+                            <tr>
+                                <th>Área</th>
+                                <th>Nombre y Apellido</th>
+                                <th>Cédula de Ciudadanía</th>
+                                <th>Dirección</th>
+                                <th>Ciudad</th>
+                                <th>Teléfono</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.Empleado.Area</td>
+                                <td>@Model.Empleado.Nombre</td>
+                                <td>@Model.Empleado.Cedula</td>
+                                <td>@Model.Empleado.Direccion</td>
+                                <td>@Model.Empleado.Ciudad</td>
+                                <td>@Model.Empleado.Telefono</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -143,63 +147,62 @@
                 </div>
 
                 <div class="box-body">
-                    <label asp-for="Concepto">Concepto del Anticipo*</label>
+                    <label>Concepto del Anticipo</label>
                     <div class="row">
                         <div class="col-md-12">
-                            @*@Html.TextAreaFor(model => model.Concepto, 4, 140,
-                                new { @placeholder = "Explique el concepto del Anticipo (Minímo 50 carácteres)", @style = "width:100%;", @editable ="False" })*@
                             <span> @Model.Concepto </span>
-                            <span asp-validation-for="Concepto" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
                 <div class="box-body">
-                    <div class="row">
-
+                    <div class="row margin-bottom">
+                        <div class="col-md-3">
+                            <label>Destino:</label>&nbsp;<span>@Model.Destino.Nombre </span>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Zona Visitada:</label>&nbsp;
+                            @if (Model.Zona != null)
+                            {
+                                <span>@Model.Zona.Nombre</span>
+                            }
+                            else
+                            {
+                                <span>No disponible</span>
+                            }
+                        </div>
+                        <div class="col-md-3">
+                            <label>Centro de operación:</label>&nbsp;<span>@Model.CentroOperacion</span>
+                        </div>
+                        <div class="col-md-3">
+                            <label>Unidad de negocio:</label>&nbsp;<span>@Model.UnidadNegocio</span>
+                        </div>
                     </div>
-
-                    <div class="row">
+                    <div class="row margin-bottom">
                         <div class="col-md-3">
-                            <label asp-for="Destino" id="lbl_destino">Destino:</label>&nbsp;<span>@Model.Destino.Nombre </span>
-                        </div>
-                        <div class="col-md-3">
-                            <label asp-for="Zona" id="lbl_zona">Zona Visitada:</label>&nbsp;<span>@Model.Zona.Nombre</span>
+                            <label asp-for="CentroCosto">Centro de costo:</label> &nbsp;<span> @Model.CentroCosto</span>
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="CentroOperacion">Centro de operación:</label>&nbsp;<span>@Model.CentroOperacion.Nombre</span>
-                        </div>
-                        <div class="col-md-3">
-                            <label asp-for="UnidadNegocio">Unidad de negocio:</label>&nbsp;<span>@Model.UnidadNegocio.Nombre </span>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-3">
-                            <label asp-for="CentroCosto">Centro de costo:</label> &nbsp;<span> @Model.CentroCosto.Nombre</span>
+                            <label asp-for="FechaDesde">Fecha desde:</label> &nbsp;<span>@Model.FechaDesde.ToString("dd/MM/yyyy")</span>
                         </div>
 
                         <div class="col-md-3">
-                            <label asp-for="FechaDesde">Fecha desde:</label> &nbsp;<span>@Model.FechaDesde.ToShortDateString() </span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label asp-for="FechaHasta">Fecha hasta:</label> &nbsp;<span> @Model.FechaHasta.ToShortDateString()</span>
+                            <label asp-for="FechaHasta">Fecha hasta:</label> &nbsp;<span> @Model.FechaHasta.ToString("dd/MM/yyyy")</span>
                         </div>
 
                         <div class="col-md-3">
                             <label asp-for="Moneda">Moneda:</label> &nbsp;<span>@Model.Moneda.Nombre</span>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row margin-bottom">
                         <div class="col-md-3">
-                            <label asp-for="Monto">Monto:</label> &nbsp;<span>@Model.Monto</span>
+                            <label>Monto:</label> &nbsp;<span> <input type="text" value="@Model.Monto" readonly="readonly" class="txtLabel maskMoney" /> </span>
                         </div>
                         @if (!string.IsNullOrEmpty(Model.RutaArchivo))
                         {
                             <div class="col-md-3">
-                                <label asp-for="CentroCosto">
-                                    Carta de Descuento:
+                                <label>
+                                    Documento:
                                     <a class="item-btn" onclick="showCartaModal('@Model.RutaArchivo');"> <span class="fa fa-file-pdf-o"></span> </a>
                                 </label>
                             </div>
@@ -208,7 +211,6 @@
                 </div>
 
                 <div class="box-body">
-
                     <div class="row" style="margin-top:40px;">
                         <div class="col-md-6">
                             <label>Registro de Gastos</label>
@@ -228,7 +230,6 @@
                                     @if (Model.SolicitudGastos.Count > 0)
                                     {
                                         @Html.Partial("SolicitudGastos", Model.SolicitudGastos)
-
                                     }
                                     else
                                     {
@@ -239,11 +240,18 @@
                                 </tbody>
                             </table>
                             <br />
-                            
+
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-12 text-right">
+                                    <h3>Monto Total:</h3>
+                                    <input type="text" name="txMontoT" id="txMontoT" value="@Model.SolicitudGastos.Sum(m => m.Monto)" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
+                                </div>
+                            </div>
+
                             @if (ViewBag.cargoId != "1")
                             {
-                                <a class="btn btn-primary fa fa-file-pdf-o" 
-                                   asp-controller="ExportFilesFormat" asp-action="CreatePDF" 
+                                <a class="btn btn-primary fa fa-file-pdf-o"
+                                   asp-controller="ExportFilesFormat" asp-action="CreatePDF"
                                    asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
                                 <div style="float:right"></div>
                             }

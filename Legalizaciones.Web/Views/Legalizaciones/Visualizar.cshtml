@@ -1,7 +1,6 @@
 ﻿@model Legalizaciones.Model.Legalizacion;
 @{
-    ViewData["Title"] = "Ver";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Detalle";
 }
 
 <div class="row">
@@ -20,50 +19,41 @@
     </div>
 </div>
 
-
 <div class="box box-default">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
     </div>
-
     <div class="box-body">
         <table width="100%">
-            
             <tr class="HeaderTable">
-                <td class="col-md-1 sinBorder">
+                <td class="col-md-1">
                     <label>ID</label>
                 </td>
-                <td class="col-md-2 sinBorder">
+                <td class="col-md-2">
                     <label>ID documentos en ERP</label>
                 </td>
-                <td class="col-md-2 sinBorder">
+                <td class="col-md-2">
                     <label>Concecutivo ERP</label>
                 </td>
-                <td class="col-md-3 sinBorder">
+                <td class="col-md-3">
                     <label>Concepto</label>
                 </td>
             </tr>
-            
-            
             <tr class="RowsTable">
-                <td class="sinBorder RowsTable">
-                    <label>@Model.SolicitudID</label>
+                <td>
+                    @Model.Solicitud.Id
                 </td>
-                <td class="sinBorder RowsTable">
-                    <label>84526</label>
+                <td>
+                    @Model.Solicitud.DocumentoERP
                 </td>
-                <td class="sinBorder RowsTable">
-                    <label>8652</label>
+                <td>
+                    @Model.Solicitud.ConsecutivoERP
                 </td>
-                <td class="sinBorder RowsTable">
-                    <label>@Model.Solicitud.Concepto</label>
+                <td>
+                    @Model.Solicitud.Concepto
                 </td>
-              
             </tr>
-            
         </table>
-
-
     </div>
 </div>
 
@@ -73,115 +63,77 @@
         <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del empleado</strong></h3>
         <div class="box-tools pull-right">
         </div>
-
-        <div class="box-body">
-            <table width="100%">
-
-                <tr class="HeaderTable">
-                    <td class="col-md-3 sinBorder">
-                        <label>Beneficiario del anticipo</label>
-                    </td>
-                    <td class="col-md-3 sinBorder">
-                        <label>Cedula de ciudadania</label>
-                    </td>
-                    <td class="col-md-3 sinBorder">
-                        <label>Area</label>
-                    </td>
-                    <td class="col-md-3 sinBorder">
-                        <label>Cargo</label>
-                    </td>
-                </tr>
-
-
-                <tr class="RowsTable">
-                    <td class="sinBorder RowsTable">
-                        <label>@Model.Empleado.Nombre @Model.Empleado.Apellido</label>
-                    </td>
-                    <td class="sinBorder RowsTable">
-                        <label>@Model.Solicitud.EmpleadoCedula</label>
-                    </td>
-
-                    <td class="sinBorder RowsTable">
-                        <label>@Model.Empleado.Area</label>
-                    </td>
-
-                    <td class="sinBorder RowsTable">
-                        <label>Vendedor</label>
-                    </td>
-
-                </tr>
-
-            </table>
-
-
-        </div>
+    </div>
+    <div class="box-body">
+        <table width="100%">
+            <tr class="HeaderTable">
+                <td class="col-md-3 sinBorder">
+                    <label>Nombre y Apellido</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Cédula de Ciudadanía</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Area</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Cargo</label>
+                </td>
+            </tr>
+            <tr class="RowsTable">
+                <td>
+                    @Model.Empleado.Nombre @Model.Empleado.Apellido
+                </td>
+                <td>
+                    @Model.Solicitud.EmpleadoCedula
+                </td>
+                <td>
+                    @Model.Empleado.Area
+                </td>
+                <td>
+                    @Model.Empleado.Cargo
+                </td>
+            </tr>
+        </table>
     </div>
 </div>
-
 
 <div class="box box-default">
     <div class="box-header with-border">
         <h3 class="box-title"><i class="fa fa-random"></i><strong>Detalles de legalizacion</strong></h3>
        
         <div class="box-body">
-
-            <table width="100%">
-                <tr height="20px">
-
-                    <td style="width: 60%" class="sinBorder">
-
-                        <table width="100%" border="0">
-                            <tr class="sinBorder">
-                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
-                                <td width="15%" class="sinBorder">@Model.FechaCreacion</td>
-                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
-                                <td width="15%" class="sinBorder">@Model.Solicitud.FechaHasta</td>
-                            </tr>
-                            <tr class="sinBorder">
-                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
-                                <td width="15%" class="sinBorder RowsTable">@Model.ReciboCaja</td>
-                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
-                                <td width="15%" class="sinBorder RowsTable">@Model.Consignacion</td>
-                            </tr>
-                        </table>
-
-                    </td>
-
-                    <td style="width: 80%" height="20px" class="sinBorder">
-
-                        <div class="row" style="margin-top: 0px;">
-                            <div class="col-md-12 Curva">
-
-                                <table width="80%" border="0">
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
-                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
-                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
-
-                                    </tr>
-
-                                    <tr>
-                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
-                                        <td class="RowsTable sinBorder">0.00 COP</td>
-
-                                    </tr>
-
-                                </table>
-
-                            </div>
-
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Fecha de Registro:</label>&nbsp;<span>@Model.FechaCreacion.ToString("dd/MM/yyyy")</span>
                         </div>
-
-                    </td>
-
-                </tr>
-
-            </table>
+                        <div class="col-md-6">
+                            <label>Fecha de Vencimiento:</label>&nbsp;<span>@Model.Solicitud.FechaVencimiento.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Recibo Caja:</label>&nbsp;<span>@Model.ReciboCaja</span>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Consignación:</label>&nbsp;<span>@Model.Consignacion</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 text-right">
+                    <div class="row Curva">
+                        <div class="col-md-12">
+                            <label>Total Anticipo:</label>&nbsp;<span><input type="text" class="txtLabel maskMoney" value="@Model.MontoAnticipoEntregado" readonly="readonly" /></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>Total Legalización:</label>&nbsp;<span><input type="text" class="txtLabel maskMoney" value="@Model.MontoGastosReportados" readonly="readonly" /></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label>Saldo:</label>&nbsp;<span><input type="text" class="txtLabel maskMoney" value="@Model.MontoSaldo" readonly="readonly" /></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <br /><br />
 
@@ -196,7 +148,6 @@
                                           <thead>
                                               <tr>
                                                   @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                                  <td>Item</td>
                                                   <td>Fecha</td>
                                                   <td>Centro Oper.</td>
                                                   <td>Unidad Neg</td>
@@ -217,16 +168,14 @@
                                               {
                                                   // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
                                                   <tr>
-                                                      <td class="col-md-1 ">@item.Id</td>
-                                                      <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
-                                                      <td class="col-md-2 ">@item.CentroOperacion.Nombre</td>
-                                                      <td class="col-md-2 ">@item.UnidadNegocio.Nombre</td>
-                                                      <td class="col-md-2 ">@item.CentroCosto.Nombre</td>
-                                                      <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
-                                                      <td class="col-md-1 ">@item.Pais.Nombre</td>
-                                                      <td class="col-md-1 ">@item.Ciudad.Nombre</td>
+                                                      <td class="col-md-1 ">@item.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                                                      <td class="col-md-2 ">@item.CentroOperacion</td>
+                                                      <td class="col-md-2 ">@item.UnidadNegocio</td>
+                                                      <td class="col-md-2 ">@item.CentroCosto</td>
+                                                      <td class="col-md-2 ">@String.Format("{0:dd/MM/yyy}", item.FechaGasto)</td>
+                                                      <td class="col-md-1 ">@item.Pais</td>
+                                                      <td class="col-md-1 ">@item.Ciudad</td>
                                                       <td class="col-md-1 ">
-
                                                           @if (@item.TipoServicioId == 1)
                                                           {
                                                               <span>Comida</span>

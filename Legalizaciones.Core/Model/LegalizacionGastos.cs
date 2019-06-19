@@ -21,42 +21,48 @@ namespace Legalizaciones.Model
 
         [Required(ErrorMessage = "Seleccione un Centro de Operaciones.")]
         public int CentroOperacionId { get; set; }
+        public string CentroOperacion { get; set; }
 
         [NotMapped]
-        public CentroOperacion CentroOperacion { get; set; }
+        public CentroOperacion CentroOperacionObj { get; set; }
 
         [Required(ErrorMessage = "Seleccione una Unidad de Negocio.")]
         public int UnidadNegocioId { get; set; }
+        public string UnidadNegocio { get; set; }
 
         [NotMapped]
-        public UnidadNegocio UnidadNegocio{ get; set; }
+        public UnidadNegocio UnidadNegocioObj{ get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Costo.")]
-        public int CentroCostosId { get; set; }
+        public int CentroCostoId { get; set; }
+        public string CentroCosto { get; set; }
 
         [NotMapped]
-        public CentroCosto CentroCosto { get; set; }
+        public CentroCosto CentroCostoObj { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Motivo.")]
         public int MotivoId { get; set; }
 
         [ForeignKey("Pais")]
         public int PaisId { get; set; }
+        public string Pais { get; set; }
 
         [ForeignKey("Ciudad")]
         public int CiudadId { get; set; }
+        public string Ciudad { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Tipo de Servicio.")]
         public int TipoServicioId { get; set; }
+        public string Servicio { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Proveedor.")]
         public int ProveedorId { get; set; }
 
         [NotMapped]
-        public Pais Pais { get; set; }
+        public Pais PaisObj { get; set; }
 
         [NotMapped]
-        public Ciudad Ciudad { get; set; }
+        public Ciudad CiudadObj { get; set; }
 
         //Para que me carge los Motivo
         [NotMapped]
@@ -65,7 +71,11 @@ namespace Legalizaciones.Model
         public string Concepto{ get; set; }
 
         public string  Valor { get; set; }
-
-
+        public string IVA { get; set; }
+        public string ReteIVA { get; set; }
+        public string ReteServicio { get; set; }
+        public string ICA { get; set; }
+        public string Neto { get; set; }
+        public string IVATeorico { get; set; }
     }
 }

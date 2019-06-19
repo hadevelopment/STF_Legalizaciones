@@ -19,14 +19,50 @@ namespace Legalizaciones.Web.Helpers
             int EL_Empleado = 2;
             return EL_Empleado;
         }
-        public CentroCosto getCentroCosto(int IdCentroCosto) {
+
+        public List<CentroCosto> getCentroCostos()
+        {
+            List<CentroCosto> Lista = new List<CentroCosto>();
+            CentroCosto centroCosto = new CentroCosto();
+            centroCosto.Id = 1;
+            centroCosto.Nombre = "Centro de Costo";
+
+            Lista.Add(centroCosto);
+            return Lista;
+        }
+
+        public List<CentroOperacion> getCentroOperaciones()
+        {
+            List<CentroOperacion> Lista = new List<CentroOperacion>();
+            CentroOperacion centroOperacion = new CentroOperacion();
+            centroOperacion.Id = 1;
+            centroOperacion.Nombre = "Centro de Operacion";
+
+            Lista.Add(centroOperacion);
+            return Lista;
+        }
+
+
+        public List<UnidadNegocio> getUnidadNegocios()
+        {
+            List<UnidadNegocio> Lista = new List<UnidadNegocio>();
+            UnidadNegocio unidadNegocio = new UnidadNegocio();
+            unidadNegocio.Id = 1;
+            unidadNegocio.Nombre = "Unidad de Negocio";
+
+            Lista.Add(unidadNegocio);
+            return Lista;
+        }
+
+
+        public CentroCosto getCentroCosto(int? IdCentroCosto) {
             CentroCosto CentroCostos = new CentroCosto();
             CentroCostos.Id = 1;
             CentroCostos.Nombre = "Centro de Costo";
             return CentroCostos;
         }
 
-        public CentroOperacion getCentroOperacion(int IdCentroOperacion)
+        public CentroOperacion getCentroOperacion(int? IdCentroOperacion)
         {
             CentroOperacion centroOperacion = new CentroOperacion();
             centroOperacion.Id = 1;
@@ -35,7 +71,7 @@ namespace Legalizaciones.Web.Helpers
         }
 
 
-        public UnidadNegocio getUnidadNegocio(int IdUnidadNegocio)
+        public UnidadNegocio getUnidadNegocio(int? IdUnidadNegocio)
         {
             UnidadNegocio unidadNegocio = new UnidadNegocio();
             unidadNegocio.Id = 1;

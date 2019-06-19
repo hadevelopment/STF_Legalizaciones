@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Solicitud";
     decimal wMontoTotal = 0;
+    var actualizar = 0;
 }
 
 
@@ -37,56 +38,43 @@
         @Html.TextBoxFor(model => model.FechaSolicitud, new { @class = "form-control " })
         @Html.TextBoxFor(model => model.Extracto, new { @class = "form-control " })
         @Html.TextBoxFor(model => model.Banco, new { @class = "form-control " })
+        @Html.HiddenFor(model => model.FlujoSolicitudId, null)
+        @Html.HiddenFor(model => model.PasoFlujoSolicitudId, null)
         <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
-
-
     </div>
 
-
-
     <section class="">
+        @*informacion del empleado*@
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <h3 class="box-title"><i class="fa fa-info-circle"></i>Información del empleado</h3>
                 <div class="box-tools pull-right">
-                    <label>Fecha de Registro: @String.Format("{0:MM-dd-yyy}", Model.FechaCreacion)</label>
+                    <label>Fecha de Registro: @String.Format("{0:dd/MM/yyy}", DateTime.Now)</label>
                 </div>
             </div>
-
             <div class="box-body">
-
-                @if (Model.Empleado != null)
-                {
-                    <table class="tableSolicitud">
-                        <thead>
-                            <tr>
-                                <th>Área</th>
-                                <th>Nombre completo</th>
-                                <th>Cedula de ciudadanía</th>
-                                <th>Dirección</th>
-                                <th>Ciudad</th>
-                                <th>Teléfono</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <div class="row">
-                        No se encontraron datos del empleado...
-                    </div>
-                }
-
+                <table class="tableEmpleado">
+                    <thead>
+                        <tr>
+                            <th>Área</th>
+                            <th>Nombre completo</th>
+                            <th>Cédula</th>
+                            <th>Dirección</th>
+                            <th>Ciudad</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
@@ -96,7 +84,6 @@
                 <div class="box-tools pull-right">
                 </div>
             </div>
-
             <div class="box-body">
                 <label asp-for="Concepto">Concepto del Anticipo*</label>
                 <div class="row">
@@ -107,72 +94,86 @@
                 </div>
             </div>
             <div class="box-body">
-
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="DestinoID" id="lbl_destino">Destino</label>
                         @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
                         @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.DestinoID, new { @class = "form-control", id = "hdfDestinoId" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="ZonaID" id="lbl_zona">Zona Visitada</label>
                         @Html.DropDownListFor(model => model.ZonaID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Zona" })
                         @Html.ValidationMessageFor(model => model.ZonaID, "", new { @class = "text-danger" })
+                        @Html.HiddenFor(model => model.ZonaID, new { @class = "form-control", id = "hdfZonaId" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Moneda">Moneda</label>
-                        @Html.DropDownListFor(model => model.MonedaId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "MonedaId" })
-
+                        @Html.DropDownListFor(model => model.MonedaId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Moneda" })
+                        @Html.HiddenFor(model => model.MonedaId, new { @class = "form-control", id = "hdfMonedaId" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroOperacionId">Centro de Operación</label>
+                        @Html.HiddenFor(model => model.CentroOperacion, new { @class = "form-control", id = "hdfCentroOperacion" })
                         @Html.DropDownListFor(model => model.CentroOperacionId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroOperacion" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
                             @Html.ValidationMessageFor(model => model.CentroOperacionId, "Seleccione un Centro de Operaciones.", new { @class = "text-danger" })
                         }
+                        @Html.HiddenFor(model => model.CentroOperacionId, new { @class = "form-control", id = "hdfCentroOperacionId" })
                     </div>
-
                 </div>
-
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="UnidadNegocio">Unidad de Negocio</label>
+                        @Html.HiddenFor(model => model.UnidadNegocio, new { @class = "form-control", id = "hdfUnidadNegocio" })
                         @Html.DropDownListFor(model => model.UnidadNegocioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "UnidadNegocio" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
                             @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una Unidad de Negocio.", new { @class = "text-danger" })
                         }
+                        @Html.HiddenFor(model => model.UnidadNegocioId, new { @class = "form-control", id = "hdfUnidadNegocioId" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="CentroCosto">Centro de Costo</label>
-                        @Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "CentroCosto" })
+                        @Html.HiddenFor(model => model.CentroCosto, new { @class = "form-control", id = "hdfCentroCosto" })
+                        @Html.DropDownListFor(model => model.CentroCostoId, new SelectList(string.Empty, "Value", "Text"), Model.CentroCosto, new { @class = "form-control", id = "CentroCosto" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
                             @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de Costo.", new { @class = "text-danger" })
                         }
+                        @Html.HiddenFor(model => model.CentroCostoId, new { @class = "form-control", id = "hdfCentroCostoId" })
                     </div>
-
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde", @type="datetime" })
+                        @Html.TextBoxFor(model => model.FechaDesde, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde", @type = "datetime" })
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
-
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
                         @Html.TextBoxFor(model => model.FechaHasta, "{0:yyyy-MM-dd}", new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta", @type = "datetime" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
                 </div>
-
-
                 <div class="row margin-bottom">
-
-                    @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosSolicitud" })
-
+                    @if (!string.IsNullOrEmpty(Model.RutaArchivo))
+                    {
+                        <div class="col-sm-6">
+                            <label>
+                                Ver Carta de Descuento:
+                                <a class="item-btn" onclick="showCartaModal('@Model.RutaArchivo');"> <span class="fa fa-file-pdf-o"></span> </a>
+                            </label>
+                        </div>
+                    }
+                    <div class="col-sm-6">
+                        <label asp-for="Archivo">Carta de Descuento</label>
+                        @Html.TextBoxFor(model => model.Archivo, new { type = "file" })
+                        @Html.ValidationMessageFor(model => model.Archivo)
+                    </div>
                 </div>
-
+                <div class="row margin-bottom">
+                    @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosSolicitud" })
+                </div>
                 <div class="row display-none" id="mensajeValidacionViaje">
                     <div class="col-sm-12">
                         <div class="alert alert-warning" role="alert">
@@ -182,16 +183,13 @@
                 </div>
             </div>
         </div>
-
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title"><i class="fa fa-money"></i> Registro de Gastos</h3>
                 <div class="box-tools pull-right">
                 </div>
             </div>
-
             <div class="box-body">
-
                 <div class="row">
                     <div class="col-md-12">
                         <a id="btnA" class="btn btn-primary" onclick="validarViaje(this);" style="float:right;">
@@ -233,7 +231,7 @@
                                             <td class="ciudad">@item.Ciudad</td>
                                             <td class="origen">@item.Origen</td>
                                             <td class="destino">@item.Destino</td>
-                                            <td class="monto">@item.Monto</td>
+                                            <td class="monto"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-@index" value="@item.Monto" /></td>
                                             <td>
                                                 <a class="btn btn-danger btn-sm btnDelete">
                                                     <span class="glyphicon glyphicon-trash"></span>
@@ -259,7 +257,7 @@
                     </div>
                     <div class="col-md-2">
                         @Html.HiddenFor(model => model.Monto, new { @class = "form-control", id = "hdfMontoSolicitud" })
-                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
+                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
                     </div>
 
                 </div>
@@ -302,11 +300,6 @@
                                         <label class="control-label">Ciudad</label>
                                         @Html.DropDownList("Ciudad", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Ciudad" })
                                     </div>
-                                    @*<div class="col-md-4">
-                                            <label class="control-label">Proveedor</label>
-                                            @Html.DropDownList("Proveedor", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Proveedor" })
-                                        </div>*@
-
                                 </div>
                                 <br />
                                 <div class="row">
@@ -316,7 +309,7 @@
                                     </div>
                                     <div class="col-md-6" id="divGastosFecha">
                                         <label class="control-label">Fecha Gasto</label>
-                                        @Html.Editor("FechaGasto", new { htmlAttributes = new { @class = "form-control datepicker FechaGasto", id = "FechaGasto", @placeholder = "Selecciona Fecha del Gasto..." } })
+                                        @Html.Editor("FechaGasto", new { htmlAttributes = new { @class = "form-control datepicker FechaGasto", id = "FechaGasto", qplaceholder = "Selecciona Fecha del Gasto..." } })
                                     </div>
                                 </div>
                                 <br />
@@ -335,10 +328,10 @@
                                     </div>
                                     <div class="col-md-4" style="float:right;">
                                         <label class="control-label">Monto</label>
-                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto", @type = "number" } })
-                                        <label style="color:silver;font-size:12px">ej: 1985,89</label>
+                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control maskMoney", id = "Monto", @type = "text", @pattern = @"^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?\.\d{1,2}$" } })
+                                        @*<label style="color:silver;font-size:12px">ej: 1,234.00 $</label>*@
                                         <div class="display-none" id="AvisoMontoServicio">
-                                            <label class="" id="MensajeAviso"></label>
+                                            <label>Limite establecido:</label>  <input type="text" class="form-control txtLabel maskMoney" id="MensajeAviso" readonly="readonly"></input>
                                         </div>
                                     </div>
                                 </div>
@@ -369,6 +362,33 @@
     </div>
 </div>
 
+
+<div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-off"></span> Cerrar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts {
     <script src="~/js/jquery-ui-1.8.2.js"></script>
     <script src="~/js/select2.min.js"></script>
@@ -388,22 +408,32 @@
         })
 
         function cargarGastos() {
-            debugger;
             var table = $('.tableGastos').tableToJSON({
+                textExtractor: function (cellIndex, $cell) {
+                    // get text from an input or select inside table cells;
+                    // if empty or non-existent, get the cell text
+                    return $cell.find('input, select').val() || $cell.text();
+                },
                 ignoreColumns: [10]
             });
 
             if (table.length > 0) {
+                $("#mensajeRegistro").text("");
+                $('#mensajeValidacionRegistro').hide("slow");
                 $('#hdfGastosSolicitud').val(JSON.stringify(table));
                 return true;
             } else {
+                $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                $('#mensajeValidacionRegistro').show("slow");
                 return false;
             }
-
         }
 
-
-
-
+        function showCartaModal(ruta) {
+            debugger;
+            ruta = ruta.replace("~", "");
+            $('#iframePDF').attr('src', ruta);
+            $('#pdfModal').modal('show');
+        }
     </script>
 }

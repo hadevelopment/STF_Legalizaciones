@@ -102,6 +102,8 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("Area");
 
+                    b.Property<string>("Cargo");
+
                     b.Property<int?>("CargoId");
 
                     b.Property<string>("Cedula")
@@ -353,6 +355,14 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
+                    b.Property<int?>("FlujoSolicitudId");
+
+                    b.Property<decimal>("MontoAnticipoEntregado");
+
+                    b.Property<decimal>("MontoGastosReportados");
+
+                    b.Property<decimal>("MontoSaldo");
+
                     b.Property<int>("PasoFlujoSolicitudId");
 
                     b.Property<long>("ReciboCaja");
@@ -366,6 +376,8 @@ namespace Legalizaciones.Data.Migrations
 
                     b.HasIndex("EstadoId");
 
+                    b.HasIndex("FlujoSolicitudId");
+
                     b.HasIndex("PasoFlujoSolicitudId");
 
                     b.ToTable("Legalizacion");
@@ -376,9 +388,15 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("CentroCosto");
+
                     b.Property<int>("CentroCostosId");
 
+                    b.Property<string>("CentroOperacion");
+
                     b.Property<int>("CentroOperacionId");
+
+                    b.Property<string>("Ciudad");
 
                     b.Property<int>("CiudadId");
 
@@ -388,17 +406,35 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<DateTime>("FechaGasto");
+                    b.Property<string>("FechaGasto");
+
+                    b.Property<string>("ICA");
+
+                    b.Property<string>("IVA");
+
+                    b.Property<string>("IVATeorico");
 
                     b.Property<int?>("LegalizacionId");
 
                     b.Property<int>("MotivoId");
 
+                    b.Property<string>("Neto");
+
+                    b.Property<string>("Pais");
+
                     b.Property<int>("PaisId");
 
                     b.Property<int>("ProveedorId");
 
+                    b.Property<string>("ReteIVA");
+
+                    b.Property<string>("ReteServicio");
+
+                    b.Property<string>("Servicio");
+
                     b.Property<int>("TipoServicioId");
+
+                    b.Property<string>("UnidadNegocio");
 
                     b.Property<int>("UnidadNegocioId");
 
@@ -461,17 +497,29 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Area");
+
                     b.Property<string>("Banco");
 
-                    b.Property<int>("CentroCostoId");
+                    b.Property<string>("CentroCosto");
 
-                    b.Property<int>("CentroOperacionId");
+                    b.Property<int?>("CentroCostoId")
+                        .IsRequired();
+
+                    b.Property<string>("CentroOperacion");
+
+                    b.Property<int?>("CentroOperacionId")
+                        .IsRequired();
 
                     b.Property<string>("Concepto")
                         .IsRequired();
 
+                    b.Property<string>("ConsecutivoERP");
+
                     b.Property<int?>("DestinoID")
                         .IsRequired();
+
+                    b.Property<string>("DocumentoERP");
 
                     b.Property<string>("EmpleadoCedula")
                         .IsRequired();
@@ -507,7 +555,10 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<int>("TipoSolicitudID");
 
-                    b.Property<int>("UnidadNegocioId");
+                    b.Property<string>("UnidadNegocio");
+
+                    b.Property<int?>("UnidadNegocioId")
+                        .IsRequired();
 
                     b.Property<int?>("ZonaID")
                         .IsRequired();
@@ -572,25 +623,13 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("FechaGasto");
 
-                    b.Property<string>("ICA");
-
-                    b.Property<string>("IVA");
-
-                    b.Property<string>("IVATeorico");
-
                     b.Property<decimal>("Monto");
-
-                    b.Property<string>("Neto");
 
                     b.Property<string>("Origen");
 
                     b.Property<string>("Pais");
 
                     b.Property<int>("PaisId");
-
-                    b.Property<string>("ReteIVA");
-
-                    b.Property<string>("ReteServicio");
 
                     b.Property<string>("Servicio");
 
@@ -654,9 +693,9 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<float>("MontoMaximo");
+                    b.Property<long>("MontoMaximo");
 
-                    b.Property<float>("MontoMinimo");
+                    b.Property<long>("MontoMinimo");
 
                     b.Property<int>("TipoSolicitudId");
 
@@ -823,6 +862,10 @@ namespace Legalizaciones.Data.Migrations
                     b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoLegalizacion", "EstadoLegalizacion")
                         .WithMany()
                         .HasForeignKey("EstadoId");
+
+                    b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("FlujoSolicitudId");
 
                     b.HasOne("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", "PasoFlujoSolicitud")
                         .WithMany()

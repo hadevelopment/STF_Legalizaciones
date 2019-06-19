@@ -13,7 +13,9 @@ namespace Legalizaciones.Web.Models
         public int TipoServicioId { get; set; }
         public int ProveedorId { get; set; }
         public string Concepto { get; set; }
-        public int Item { get; set; }
+        public int CentroOperacionId { get; set; }
+        public int UnidadNegocioId { get; set; }
+        public int CentroCostoId { get; set; }
         public string Fecha { get; set; }
         public string CentroOperacion { get; set; }
         public string UnidadNegocio { get; set; }

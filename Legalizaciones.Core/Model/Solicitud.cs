@@ -41,33 +41,36 @@ namespace Legalizaciones.Model
         public Zona Zona { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Operaciones.")]
-        public int CentroOperacionId { get; set; }
+        public int? CentroOperacionId { get; set; }
+        public string CentroOperacion { get; set; }
 
         [NotMapped]
-        public CentroOperacion CentroOperacion { get; set; }
+        public CentroOperacion CentroOperacionObj { get; set; }
 
         [Required(ErrorMessage = "Seleccione una Unidad de Negocio.")]
         [DisplayName("Unidad Negocio")]
-        public int UnidadNegocioId { get; set; }
+        public int? UnidadNegocioId { get; set; }
+        public string UnidadNegocio { get; set; }
 
         [NotMapped]
-        public UnidadNegocio UnidadNegocio { get; set; }
+        public UnidadNegocio UnidadNegocioObj { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Costo.")]
         [DisplayName("Centro Costo")]
-        public int CentroCostoId { get; set; }
+        public int? CentroCostoId { get; set; }
+        public string CentroCosto { get; set; }
 
         [NotMapped]
-        public CentroCosto CentroCosto { get; set; }
+        public CentroCosto CentroCostoObj { get; set; }
 
         [Required(ErrorMessage = "Debe indicar Fecha Desde.")]
         [DisplayName("Fecha Desde")]
-        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaDesde { get; set; }
 
         [Required(ErrorMessage = "Debe indicar Fecha Hasta.")]
         [DisplayName("Fecha Hasta")]
-        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaHasta { get; set; }
 
 
@@ -110,12 +113,15 @@ namespace Legalizaciones.Model
         public DateTime FechaVencimiento { get; set; }
 
         public string RutaArchivo { get; set; }
+        public string DocumentoERP { get; set; }
+        public string ConsecutivoERP { get; set; }
+        public string Area { get; set; }
 
         [NotMapped]
         public ICollection<SolicitudGastos> SolicitudGastos { get; set; }
 
         [NotMapped]
-        public IFormFile Carta { get; set; }
+        public IFormFile Archivo { get; set; }
 
         [NotMapped]
         public List<Flujo> ListaFlujo { get; set; }
@@ -133,7 +139,6 @@ namespace Legalizaciones.Model
 
         [NotMapped]
         public string EmailAprobador { get; set; }
-
 
     }
 }

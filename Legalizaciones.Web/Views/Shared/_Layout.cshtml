@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Legalizaciones</title>
+    <title>@ViewData["Title"] - STF Group</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/Banner.css" />
     <link rel="stylesheet" href="~/css/Comun.css" />
@@ -79,7 +79,6 @@
                         </a>
                     </li>
 
-
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "OrigenDestino")'>
                             <i class="fa fa-plane"></i> <br />
@@ -87,17 +86,10 @@
                         </a>
                     </li>
 
-
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "WorkFlow")'>
                             <i class="fa fa-gear"></i> <br />
                             <span>Conf. Flujo Aprobacion</span>
-                        </a>
-                    </li>
-                    <li class="btnMenu">
-                        <a href='@Url.Action("Index", "Erp")'>
-                            <i class="fa fa-gear"></i> <br />
-                            <span>Prueba ErpProyect</span>
                         </a>
                     </li>
                 </ul>
@@ -138,6 +130,7 @@
         <section class="message-content"></section>
     </div>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-mask/jquery.mask.js"></script>
     <script src="~/js/jquery.maskMoney.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     <script src="~/lib/legalizaciones/dist/js/adminlte.js"></script>
@@ -235,6 +228,15 @@
             $('.loading').hide();
 
             $(".maskMoney").maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $(".maskMoney").focus();
+
+            $(".maskMoney").each(function () {
+                    //$("#Destino").select2();
+                    console.log("hola");
+                    $(this).focus();
+            });
+            $('.creditCard').mask('0000 0000 0000 0000');
+
         });
     </script>
 

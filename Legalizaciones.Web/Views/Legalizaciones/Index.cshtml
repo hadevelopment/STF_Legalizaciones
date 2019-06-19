@@ -1,6 +1,6 @@
 ﻿@model List<Legalizaciones.Model.InfoLegalizacion>
 @{
-    ViewData["Title"] = "Index"; }
+    ViewData["Title"] = "Legalizaciones"; }
 
 <style type="text/css">
     #divMain {
@@ -70,18 +70,18 @@
                     <thead>
                         <tr>
                             <th>Id </th>
-                            <th title="Fecha de Registro">Fecha de Registro</th>
-                            <th title="Concepto">Concepto</th>
-                            <th title="Cedula Beneficiario">Cédula</th>
-                            <th title="Beneficiario">Beneficiario</th>
+                            <th>Fecha de Registro</th>
+                            <th>Concepto</th>
+                            <th>Cédula</th>
+                            <th>Beneficiario</th>
                             <th>Estado</th>
                             <th>Monto</th>
                             @*<th>Tasa</th>*@
                             <th class="hidden"> Nro. Anticipo UNOEE</th>
                             <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
-                            <th title="Entrega"> Fecha Entrega </th>
-                            <th title="Dias Entregado">Dias Entregado</th>
-                            <th title="Fecha de Vencimiento">Fecha de Vencimiento</th>
+                            <th> Fecha Entrega </th>
+                            <th>Dias Entregado</th>
+                            <th>Fecha de Vencimiento</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -149,7 +149,7 @@
                                         }
                                         else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizadaa
                                         {
-                                            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Ver" asp-route-Id="@item.legalizacionID">
+                                            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
                                                 <span class="fa fa-eye"></span>
                                             </a>
                                             <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
@@ -158,7 +158,8 @@
                                         }
                                         else
                                         {
-                                            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>
+                                            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
+                                            @*<a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>*@
                                         }
                                     </td>
                                 </tr>}

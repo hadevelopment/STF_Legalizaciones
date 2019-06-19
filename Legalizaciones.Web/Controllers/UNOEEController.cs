@@ -92,7 +92,12 @@ namespace Legalizaciones.Web.Controllers
             centroOperacion.Id = 1;
             centroOperacion.Nombre = "Centro Operaciones 01";
 
+            CentroOperacion centroOperacion2 = new CentroOperacion();
+            centroOperacion2.Id = 2;
+            centroOperacion2.Nombre = "Centro Operaciones 02";
+
             lstCentroOperaciones.Add(centroOperacion);
+            lstCentroOperaciones.Add(centroOperacion2);
 
             return Json(lstCentroOperaciones);
         }
@@ -101,10 +106,15 @@ namespace Legalizaciones.Web.Controllers
         {
             List<UnidadNegocio> lstUnidadNegocio = new List<UnidadNegocio>();
             UnidadNegocio unidadNegocio = new UnidadNegocio();
-            unidadNegocio.Id = 3;
+            unidadNegocio.Id = 1;
             unidadNegocio.Nombre = "Unidad Negocio 01";
 
+            UnidadNegocio unidadNegocio2 = new UnidadNegocio();
+            unidadNegocio2.Id = 2;
+            unidadNegocio2.Nombre = "Unidad Negocio 02";
+
             lstUnidadNegocio.Add(unidadNegocio);
+            lstUnidadNegocio.Add(unidadNegocio2);
 
             return Json(lstUnidadNegocio);
         }
@@ -113,10 +123,15 @@ namespace Legalizaciones.Web.Controllers
         {
             List<CentroCosto> lstCentroCosto = new List<CentroCosto>();
             CentroCosto centroCosto = new CentroCosto();
-            centroCosto.Id = 3;
-            centroCosto.Nombre = "Centro Costo. 01";
+            centroCosto.Id = 1;
+            centroCosto.Nombre = "Centro Costo 01";
+
+            CentroCosto centroCosto2 = new CentroCosto();
+            centroCosto2.Id = 2;
+            centroCosto2.Nombre = "Centro Costo 02";
 
             lstCentroCosto.Add(centroCosto);
+            lstCentroCosto.Add(centroCosto2);
 
             return Json(lstCentroCosto);
         }
