@@ -92,12 +92,7 @@ namespace Legalizaciones.Web.Controllers
             centroOperacion.Id = 1;
             centroOperacion.Nombre = "Centro Operaciones 01";
 
-            CentroOperacion centroOperacion2 = new CentroOperacion();
-            centroOperacion2.Id = 2;
-            centroOperacion2.Nombre = "Centro Operaciones 02";
-
             lstCentroOperaciones.Add(centroOperacion);
-            lstCentroOperaciones.Add(centroOperacion2);
 
             return Json(lstCentroOperaciones);
         }
@@ -106,15 +101,10 @@ namespace Legalizaciones.Web.Controllers
         {
             List<UnidadNegocio> lstUnidadNegocio = new List<UnidadNegocio>();
             UnidadNegocio unidadNegocio = new UnidadNegocio();
-            unidadNegocio.Id = 1;
+            unidadNegocio.Id = 3;
             unidadNegocio.Nombre = "Unidad Negocio 01";
 
-            UnidadNegocio unidadNegocio2 = new UnidadNegocio();
-            unidadNegocio2.Id = 2;
-            unidadNegocio2.Nombre = "Unidad Negocio 02";
-
             lstUnidadNegocio.Add(unidadNegocio);
-            lstUnidadNegocio.Add(unidadNegocio2);
 
             return Json(lstUnidadNegocio);
         }
@@ -123,25 +113,121 @@ namespace Legalizaciones.Web.Controllers
         {
             List<CentroCosto> lstCentroCosto = new List<CentroCosto>();
             CentroCosto centroCosto = new CentroCosto();
-            centroCosto.Id = 1;
-            centroCosto.Nombre = "Centro Costo 01";
-
-            CentroCosto centroCosto2 = new CentroCosto();
-            centroCosto2.Id = 2;
-            centroCosto2.Nombre = "Centro Costo 02";
+            centroCosto.Id = 3;
+            centroCosto.Nombre = "Centro Costo. 01";
 
             lstCentroCosto.Add(centroCosto);
-            lstCentroCosto.Add(centroCosto2);
 
             return Json(lstCentroCosto);
         }
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-
             List<Empleado> Empleados = new List<Empleado>();
 
-         
+            Empleados.Add(new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Eliezer Vargas",
+                Cedula = "6.845.256.665",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.vargas@innova4j.com",
+                Cargo ="Jefe Directo"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
+                Cedula = "7.845.256.666",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-2",
+                CargoId = 2, // ROL Administracion Tesoreria
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "a.betancourt@innova4j.com",
+                Cargo = "Director General"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "8.845.256.667",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 3, // ROL Administracion Contraloria
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com",
+                Cargo = "Gerente General"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "9.845.256.668",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "l.marina@innova4j.com",
+                Cargo = "Presidencia"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrain Mejias",
+                Cedula = "11.346.727",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com",
+                Cargo = "VicePresidencia"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Javier Rodriguez",
+                Cedula = "11.845.256",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "j.rodriguez@innova4j.com",
+                Cargo = "Jefe Directo"
+            });
+
+            if (filtroCedula)
+            {
+                var cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == cedula).ToList();
+                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula) && m.Cedula != cedula);
+                return Json(list);
+            }
 
             return Json(Empleados);
         }
