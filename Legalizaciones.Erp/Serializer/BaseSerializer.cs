@@ -48,7 +48,7 @@ namespace Legalizaciones.Erp
              new XElement("IdConsulta", IdRequest),
              new XElement("Usuario", User),
              new XElement("Clave", Password),
-             new XElement("Parametros", null)
+             new XElement("Parametros",null)
             );
             xmlRequest.ToString();
         }

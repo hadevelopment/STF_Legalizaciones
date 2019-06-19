@@ -16,6 +16,7 @@ namespace Legalizaciones.Web.Engine
             ListBussinesUnit unidadNegocio = await ListBussniseUnitsAsync<ListBussinesUnit>();
             return unidadNegocio;
         }
+
         public async Task<BusinessUnit> UnidadNegocioSingleAsync(string id)
         {
             BusinessUnit unidadNegocio = await GetBussinesUnitAsync<BusinessUnit>(id);
@@ -34,16 +35,42 @@ namespace Legalizaciones.Web.Engine
             return centroOperaciones;
         }
 
-        public async Task<ListTaxTypes> TipoImpuestosCollectionAsync()
-        {
-            ListTaxTypes tipoImpuesto = await ListTaxtypesServicesAsync<ListTaxTypes>();
-            return tipoImpuesto;
-        }
-
         public async Task<TaxTypes> TipoImpuestosSingleAsync(string id)
         {
             TaxTypes tipoImpuesto = await GetTaxtypesServicesAsync<TaxTypes>(id);
             return tipoImpuesto;
+        }
+
+        public async Task<ListSuppliers> ProveedoresCollectionAsync()
+        {
+            ListSuppliers proveedores = await ListSuppliersAsync<ListSuppliers>();
+            return proveedores;
+        }
+        public async Task<Suppliers> ProveedoresSingleAsync(string id)
+        {
+            Suppliers proveedores = await GetSuppliersAsync<Suppliers>(id);
+            return proveedores;
+        }
+
+        public async Task<ListServiceTypes> TiposServiciosCollectionAsync()
+        {
+            ListServiceTypes tipoServicios = await ListServicesTypesAsync<ListServiceTypes>();
+            return tipoServicios;
+        }
+        public async Task<ServiceTypes> TipoServiciosSingleAsync(string id)
+        {
+            ServiceTypes tipoServicios = await GetServicesTypesAsync<ServiceTypes>(id);
+            return tipoServicios;
+        }
+        public async Task<ListCostCenters> CentroCostosCollectionAsync()
+        {
+            ListCostCenters centroCosto = await ListCostCentersAsync<ListCostCenters>();
+            return centroCosto;
+        }
+        public async Task<CostCenters> CentroCostosSingleAsync(string id)
+        {
+            CostCenters centroCosto = await GetCostCentersAsync<CostCenters>(id);
+            return centroCosto;
         }
     }
 }

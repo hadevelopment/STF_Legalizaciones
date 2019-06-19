@@ -114,6 +114,16 @@ namespace Legalizaciones.Web.Controllers
             }
         }
 
+        private async Task<List<KactusIntegration.Empleado>> GetKactusEmpleadoAsync()
+        {
+            EngineStf Funcion = new EngineStf();
+            List<KactusIntegration.Empleado> empleado = new List<KactusIntegration.Empleado>();
+            empleado = await Funcion.EmpleadoKactusAsync();
+            EngineDb Metodo = new EngineDb();
+            Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", empleado);
+            return empleado;
+        }
+
         [HttpGet]
         [Route("Crear")]
         public ActionResult Crear(int id)

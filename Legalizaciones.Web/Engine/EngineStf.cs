@@ -414,30 +414,42 @@ namespace Legalizaciones.Web.Engine
             return JefeArea;
         }
 
-        public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
+        public async Task<List<KactusIntegration.Empleado>>EmpleadoKactusAsync()
         {
-            //Convert.ToDateTime("2019-04-26")
+            string resultado = string.Empty;
             string userWcf = EngineStf.UserWcf;
             string passwordWcf = EngineStf.PasswordWcf;
-            DateTime Fecha = DateTime.Now.Date.AddDays(-1);
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, Convert.ToDateTime("2019-04-26"), userWcf, passwordWcf);
-            string resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
-            XmlCreate(resultado);
+            wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0);
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
+
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
+            resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
             KactusEmpleado = response.ToList();
+           // XmlDocument doc = XmlCreate(resultado);
             return KactusEmpleado;
         }
 
-        private void XmlCreate(string cadena)
+        private XmlDocument XmlCreate(string cadena)
         {
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-            doc.PreserveWhitespace = true;
             XmlElement root = doc.DocumentElement;
-            doc.InsertBefore(xmlDeclaration, root);
-            doc = JsonConvert.DeserializeXmlNode(cadena);
-            int n = 0;
+            
+            try
+            {
+                doc.InsertBefore(xmlDeclaration, root);
+                doc.LoadXml(cadena);
+
+                string json = JsonConvert.SerializeXmlNode(doc);
+                //doc = JsonConvert.DeserializeXmlNode(cadena);
+            }
+            catch (Exception ex)
+            {
+                string h = ex.ToString();
+            }
+            //doc.Save("C://ruta//xml_ejemplo.xml");
+            return doc;
         }
 
     }

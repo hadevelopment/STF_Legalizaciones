@@ -170,6 +170,11 @@ function GetVerFlujo() {
 }
 
 $('#solicitud').on('change', function (e) {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
+    $('#flujoId').val(0);
+    $('#flujoDescripcion').val('');
     var tipoDocumentoId = $('#solicitud').val();
     var tipoDocumento = $("#solicitud :selected").text();
     $('#tipoDocumentoId').val(tipoDocumentoId);
@@ -178,6 +183,9 @@ $('#solicitud').on('change', function (e) {
 }); 
 
 $('#flujos').on('change', function (e) {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
     var flujoId = $('#flujos').val();
     var flujoDescripcion = $("#flujos :selected").text();
     $('#flujoId').val(flujoId);
@@ -251,6 +259,9 @@ $('#suplente22').on('change', function (e) {
 
 
 function SetNuevoFlujo() {
+    $("#tblAprobadores thead tr").remove();
+    $("#tblAprobadores tbody tr").remove();
+    $('#addPasoFlow').remove();
     $('#paso').val(1);
     var flag = $('#solicitud').val();
     console.log(flag);
@@ -258,9 +269,6 @@ function SetNuevoFlujo() {
         alert('Seleccione tipo de documento');
         return false;
     }
-    $("#tblFlujo thead tr").remove();
-    $("#tblFlujo tbody tr").remove();
-    $('#addPasoFlow').remove();
     Aprobadores('#Empleado');
     Aprobadores('#nuevoSuplente1');
     Aprobadores('#nuevoSuplente2');
@@ -432,8 +440,8 @@ function SetAgregarPasoFlujo() {
     min = min.trim();
     max = max.trim();
     des = des.trim();
-    document.getElementById('montoMinimo').value = min;
-    document.getElementById('montoMaximo').value = max;
+    document.getElementById('montoMinimo').value = parseFloat(min).toFixed(2);
+    document.getElementById('montoMaximo').value = parseFloat(max).toFixed(2);
     document.getElementById('descripcion').readOnly = false;
     var indiceDestino = 0;
     if (des == 'Nacional') { indiceDestino = 1; }
@@ -467,6 +475,8 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDoc
     $('#aprobador').val(nombre);
     $('#suplent1').val(nombreSuplenteUno);
     $('#suplent2').val(nombreSuplenteDos);
+    $('#aprobadorSuplente1').val(nombreSuplenteUno);
+    $('#aprobadorSuplente2').val(nombreSuplenteDos);
     $('#cedulaAprobador').val(cedula);
     $('#cedulaSuplente1').val(cedulaSuplenteUno);
     $('#cedulaSuplente2').val(cedulaSuplenteDos);
@@ -546,7 +556,7 @@ function Aprobadores(objeto) {
             $(objeto).append('<option selected disabled value="-1">Seleccione...</option>');
             $.each(data, function (index, value) {
                 arrayEmpleadoPermiso.push(value);
-                $(objeto).append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.nombre + '</option>');
+                $(objeto).append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.cargo + '</option>');
             });
         },
         complete: function () {
@@ -621,7 +631,7 @@ function Eliminar() {
             var paso = document.getElementById("tblAprobadores").rows.length;
             if (paso == 2) {
                 var indice = document.getElementById("solicitud").selectedIndex;
-                setTimeout(FlujosAprobacion(indice), 2000);
+                setTimeout(GetFlujosAprobacion(indice), 2000);
             }
         }
     });
@@ -639,10 +649,10 @@ function CreateTablaAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Nombre Aprobador </th>
+                        <th> Cargo del Aprobador </th>
                         <th> E-Mail Aprobador </th>
-                        <th> E-Mail Suplente 1 </th>
-                        <th> E-Mail Suplente 2 </th>
+                        <th> Cargo Suplente 1 </th>
+                        <th> Cargo Suplente 2 </th>
                         <th> Actualizar </th>
                         <th> Eliminar </th>
                                       </tr>`;
@@ -656,8 +666,8 @@ function CreateTablaAprobadores(infoAprobadores) {
                             <td> ${item.descripcion}</td>
                             <td> ${item.nombreAprobador}</td>
                             <td> ${item.emailAprobador}</td>
-                            <td> ${item.emailSuplenteUno}</td>
-                            <td> ${item.emailSuplenteDos}</td>
+                            <td> ${item.nombreSuplenteUno}</td>
+                            <td> ${item.nombreSuplenteDos}</td>
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}',
                                                                                           '${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}', '${item.flujoSolicitudId}',
                                                                                    '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.emailSuplenteUno}', '${item.emailSuplenteDos}',
@@ -686,7 +696,7 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Nombre Aprobador </th>
+                        <th> Cargo del Aprobador </th>
                         <th> E-Mail Aprobador</th>            
                                       </tr>`;
         $("#tblFlujo thead").append(title); //Se agrega a la nueva tabla
