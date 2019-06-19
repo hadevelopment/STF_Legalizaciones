@@ -413,7 +413,7 @@ namespace Legalizaciones.Web.Engine
             return JefeArea;
         }
 
-        public async Task<List<KactusIntegration.Empleado>> UseKactusAsync()
+        public async Task<List<KactusIntegration.Empleado>>EmpleadoKactusAsync()
         {
             string resultado = string.Empty;
             string userWcf = EngineStf.UserWcf;
@@ -422,7 +422,7 @@ namespace Legalizaciones.Web.Engine
             wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0);
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
 
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-1), userWcf, passwordWcf);
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
             resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
             KactusEmpleado = response.ToList();
             XmlDocument doc = XmlCreate(resultado);
