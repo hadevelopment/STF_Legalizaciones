@@ -65,7 +65,7 @@
                 <label asp-for="Concepto">Concepto del Anticipo*</label>
                 <div class="row">
                     <div class="col-md-12">
-                        @Html.TextAreaFor(model => model.Concepto, 4, 140, new { @placeholder = "Explique el concepto del Anticipo (Maximo 50 carácteres)", @style = "width:100%;", @required = "required" })
+                        @Html.TextAreaFor(model => model.Concepto, 4, 140, new { @placeholder = "Explique el concepto del Anticipo (Maximo 50 carácteres)", @style = "width:100%;", @required = "required", @maxlength = "50" })
                         <span asp-validation-for="Concepto" class="text-danger"></span>
                     </div>
                 </div>
@@ -275,7 +275,7 @@
                                     </div>
                                     <div class="col-md-4" style="float:right;">
                                         <label class="control-label">Monto</label>
-                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control maskMoney", id = "Monto", @type = "text", @pattern= @"^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?\.\d{1,2}$" } })
+                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control maskMoney", id = "Monto", @type = "text", @pattern = @"^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?\.\d{1,2}$" } })
                                         @*<label style="color:silver;font-size:12px">ej: 1,234.00 $</label>*@
                                         <div class="display-none" id="AvisoMontoServicio">
                                             <label>Limite establecido:</label>  <input type="text" class="form-control txtLabel maskMoney" id="MensajeAviso" readonly="readonly"></input>
@@ -334,29 +334,25 @@
                     });
                 }
             });
+
         });
 
         function cargarGastos() {
-            var table = $('.tableGastos').tableToJSON({
-                textExtractor: function (cellIndex, $cell) {
-                    // get text from an input or select inside table cells;
-                    // if empty or non-existent, get the cell text
-                    return $cell.find('input, select').val() || $cell.text();
-                },
-                ignoreColumns: [10]
-            });
+            if (ValidarForm()) {
+                var table = $('.tableGastos').tableToJSON({
+                    textExtractor: function (cellIndex, $cell) {
+                        // get text from an input or select inside table cells;
+                        // if empty or non-existent, get the cell text
+                        return $cell.find('input, select').val() || $cell.text();
+                    },
+                    ignoreColumns: [10]
+                });
 
-            if (table.length > 0) {
-                $("#mensajeRegistro").text("");
-                $('#mensajeValidacionRegistro').hide("slow");
-                $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                return true;
-            } else {
-                $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-                $('#mensajeValidacionRegistro').show("slow");
-                return false;
+                if (table.length > 0) {
+                    $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                    return true;
+                }
             }
-
         }
 
     </script>

@@ -60,8 +60,8 @@ namespace Legalizaciones.Web.Engine
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Clear();
                     command.Parameters.Add(new SqlParameter("@EmpleadoCedula", SqlDbType.VarChar));
-                    command.Parameters.Add(new SqlParameter("@fechaDesde", SqlDbType.DateTime));
-                    command.Parameters.Add(new SqlParameter("@fechaHasta", SqlDbType.DateTime));
+                    command.Parameters.Add(new SqlParameter("@fechaDesde", SqlDbType.VarChar));
+                    command.Parameters.Add(new SqlParameter("@fechaHasta", SqlDbType.VarChar));
                     command.Parameters[0].Value = cedula;
                     command.Parameters[1].Value = fechaDesde;
                     command.Parameters[2].Value = fechaHasta;

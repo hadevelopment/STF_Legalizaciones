@@ -18,7 +18,7 @@ body {
   height: 100%;
 }
 body {
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: sans-serif, Arial;
   font-weight: 400;
   overflow-x: hidden;
   overflow-y: auto;
@@ -174,7 +174,7 @@ h6,
 .h4,
 .h5,
 .h6 {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: sans-serif, Arial;
 }
 /* General Links */
 a {
@@ -315,7 +315,7 @@ a {
   line-height: 50px;
   text-align: center;
   width: 230px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: sans-serif, Arial;
   padding: 0 15px;
   font-weight: 300;
   overflow: hidden;
@@ -5013,7 +5013,7 @@ table.text-center th {
     /*vladimir*/
 
 table {
-    font-family: arial, sans-serif;
+    font-family: sans-serif, Arial;
     border-collapse: collapse;
     width: 100%;
 }

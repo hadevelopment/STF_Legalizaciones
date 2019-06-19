@@ -56,7 +56,7 @@
                 </form>
             </div>
             <div class="col-md-12">
-                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Añadir Legalizacion sin anticipo</a>
+                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Legalizar gastos sin anticipo</a>
                 @*@if (ViewBag.cargo != "3")
                 {
                     //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
@@ -96,7 +96,7 @@
 
                                 var wvenc = false;
 
-                                <tr>
+                                <tr style="background-color:@(item.FechaVencimiento < DateTime.Now ? "#f5dbbe" : "transparent")">
                                     <td>
                                         @Html.DisplayFor(modelItem => item.Id)
                                     </td>
@@ -180,7 +180,7 @@
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel">Exportar</a>
+                        <a class="btn btn-primary" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel"><i class="fa fa-file-excel-o"></i>Exportar</a>
 
                     </div>
                 </div>

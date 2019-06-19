@@ -390,7 +390,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("CentroCosto");
 
-                    b.Property<int>("CentroCostosId");
+                    b.Property<int>("CentroCostoId");
 
                     b.Property<string>("CentroOperacion");
 

@@ -3,10 +3,13 @@
 $(document).ready(function () {
     //remove button click event
     $('#Items').on('click', '.btnDelete', function () {
-        $(this).parents('tr').remove();
-
-        //Suma de Montos de Gastos
-        CalcularMonto();
+        if (confirm('¿Esta Seguro(a) de eliminar el gasto?')) {
+            $(this).parents('tr').remove();
+            //Suma de Montos de Gastos
+            CalcularMonto();
+        } else {
+            return false;
+        }
     });
 
     //Propiedades del dropdown Zona
@@ -67,7 +70,6 @@ $(document).ready(function () {
 
         consultarLimiteGasto();
 
-        //LoadProductsData($("#Servicio option:selected").val());
     });
 
     $("#CentroOperacion").change(function () {
@@ -332,6 +334,7 @@ $(document).ready(function () {
     $("#Destino").select2({
         multiple: false
     });
+
 });
 
 //get products details
@@ -722,7 +725,6 @@ window.onload = function () {
     if ($("#txProceso").val() !== "A") {
         CargarListasCrear();
         var date = new Date();
-        console.log(date);
         $(".datepicker").datepicker("update", new Date());
     } else {
         CargarListasEditar();
@@ -948,7 +950,44 @@ function CargarListasEditar() {
     });
 }
 
+function ValidarForm() {
+    var result = true;
+    var destino = $("#Destino option:selected").val();
+    var zona = $("#Zona option:selected").val();
+    var moneda = $("#Moneda option:selected").val();
+    var centroOperacion = $("#CentroOperacion option:selected").val();
+    var unidadNegocio = $("#UnidadNegocio option:selected").val();
+    var centroCosto = $("#CentroCosto option:selected").val();
+    var fechaDesde = $('#FechaDesde').val();
+    var fechaHasta = $('#FechaHasta').val();
+    var cantidadGastos = $('.tableGastos tr').length;
+
+    if (destino != "" || zona == "" || moneda == "" || centroOperacion == ""
+        || unidadNegocio == "" || centroCosto == "" || fechaDesde == "" || fechaHasta == "") {
+
+        $("#mensajeViaje").html("Faltan datos por específicar.");
+        $('#mensajeValidacionViaje').show("slow");
+        result = false;
+    } else {
+        $("#mensajeViaje").html("");
+        $('#mensajeValidacionViaje').hide("slow");
+    }
+
+    if (cantidadGastos == 1) {
+        $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+        $('#mensajeValidacionRegistro').show("slow");
+        result = false;
+    } else {
+        $("#mensajeRegistro").text("");
+        $('#mensajeValidacionRegistro').hide("slow");
+    }
+
+    return result;
+}
+
 function CalcularMonto() {
+    console.log('calculando montos');
+
     //Suma de Montos de Gastos
     var sum = 0;
     $('td.monto input').each(function () {
@@ -958,6 +997,17 @@ function CalcularMonto() {
     $('#txMontoT' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
     $("#txMontoT").focus();
     $('#hdfMontoSolicitud').val($("#txMontoT").val());
+
+    var cantidadGastos = $('.tableGastos tr').length;
+    if (cantidadGastos > 1) {
+        $('#Destino').attr('disabled', 'disabled');
+        $('#Zona').attr('disabled', 'disabled');
+        $('#Moneda').attr('disabled', 'disabled');
+    } else {
+        $('#Destino').removeAttr('disabled');
+        $('#Zona').removeAttr('disabled');
+        $('#Moneda').removeAttr('disabled');
+    }
 }
 
 function CalcularGastoComida() {

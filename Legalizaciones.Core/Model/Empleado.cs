@@ -44,6 +44,5 @@ namespace Legalizaciones.Model
 
         public string UnidadNegocios { get; set; }
 
-        public string Cargo { get; set; }
     }
 }
