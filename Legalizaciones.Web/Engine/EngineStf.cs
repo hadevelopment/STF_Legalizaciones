@@ -426,7 +426,7 @@ namespace Legalizaciones.Web.Engine
             resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
             KactusEmpleado = response.ToList();
             EngineDb Metodo = new EngineDb();
-            Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", empleado);
+            Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", KactusEmpleado);
             return KactusEmpleado;
         }
 
