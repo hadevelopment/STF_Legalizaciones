@@ -22,6 +22,9 @@ using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Web.Engine;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Quartz.Spi;
+using Quartz;
+using Quartz.Impl;
 
 namespace Legalizaciones
 {
@@ -88,6 +91,14 @@ namespace Legalizaciones
             EngineDb.DefaultConnection = Configuration["ConnectionStrings:Default"];
             EngineStf.UserWcf = Configuration["KeyConnect:UserWcf"];
             EngineStf.PasswordWcf = Configuration["KeyConnect:PasswordWcf"];
+
+            // Add Quartz services
+            services.AddSingleton<IJobFactory, SingletonJobFactory>();
+            services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
+            // Add our job
+            services.AddSingleton<ChronJob>();
+            services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob),cronExpression: "0 20 04 ? * *"));
+            services.AddHostedService<QuartzHostedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
