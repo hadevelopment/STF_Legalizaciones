@@ -208,7 +208,7 @@ namespace Legalizaciones.Web.Controllers
                 }
                 //*****************************************SET DATA MAIL*****************
                 Models.StructureMail model = new Models.StructureMail();
-                model. Destinatario.Add(solicitud.EmailAprobador);
+                model.Destinatario.Add(solicitud.EmailAprobador);
                 model.NombreDestinatario = "Aprobador";
                 model.NumeroDocumento = solicitud.NumeroSolicitud;
                 email.SendEmail(model);
