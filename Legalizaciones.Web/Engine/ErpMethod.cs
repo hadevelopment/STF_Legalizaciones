@@ -72,5 +72,6 @@ namespace Legalizaciones.Web.Engine
             CostCenters centroCosto = await GetCostCentersAsync<CostCenters>(id);
             return centroCosto;
         }
+
     }
 }

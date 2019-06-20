@@ -31,43 +31,63 @@
     </style>
 </head>
 <body>
-    <div>
-        <table class="table table-responsive table-striped">
-            <tbody>
-                <tr>
-                    <td colspan="2" class="cabezera"><div align="center">STUDIO F</div></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><div class="line"></div></td>
-                </tr>
-                <tr>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; Saludos estimado(a):  </td>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; @Model.NombreDestinatario</td>
-                </tr>
-                <tr>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; Hoy: @Model.Fecha</td>
-                    <td class="celda">&nbsp;&nbsp;&nbsp;</td>
-                </tr>
-                <tr>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; Se le notifica que la solicitud de anticipo, </td>
-                    <td class="celda">&nbsp;&nbsp;&nbsp; Nº: @Model.NumeroDocumento espera por aprobacion.</td>
-                </tr>
-                <tr>
-                    <td class="celda">&nbsp;&nbsp;&nbsp;</td>
-                    <td class="celda">&nbsp;&nbsp;&nbsp;</td>
-                </tr>
-                <tr>
-                    <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Direccion </td>
-                    <td class="celda">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="2"><div class="line"></div></td>
-                </tr>
-                <tr>
-                    <td colspan="2" class="cabezera"><div align="center"></div></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <div>
+            <table class="table table-responsive table-striped">
+                <tbody>
+                    <tr>
+                        <td colspan="2" class="cabezera"><div align="center">STUDIO F</div></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div class="line"></div></td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Saludos estimado(a):  </td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; @Model.NombreDestinatario</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Hoy: @Model.Fecha</td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Se le notifica que se ha creado un nuevo @Model.TipoDocumento, y este le ha sido asignado, a continuacion mostramos el detalle del documento </td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Nº: @Model.NumeroDocumento .</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Empleado: @Model.NombreEmpleado  Cedula: @Model.CedulaEmpleado</td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Cargo: @Model.CargoEmpleado</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp; Concepto: @Model.Concepto</td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Destino </td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Zona </td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Moneda </td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.Monto</td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp; @Model.DatosStf</td>
+                        <td class="celda">&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><div class="line"></div></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="cabezera"><div align="center"></div></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 </body>
 </html>

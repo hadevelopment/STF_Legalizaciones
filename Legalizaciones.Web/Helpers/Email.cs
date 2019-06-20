@@ -4,20 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Legalizaciones.Web.Models;
 
 namespace Legalizaciones.Web.Helpers
 {
-    public class Structure
-    {
-        public string NombreDestinatario { get; set; }
-        public string NumeroDocumento { get; set; }
-        public string Direccion { get; set; }
-        public string Fecha { get; set; }
-    }
-
     public interface IEmail
     {
-        Boolean SendEmail(string Destinatario, string Nombre, string SolicitudId, string Direccion);
+      Boolean SendEmail(StructureMail model);
     }
 
     public class Email : IEmail
@@ -26,30 +19,14 @@ namespace Legalizaciones.Web.Helpers
 
         public Email(IHostingEnvironment env)
         {
-            this.env = env;
+           this.env = env;
         }
 
-        public Boolean SendEmail(string Destinatario, string Nombre, string SolicitudId, string Direccion)
+        public Boolean SendEmail(StructureMail model)
         {
-            List<string> listaDestino = new List<string>();
-            //listaDestino.Add("d.sanchez@innova4j.com");
-            //listaDestino.Add("efrainmejiasc@gmail.com");
-            listaDestino.Add(Destinatario);
-            //listaDestino.Add("ha.development.org@gmail.com");
-            //listaDestino.Add("abetancourt@innova4j.com");
-
-            Structure model = new Structure
-            {
-                Fecha = DateTime.Now.ToString("dd/MM/yyyy"),
-                NombreDestinatario = Nombre,
-                NumeroDocumento = SolicitudId,
-                Direccion = Direccion
-            };
-            //****************************************************************************************************
-            string body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
-            EngineMailSend Enviar = new EngineMailSend("Prueba Notificacion STF", body, string.Empty, listaDestino, model);
+            model.Body = System.IO.Path.Combine(env.WebRootPath, "EmailTemplate", "TemplateEmail.cshtml");
+            EngineMailSend Enviar = new EngineMailSend(model);
             bool resultado = Enviar.EnviarMail();
-            //*****************************************************************************************************
             string msjGet = string.Empty;
             if (resultado)
             {

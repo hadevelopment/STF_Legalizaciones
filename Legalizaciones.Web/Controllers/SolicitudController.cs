@@ -206,9 +206,13 @@ namespace Legalizaciones.Web.Controllers
                         solicitudRepository.Update(solicitud);
                     }
                 }
-
-                email.SendEmail(solicitud.EmailAprobador, solicitud.Empleado.Nombre, solicitud.NumeroSolicitud, solicitud.Empleado.Direccion);
-
+                //*****************************************SET DATA MAIL*****************
+                Models.StructureMail model = new Models.StructureMail();
+                model. Destinatario.Add(solicitud.EmailAprobador);
+                model.NombreDestinatario = "Aprobador";
+                model.NumeroDocumento = solicitud.NumeroSolicitud;
+                email.SendEmail(model);
+                //***************************************************************************
                 TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
                 return RedirectToAction("Index", "Solicitud");
             }
