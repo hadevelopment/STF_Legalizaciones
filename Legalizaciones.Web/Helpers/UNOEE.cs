@@ -55,7 +55,8 @@ namespace Legalizaciones.Web.Helpers
         }
 
 
-        public CentroCosto getCentroCosto(int? IdCentroCosto) {
+        public CentroCosto getCentroCosto(int? IdCentroCosto)
+        {
             CentroCosto CentroCostos = new CentroCosto();
             CentroCostos.Id = 1;
             CentroCostos.Nombre = "Centro de Costo";

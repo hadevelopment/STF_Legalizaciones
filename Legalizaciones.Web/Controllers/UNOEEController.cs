@@ -39,7 +39,7 @@ namespace Legalizaciones.Web.Controllers
             return Json(lstProveedores);
         }
 
-        public JsonResult Servicios(int ? proveedorId)
+        public JsonResult Servicios(int? proveedorId)
         {
 
             Servicio[] lstServicios = new Servicio[3];
@@ -92,7 +92,12 @@ namespace Legalizaciones.Web.Controllers
             centroOperacion.Id = 1;
             centroOperacion.Nombre = "Centro Operaciones 01";
 
+            CentroOperacion centroOperacion2 = new CentroOperacion();
+            centroOperacion2.Id = 2;
+            centroOperacion2.Nombre = "Centro Operaciones 02";
+
             lstCentroOperaciones.Add(centroOperacion);
+            lstCentroOperaciones.Add(centroOperacion2);
 
             return Json(lstCentroOperaciones);
         }
@@ -101,10 +106,15 @@ namespace Legalizaciones.Web.Controllers
         {
             List<UnidadNegocio> lstUnidadNegocio = new List<UnidadNegocio>();
             UnidadNegocio unidadNegocio = new UnidadNegocio();
-            unidadNegocio.Id = 3;
+            unidadNegocio.Id = 1;
             unidadNegocio.Nombre = "Unidad Negocio 01";
 
+            UnidadNegocio unidadNegocio2 = new UnidadNegocio();
+            unidadNegocio2.Id = 2;
+            unidadNegocio2.Nombre = "Unidad Negocio 02";
+
             lstUnidadNegocio.Add(unidadNegocio);
+            lstUnidadNegocio.Add(unidadNegocio2);
 
             return Json(lstUnidadNegocio);
         }
@@ -113,10 +123,15 @@ namespace Legalizaciones.Web.Controllers
         {
             List<CentroCosto> lstCentroCosto = new List<CentroCosto>();
             CentroCosto centroCosto = new CentroCosto();
-            centroCosto.Id = 3;
-            centroCosto.Nombre = "Centro Costo. 01";
+            centroCosto.Id = 1;
+            centroCosto.Nombre = "Centro Costo 01";
+
+            CentroCosto centroCosto2 = new CentroCosto();
+            centroCosto2.Id = 2;
+            centroCosto2.Nombre = "Centro Costo 02";
 
             lstCentroCosto.Add(centroCosto);
+            lstCentroCosto.Add(centroCosto2);
 
             return Json(lstCentroCosto);
         }
@@ -137,8 +152,7 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.vargas@innova4j.com",
-                Cargo ="Jefe Directo"
+                Correo = "e.vargas@innova4j.com"
             });
 
             Empleados.Add(new Empleado
@@ -153,8 +167,7 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "a.betancourt@innova4j.com",
-                Cargo = "Director General"
+                Correo = "a.betancourt@innova4j.com"
             });
 
             Empleados.Add(new Empleado
@@ -169,8 +182,7 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com",
-                Cargo = "Gerente General"
+                Correo = "d.sanchez@innova4j.com"
             });
 
             Empleados.Add(new Empleado
@@ -185,15 +197,14 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "l.marina@innova4j.com",
-                Cargo = "Presidencia"
+                Correo = "l.marina@innova4j.com"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Efrain Mejias",
-                Cedula = "11.346.727",
+                Cedula = "10.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -201,15 +212,14 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com",
-                Cargo = "VicePresidencia"
+                Correo = "e.mejias@innova4j.com"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Javier Rodriguez",
-                Cedula = "11.845.256",
+                Cedula = "11.845.256.665",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -217,8 +227,7 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "j.rodriguez@innova4j.com",
-                Cargo = "Jefe Directo"
+                Correo = "j.rodriguez@innova4j.com"
             });
 
             if (filtroCedula)
@@ -261,7 +270,7 @@ namespace Legalizaciones.Web.Controllers
                 Estatus = 1
             };
 
-          
+
 
             foreach (var item in Cargos)
             {

@@ -75,16 +75,19 @@
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="DestinoID" id="lbl_destino">Destino</label>
+                        @Html.HiddenFor(model => model.DestinoID, new { @class = "form-control", id = "hdfDestino" })
                         @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
                         @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="ZonaID" id="lbl_zona">Zona Visitada</label>
+                        @Html.HiddenFor(model => model.ZonaID, new { @class = "form-control", id = "hdfZona" })
                         @Html.DropDownListFor(model => model.ZonaID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Zona" })
                         @Html.ValidationMessageFor(model => model.ZonaID, "", new { @class = "text-danger" })
                     </div>
                     <div class="col-md-3">
                         <label asp-for="Moneda">Moneda</label>
+                        @Html.HiddenFor(model => model.MonedaId, new { @class = "form-control", id = "hdfMoneda" })
                         @Html.DropDownListFor(model => model.MonedaId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Moneda" })
                         @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
                         {
@@ -195,7 +198,7 @@
                 <div class="row" style="margin-top: 10px;">
                     <div class="col-md-12 text-right">
                         <h3>Monto Total:</h3>
-                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
+                        <input type="text" name="txMontoT" id="txMontoT" value="@wMontoTotal" readonly="readonly" class="txtLabel maskMoney" style="font-size: 20px;" />
                     </div>
                     @Html.HiddenFor(model => model.Monto, new { @class = "form-control", id = "hdfMontoSolicitud" })
                 </div>
@@ -256,7 +259,7 @@
                                     </div>
                                     <div class="col-md-6" id="divGastosFecha">
                                         <label class="control-label">Fecha Gasto</label>
-                                        @Html.Editor("FechaGasto", new { htmlAttributes = new { @class = "form-control datepicker FechaGasto", id = "FechaGasto", qplaceholder = "Selecciona Fecha del Gasto..." } })
+                                        @Html.Editor("FechaGasto", new { htmlAttributes = new { @class = "form-control FechaGasto", id = "FechaGasto", @placeholder = "Selecciona Fecha del Gasto...", @autocomplete = "off" } })
                                     </div>
                                 </div>
                                 <br />
@@ -337,23 +340,7 @@
 
         });
 
-        function cargarGastos() {
-            if (ValidarForm()) {
-                var table = $('.tableGastos').tableToJSON({
-                    textExtractor: function (cellIndex, $cell) {
-                        // get text from an input or select inside table cells;
-                        // if empty or non-existent, get the cell text
-                        return $cell.find('input, select').val() || $cell.text();
-                    },
-                    ignoreColumns: [10]
-                });
-
-                if (table.length > 0) {
-                    $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                    return true;
-                }
-            }
-        }
+        
 
     </script>
 }

@@ -187,6 +187,7 @@ $(document).ready(function () {
     //EVENTO CHANGE DE DESTINOS   
     $("#Destino").change(function () {
         var valor = $("#Destino option:selected").val();
+        $('#hdfDestino').val(valor);
         $.ajax({
             type: "GET",
             url: "/Localidad/ZonasDestinos",
@@ -237,12 +238,24 @@ $(document).ready(function () {
                                 $('#Moneda').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                             }
                         });
+
+                        $("#Moneda").trigger('change');
                     }
                 });
 
             }
         });
 
+    });
+
+    $("#Zona").change(function () {
+        var valor = $("#Zona option:selected").val();
+        $('#hdfZona').val(valor);
+    });
+
+    $("#Moneda").change(function () {
+        var valor = $("#Moneda option:selected").val();
+        $('#hdfMoneda').val(valor);
     });
 
     //Obtener PAIS
@@ -426,7 +439,7 @@ function validarGastos() {
     } else {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
             rowIndex = rowIndex + 1;
-            var row2 = `<tr class="rowIndex${rowIndex}">
+            var row2 = `<tr class="rowIndex-${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
                     <td class="paisId display-none">${paisId}</td>
                     <td class="pais">${pais}</td>
@@ -476,7 +489,7 @@ function actualizarGastos() {
     var ciudad = $("#Ciudad option:selected").text();
     var origen = $("#ZonaOrigen").val();
     var destino = $("#ZonaDestino").val();
-    var monto = $("#Monto").maskMoney('unmasked')[0]
+    var monto = $("#Monto").maskMoney('unmasked')[0];
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" || pais !== "" && ciudad !== "" && servicio === "Comida" && fechaGasto !== "" && monto !== "") {
@@ -537,6 +550,7 @@ function actualizarGastos() {
 
 
 function ShowModalUpdate(value) {
+    var rowIndex = value.split('-')[1];
     var fechaGasto = $('.' + value + ' .fechaGasto').text();
     var paisId = $('.' + value + ' .paisId').text();
     var pais = $('.' + value + ' .pais').text();
@@ -546,7 +560,7 @@ function ShowModalUpdate(value) {
     var ciudad = $('.' + value + ' .ciudad').text();
     var origen = $('.' + value + ' .origen').text();
     var destino = $('.' + value + ' .destino').text();
-    var monto = $('.' + value + ' .monto').text();
+    var monto = $('#monto-' + rowIndex).val();
 
     ciudadActualizar = ciudadId;
 
@@ -559,7 +573,6 @@ function ShowModalUpdate(value) {
     $('#ZonaOrigen').val(origen);
     $('#ZonaDestino').val(destino);
     $('#Monto').val(monto);
-    $('#Monto').focus();
 
     $('#btnAdd').addClass('display-none');
     $('#btnUpd').removeClass('display-none');
@@ -583,6 +596,7 @@ function ShowModalUpdate(value) {
     }
 
     $('#gastosModal').modal('show');
+    //$('#Monto').focus();
 }
 
 function validarViaje(boton) {
@@ -593,6 +607,21 @@ function validarViaje(boton) {
     var destino = $("#Destino option:selected").val();
     var zona = $("#Zona option:selected").val();
     var moneda = $("#Moneda option:selected").val();
+
+    var dateMin = $('#FechaDesde').val();
+    var dateMax = $('#FechaHasta').val();
+
+    $('#FechaGasto').datepicker('remove');
+
+    $('#FechaGasto').datepicker({
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto',
+        startDate: dateMin,
+        endDate: dateMax,
+    });
 
     if (destino !== "" && zona !== "" && moneda !== "") {
 
@@ -962,7 +991,7 @@ function ValidarForm() {
     var fechaHasta = $('#FechaHasta').val();
     var cantidadGastos = $('.tableGastos tr').length;
 
-    if (destino != "" || zona == "" || moneda == "" || centroOperacion == ""
+    if (destino == "" || zona == "" || moneda == "" || centroOperacion == ""
         || unidadNegocio == "" || centroCosto == "" || fechaDesde == "" || fechaHasta == "") {
 
         $("#mensajeViaje").html("Faltan datos por específicar.");
@@ -1000,13 +1029,13 @@ function CalcularMonto() {
 
     var cantidadGastos = $('.tableGastos tr').length;
     if (cantidadGastos > 1) {
-        $('#Destino').attr('disabled', 'disabled');
-        $('#Zona').attr('disabled', 'disabled');
-        $('#Moneda').attr('disabled', 'disabled');
+        $('#Destino').attr('disabled', true);
+        $('#Zona').attr('disabled', true);
+        $('#Moneda').attr('disabled', true);
     } else {
-        $('#Destino').removeAttr('disabled');
-        $('#Zona').removeAttr('disabled');
-        $('#Moneda').removeAttr('disabled');
+        $('#Destino').attr('disabled', false);
+        $('#Zona').attr('disabled', false);
+        $('#Moneda').attr('disabled', false);
     }
 }
 
@@ -1042,63 +1071,27 @@ $("#Concepto").keydown(function () {
         $("#Concepto").val(wConcepto);
         toastr.warning("El concepto no puede ser superior a 50 caracteres.", "Información")
     }
-
 });
 
-function validarFormatoFecha(campo) {
-    var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
-    if ((campo.match(RegExPattern)) && (campo !== '')) {
+function cargarGastos() {
+    if (ValidarForm()) {
+        var table = $('.tableGastos').tableToJSON({
+            textExtractor: function (cellIndex, $cell) {
+                // get text from an input or select inside table cells;
+                // if empty or non-existent, get the cell text
+                return $cell.find('input, select').val() || $cell.text();
+            },
+            ignoreColumns: [10]
+        });
+
+        if (table.length > 0) {
+            $('#hdfGastosSolicitud').val(JSON.stringify(table));
+        }
+
         return true;
+
     } else {
         return false;
     }
-}
-
-function existeFecha(fecha) {
-    var fechaf = fecha.split("/");
-    var day = fechaf[0];
-    var month = fechaf[1];
-    var year = fechaf[2];
-    var date = new Date(year, month, '0');
-    if ((day - 0) > (date.getDate() - 0)) {
-        return false;
-    }
-    return true;
-}
-
-function existeFecha2(fecha) {
-    var fechaf = fecha.split("/");
-    var d = fechaf[0];
-    var m = fechaf[1];
-    var y = fechaf[2];
-    return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
-}
-
-function validarFechaMenorActual(date) {
-    var x = new Date();
-    var fecha = date.split("/");
-    x.setFullYear(fecha[2], fecha[1] - 1, fecha[0]);
-    var today = new Date();
-
-    if (x >= today)
-        return true;
-    else
-        return false;
-}
-
-function validarFechaMenorDesde(date,date2) {
-    var x = new Date();
-    var y = new Date();
-
-    var fecha = date.split("/");
-    var fechaH = date2.split("/");
-    x.setFullYear(fecha[2], fecha[1] - 1, fecha[0]);
-    y.setFullYear(fechaH[2], fechaH[1] - 1, fechaH[0]);
-    //var today = new Date();
-
-    if (x >= y)
-        return false;
-    else
-        return true;
 }
 

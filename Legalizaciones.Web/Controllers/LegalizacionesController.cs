@@ -507,8 +507,9 @@ namespace Legalizaciones.Web.Controllers
 
         private bool getPasoInicialFlujo(Legalizacion legalizacion, int? destino, float monto)
         {
+            var montoInt = Convert.ToInt64(monto);
             //Obtengo el Id del flujo
-            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
+            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && montoInt >= m.MontoMinimo && montoInt <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
             if (idFlujo != null && idFlujo > 0)
             {

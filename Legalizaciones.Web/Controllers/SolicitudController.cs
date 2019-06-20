@@ -15,6 +15,7 @@ using Legalizaciones.Web.Models.ViewModel;
 using Legalizaciones.Web.Engine;
 using Legalizaciones.Model.Workflow;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -29,6 +30,7 @@ namespace Legalizaciones.Web.Controllers
         public Solicitud sol;
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
+        public Util objUtil = new Util();
 
         public readonly IEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
@@ -181,7 +183,7 @@ namespace Legalizaciones.Web.Controllers
                 solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
 
                 //Se Registra la Solicitud
-                solicitudRepository.Insert(solicitud);
+                //solicitudRepository.Insert(solicitud);
 
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 solicitud.SolicitudGastos = listaGastos;
@@ -189,8 +191,8 @@ namespace Legalizaciones.Web.Controllers
                 //Se Registran los gastos de la Solicitud
                 foreach (SolicitudGastos item in listaGastos)
                 {
-                    item.SolicitudId = solicitud.Id;
-                    solicitudGastosRepository.Insert(item);
+                    //item.SolicitudId = solicitud.Id;
+                    //solicitudGastosRepository.Insert(item);
                 }
 
                 //Se guarda la carta de descuento en el directorio en caso de que exista
@@ -258,8 +260,12 @@ namespace Legalizaciones.Web.Controllers
             try
             {
                 if (!ModelState.IsValid || solicitud.Id == 0)
-                    return View(solicitud);
-
+                {
+                    var modelState = ModelState.Where(m => m.Value.ValidationState == ModelValidationState.Invalid).ToList();
+                    TempData["Alerta"] = "warning - Faltan datos por especificar.";
+                    return RedirectToAction("Editar", routeValues: new { id = solicitud.Id });
+                }
+                    
                 //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
                 if (!getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
                 {
@@ -279,20 +285,27 @@ namespace Legalizaciones.Web.Controllers
 
                 //Elimino la tabla de detalles
                 var LisGastosRegistrados = solicitudGastosRepository.All().Where(a => a.SolicitudId == solicitud.Id).ToList();
-                if(listaGastos != LisGastosRegistrados)
-                {
-                    foreach (var item in LisGastosRegistrados)
-                    {
-                        solicitudGastosRepository.Delete(item);
-                    }
+                //foreach (var item in LisGastosRegistrados)
+                //{
+                //    item.Id = 0;
+                //    item.Solicitud = null;
+                //    item.SolicitudId = null;
+                //}
 
-                    //Ahora voy a agregar el detalle de las solicitudes
-                    foreach (var item in listaGastos)
-                    {
-                        item.SolicitudId = solicitud.Id;
-                        solicitudGastosRepository.Insert(item);
-                    }
+                //if(objUtil.CompararObjetos(LisGastosRegistrados, listaGastos))
+                //{
+                foreach (var item in LisGastosRegistrados)
+                {
+                    solicitudGastosRepository.Delete(item);
                 }
+
+                //Ahora voy a agregar el detalle de las solicitudes
+                foreach (var item in listaGastos)
+                {
+                    item.SolicitudId = solicitud.Id;
+                    solicitudGastosRepository.Insert(item);
+                }
+                //}
 
                 //Se guarda la carta de descuento en el directorio en caso de que exista
                 if (solicitud.Archivo != null)
@@ -652,7 +665,7 @@ namespace Legalizaciones.Web.Controllers
 
             string path = Directory.GetCurrentDirectory() + "\\wwwroot\\" + ruta + cedula + "\\" + solicitudId + "\\";
 
-            var pathFile = Path.Combine(path, file.FileName);
+            var pathFile = Path.Combine(path, file.FileName.Trim());
 
             if (!Directory.Exists(path))
             {
@@ -749,7 +762,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 var obj = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => new { m.Id, m.EmailAprobador}).FirstOrDefault();
 
-                if (solicitud.FlujoSolicitud != null && solicitud.PasoFlujoSolicitudId != null)
+                if (solicitud.FlujoSolicitudId != null && solicitud.PasoFlujoSolicitudId != null)
                 {
                     //Si el flujo y el paso de la solicitud son distintos a los anteriores se debe ejecutar el trigger de la base da datos
                     if (solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != obj.Id)

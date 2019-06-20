@@ -20,10 +20,10 @@
     //$('#Moneda').hide();
     //$('#Currency').hide();
 
-/* $("#Moneda").select2({
-   multiple: false,
-   placeholder: 'Seleccione...'
-});*/
+    /* $("#Moneda").select2({
+       multiple: false,
+       placeholder: 'Seleccione...'
+    });*/
 });
 
 
@@ -154,7 +154,7 @@ function GetVerFlujo() {
     }
     $.ajax({
         url: "/WorkFlow/GetAprobadores/",
-        data: { idDocumento: tipoDocumentoId, idFlujo: flujoId, rango: flujoDescripcion},
+        data: { idDocumento: tipoDocumentoId, idFlujo: flujoId, rango: flujoDescripcion },
         dataType: 'json',
         type: 'GET',
         cache: false,
@@ -180,7 +180,7 @@ $('#solicitud').on('change', function (e) {
     $('#tipoDocumentoId').val(tipoDocumentoId);
     $('#tipoDocumento').val(tipoDocumento);
     GetFlujosAprobacion(tipoDocumentoId);
-}); 
+});
 
 $('#flujos').on('change', function (e) {
     $("#tblAprobadores thead tr").remove();
@@ -190,14 +190,14 @@ $('#flujos').on('change', function (e) {
     var flujoDescripcion = $("#flujos :selected").text();
     $('#flujoId').val(flujoId);
     $('#flujoDescripcion').val(flujoDescripcion);
-}); 
+});
 
 $('#Destino').on('change', function (e) {
     var destinoId = $('#Destino').val();
     var destino = $("#Destino :selected").text();
     $('#destinoId').val(destinoId);
     $('#destino').val(destino);
-}); 
+});
 
 $('#Empleado').on('change', function (e) {
     var email = $("#Empleado option:selected").data('email');
@@ -207,7 +207,7 @@ $('#Empleado').on('change', function (e) {
     $('#aprobador').val(nombre);
     var cedula = $("#Empleado option:selected").val();
     $('#cedulaAprobador').val(cedula);
-}); 
+});
 
 $('#Empleado2').on('change', function (e) {
     var email = $("#Empleado2 option:selected").data('email');
@@ -217,7 +217,7 @@ $('#Empleado2').on('change', function (e) {
     $('#nombre').val(nombre);
     var cedula = $("#Empleado2 option:selected").val();
     $('#cedulaAprobador').val(cedula);
-}); 
+});
 
 $('#nuevoSuplente1').on('change', function (e) {
     var email = $("#nuevoSuplente1 option:selected").data('email');
@@ -226,7 +226,7 @@ $('#nuevoSuplente1').on('change', function (e) {
     $('#aprobadorSuplente1').val(nombre);
     var cedula = $("#nuevoSuplente1 option:selected").val();
     $('#cedulaSuplente1').val(cedula);
-}); 
+});
 
 $('#nuevoSuplente2').on('change', function (e) {
     var email = $("#nuevoSuplente2 option:selected").data('email');
@@ -235,7 +235,7 @@ $('#nuevoSuplente2').on('change', function (e) {
     $('#aprobadorSuplente2').val(nombre);
     var cedula = $("#nuevoSuplente2 option:selected").val();
     $('#cedulaSuplente2').val(cedula);
-}); 
+});
 
 $('#suplente11').on('change', function (e) {
     var email = $("#suplente11 option:selected").data('email');
@@ -255,7 +255,7 @@ $('#suplente22').on('change', function (e) {
     var cedula = $("#suplente22 option:selected").val();
     $('#cedulaSuplente2').val(cedula);
     $('#suplent2').val(nombre);
-}); 
+});
 
 
 function SetNuevoFlujo() {
@@ -292,7 +292,7 @@ function SetNuevoFlujo() {
     document.getElementById('montoMaximo').placeholder = '0,00';
     var tipoDocumento = $('#tipoDocumento').val();
     document.getElementById("msjNuevoFlujo").innerHTML = 'Nuevo flujo de aprobacion para ' + tipoDocumento;
-    $("#nuevoFlujoModal").modal('show'); 
+    $("#nuevoFlujoModal").modal('show');
 }
 
 function EnviarDataAprobador() {
@@ -434,7 +434,7 @@ function SetAgregarPasoFlujo() {
     Aprobadores('#nuevoSuplente1');
     Aprobadores('#nuevoSuplente2');
     Destinos();
-    $("#Empleado").prop("disabled", false);  
+    $("#Empleado").prop("disabled", false);
     var txtFlujo = $('#flujoDescripcion').val();
     var [min, max, des] = txtFlujo.split("-");
     min = min.trim();
@@ -450,7 +450,7 @@ function SetAgregarPasoFlujo() {
     $("#Destino").val(indiceDestino);
     $("#Destino option[value=" + des + "]").attr("selected", true);
     $("#Destino").prop("disabled", true);
-    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + $('#tipoDocumento').val()+ ' - ' + des;
+    document.getElementById("msjNuevoFlujo").innerHTML = 'Agregar paso para el flujo de aprobacion ' + $('#tipoDocumento').val() + ' - ' + des;
     var paso = document.getElementById("tblAprobadores").rows.length;
     $('#paso').val(paso);
     $('#destino').val(des);
@@ -460,7 +460,7 @@ function SetAgregarPasoFlujo() {
 
 
 function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDocumento, idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId,
-                                               nombreSuplenteUno, nombreSuplenteDos, cedulaSuplenteUno, cedulaSuplenteDos, emailSuplenteUno, emailSuplenteDos,proceso) {
+    nombreSuplenteUno, nombreSuplenteDos, cedulaSuplenteUno, cedulaSuplenteDos, emailSuplenteUno, emailSuplenteDos, proceso) {
     Aprobadores('#Empleado2');
     Aprobadores('#suplente11');
     Aprobadores('#suplente22');
@@ -541,7 +541,7 @@ function Aprobadores(objeto) {
         multiple: false,
         placeholder: 'Seleccione...'
     });
-
+    debugger;
     var arrayEmpleadoPermiso = [];
     $.ajax({
         type: "GET",
