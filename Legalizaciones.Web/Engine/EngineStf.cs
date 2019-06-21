@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
@@ -432,23 +433,25 @@ namespace Legalizaciones.Web.Engine
 
         private XmlDocument XmlCreate(string cadena)
         {
+            cadena = cadena.Replace("{", "");
+            cadena = cadena.Replace("}", "");
+            cadena = cadena.Replace("[", "");
+            cadena = cadena.Replace("]", "");
+            cadena = cadena.Replace("/", "");
+            cadena = cadena.Replace("\\", "");
+            cadena = cadena.Replace("\"", "");
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             XmlElement root = doc.DocumentElement;
-            
             try
             {
                 doc.InsertBefore(xmlDeclaration, root);
                 doc.LoadXml(cadena);
-
-                string json = JsonConvert.SerializeXmlNode(doc);
-                //doc = JsonConvert.DeserializeXmlNode(cadena);
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
-                string h = ex.ToString();
+                string e = ex.ToString();
             }
-            //doc.Save("C://ruta//xml_ejemplo.xml");
+
             return doc;
         }
 
