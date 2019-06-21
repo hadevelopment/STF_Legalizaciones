@@ -407,8 +407,8 @@ namespace Legalizaciones.Web.Engine
         public string []  SimuladorKactusJefeInmediato()
         {
             string [] JefeArea = new string[6];
-            JefeArea[0] = "Daniel Sanchez";
-            JefeArea[1] = "8.845.256.667";
+            JefeArea[0] = "Direccion";
+            JefeArea[1] = "Nivel3";
             JefeArea[2] = "En Espera de Aprobación JD";
             JefeArea[3] = "d.sanchez@innova4j.com";
             return JefeArea;
