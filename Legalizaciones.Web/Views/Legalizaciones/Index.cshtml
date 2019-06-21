@@ -143,27 +143,26 @@
                                         @Html.DisplayFor(modelItem => item.FechaVencimiento)
                                     </td>
                                     <td>
-                                        @if (item.EstadoId == 1)//Sin Legalizar
+                                        @if (item.Estado == "Creada")//Sin Legalizar
                                         {
                                             <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
                                         }
-                                        else if (item.EstadoId == 2 || item.EstadoId == 3)//Legalizadaa
+                                        else if (item.Estado == "En Proceso" || item.Estado == "Legalizada")//Legalizadaa
                                         {
                                             <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
                                                 <span class="fa fa-eye"></span>
-                                            </a>
-                                            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
-                                                <span class="fa fa-pencil"></span>
                                             </a>
                                         }
                                         else
                                         {
                                             <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
+                                            @*<a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                <span class="fa fa-pencil"></span>
+                                            </a>*@
                                             @*<a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>*@
                                         }
                                     </td>
                                 </tr>}
-
                         }
                         else
                         {
