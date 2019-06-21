@@ -284,8 +284,8 @@ namespace Legalizaciones.Web.Engine
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
                     data.Id = lector.GetInt32(5);
-                    data.MontoMinimo = lector.GetFloat(6);
-                    data.MontoMaximo = lector.GetFloat(7);
+                    data.MontoMinimo = lector.GetInt64(6);
+                    data.MontoMaximo = lector.GetInt64(7);
                     data.Destino = lector.GetString(8);
                     data.DestinoId = lector.GetInt32(9);
                     data.TipoSolicitud = lector.GetString(10);
@@ -352,8 +352,8 @@ namespace Legalizaciones.Web.Engine
                     data.Orden = lector.GetInt32(3);
                     data.Descripcion = lector.GetString(4);
                     data.Id = lector.GetInt32(5);
-                    data.MontoMinimo = lector.GetFloat(6);
-                    data.MontoMaximo = lector.GetFloat(7);
+                    data.MontoMinimo = lector.GetInt64(6);
+                    data.MontoMaximo = lector.GetInt64(7);
                     data.Destino = lector.GetString(8);
                     data.DestinoId = lector.GetInt32(9);
                     data.TipoSolicitud = lector.GetString(10);
