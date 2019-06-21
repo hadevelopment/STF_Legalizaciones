@@ -541,7 +541,6 @@ function Aprobadores(objeto) {
         multiple: false,
         placeholder: 'Seleccione...'
     });
-    debugger;
     var arrayEmpleadoPermiso = [];
     $.ajax({
         type: "GET",
@@ -649,10 +648,9 @@ function CreateTablaAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Cargo del Aprobador </th>
-                        <th> E-Mail Aprobador </th>
-                        <th> Cargo Suplente 1 </th>
-                        <th> Cargo Suplente 2 </th>
+                        <th> Aprobador </th>
+                        <th> Suplente 1 </th>
+                        <th> Suplente 2 </th>
                         <th> Actualizar </th>
                         <th> Eliminar </th>
                                       </tr>`;
@@ -665,7 +663,6 @@ function CreateTablaAprobadores(infoAprobadores) {
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
                             <td> ${item.nombreAprobador}</td>
-                            <td> ${item.emailAprobador}</td>
                             <td> ${item.nombreSuplenteUno}</td>
                             <td> ${item.nombreSuplenteDos}</td>
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}',
@@ -696,8 +693,7 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
         let title = `<tr>
                         <th> Orden de Aprobacion </th>
                         <th> Descripcion </th>
-                        <th> Cargo del Aprobador </th>
-                        <th> E-Mail Aprobador</th>            
+                        <th> Aprobador</th>            
                                       </tr>`;
         $("#tblFlujo thead").append(title); //Se agrega a la nueva tabla
 
@@ -708,7 +704,6 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
                             <td> ${item.nombreAprobador}</td>
-                            <td> ${item.emailAprobador}</td>
                                     </tr>`;
             $("#tblFlujo tbody").append(tr);
         });

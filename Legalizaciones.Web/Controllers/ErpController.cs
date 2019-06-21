@@ -18,8 +18,8 @@ namespace Legalizaciones.Web.Controllers
             
 
             //ErpMethod Servicio = new ErpMethod();
-            //EngineStf Funcion = new EngineStf();
-            //var resultado = Funcion.UseKactusAsync();
+            EngineStf Funcion = new EngineStf();
+            var resultado = Funcion.EmpleadoKactusAsync();
             //var UnidadNegocio = Servicio.UnidadNegocioSingleAsync("01");
             // var UnidadesNegocios = Servicio.UnidadNegocioCollectionAsync();
             // var centroOperacion = Servicio.CentroOperacionesSingleAsync("27");

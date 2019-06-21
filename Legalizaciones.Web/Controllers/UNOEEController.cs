@@ -128,7 +128,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 Area = "Empleado",
                 Nombre = "Eliezer Vargas",
-                Cedula = "6.845.256.665",
+                Cedula = "Nivel3",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -136,14 +136,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.vargas@innova4j.com"
-            });
+                Correo = "e.vargas@innova4j.com",
+                Cargo = "Direccion"
+            }) ;
 
             Empleados.Add(new Empleado
             {
                 Area = "Administracion Tesoreria",
                 Nombre = "Angelica Betancourt",
-                Cedula = "7.845.256.666",
+                Cedula = "Nivel4",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-2",
@@ -151,14 +152,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "a.betancourt@innova4j.com"
+                Correo = "a.betancourt@innova4j.com",
+                Cargo = "Gerencia"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Administracion Contraloria",
                 Nombre = "Daniel Sanchez",
-                Cedula = "8.845.256.667",
+                Cedula = "Nivel5",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100-3",
@@ -166,14 +168,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com"
+                Correo = "d.sanchez@innova4j.com",
+                Cargo = "Jefatura"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Administracion Contabilidad",
                 Nombre = "Luz Marina",
-                Cedula = "9.845.256.668",
+                Cedula = "N/A",
                 Direccion = "Calle 29 No. 13A - 15. Piso 10",
                 Ciudad = "Cucuta",
                 Telefono = "(1) 560 00100-3",
@@ -181,14 +184,15 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "l.marina@innova4j.com"
+                Correo = "l.marina@innova4j.com",
+                Cargo = "Presidencia"
             });
 
             Empleados.Add(new Empleado
             {
                 Area = "Empleado",
                 Nombre = "Efrain Mejias",
-                Cedula = "10.845.256.665",
+                Cedula = "N/A",
                 Direccion = "Calle 28 No. 13A - 15. Piso 10",
                 Ciudad = "Bogota",
                 Telefono = "(1) 560 00100",
@@ -196,22 +200,8 @@ namespace Legalizaciones.Web.Controllers
                 CentroOperaciones = "1",
                 CentroCostos = "1",
                 UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Javier Rodriguez",
-                Cedula = "11.845.256.665",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "j.rodriguez@innova4j.com"
+                Correo = "e.mejias@innova4j.com",
+                Cargo = "VicePresidencia"
             });
 
             if (filtroCedula)
