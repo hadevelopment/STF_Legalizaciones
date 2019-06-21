@@ -10,6 +10,8 @@ using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Legalizaciones.Erp.Models;
+
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -17,6 +19,7 @@ namespace Legalizaciones.Web.Controllers
     {
         private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
+        private Engine.ErpMethod FuncionErp = new Engine.ErpMethod();
 
         public UNOEEController(IEmpleadoPermisoRepository _empleadoPermisoRepository, ISolicitudGastosRepository solicitudGastosRepository)
         {
@@ -28,112 +31,93 @@ namespace Legalizaciones.Web.Controllers
             return View();
         }
 
-        public JsonResult Proveedores()
+        [HttpGet]
+        public async Task<JsonResult> GetProveedores()
         {
-            List<Proveedor> lstProveedores = new List<Proveedor>();
-            Proveedor proveedor = new Proveedor();
-            proveedor.Id = 1;
-            proveedor.Nombre = "Proveedor Prueba";
-            lstProveedores.Add(proveedor);
-
-            return Json(lstProveedores);
+            ListSuppliers Proveedores = new ListSuppliers();
+            Proveedores = await FuncionErp.ProveedoresCollectionAsync();
+            return Json(Proveedores);
         }
 
-        public JsonResult Servicios(int? proveedorId)
+
+        [HttpGet]
+        public async Task<JsonResult> GetProveedor(string id)
         {
-
-            Servicio[] lstServicios = new Servicio[3];
-
-            lstServicios[0] = new Servicio
-            {
-                Id = 1,
-                Nombre = "Comida"
-            };
-            lstServicios[1] = new Servicio
-            {
-                Id = 2,
-                Nombre = "Transporte"
-            };
-            lstServicios[2] = new Servicio
-            {
-                Id = 3,
-                Nombre = "Hospedaje"
-            };
-
-
-            //List<Servicio> lstServicios = new List<Servicio>();
-            //Servicio servicio = new Servicio();
-            //servicio.Id = 1;
-            //servicio.Nombre = "Comida";
-
-            //Servicio servicio2 = new Servicio();
-            //servicio2.Id = 2;
-            //servicio2.Nombre = "Transporte";
-
-            //lstServicios.Add(servicio);
-            //lstServicios.Add(servicio2);
-
-            return Json(lstServicios);
+            Suppliers Proveedores = new Suppliers();
+            Proveedores = await FuncionErp.ProveedoresSingleAsync(id);
+            return Json(Proveedores);
         }
 
-        public JsonResult MontoServicio(int servicioId)
+        [HttpGet]
+        public async Task<JsonResult> GetServicios()
         {
-            ServicioDetalle servicioDetalle = new ServicioDetalle();
-            servicioDetalle.Id = 1;
-            servicioDetalle.Monto = 30000;
-
-            return Json(servicioDetalle);
+            ListServiceTypes Servicio = new ListServiceTypes();
+            Servicio = await FuncionErp.TiposServiciosCollectionAsync();
+            return Json(Servicio);
         }
 
-        public JsonResult CentroOperaciones()
+        [HttpGet]
+        public async Task<JsonResult> GetServicio(string id)
         {
-            List<CentroOperacion> lstCentroOperaciones = new List<CentroOperacion>();
-            CentroOperacion centroOperacion = new CentroOperacion();
-            centroOperacion.Id = 1;
-            centroOperacion.Nombre = "Centro Operaciones 01";
-
-            CentroOperacion centroOperacion2 = new CentroOperacion();
-            centroOperacion2.Id = 2;
-            centroOperacion2.Nombre = "Centro Operaciones 02";
-
-            lstCentroOperaciones.Add(centroOperacion);
-            lstCentroOperaciones.Add(centroOperacion2);
-
-            return Json(lstCentroOperaciones);
+            ServiceTypes Servicio = new ServiceTypes();
+            Servicio = await FuncionErp.TipoServiciosSingleAsync(id);
+            return Json(Servicio);
         }
 
-        public JsonResult UnidadNegocios()
+        [HttpGet]
+        public async Task<JsonResult> GetCentroOperaciones()
         {
-            List<UnidadNegocio> lstUnidadNegocio = new List<UnidadNegocio>();
-            UnidadNegocio unidadNegocio = new UnidadNegocio();
-            unidadNegocio.Id = 1;
-            unidadNegocio.Nombre = "Unidad Negocio 01";
-
-            UnidadNegocio unidadNegocio2 = new UnidadNegocio();
-            unidadNegocio2.Id = 2;
-            unidadNegocio2.Nombre = "Unidad Negocio 02";
-
-            lstUnidadNegocio.Add(unidadNegocio);
-            lstUnidadNegocio.Add(unidadNegocio2);
-
-            return Json(lstUnidadNegocio);
+            ListOperationCenter CentroOperaciones = new ListOperationCenter();
+            CentroOperaciones = await FuncionErp.CentroOperacionesCollectionAsync();
+            return Json(CentroOperaciones);
         }
 
-        public JsonResult CentroCostos()
+        [HttpGet]
+        public async Task<JsonResult> GetCentroOperacion(string id)
         {
-            List<CentroCosto> lstCentroCosto = new List<CentroCosto>();
-            CentroCosto centroCosto = new CentroCosto();
-            centroCosto.Id = 1;
-            centroCosto.Nombre = "Centro Costo 01";
+            OperationCenter CentroOperacion = new OperationCenter();
+            CentroOperacion = await FuncionErp.CentroOperacionesSingleAsync(id);
+            return Json(CentroOperacion);
+        }
 
-            CentroCosto centroCosto2 = new CentroCosto();
-            centroCosto2.Id = 2;
-            centroCosto2.Nombre = "Centro Costo 02";
+        [HttpGet]
+        public async Task<JsonResult> GetUnidadNegocios()
+        {
+            ListBussinesUnit UnidadNegocio = new ListBussinesUnit();
+            UnidadNegocio = await FuncionErp.UnidadNegocioCollectionAsync();
+            return Json(UnidadNegocio);
+        }
 
-            lstCentroCosto.Add(centroCosto);
-            lstCentroCosto.Add(centroCosto2);
+        [HttpGet]
+        public async Task<JsonResult> GetUnidadNegocio(string id)
+        {
+            BusinessUnit UnidadNegocio = new BusinessUnit();
+            UnidadNegocio = await FuncionErp.UnidadNegocioSingleAsync(id);
+            return Json(UnidadNegocio);
+        }
 
-            return Json(lstCentroCosto);
+        [HttpGet]
+        public async Task<JsonResult>  GetCentroCostos()
+        {
+            ListCostCenters CentroCosto = new ListCostCenters();
+            CentroCosto = await FuncionErp.CentroCostosCollectionAsync();
+            return Json(CentroCosto);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCentroCosto(string id)
+        {
+            ListCostCenters CentroCosto = new ListCostCenters();
+            CentroCosto = await FuncionErp.CentroCostosCollectionAsync();
+            return Json(CentroCosto);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetTipoImpuesto(string id)
+        {
+            TaxTypes TipoImpuesto = new TaxTypes();
+            TipoImpuesto = await FuncionErp.TipoImpuestosSingleAsync(id);
+            return Json(TipoImpuesto);
         }
 
         public JsonResult Empleados(Boolean filtroCedula)
