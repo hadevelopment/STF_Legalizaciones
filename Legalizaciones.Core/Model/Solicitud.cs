@@ -98,8 +98,11 @@ namespace Legalizaciones.Model
         [Required(ErrorMessage = "Debe indicar cedula del empleado.")]
         public string EmpleadoCedula { get; set; }
 
+        [Required(ErrorMessage = "Debe indicar el nombre del empleado.")]
+        public string EmpleadoNombre { get; set; }
+
         [NotMapped]
-        public Empleado Empleado { get; set; }
+        public KactusEmpleado Empleado { get; set; }
 
         [DisplayName("Monto")]
         [Range(0.001, float.MaxValue)]

@@ -7,6 +7,11 @@ namespace Legalizaciones.Web.Models
 {
     public class StructureMail
     {
+        public StructureMail()
+        {
+            Destinatario = new List<string>();
+        }
+
         public string Subject { get; set; }
         public string Body { get; set; }
         public string PathAdjunto { get; set; }

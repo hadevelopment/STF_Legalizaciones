@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Legalizaciones.Interface;
 using Legalizaciones.Model.Workflow;
 using Legalizaciones.Web.Engine;
 using Legalizaciones.Web.Helpers;
@@ -12,10 +13,18 @@ namespace Legalizaciones.Web.Controllers
 {
     public class AprobacionController : Controller
     {
+        public UNOEE erp = new UNOEE();
+        private readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
+
         enum TipoAccion
         {
             Aprobar = 1,
             Rechazar = 2
+        }
+
+        public AprobacionController(IKactusEmpleadoRepository kactusEmpleadoRepository)
+        {
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
         }
 
         /// <summary>
@@ -24,7 +33,7 @@ namespace Legalizaciones.Web.Controllers
         /// <returns></returns>
         public IActionResult Index()
         {
-            UNOEE erp = new UNOEE();
+            
             Aprobacion aprobacion = new Aprobacion();
             EngineDb DB = new EngineDb();
 
@@ -34,7 +43,7 @@ namespace Legalizaciones.Web.Controllers
                 aprobacion = DB.ObtenerSolicitudesPorAprobar(usuarioCedula);
                 foreach(var item in aprobacion.Anticipos)
                 {
-                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+                    item.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(item.EmpleadoCedula);
                 }
             }
 

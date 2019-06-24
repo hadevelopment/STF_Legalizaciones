@@ -13,14 +13,14 @@ namespace Legalizaciones.Web.Helpers
 {
     public class Listas : Controller
     {
-        public readonly IEmpleadoRepository empleadoRepository;
+        public readonly IKactusEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
         private readonly IBancoRepository bancoRepository;
 
         public Listas(
-            IEmpleadoRepository empleadoRepository,
+            IKactusEmpleadoRepository empleadoRepository,
             IMonedaRepository monedaRepository,
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,

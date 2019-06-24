@@ -29,12 +29,12 @@ namespace Legalizaciones.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult PreferenciasLegalizacion(Empleado empleado)
+        public IActionResult PreferenciasLegalizacion(KactusEmpleado empleado)
         {
             EmpleadoPermiso empleadoPermiso = new EmpleadoPermiso();
             empleadoPermiso.EmpleadoCedula = HttpContext.Session.GetString("Usuario_Cedula");
-            empleadoPermiso.EmpleadoPermisoCedula = empleado.Cedula;
-            empleadoPermiso.EmpleadoPermisoNombre = String.Concat(empleado.Nombre, empleado.Apellido);
+            empleadoPermiso.EmpleadoPermisoCedula = empleado.NumeroDeIdentificacion;
+            empleadoPermiso.EmpleadoPermisoNombre = String.Concat(empleado.PrimerNombre, empleado.PrimerApellido);
             empleadoPermiso.TipoPermisoId = 3;
 
             empleadoPermisoRepository.Insert(empleadoPermiso);

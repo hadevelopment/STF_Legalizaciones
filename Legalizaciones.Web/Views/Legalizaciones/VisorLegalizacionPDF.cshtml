@@ -79,14 +79,14 @@
 
                 <tr class="RowsTable">
                     <td class="sinBorder RowsTable">
-                        <label>@Model.Empleado.Nombre @Model.Empleado.Apellido</label>
+                        <label>@Model.Empleado.PrimerNombre &nbsp; @Model.Empleado.PrimerApellido</label>
                     </td>
                     <td class="sinBorder RowsTable">
                         <label>@Model.Solicitud.EmpleadoCedula</label>
                     </td>
 
                     <td class="sinBorder RowsTable">
-                        <label>@Model.Empleado.Area</label>
+                        <label>@Model.Empleado.CodigoArea</label>
                     </td>
 
                     <td class="sinBorder RowsTable">
@@ -145,12 +145,12 @@
                                             <tr>
                                                 <td class="col-md-1 ">@item.Id</td>
                                                 <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
-                                                <td class="col-md-2 ">@item.CentroOperacion.Nombre</td>
-                                                <td class="col-md-2 ">@item.UnidadNegocio.Nombre</td>
-                                                <td class="col-md-2 ">@item.CentroCosto.Nombre</td>
+                                                <td class="col-md-2 ">@item.CentroOperacion</td>
+                                                <td class="col-md-2 ">@item.UnidadNegocio</td>
+                                                <td class="col-md-2 ">@item.CentroCosto</td>
                                                 <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
-                                                <td class="col-md-1 ">@item.Pais.Nombre</td>
-                                                <td class="col-md-1 ">@item.Ciudad.Nombre</td>
+                                                <td class="col-md-1 ">@item.Pais</td>
+                                                <td class="col-md-1 ">@item.Ciudad</td>
                                                 <td class="col-md-1 ">
 
                                                     @if (@item.TipoServicioId == 1)

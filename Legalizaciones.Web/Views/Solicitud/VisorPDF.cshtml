@@ -31,23 +31,33 @@
             </div>
 
             <div class="box-body">
-                <table width="100%">
-                    <tr class="HeaderTable">
-                        <td>Área</td>
-                        <td>Nombre y Apellido</td>
-                        <td>Cédula de Ciudadanía</td>
-                        <td>Dirección</td>
-                        <td>Ciudad</td>
-                        <td>Teléfono</td>
-                    </tr>
-                    <tr class="RowsTable">
-                        <td>@Model.Empleado.Area</td>
-                        <td>@Model.Empleado.Nombre</td>
-                        <td>@Model.Empleado.Cedula</td>
-                        <td>@Model.Empleado.Direccion</td>
-                        <td>@Model.Empleado.Ciudad</td>
-                        <td>@Model.Empleado.Telefono</td>
-                    </tr>
+                <table class="tableEmpleado">
+                    <thead>
+                        <tr>
+                            <th>Código Área</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cédula</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
+                                @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
+                            </td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
+                                @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
+                            </td>
+                            <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -78,15 +88,15 @@
                         <td class="neg sinBorder" width="10%">Zona Visitada:</td>
                         <td class="sinBorder lf" width="10%"> @Model.Zona.Nombre</td>
                         <td class="neg sinBorder" width="14%">Centro de Operacion:</td>
-                        <td class="sinBorder lf">@Model.CentroOperacion.Nombre</td>
+                        <td class="sinBorder lf">@Model.CentroOperacion</td>
                         <td class="neg sinBorder" width="13%">Unidad de negocio:</td>
-                        <td class="sinBorder lf">@Model.UnidadNegocio.Nombre</td>
+                        <td class="sinBorder lf">@Model.UnidadNegocio</td>
                     </tr>
 
 
                     <tr>
                         <td class="neg sinBorder" width="12%">Centro de costo:</td>
-                        <td class="sinBorder" width="09%">@Model.CentroCosto.Nombre</td>
+                        <td class="sinBorder" width="09%">@Model.CentroCosto</td>
                         <td class="neg sinBorder" width="10%">Fecha desde:</td>
                         <td class="sinBorder" width="10%">@Model.FechaDesde.ToShortDateString()</td>
                         <td class="neg sinBorder" width="10%">Fecha hasta:</td>

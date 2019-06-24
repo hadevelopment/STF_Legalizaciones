@@ -70,7 +70,7 @@ namespace Legalizaciones
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IOrigenDestinoRepository, OrigenDestinoRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
-            services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();
+            services.AddTransient<IKactusEmpleadoRepository, KactusEmpleadoRepository>();
             services.AddTransient<ITasaRepository, TasaRepository>();
             services.AddTransient<IFlujoSolicitudRepository, FlujoSolicitudRepository>();
             services.AddTransient<IPasoFlujoSolicitudRepository, PasoFlujoSolicitudRepository>();

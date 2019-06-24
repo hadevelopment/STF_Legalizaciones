@@ -93,55 +93,6 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("ConfiguracionGasto");
                 });
 
-            modelBuilder.Entity("Legalizaciones.Model.Empleado", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Apellido");
-
-                    b.Property<string>("Area");
-
-                    b.Property<string>("Cargo");
-
-                    b.Property<int?>("CargoId");
-
-                    b.Property<string>("Cedula")
-                        .IsRequired();
-
-                    b.Property<string>("CentroCostos");
-
-                    b.Property<string>("CentroOperacion");
-
-                    b.Property<string>("CentroOperaciones");
-
-                    b.Property<string>("Ciudad");
-
-                    b.Property<string>("Correo");
-
-                    b.Property<string>("Direccion");
-
-                    b.Property<int>("Estatus");
-
-                    b.Property<DateTime>("FechaCreacion");
-
-                    b.Property<string>("Nombre");
-
-                    b.Property<string>("NombreSupervisor");
-
-                    b.Property<int>("SupervisorId");
-
-                    b.Property<string>("Telefono");
-
-                    b.Property<string>("UnidadNegocio");
-
-                    b.Property<string>("UnidadNegocios");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Empleado");
-                });
-
             modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
                 {
                     b.Property<int>("Id")
@@ -340,6 +291,139 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Zona");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.KactusEmpleado", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Cargo")
+                        .IsRequired();
+
+                    b.Property<string>("CargoEmpleado");
+
+                    b.Property<string>("Celular");
+
+                    b.Property<string>("CentroCosto");
+
+                    b.Property<string>("CodCiudadExpedicion");
+
+                    b.Property<string>("CodCiudadResidencia");
+
+                    b.Property<string>("CodDeptoExpedicion");
+
+                    b.Property<string>("CodDeptoResidencia");
+
+                    b.Property<int>("CodTipoEspPersonaPreliq");
+
+                    b.Property<int>("CodTipoPersona");
+
+                    b.Property<int>("CodUbicacion");
+
+                    b.Property<string>("CodigoArea");
+
+                    b.Property<string>("CodigoEmpresa");
+
+                    b.Property<string>("CodigoGrupo");
+
+                    b.Property<string>("CodigoNivel");
+
+                    b.Property<int>("CodigoNivel1");
+
+                    b.Property<int>("CodigoNivel2");
+
+                    b.Property<int>("CodigoNivel3");
+
+                    b.Property<int>("CodigoNivel4");
+
+                    b.Property<int>("CodigoNivel5");
+
+                    b.Property<int>("CodigoNivel6");
+
+                    b.Property<int>("CodigoNivel7");
+
+                    b.Property<string>("Direccion");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Eps");
+
+                    b.Property<string>("EscalaSalarial");
+
+                    b.Property<string>("EstadoEmpleado");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<string>("ExtensionCompania");
+
+                    b.Property<DateTime>("FecActCargo");
+
+                    b.Property<DateTime>("FecActContr");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<DateTime>("FechaInicioContrato");
+
+                    b.Property<DateTime>("FechaNacimiento");
+
+                    b.Property<string>("GanaExtras");
+
+                    b.Property<string>("Genero");
+
+                    b.Property<string>("IdentificacionExterna");
+
+                    b.Property<string>("NombreNivel");
+
+                    b.Property<string>("NombreNivel1");
+
+                    b.Property<string>("NombreNivel2");
+
+                    b.Property<string>("NombreNivel3");
+
+                    b.Property<string>("NombreNivel4");
+
+                    b.Property<string>("NombreNivel5");
+
+                    b.Property<string>("NombreNivel6");
+
+                    b.Property<string>("NombreNivel7");
+
+                    b.Property<string>("NumeroContrato");
+
+                    b.Property<string>("NumeroDeIdentificacion");
+
+                    b.Property<string>("PrimerApellido");
+
+                    b.Property<string>("PrimerNombre");
+
+                    b.Property<string>("PuedeSerVisitado");
+
+                    b.Property<string>("Rh");
+
+                    b.Property<string>("SegundoApellido");
+
+                    b.Property<string>("SegundoNombre");
+
+                    b.Property<string>("Telefono");
+
+                    b.Property<string>("Temporal");
+
+                    b.Property<string>("TipoContratista");
+
+                    b.Property<string>("TipoDeIdentificacion");
+
+                    b.Property<string>("TipoDeSangre");
+
+                    b.Property<bool>("Titular");
+
+                    b.Property<string>("ValidoParaLiqNomina");
+
+                    b.Property<int>("VencimientoAccion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KactusEmpleado");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.Legalizacion", b =>
                 {
                     b.Property<int>("Id")
@@ -522,6 +606,9 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<string>("DocumentoERP");
 
                     b.Property<string>("EmpleadoCedula")
+                        .IsRequired();
+
+                    b.Property<string>("EmpleadoNombre")
                         .IsRequired();
 
                     b.Property<int?>("EstadoId");

@@ -26,13 +26,13 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly ITipoSolicitudRepository tipoSolicitudRepository;
         private readonly IHistoricoSolicitudRepository historicoSolicitudRepository;
-        
+
         public Solicitud sol;
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
         public Util objUtil = new Util();
 
-        public readonly IEmpleadoRepository empleadoRepository;
+        public readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
@@ -62,7 +62,8 @@ namespace Legalizaciones.Web.Controllers
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
             IFlujoSolicitudRepository flujoSolicitudRepository,
             IEmail email,
-            IBancoRepository bancoRepository
+            IBancoRepository bancoRepository,
+            IKactusEmpleadoRepository kactusEmpleadoRepository
             )
         {
             this.solicitudRepository = solicitudRepository;
@@ -77,13 +78,13 @@ namespace Legalizaciones.Web.Controllers
             this.flujoSolicitudRepository = flujoSolicitudRepository;
             this.email = email;
             this.bancoRepository = bancoRepository;
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
         }
 
         public IActionResult Index()
         {
-            UNOEE erp = new UNOEE();
             var cedula = "";
-            var cargo = "";
+            var rol = "";
             //List<SolicitudAnticipioView> solicitudes = new List <SolicitudAnticipioView>();
             List<Solicitud> solicitudes = new List<Solicitud>();
 
@@ -95,22 +96,21 @@ namespace Legalizaciones.Web.Controllers
             */
 
             // Obtenemos datos del empleado en Session
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Rol")))
             {
                 cedula = HttpContext.Session.GetString("Usuario_Cedula");
-                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+                rol = HttpContext.Session.GetString("Usuario_Rol");
             }
 
-            ViewBag.cargo = cargo;
+            ViewBag.rol = rol;
 
             //Si es administrador puede ver todas las solicitudes
-            if (cargo == "3")
+            if (rol == "Contraloria" || rol == "Administrador")
             {
                 solicitudes = solicitudRepository.All().ToList();
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
@@ -123,7 +123,6 @@ namespace Legalizaciones.Web.Controllers
 
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
                     item.EstadoSolicitud = estatusRepository.All().Where(e => e.Id == item.EstadoId).ToList().FirstOrDefault();
                 }
 
@@ -137,17 +136,17 @@ namespace Legalizaciones.Web.Controllers
         {
             var cedula = "";
             var cargo = "";
-            Empleado empleado = null;
+            KactusEmpleado empleado = null;
 
             // Obtenemos datos del empleado en Session
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
             {
                 cedula = HttpContext.Session.GetString("Usuario_Cedula");
                 cargo = HttpContext.Session.GetString("Usuario_Cargo");
-            }
 
-            //Se obtiene el objeto empleado
-            empleado = objUNOEE.getEmpleadoCedula(cedula);
+                //Se obtiene el objeto empleado
+                empleado = kactusEmpleadoRepository.getEmpleadoCedula(cedula);
+            }
 
             Solicitud solicitud = new Solicitud();
             solicitud.Empleado = empleado;
@@ -170,20 +169,21 @@ namespace Legalizaciones.Web.Controllers
 
                 solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
-                solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
+                solicitud.EmpleadoCedula = solicitud.Empleado.NumeroDeIdentificacion;
+                solicitud.EmpleadoNombre = solicitud.Empleado.PrimerNombre + " " + solicitud.Empleado.SegundoNombre + " " + solicitud.Empleado.PrimerApellido + " " + solicitud.Empleado.SegundoApellido;
                 solicitud.FechaCreacion = DateTime.Now;
                 solicitud.Estatus = 1;//Activa
-                solicitud.EstadoId = 1;//Estado Sin Legalizar
-                solicitud.TipoSolicitudID = 1;//Anticipo
+                solicitud.EstadoId = estatusRepository.All().Where(m => m.Descripcion.Contains("Creada")).Select(m => m.Id).FirstOrDefault(); //Estado Inicial
+                solicitud.TipoSolicitudID = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo").Select(m => m.Id).FirstOrDefault(); //Anticipo
                 solicitud.FechaSolicitud = DateTime.Now;
-                solicitud.Area = solicitud.Empleado.Area;
+                solicitud.Area = solicitud.Empleado.CodigoArea;
 
                 //Calculo Fecha de Vencimiento de la Solicitud
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
                 solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
 
                 //Se Registra la Solicitud
-                //solicitudRepository.Insert(solicitud);
+                solicitudRepository.Insert(solicitud);
 
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 solicitud.SolicitudGastos = listaGastos;
@@ -191,8 +191,8 @@ namespace Legalizaciones.Web.Controllers
                 //Se Registran los gastos de la Solicitud
                 foreach (SolicitudGastos item in listaGastos)
                 {
-                    //item.SolicitudId = solicitud.Id;
-                    //solicitudGastosRepository.Insert(item);
+                    item.SolicitudId = solicitud.Id;
+                    solicitudGastosRepository.Insert(item);
                 }
 
                 //Se guarda la carta de descuento en el directorio en caso de que exista
@@ -201,10 +201,10 @@ namespace Legalizaciones.Web.Controllers
                     if (solicitud.Archivo.FileName != "")
                     {
                         //Se sube al directorio
-                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.NumeroDeIdentificacion, solicitud.Id.ToString());
 
                         //Se actualiza la ruta en BD
-                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.NumeroDeIdentificacion, solicitud.Id.ToString());
                         solicitudRepository.Update(solicitud);
                     }
                 }
@@ -233,22 +233,14 @@ namespace Legalizaciones.Web.Controllers
             try
             {
                 var OSolicitud = solicitudRepository.Find(id);
-                if (OSolicitud.TipoSolicitudID == 1)
-                {
-                    var empleado = objUNOEE.getEmpleadoCedula(OSolicitud.EmpleadoCedula);
+                var empleado = kactusEmpleadoRepository.getEmpleadoCedula(OSolicitud.EmpleadoCedula);
 
-                    OSolicitud.Empleado = empleado;
+                OSolicitud.Empleado = empleado;
 
-                    var ListaSolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
-                    OSolicitud.SolicitudGastos = ListaSolicitudGastos;
+                var ListaSolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
+                OSolicitud.SolicitudGastos = ListaSolicitudGastos;
 
-                    return View(OSolicitud);
-
-                }
-                else
-                {
-                    return RedirectToAction("EditarSolicitudTDC", routeValues: new { id = id});
-                }
+                return View(OSolicitud);
             }
             catch (Exception e)
             {
@@ -317,10 +309,10 @@ namespace Legalizaciones.Web.Controllers
                     if (solicitud.Archivo.FileName != "")
                     {
                         //Se sube al directorio
-                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        SubirArchivo(solicitud.Archivo, "files\\carta\\", solicitud.Empleado.NumeroDeIdentificacion, solicitud.Id.ToString());
 
                         //Se actualiza la ruta en BD
-                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
+                        solicitud.RutaArchivo = getRuta(solicitud.Archivo, "files/carta/", solicitud.Empleado.NumeroDeIdentificacion, solicitud.Id.ToString());
                         solicitudRepository.Update(solicitud);
                     }
                 }
@@ -366,14 +358,13 @@ namespace Legalizaciones.Web.Controllers
         [Route("VisorPDF")]
         public ActionResult VisorPDF(int id)
         {
-            UNOEE erp = new UNOEE();
             var res = solicitudRepository.Find(id);
 
             res.CentroCosto = res.CentroCosto;
             res.CentroOperacion = res.CentroOperacion;
             res.Moneda = Get_moneda(res.MonedaId);
             res.UnidadNegocio = res.UnidadNegocio;
-            res.Empleado = erp.getEmpleadoCedula(res.EmpleadoCedula);
+            res.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(res.EmpleadoCedula);
             res.Destino = Get_Destino(res.DestinoID);
             res.Zona = Get_Zona(res.ZonaID);
 
@@ -393,7 +384,6 @@ namespace Legalizaciones.Web.Controllers
         [Route("Detalle")]
         public ActionResult Visualizar(int id)
         {
-            UNOEE erp = new UNOEE();
             var res = solicitudRepository.Find(id);
 
             if (res.CentroCostoId != null)
@@ -406,7 +396,7 @@ namespace Legalizaciones.Web.Controllers
             if (res.UnidadNegocioId != null)
                 res.UnidadNegocio = res.UnidadNegocio;
 
-            res.Empleado = erp.getEmpleadoCedula(res.EmpleadoCedula);
+            res.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(res.EmpleadoCedula);
 
             if (res.DestinoID != null)
                 res.Destino = Get_Destino(res.DestinoID);
@@ -438,17 +428,17 @@ namespace Legalizaciones.Web.Controllers
         [Route("RegistrarSTDC")]
         public ActionResult RegistrarSTDC()
         {
-            var cargo = "";
+            var rol = "";
             var ListaBanco = bancoRepository.All().ToList();
             var ListaDestino = destinoRepository.All().ToList();
 
             // Obtenemos datos del empleado en Session
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Rol")))
             {
-                cargo = HttpContext.Session.GetString("Usuario_Cargo");
+                rol = HttpContext.Session.GetString("Usuario_Rol");
             }
 
-            if (cargo == "1")
+            if (rol == "Empleado")
             {
                 TempData["Alerta"] = "error - No tienes acceso a esta opción";
                 return RedirectToAction("Index", "Home");
@@ -469,8 +459,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 try
                 {
-                    UNOEE erp = new UNOEE();
-                    var Empleado = erp.getEmpleadoCedula(solicitudTDC.Cedula);
+                    var Empleado = kactusEmpleadoRepository.getEmpleadoCedula(solicitudTDC.Cedula);
 
                     var OSolicitud = new Solicitud
                     {
@@ -483,9 +472,9 @@ namespace Legalizaciones.Web.Controllers
                         Concepto = "Solicitud de Anticipo Con TDC",
                         DestinoID = Convert.ToInt32(solicitudTDC.DestinoId),
                         ZonaID = null,
-                        CentroOperacionId = Convert.ToInt32(Empleado.CentroOperacion),
-                        UnidadNegocioId = Convert.ToInt32(Empleado.UnidadNegocio),
-                        CentroCostoId = Convert.ToInt32(Empleado.CentroCostos),
+                        CentroOperacionId = solicitudTDC.CentroOperacionId,
+                        UnidadNegocioId = solicitudTDC.UnidadNegocioId,
+                        CentroCostoId = solicitudTDC.CentroCostoId,
                         FechaDesde = DateTime.Now,
                         FechaHasta = DateTime.Now,
                         MonedaId = 1,
@@ -602,7 +591,7 @@ namespace Legalizaciones.Web.Controllers
                 return RedirectToAction("Index", "Solicitud");
             }
 
-            UNOEE erp = new UNOEE();
+            
             var cedula = "";
             var cargo = "";
 
@@ -619,7 +608,7 @@ namespace Legalizaciones.Web.Controllers
             foreach (var item in solicitudes)
             {
                 item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);
-                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+                item.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(item.EmpleadoCedula);
             }
             return View("Index", solicitudes);
         }
@@ -760,6 +749,7 @@ namespace Legalizaciones.Web.Controllers
         private bool getPasoInicialFlujo(Solicitud solicitud, int? destino, float monto)
         {
             //Obtengo el Id del flujo
+            var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo" ).Select(m => m.Id).FirstOrDefault();
             var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
             if(idFlujo != null && idFlujo > 0)

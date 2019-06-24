@@ -405,19 +405,7 @@ window.onload = function () {
     $('#txSaldo').val(w); 
 }
 
-
-$('.datepicker').datepicker({
-    language: 'es',
-    format: 'yyyy-mm-dd',
-    todayHighlight: true,
-    autoclose: true,
-    orientation: 'bottom auto'
-}).on("changeDate", function (dateText, inst) {
-    var id = $(this).attr('id');
-    console.log(id);
-    });
-
-$(".datepicker").datepicker("update", new Date());
+//$(".datepicker").datepicker("update", new Date());
 
 function remove(tr) {
     $(tr).parent().parent().remove();

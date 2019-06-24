@@ -46,7 +46,7 @@
             </div>
             <div style="float: left;" class="col-md-12">
                 <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear" method="get">Crear Solicitud</a>
-                @*@if (ViewBag.cargo != "3")
+                @*@if (ViewBag.rol != "Contabilidad")
                 {
                     //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
 
@@ -95,7 +95,7 @@
                                             @Html.DisplayFor(modelItem => item.EmpleadoCedula)
                                         </td>
                                         <td>
-                                            @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                                            @Html.DisplayFor(modelItem => item.EmpleadoNombre)
                                         </td>
                                         <td>
                                             @item.Monto.ToString("N2")

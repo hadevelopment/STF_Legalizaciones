@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Xml;
+using Legalizaciones.Interface;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
@@ -18,9 +19,15 @@ namespace Legalizaciones.Web.Engine
     {
         public static string UserWcf { get; set; }
         public static string PasswordWcf { get; set; }
+        IKactusEmpleadoRepository kactusEmpleadoRepository;
+        public UNOEE erp = new UNOEE();
+
+        public EngineStf()
+        {
+        }
+
         public List<InfoLegalizacion> ConvertirToListSolicitud(DataTable dt)
         {
-            UNOEE erp = new UNOEE();
             List<InfoLegalizacion> list = new List<InfoLegalizacion>();
             int n = 0;
             string[] formatFecha = null;
@@ -57,13 +64,13 @@ namespace Legalizaciones.Web.Engine
                     item.Estado = row[12].ToString();
                 if (row[13] != DBNull.Value)
                     item.legalizacionID = Convert.ToInt32(row[13]);
+                if (row[14] != DBNull.Value)
+                    item.Beneficiario = row[14].ToString();
+                if (row[15] != DBNull.Value)
+                    item.IdDocErp = row[15].ToString();
+                if (row[16] != DBNull.Value)
+                    item.ConsecutivoErp = row[16].ToString();
 
-                var empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
-
-               
-                item.IdDocErp = Aleatorio(n);
-                item.ConsecutivoErp = Aleatorio(n + 2);
-                item.Beneficiario = empleado.Nombre;
                 list.Insert(n, item);
                 
                 n++;
@@ -74,7 +81,6 @@ namespace Legalizaciones.Web.Engine
 
         public List<Flujo> ConvertirToListFlujo(DataTable dt)
         {
-            UNOEE erp = new UNOEE();
             List<Flujo> list = new List<Flujo>();
             int n = 0;
             foreach (DataRow row in dt.Rows)
@@ -126,7 +132,6 @@ namespace Legalizaciones.Web.Engine
 
         public List<PasoFlujoSolicitud> ConvertirToListPasos(DataTable dt)
         {
-            UNOEE erp = new UNOEE();
             List<PasoFlujoSolicitud> list = new List<PasoFlujoSolicitud>();
             foreach (DataRow row in dt.Rows)
             {
@@ -149,7 +154,7 @@ namespace Legalizaciones.Web.Engine
 
         public List<Solicitud> ConvertirToListAnticipos(DataTable dt)
         {
-            UNOEE erp = new UNOEE();
+            
             List<Solicitud> list = new List<Solicitud>();
             foreach (DataRow row in dt.Rows)
             {
@@ -195,7 +200,6 @@ namespace Legalizaciones.Web.Engine
 
         public List<Legalizacion> ConvertirToListLegalizaciones(DataTable dt)
         {
-            UNOEE erp = new UNOEE();
             List<Legalizacion> list = new List<Legalizacion>();
             foreach (DataRow row in dt.Rows)
             {

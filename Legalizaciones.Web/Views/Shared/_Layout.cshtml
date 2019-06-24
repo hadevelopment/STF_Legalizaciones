@@ -112,8 +112,8 @@
                             <i class="fa fa-user-circle"></i>
                             <br />
 
-                            <span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Nombre")</span>
-                            <span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Area")</span>
+                            <span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Nombre")</span>&nbsp;-&nbsp;
+                            <strong><span>@HttpContextAccessor.HttpContext.Session.GetString("Usuario_Area")</span></strong>
                         </a>
                         <ul class="dropdown-menu">
                             <li><a href='@Url.Action("PreferenciasLegalizacion", "Empleado", new { cedula = HttpContextAccessor.HttpContext.Session.GetString("Usuario_Cedula") })'><span class="fa fa-gear"></span>Configuracion de Permisos</a></li>

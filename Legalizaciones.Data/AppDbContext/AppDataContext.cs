@@ -15,22 +15,20 @@ namespace Legalizaciones.Data.AppDbContext
         public AppDataContext(DbContextOptions options) : base(options)
         {
         }
-
         //Configuracion
         public DbSet<ConfiguracionGasto> ConfiguracionGasto { get; set; }
-
+        //Empleado
+        public DbSet<KactusEmpleado> KactusEmpleado { get; set; }
         //Localidades
         public DbSet<Pais> Pais { get; set; }
         public DbSet<Ciudad> Ciudad { get; set; }
         public DbSet<Destino> Destino { get; set; }
         public DbSet<Zona> Zona { get; set; }
-
         //Solicitud
         public DbSet<Moneda> Moneda { get; set; }
         public DbSet<Tasa> Tasa{ get; set; }
         //Objetos
         public DbSet<Banco> Banco { get; set; }
-        public DbSet<Empleado> Empleado { get; set; }
         public DbSet<EmpleadoPermiso> EmpleadoPermiso { get; set; }
         public DbSet<Solicitud> Solicitud { get; set; }
         public DbSet<SolicitudGastos> SolicitudGastos { get; set; }

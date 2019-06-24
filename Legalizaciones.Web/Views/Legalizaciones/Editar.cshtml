@@ -117,24 +117,30 @@
                 </div>
             </div>
             <div class="box-body">
-                <table class="tableSolicitud">
+                <table class="tableEmpleado">
                     <thead>
                         <tr>
-                            <th>Área</th>
-                            <th>Nombre completo</th>
+                            <th>Código Área</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
                             <th>Cédula</th>
                             <th>Dirección</th>
-                            <th>Ciudad</th>
                             <th>Teléfono</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
-                            <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
-                            <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
+                                @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
+                            </td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
+                                @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
+                            </td>
+                            <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
                             <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
-                            <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
                             <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
                         </tr>
                     </tbody>

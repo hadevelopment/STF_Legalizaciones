@@ -35,8 +35,13 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private IConfiguration _config;
 
+        private readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
+
+        public UNOEE erp = new UNOEE();
+
         public HomeController(ISolicitudRepository solicitudRepository, IPaisRepository paisRepository, IConceptoRepository conceptoRepository, IDestinoRepository destinoRepository,
-                              IMonedaRepository monedaRepository, IZonaRepository zonaRepository, ISolicitudGastosRepository solicitudGastosRepository, IConfiguration Configuration)
+                              IMonedaRepository monedaRepository, IZonaRepository zonaRepository, ISolicitudGastosRepository solicitudGastosRepository, IConfiguration Configuration,
+                              IKactusEmpleadoRepository kactusEmpleadoRepository)
         {
             this.solicitudRepository = solicitudRepository;
             this.paisRepository = paisRepository;
@@ -45,6 +50,7 @@ namespace Legalizaciones.Web.Controllers
             this.monedaRepository = monedaRepository;
             this.zonaRepository = zonaRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
             _config = Configuration;
         }
         public IActionResult Index()
@@ -52,25 +58,25 @@ namespace Legalizaciones.Web.Controllers
             //si no existe una variable de sesion creada del empleado cargo la que viene x defecto del archivo appsettings.json
             if (HttpContext.Session.GetString("Usuario_Cargo") == null)
             {
-                Empleado emp = new Empleado();
-                UNOEE erp = new UNOEE();
+                KactusEmpleado emp = new KactusEmpleado();
+                
 
                 //Busco el empleado logeado del AppSettings
-                int wEmpleadoLogeado = Convert.ToInt32(_config["AppSettings:EmpLog"]);
+                string wEmpleadoLogeado = Convert.ToString(_config["AppSettings:EmpLog"]);
+                string wEmpleadoRol = Convert.ToString(_config["AppSettings:EmpRol"]);
 
                 //emp = erp.getEmpleadoID(erp.Empleado_logeado());
-                emp = erp.getEmpleadoID(wEmpleadoLogeado);
-                HttpContext.Session.SetString("Usuario_Nombre", emp.Nombre);
-                HttpContext.Session.SetString("Usuario_Area", emp.Area);
-                HttpContext.Session.SetString("Usuario_Cedula", emp.Cedula);
-                HttpContext.Session.SetString("Usuario_Cargo", emp.CargoId.ToString());
-                HttpContext.Session.SetString("Usuario_Telefono", emp.Telefono);
-                HttpContext.Session.SetString("Usuario_Ciudad", emp.Ciudad);
+                emp = kactusEmpleadoRepository.getEmpleadoCedula(wEmpleadoLogeado);
+                HttpContext.Session.SetString("Usuario_Nombre", emp.PrimerNombre + " " + emp.PrimerApellido);
+                HttpContext.Session.SetString("Usuario_Area", emp.CodigoArea);
+                HttpContext.Session.SetString("Usuario_Cedula", emp.NumeroDeIdentificacion);
+                HttpContext.Session.SetString("Usuario_Cargo", emp.CargoEmpleado);
+                HttpContext.Session.SetString("Usuario_Telefono", emp.Celular);
                 HttpContext.Session.SetString("Usuario_Direccion", emp.Direccion);
+                HttpContext.Session.SetString("Usuario_Rol", wEmpleadoRol);
             }
 
-            UNOEE objUNOEE = new UNOEE();
-            var ListaEmpleado = objUNOEE.EmpleadoAll();
+            var ListaEmpleado = kactusEmpleadoRepository.All();
 
             var wHomevista = new HomeViewModel
             {
@@ -84,16 +90,14 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public IActionResult CambiarUsuario(string Cedula)
         {
-            UNOEE erp = new UNOEE();
 
             if (ModelState.IsValid){
-                var Oempleado = erp.getEmpleadoCedula(Cedula);
-                HttpContext.Session.SetString("Usuario_Nombre", Oempleado.Nombre);
-                HttpContext.Session.SetString("Usuario_Area", Oempleado.Area);
-                HttpContext.Session.SetString("Usuario_Cedula", Oempleado.Cedula);
-                HttpContext.Session.SetString("Usuario_Cargo", Oempleado.CargoId.ToString());
-                HttpContext.Session.SetString("Usuario_Telefono", Oempleado.Telefono);
-                HttpContext.Session.SetString("Usuario_Ciudad", Oempleado.Ciudad);
+                var Oempleado = kactusEmpleadoRepository.getEmpleadoCedula(Cedula);
+                HttpContext.Session.SetString("Usuario_Nombre", Oempleado.PrimerNombre + " " + Oempleado.PrimerApellido);
+                HttpContext.Session.SetString("Usuario_Area", Oempleado.CodigoArea);
+                HttpContext.Session.SetString("Usuario_Cedula", Oempleado.NumeroDeIdentificacion);
+                HttpContext.Session.SetString("Usuario_Cargo", Oempleado.CargoEmpleado);
+                HttpContext.Session.SetString("Usuario_Telefono", Oempleado.Celular);
                 HttpContext.Session.SetString("Usuario_Direccion", Oempleado.Direccion);
             }
 

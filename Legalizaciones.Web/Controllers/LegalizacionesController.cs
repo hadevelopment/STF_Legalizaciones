@@ -30,7 +30,7 @@ namespace Legalizaciones.Web.Controllers
         //private readonly IMotivoRepository motivoRepository;
         private readonly ISolicitudRepository solicitudRepository;
         private readonly IEstadoSolicitudRepository estadoSolicitudRepository;
-        private readonly IEmpleadoRepository empleadoRepository;
+        private readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly IBancoRepository bancoRepository;
         private readonly IMonedaRepository monedaRepository;
@@ -41,6 +41,7 @@ namespace Legalizaciones.Web.Controllers
         /*WORKFLOW*/
         private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
         private readonly IFlujoSolicitudRepository flujoSolicitudRepository;
+        private readonly ITipoSolicitudRepository tipoSolicitudRepository;
 
         private readonly IEmail email;
 
@@ -49,12 +50,13 @@ namespace Legalizaciones.Web.Controllers
         public LegalizacionesController(ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository, IBancoRepository bancoRepository,
             IMonedaRepository monedaRepository, ILegalizacionRepository legalizacionRepository,
-            IEmpleadoRepository empleadoRepository, ICiudadRepository ciudadRepository, ITasaRepository tasaRepository,
+            IKactusEmpleadoRepository kactusEmpleadoRepository, ICiudadRepository ciudadRepository, ITasaRepository tasaRepository,
             IPaisRepository paisRepository, ILegalizacionGastosRepository legalizacionGastosRepository,
             IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository,
             IFlujoSolicitudRepository flujoSolicitudRepository,
             IEmail email,
-            IEstadoSolicitudRepository estadoSolicitudRepository)
+            IEstadoSolicitudRepository estadoSolicitudRepository,
+            ITipoSolicitudRepository tipoSolicitudRepository)
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
@@ -62,7 +64,7 @@ namespace Legalizaciones.Web.Controllers
             this.monedaRepository = monedaRepository;
             this.legalizacionRepository = legalizacionRepository;
             this.legalizacionGastosRepository = legalizacionGastosRepository;
-            this.empleadoRepository = empleadoRepository;
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
             this.ciudadRepository = ciudadRepository;
             this.paisRepository = paisRepository;
             this.tasaRepository = tasaRepository;
@@ -70,6 +72,7 @@ namespace Legalizaciones.Web.Controllers
             this.flujoSolicitudRepository = flujoSolicitudRepository;
             this.email = email;
             this.estadoSolicitudRepository = estadoSolicitudRepository;
+            this.tipoSolicitudRepository = tipoSolicitudRepository;
         }
 
         public IActionResult Index()
@@ -77,10 +80,10 @@ namespace Legalizaciones.Web.Controllers
             List<InfoLegalizacion> model = new List<InfoLegalizacion>();
             EngineDb Metodo = new EngineDb();
 
-            string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
+            string usuarioRol = HttpContext.Session.GetString("Usuario_Rol");
             string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
 
-            if (usuarioCargo == "3")
+            if (usuarioRol == "Contraloria" || usuarioRol == "Administrador")
             {
                 model = Metodo.SolicitudesAntPendientesLegalizacion(string.Empty);
             }
@@ -131,105 +134,95 @@ namespace Legalizaciones.Web.Controllers
             // Obtenemos datos del empleado en Session
             string cedula = "";
             string cargo = "";
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")))
+            string rol = "";
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cedula")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Cargo")) && !string.IsNullOrEmpty(HttpContext.Session.GetString("Usuario_Rol")))
             {
                 cedula = HttpContext.Session.GetString("Usuario_Cedula");
                 cargo = HttpContext.Session.GetString("Usuario_Cargo");
-            }
+                rol = HttpContext.Session.GetString("Usuario_Rol");
 
-            /*Validar Perfil*/
-            if (cargo == "2")
-                ViewBag.MostrarTasa = true;
-            else
-                ViewBag.MostrarTasa = false;
-
-
-            /*Cargar Listas*/
-            var ListaBanco = bancoRepository.All().ToList();
-            var ListaCentroCosto = objUNOEE.getCentroCostos();
-            var ListaCentroOperaciones = objUNOEE.getCentroOperaciones();
-            var ListaUnidadNegocio = objUNOEE.getUnidadNegocios();
+                /*Validar Perfil*/
+                if (rol == "Tesoreria")
+                    ViewBag.MostrarTasa = true;
+                else
+                    ViewBag.MostrarTasa = false;
 
 
-            if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
-            {
-                var ListaMoneda = monedaRepository.All().ToList();
-                var ListaEmpleado = objUNOEE.EmpleadoAll();
+                /*Cargar Listas*/
+                var ListaBanco = bancoRepository.All().ToList();
+                var ListaCentroCosto = objUNOEE.getCentroCostos();
+                var ListaCentroOperaciones = objUNOEE.getCentroOperaciones();
+                var ListaUnidadNegocio = objUNOEE.getUnidadNegocios();
 
-                var OEmpleado = objUNOEE.getEmpleadoCedula(cedula);
 
-                var OLegalizaciones = new LegalizacionesViewModel
+                if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
                 {
-                    DocumentoERPID = 11111,
-                    ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
-                    ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
-                    ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
-                    ConAnticipo = 0,
-                    Empleado = OEmpleado,
-                    ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
-                    ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
-                    ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
-                };
-                return View(OLegalizaciones);
-            }
-            else
-            {
-                var Osolicitud = solicitudRepository.Find(id);
-                var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
-                var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
+                    var ListaMoneda = monedaRepository.All().ToList();
+                    var ListaEmpleado = kactusEmpleadoRepository.All();
 
-                string wCargo = "Empleado";
-                switch (OEmpleado.CargoId)
-                {
-                    case 1:
-                        wCargo = "Empleado";
-                        break;
-                    case 2:
-                        wCargo = "Tesoreria";
-                        break;
-                    case 3:
-                        wCargo = "Contabilidad";
-                        break;
+                    var OEmpleado = kactusEmpleadoRepository.getEmpleadoCedula(cedula);
+
+                    var OLegalizaciones = new LegalizacionesViewModel
+                    {
+                        DocumentoERPID = "N/A",
+                        ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                        ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
+                        ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
+                        ConAnticipo = 0,
+                        Empleado = OEmpleado,
+                        ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
+                        ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
+                        ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
+                    };
+                    return View(OLegalizaciones);
                 }
-
-
-                var OTasa = tasaRepository.All().Where(a => a.MonedaId == Osolicitud.MonedaId).FirstOrDefault();
-                var wTasa = OTasa.Valor;
-                long wIdMoneda = Convert.ToInt64(Osolicitud.MonedaId);
-                var OMoneda = monedaRepository.Find(wIdMoneda);
-
-                var OLegalizaciones = new LegalizacionesViewModel
+                else
                 {
-                    AnticipoId = Osolicitud.Id,
-                    DocumentoERPID = 11111,
-                    FechaRegistro = Osolicitud.FechaSolicitud,
-                    FechaVencimiento = Osolicitud.FechaVencimiento,
-                    Concepto = Osolicitud.Concepto,
-                    Monto = Osolicitud.Monto,
-                    CentroCostoDescripcion = Osolicitud.CentroCosto,
-                    CentroCosto = Osolicitud.CentroCostoId,
-                    CentroOperacion = Osolicitud.CentroOperacionId,
-                    UnidadNegocio = Osolicitud.UnidadNegocioId,
-                    ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
-                    ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
-                    ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
-                    FechaDesde = Osolicitud.FechaDesde,
-                    FechaHasta = Osolicitud.FechaHasta,
-                    Empleado = OEmpleado,
-                    ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
-                    ReciboCaja = 0,
-                    Consignacion = 0,
-                    Valor = "0",
-                    MonedaId = Osolicitud.MonedaId,
-                    Moneda = OMoneda.Nombre,
-                    ValorTasa = wTasa,
-                    SolicitudGastos = ListsolicitudGastos,
-                    ConAnticipo = 1,
-                    MontoAnticipoEntregado = Osolicitud.Monto
-                };
+                    var Osolicitud = solicitudRepository.Find(id);
+                    var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
+                    var OEmpleado = kactusEmpleadoRepository.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
 
-                return View(OLegalizaciones);
+
+                    var OTasa = tasaRepository.All().Where(a => a.MonedaId == Osolicitud.MonedaId).FirstOrDefault();
+                    var wTasa = OTasa.Valor;
+                    long wIdMoneda = Convert.ToInt64(Osolicitud.MonedaId);
+                    var OMoneda = monedaRepository.Find(wIdMoneda);
+
+                    var OLegalizaciones = new LegalizacionesViewModel
+                    {
+                        AnticipoId = Osolicitud.Id,
+                        DocumentoERPID = Osolicitud.DocumentoERP,
+                        FechaRegistro = Osolicitud.FechaSolicitud,
+                        FechaVencimiento = Osolicitud.FechaVencimiento,
+                        Concepto = Osolicitud.Concepto,
+                        Monto = Osolicitud.Monto,
+                        CentroCostoDescripcion = Osolicitud.CentroCosto,
+                        CentroCosto = Osolicitud.CentroCostoId,
+                        CentroOperacion = Osolicitud.CentroOperacionId,
+                        UnidadNegocio = Osolicitud.UnidadNegocioId,
+                        ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
+                        ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
+                        ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
+                        FechaDesde = Osolicitud.FechaDesde,
+                        FechaHasta = Osolicitud.FechaHasta,
+                        Empleado = OEmpleado,
+                        ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
+                        ReciboCaja = 0,
+                        Consignacion = 0,
+                        Valor = "0",
+                        MonedaId = Osolicitud.MonedaId,
+                        Moneda = OMoneda.Nombre,
+                        ValorTasa = wTasa,
+                        SolicitudGastos = ListsolicitudGastos,
+                        ConAnticipo = 1,
+                        MontoAnticipoEntregado = Osolicitud.Monto
+                    };
+
+                    return View(OLegalizaciones);
+                }
             }
+
+            return View(null);
 
         }
 
@@ -249,7 +242,7 @@ namespace Legalizaciones.Web.Controllers
                     Consignacion = legalizacion.Consignacion,
                     Valor = legalizacion.Valor,
                     BancoId = legalizacion.BancoId,
-                    EmpleadoCedula = legalizacion.Empleado.Cedula != null ? legalizacion.Empleado.Cedula : null,
+                    EmpleadoCedula = legalizacion.Empleado.NumeroDeIdentificacion != null ? legalizacion.Empleado.NumeroDeIdentificacion : null,
                     MontoAnticipoEntregado = legalizacion.MontoAnticipoEntregado,
                     MontoGastosReportados = legalizacion.MontoGastosReportados,
                     MontoSaldo = legalizacion.MontoSaldo,
@@ -263,7 +256,7 @@ namespace Legalizaciones.Web.Controllers
                 if (!getPasoInicialFlujo(OLegalizacionHeader, solicitud.DestinoID, (float)OLegalizacionHeader.MontoGastosReportados))
                 {
                     TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
-                    return View("Crear", solicitud);
+                    return RedirectToAction("Crear", routeValues: new { id = OLegalizacionHeader.SolicitudID });
                 }
 
                 //legalizacionRepository.Insert(OLegalizacionHeader);
@@ -339,7 +332,7 @@ namespace Legalizaciones.Web.Controllers
                     Consignacion = legalizacion.Consignacion,
                     Valor = legalizacion.Valor,
                     BancoId = legalizacion.BancoId,
-                    EmpleadoCedula = legalizacion.Empleado.Cedula != null ? legalizacion.Empleado.Cedula : null
+                    EmpleadoCedula = legalizacion.Empleado.NumeroDeIdentificacion != null ? legalizacion.Empleado.NumeroDeIdentificacion : null
                 };
 
                 legalizacionRepository.Update(OLegalizacionHeader);
@@ -392,7 +385,7 @@ namespace Legalizaciones.Web.Controllers
             legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a=> a.SolicitudId == legalizacion.SolicitudID).ToList();
             legalizacion.LegalizacionGastos =
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == Id).ToList();
-            legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
+            legalizacion.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
 
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol  = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
@@ -424,12 +417,12 @@ namespace Legalizaciones.Web.Controllers
 
             if (id == 0) //si viene con el valor "0" se refiere a una legalizacion sin anticipo. Solo debo de cargar los bancos y la moneda
             {
-                var ListaEmpleado = objUNOEE.EmpleadoAll();
-                var OEmpleado = objUNOEE.getEmpleadoCedula(cedula);
+                var ListaEmpleado = kactusEmpleadoRepository.All();
+                var OEmpleado = kactusEmpleadoRepository.getEmpleadoCedula(cedula);
 
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
-                    DocumentoERPID = 11111,
+                    DocumentoERPID = "N/A",
                     ListaBanco = new SelectList(ListaBanco, "Id", "Nombre"),
                     ListaMoneda = new SelectList(ListaMoneda, "Id", "Nombre"),
                     ListaEmpleado = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
@@ -444,26 +437,12 @@ namespace Legalizaciones.Web.Controllers
                 var Osolicitud = solicitudRepository.Find(id);
                 //var ListsolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == id).ToList();
                 var ListLegalizacionGastos = legalizacionGastosRepository.All().Where(a => a.LegalizacionId == legaId).ToList();
-                var OEmpleado = objUNOEE.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
-
-                string wCargo = "Empleado";
-                switch (OEmpleado.CargoId)
-                {
-                    case 1:
-                        wCargo = "Empleado";
-                        break;
-                    case 2:
-                        wCargo = "Tesoreria";
-                        break;
-                    case 3:
-                        wCargo = "Contabilidad";
-                        break;
-                }
+                var OEmpleado = kactusEmpleadoRepository.getEmpleadoCedula(Osolicitud.EmpleadoCedula);
 
                 var OLegalizaciones = new LegalizacionesViewModel
                 {
                     AnticipoId = Osolicitud.Id,
-                    DocumentoERPID = 11111,
+                    DocumentoERPID = Osolicitud.DocumentoERP,
                     FechaRegistro = Osolicitud.FechaSolicitud,
                     FechaVencimiento = Osolicitud.FechaVencimiento,
                     Concepto = Osolicitud.Concepto,
@@ -496,7 +475,7 @@ namespace Legalizaciones.Web.Controllers
             legalizacion.SolicitudGastos = solicitudGastosRepository.All().Where(a => a.SolicitudId == legalizacion.SolicitudID).ToList();
             legalizacion.LegalizacionGastos =
                 legalizacionGastosRepository.All().Where(a => a.LegalizacionId == id).ToList();
-            legalizacion.Empleado = objUNOEE.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
+            legalizacion.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(legalizacion.Solicitud.EmpleadoCedula);
 
             @ViewBag.SumLega = legalizacion.LegalizacionGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Valor));
             @ViewBag.SumSol = legalizacion.SolicitudGastos.AsEnumerable().Sum(o => Convert.ToDecimal(o.Monto));
@@ -507,9 +486,9 @@ namespace Legalizaciones.Web.Controllers
 
         private bool getPasoInicialFlujo(Legalizacion legalizacion, int? destino, float monto)
         {
-            var montoInt = Convert.ToInt64(monto);
             //Obtengo el Id del flujo
-            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && montoInt >= m.MontoMinimo && montoInt <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
+            var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Legalizacion" ).Select(m => m.Id).FirstOrDefault();
+            var idFlujo = flujoSolicitudRepository.All().Where(m => m.TipoSolicitudId == tipoSolicitud && m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
             if (idFlujo != null && idFlujo > 0)
             {

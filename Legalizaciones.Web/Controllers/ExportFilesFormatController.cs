@@ -21,13 +21,14 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudRepository solicitudRepository;
         private readonly IBancoRepository bancoRepository;
         private readonly ILegalizacionRepository legalizacionRepository;
-        private readonly IEmpleadoRepository empleadoRepository;
+        private readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
         private readonly IZonaRepository zonaRepository;
         private readonly IDestinoRepository destinoRepository;
         private readonly IEstadoSolicitudRepository estatusRepository;
         private readonly IOrigenDestinoRepository origenDestinoRepository;
         private readonly IPaisRepository paisRepository;
         private readonly IConfiguracionGastoRepository ConfiguracionGastoRepository;
+        UNOEE erp = new UNOEE();
 
 
         public ExportFilesFormatController(IConverter converter, 
@@ -37,7 +38,7 @@ namespace Legalizaciones.Web.Controllers
                                            IEstadoSolicitudRepository estatusRepository,
                                            IOrigenDestinoRepository origenDestinoRepository,
                                            IPaisRepository paisRepository,
-                                           IEmpleadoRepository empleadoRepository,
+                                           IKactusEmpleadoRepository kactusEmpleadoRepository,
                                            ILegalizacionRepository legalizacionRepository,
                                            IBancoRepository bancoRepository,
                                            IConfiguracionGastoRepository ConfiguracionGastoRepository)
@@ -49,7 +50,7 @@ namespace Legalizaciones.Web.Controllers
             this.destinoRepository       = destinoRepository;
             this.origenDestinoRepository = origenDestinoRepository;
             this.paisRepository = paisRepository;
-            this.empleadoRepository = empleadoRepository;
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
             this.legalizacionRepository = legalizacionRepository;
             this.bancoRepository = bancoRepository;
             this.ConfiguracionGastoRepository = ConfiguracionGastoRepository;
@@ -125,11 +126,10 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public ActionResult ExportDatosSolicitudExcel()
         {
-            UNOEE erp = new UNOEE();
             List<Solicitud> lstSolicitudes = this.solicitudRepository.All().ToList();
             foreach (var item in lstSolicitudes)
             {
-                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+                item.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(item.EmpleadoCedula);
             }
 
             //foreach (var item in lstSolicitudes)
@@ -167,7 +167,7 @@ namespace Legalizaciones.Web.Controllers
                     row.CreateCell(2).SetCellValue(solicitud.FechaVencimiento.ToShortDateString());
                     row.CreateCell(3).SetCellValue(solicitud.Concepto);
                     row.CreateCell(4).SetCellValue(solicitud.EmpleadoCedula);
-                    row.CreateCell(5).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
+                    row.CreateCell(5).SetCellValue(solicitud.Empleado.PrimerNombre + ' ' + solicitud.Empleado.PrimerApellido);
                     row.CreateCell(6).SetCellValue(double.Parse(solicitud.Monto.ToString()));
                     row.CreateCell(7).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;
@@ -183,7 +183,6 @@ namespace Legalizaciones.Web.Controllers
         [HttpGet]
         public ActionResult ExportDatosLegalizacionesExcel()
         {
-            UNOEE erp = new UNOEE();
             List<Legalizacion> lstLegalizaciones = this.legalizacionRepository.All().ToList();
             Solicitud solicitud;
             foreach (var item in lstLegalizaciones)
@@ -233,14 +232,14 @@ namespace Legalizaciones.Web.Controllers
                     //solicitud.Empleado = empleadoRepository.All()
                     //    .FirstOrDefault(x => x.Cedula == solicitud.EmpleadoCedula);
 
-                    solicitud.Empleado = erp.getEmpleadoCedula(solicitud.EmpleadoCedula);
+                    solicitud.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(solicitud.EmpleadoCedula);
 
                     row.CreateCell(5).SetCellValue(solicitud.Id);
                     row.CreateCell(6).SetCellValue(solicitud.FechaSolicitud.ToShortDateString());
                     row.CreateCell(7).SetCellValue(solicitud.FechaVencimiento.ToShortDateString());
                     row.CreateCell(8).SetCellValue(solicitud.Concepto);
                     row.CreateCell(9).SetCellValue(solicitud.EmpleadoCedula);
-                    row.CreateCell(10).SetCellValue(solicitud.Empleado.Nombre + ' ' + solicitud.Empleado.Apellido);
+                    row.CreateCell(10).SetCellValue(solicitud.Empleado.PrimerNombre + ' ' + solicitud.Empleado.PrimerApellido);
                     row.CreateCell(11).SetCellValue(double.Parse(solicitud.Monto.ToString()));
                     row.CreateCell(12).SetCellValue(estatusRepository.Find(long.Parse(solicitud.EstadoId.ToString())).Descripcion);
                     index++;

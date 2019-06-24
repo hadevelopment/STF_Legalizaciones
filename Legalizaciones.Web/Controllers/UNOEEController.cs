@@ -17,14 +17,16 @@ namespace Legalizaciones.Web.Controllers
 {
     public class UNOEEController : Controller
     {
+        private readonly IKactusEmpleadoRepository kactusEmpleadoRepository;
         private readonly IEmpleadoPermisoRepository empleadoPermisoRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private Engine.ErpMethod FuncionErp = new Engine.ErpMethod();
 
-        public UNOEEController(IEmpleadoPermisoRepository _empleadoPermisoRepository, ISolicitudGastosRepository solicitudGastosRepository)
+        public UNOEEController(IEmpleadoPermisoRepository _empleadoPermisoRepository, ISolicitudGastosRepository solicitudGastosRepository, IKactusEmpleadoRepository kactusEmpleadoRepository)
         {
             this.empleadoPermisoRepository = _empleadoPermisoRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
+            this.kactusEmpleadoRepository = kactusEmpleadoRepository;
         }
         public IActionResult Index()
         {
@@ -122,186 +124,8 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            List<Empleado> Empleados = new List<Empleado>();
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Eliezer Vargas",
-                Cedula = "6.845.256.665",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "e.vargas@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Tesoreria",
-                Nombre = "Angelica Betancourt",
-                Cedula = "7.845.256.666",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100-2",
-                CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "a.betancourt@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Contraloria",
-                Nombre = "Daniel Sanchez",
-                Cedula = "8.845.256.667",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contraloria
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Contabilidad",
-                Nombre = "Luz Marina",
-                Cedula = "9.845.256.668",
-                Direccion = "Calle 29 No. 13A - 15. Piso 10",
-                Ciudad = "Cucuta",
-                Telefono = "(1) 560 00100-3",
-                CargoId = 4, // ROL Administracion Contabilidad
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "l.marina@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Efrain Mejias",
-                Cedula = "10.845.256.665",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Javier Rodriguez",
-                Cedula = "11.845.256.665",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "j.rodriguez@innova4j.com"
-            });
-
-            if (filtroCedula)
-            {
-                var cedula = HttpContext.Session.GetString("Usuario_Cedula");
-                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == cedula).ToList();
-                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula) && m.Cedula != cedula);
-                return Json(list);
-            }
-
-            return Json(Empleados);
-        }
-
-        public JsonResult CargosMaeEdit(int Id)
-        {
-
-            Cargo[] Cargos = new Cargo[3];
-
-            Cargos[0] = new Cargo
-            {
-                Id = 1,
-                Nombre = "Empleado",
-                Descripcion = "Departamento de Ventas",
-                Estatus = 1
-            };
-
-            Cargos[1] = new Cargo
-            {
-                Id = 2,
-                Nombre = "Administracion Tesoreria",
-                Descripcion = "Departamento de Compras",
-                Estatus = 1
-            };
-
-            Cargos[2] = new Cargo
-            {
-                Id = 3,
-                Nombre = "Administracion Contraloria",
-                Descripcion = "Gerente de Ventas",
-                Estatus = 1
-            };
-
-
-
-            foreach (var item in Cargos)
-            {
-                if (item.Id == Id)
-                    item.Nombre = item.Nombre + "XX";
-
-            }
-            return Json(Cargos);
-        }
-
-        public JsonResult Cargos()
-        {
-            Cargo[] Cargos = new Cargo[4];
-
-            Cargos[0] = new Cargo
-            {
-                Id = 1,
-                Nombre = "Empleado",
-                Descripcion = "Departamento de Ventas",
-                Estatus = 1
-            };
-
-            Cargos[1] = new Cargo
-            {
-                Id = 2,
-                Nombre = "Administracion Tesoreria",
-                Descripcion = "Departamento de Compras",
-                Estatus = 1
-            };
-
-            Cargos[2] = new Cargo
-            {
-                Id = 3,
-                Nombre = "Administracion Contraloria",
-                Descripcion = "Gerente de Ventas",
-                Estatus = 1
-            };
-
-            Cargos[3] = new Cargo
-            {
-                Id = 3,
-                Nombre = "Administracion Contabilidad",
-                Descripcion = "Gerente Contable",
-                Estatus = 1
-            };
-
-            return Json(Cargos);
+            var listaKactusEmpleados = kactusEmpleadoRepository.All().ToList();
+            return Json(listaKactusEmpleados);
         }
 
         public JsonResult OrigenDestinosPais(string paisID)
@@ -338,101 +162,99 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult GetEmpleadoByCedula(string wCedula)
         {
-            var OEmpleado = new Empleado();
-
-            switch (wCedula)
-            {
-                case "6.845.256.665":
-                    OEmpleado.Area = "Empleado";
-                    OEmpleado.Nombre = "Eliezer Vargas";
-                    OEmpleado.Cedula = "6.845.256.665";
-                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Bogota";
-                    OEmpleado.Telefono = "(1) 560 00100";
-                    OEmpleado.CargoId = 1;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-
-                case "7.845.256.666":
-                    OEmpleado.Area = "Administracion Tesoreria";
-                    OEmpleado.Nombre = "Angelica Betancourt";
-                    OEmpleado.Cedula = "7.845.256.666";
-                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Bogota";
-                    OEmpleado.Telefono = "(1) 560 00100-2";
-                    OEmpleado.CargoId = 2;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-
-                case "8.845.256.667":
-                    OEmpleado.Area = "Administracion Contraloria";
-                    OEmpleado.Nombre = "Daniel Sanchez";
-                    OEmpleado.Cedula = "8.845.256.667";
-                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Bogota";
-                    OEmpleado.Telefono = "(1) 560 00100-3";
-                    OEmpleado.CargoId = 3;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-
-
-                case "9.845.256.668":
-                    OEmpleado.Area = "Administracion Contabilidad";
-                    OEmpleado.Nombre = "Luz Marina";
-                    OEmpleado.Cedula = "9.845.256.668";
-                    OEmpleado.Direccion = "Calle 29 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Cucuta";
-                    OEmpleado.Telefono = "(1) 560 00100-3";
-                    OEmpleado.CargoId = 4;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-
-
-                case "10.845.256.665":
-                    OEmpleado.Area = "Empleado";
-                    OEmpleado.Nombre = "Efrain Mejias";
-                    OEmpleado.Cedula = "6.845.256.665";
-                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Bogota";
-                    OEmpleado.Telefono = "(1) 560 00100";
-                    OEmpleado.CargoId = 1;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-
-                case "11.845.256.665":
-                    OEmpleado.Area = "Empleado";
-                    OEmpleado.Nombre = "Javier Rodriguez";
-                    OEmpleado.Cedula = "6.845.256.665";
-                    OEmpleado.Direccion = "Calle 28 No. 13A - 15. Piso 10";
-                    OEmpleado.Ciudad = "Bogota";
-                    OEmpleado.Telefono = "(1) 560 00100";
-                    OEmpleado.CargoId = 1;
-                    OEmpleado.CentroOperaciones = "1";
-                    OEmpleado.CentroCostos = "1";
-                    OEmpleado.UnidadNegocio = "1";
-                    OEmpleado.FechaCreacion = DateTime.Now;
-                    break;
-            }
-
-            var wresul = Json(OEmpleado);
-            return Json(wresul);
+            var KactusEmpleado = kactusEmpleadoRepository.All().Where(m => m.NumeroDeIdentificacion == wCedula).Single();
+            return Json(KactusEmpleado);
         }
 
+        /*DATOS DEMO*/
+
+        public JsonResult Servicios(int? proveedorId)
+        {
+
+            Servicio[] lstServicios = new Servicio[3];
+
+            lstServicios[0] = new Servicio
+            {
+                Id = 1,
+                Nombre = "Comida"
+            };
+            lstServicios[1] = new Servicio
+            {
+                Id = 2,
+                Nombre = "Transporte"
+            };
+            lstServicios[2] = new Servicio
+            {
+                Id = 3,
+                Nombre = "Hospedaje"
+            };
+
+            return Json(lstServicios);
+        }
+
+        public JsonResult CentroOperaciones()
+        {
+            List<CentroOperacion> lstCentroOperaciones = new List<CentroOperacion>();
+            CentroOperacion centroOperacion = new CentroOperacion();
+            centroOperacion.Id = 1;
+            centroOperacion.Nombre = "Centro Operaciones 01";
+
+            CentroOperacion centroOperacion2 = new CentroOperacion();
+            centroOperacion2.Id = 2;
+            centroOperacion2.Nombre = "Centro Operaciones 02";
+
+            lstCentroOperaciones.Add(centroOperacion);
+            lstCentroOperaciones.Add(centroOperacion2);
+
+            return Json(lstCentroOperaciones);
+        }
+
+        public JsonResult UnidadNegocios()
+        {
+            List<UnidadNegocio> lstUnidadNegocio = new List<UnidadNegocio>();
+            UnidadNegocio unidadNegocio = new UnidadNegocio();
+            unidadNegocio.Id = 1;
+            unidadNegocio.Nombre = "Unidad Negocio 01";
+
+            UnidadNegocio unidadNegocio2 = new UnidadNegocio();
+            unidadNegocio2.Id = 2;
+            unidadNegocio2.Nombre = "Unidad Negocio 02";
+
+            lstUnidadNegocio.Add(unidadNegocio);
+            lstUnidadNegocio.Add(unidadNegocio2);
+
+            return Json(lstUnidadNegocio);
+        }
+
+        public JsonResult CentroCostos()
+        {
+            List<CentroCosto> lstCentroCosto = new List<CentroCosto>();
+            CentroCosto centroCosto = new CentroCosto();
+            centroCosto.Id = 1;
+            centroCosto.Nombre = "Centro Costo 01";
+
+            CentroCosto centroCosto2 = new CentroCosto();
+            centroCosto2.Id = 2;
+            centroCosto2.Nombre = "Centro Costo 02";
+
+            lstCentroCosto.Add(centroCosto);
+            lstCentroCosto.Add(centroCosto2);
+
+            return Json(lstCentroCosto);
+        }
+
+        public JsonResult Proveedores()
+        {
+            List<Proveedor> lstProveedores = new List<Proveedor>();
+            Proveedor proveedor = new Proveedor();
+            proveedor.Id = 1;
+            proveedor.Nombre = "Proveedor Prueba";
+            lstProveedores.Add(proveedor);
+
+            return Json(lstProveedores);
+        }
+
+        
 
     }
 }

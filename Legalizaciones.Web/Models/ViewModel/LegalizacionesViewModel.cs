@@ -27,12 +27,14 @@ namespace Legalizaciones.Web.Models.ViewModel
         public int AnticipoId { get; set; }
 
         [DisplayName("ID Documento en ERP")]
-        public int DocumentoERPID { get; set; }
+        public string DocumentoERPID { get; set; }
 
         [DisplayName("Registro")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaRegistro { get; set; }
 
         [DisplayName("Vencimiento")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaVencimiento { get; set; }
 
         [DisplayName("Concepto")]
@@ -50,13 +52,15 @@ namespace Legalizaciones.Web.Models.ViewModel
 
 
         [DisplayName("Fecha desde")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaDesde { get; set; }
 
         [DisplayName("Fecha hasta")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaHasta { get; set; }
 
         //Objeto Empleado
-        public Empleado Empleado { get; set; }
+        public KactusEmpleado Empleado { get; set; }
 
         //area de legalizacion
         [DisplayName("Recibo de Caja")]
@@ -84,7 +88,7 @@ namespace Legalizaciones.Web.Models.ViewModel
         public string ValorTasa { get; set; }
 
         [DisplayName("Fecha del gasto")]
-        [DisplayFormat(DataFormatString = "{0:dd/mm/yyyy}")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaGasto { get; set; }
 
         [DisplayName("Centro de operación")]

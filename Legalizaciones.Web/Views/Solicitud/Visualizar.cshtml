@@ -117,22 +117,28 @@
                     <table class="tableEmpleado">
                         <thead>
                             <tr>
-                                <th>Área</th>
-                                <th>Nombre y Apellido</th>
-                                <th>Cédula de Ciudadanía</th>
+                                <th>Código Área</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Cédula</th>
                                 <th>Dirección</th>
-                                <th>Ciudad</th>
                                 <th>Teléfono</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>@Model.Empleado.Area</td>
-                                <td>@Model.Empleado.Nombre</td>
-                                <td>@Model.Empleado.Cedula</td>
-                                <td>@Model.Empleado.Direccion</td>
-                                <td>@Model.Empleado.Ciudad</td>
-                                <td>@Model.Empleado.Telefono</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
+                                <td>
+                                    @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
+                                    @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
+                                </td>
+                                <td>
+                                    @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
+                                    @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
+                                </td>
+                                <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                                <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
                             </tr>
                         </tbody>
                     </table>
@@ -248,7 +254,7 @@
                                 </div>
                             </div>
 
-                            @if (ViewBag.cargoId != "1")
+                            @if (ViewBag.rol != "Empleado")
                             {
                                 <a class="btn btn-primary fa fa-file-pdf-o"
                                    asp-controller="ExportFilesFormat" asp-action="CreatePDF"

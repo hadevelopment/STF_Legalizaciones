@@ -57,7 +57,7 @@ namespace Legalizaciones.Model
 
         [NotMapped] public Solicitud Solicitud { get; set; }
 
-        [NotMapped] public Empleado Empleado { get; set; }
+        [NotMapped] public KactusEmpleado Empleado { get; set; }
 
         [NotMapped] public List<SolicitudGastos> SolicitudGastos { get; set; }
 

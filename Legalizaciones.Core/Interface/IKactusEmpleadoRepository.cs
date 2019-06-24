@@ -7,8 +7,10 @@ using System.Text;
 
 namespace Legalizaciones.Interface
 {
-    public interface IEmpleadoRepository : IRepository<Empleado>
+    public interface IKactusEmpleadoRepository : IRepository<KactusEmpleado>
     {
         IEnumerable<SelectListItem> listaEmpleados();
+        KactusEmpleado getEmpleadoID(int idEmpleado);
+        KactusEmpleado getEmpleadoCedula(string cedula);
     }
 }
