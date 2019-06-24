@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 using Legalizaciones.Interface;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
@@ -411,8 +412,8 @@ namespace Legalizaciones.Web.Engine
         public string []  SimuladorKactusJefeInmediato()
         {
             string [] JefeArea = new string[6];
-            JefeArea[0] = "Daniel Sanchez";
-            JefeArea[1] = "8.845.256.667";
+            JefeArea[0] = "Direccion";
+            JefeArea[1] = "Nivel3";
             JefeArea[2] = "En Espera de Aprobación JD";
             JefeArea[3] = "d.sanchez@innova4j.com";
             return JefeArea;
@@ -436,23 +437,25 @@ namespace Legalizaciones.Web.Engine
 
         private XmlDocument XmlCreate(string cadena)
         {
+            cadena = cadena.Replace("{", "");
+            cadena = cadena.Replace("}", "");
+            cadena = cadena.Replace("[", "");
+            cadena = cadena.Replace("]", "");
+            cadena = cadena.Replace("/", "");
+            cadena = cadena.Replace("\\", "");
+            cadena = cadena.Replace("\"", "");
             XmlDocument doc = new XmlDocument();
             XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
             XmlElement root = doc.DocumentElement;
-            
             try
             {
                 doc.InsertBefore(xmlDeclaration, root);
                 doc.LoadXml(cadena);
-
-                string json = JsonConvert.SerializeXmlNode(doc);
-                //doc = JsonConvert.DeserializeXmlNode(cadena);
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
-                string h = ex.ToString();
+                string e = ex.ToString();
             }
-            //doc.Save("C://ruta//xml_ejemplo.xml");
+
             return doc;
         }
 

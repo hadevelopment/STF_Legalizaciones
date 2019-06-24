@@ -124,9 +124,95 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            var listaKactusEmpleados = kactusEmpleadoRepository.All().ToList();
-            return Json(listaKactusEmpleados);
-        }
+            List<Empleado> Empleados = new List<Empleado>();
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Eliezer Vargas",
+                Cedula = "Nivel3",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.vargas@innova4j.com",
+                Cargo = "Direccion"
+            }) ;
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Tesoreria",
+                Nombre = "Angelica Betancourt",
+                Cedula = "Nivel4",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-2",
+                CargoId = 2, // ROL Administracion Tesoreria
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "a.betancourt@innova4j.com",
+                Cargo = "Gerencia"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Contraloria",
+                Nombre = "Daniel Sanchez",
+                Cedula = "Nivel5",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 3, // ROL Administracion Contraloria
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "d.sanchez@innova4j.com",
+                Cargo = "Jefatura"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Administracion Contabilidad",
+                Nombre = "Luz Marina",
+                Cedula = "N/A",
+                Direccion = "Calle 29 No. 13A - 15. Piso 10",
+                Ciudad = "Cucuta",
+                Telefono = "(1) 560 00100-3",
+                CargoId = 4, // ROL Administracion Contabilidad
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "l.marina@innova4j.com",
+                Cargo = "Presidencia"
+            });
+
+            Empleados.Add(new Empleado
+            {
+                Area = "Empleado",
+                Nombre = "Efrain Mejias",
+                Cedula = "N/A",
+                Direccion = "Calle 28 No. 13A - 15. Piso 10",
+                Ciudad = "Bogota",
+                Telefono = "(1) 560 00100",
+                CargoId = 1, // ROL Empleado
+                CentroOperaciones = "1",
+                CentroCostos = "1",
+                UnidadNegocio = "1",
+                Correo = "e.mejias@innova4j.com",
+                Cargo = "VicePresidencia"
+            });
+
+            if (filtroCedula)
+            {
+                var cedula = HttpContext.Session.GetString("Usuario_Cedula");
+                var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == cedula).ToList();
+                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula) && m.Cedula != cedula);
+                return Json(list);
+            }
 
         public JsonResult OrigenDestinosPais(string paisID)
         {
