@@ -247,7 +247,11 @@
                     <div class="row margin-bottom">
                         <div class="col-md-4">
                             <label class="control-label">Tipo Servicio</label>
-                           <select id="TiposervicioId" name="TiposervicioId"></select>
+                            @Html.DropDownListFor(model => model.TiposervicioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.TiposervicioId, "Seleccione un tipo de servicio.", new { @class = "text-danger" })
+                            }
                         </div>
                         <div class="col-md-4">
                             @Html.LabelFor(model => model.ProveedorId, htmlAttributes: new { @class = "control-label col-md-12" })
@@ -398,6 +402,7 @@
                                     <td>Servicio</td>
                                     <td>Proveedor</td>
                                     <td>Concepto Gasto</td>
+                                    <td>Impuesto</td>
                                     <td class="maskMoney">Valor</td>
                                     <td>Acciones</td>
                                 </tr>

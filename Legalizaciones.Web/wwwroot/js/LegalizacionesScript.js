@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
     $("#TiposervicioId").change(function () {
         var idServicio = $('#TiposervicioId  option:selected').val();
         var nombreServicio = $('#TiposervicioId  option:selected').text();
@@ -29,9 +30,7 @@
     });
 
     $('.maskMoney').focus();
-
-
-    
+   
 });
 
 
@@ -123,6 +122,8 @@ function getDescCiudad(wID) {
 
 }
 
+function Retardando() { }
+
 var rowIndex = 0;
 function AgregarFilaDatagrid() {
 
@@ -145,6 +146,7 @@ function AgregarFilaDatagrid() {
 
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
+
 
     var CentroOperacionId = $("#CentroOperacion option:selected").val();
     var CentroOperacion = $("#CentroOperacion option:selected").text();
@@ -176,6 +178,7 @@ function AgregarFilaDatagrid() {
     //    Monto = CalcularGastoComidaLegalizacion();
     //}
     rowIndex = rowIndex + 1;
+    GetImpuesto(ServicioId, rowIndex);
 
     //las primeras son para el mapeo
     //las demas son para mostrar
@@ -198,6 +201,7 @@ function AgregarFilaDatagrid() {
                     <td>${Servicio}</td>
                     <td>${Proveedor}</td>
                     <td>${ConceptoGasto}</td>
+                    <td id="tax${rowIndex}"></td>
                     <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
@@ -214,6 +218,21 @@ function AgregarFilaDatagrid() {
 
 
     CalcularMontos();
+}
+
+
+
+function GetImpuesto(idServicio,i) {
+    return $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetTipoImpuesto",
+        data: { id: idServicio },
+        datatype: "Json",
+        success: function (data) {
+            var obj = 'tax' + i;
+            document.getElementById(obj).innerHTML = data.valor;
+        }
+    });
 }
 
 
@@ -341,9 +360,10 @@ function CargarListas() {
         url: "/UNOEE/GetServicios",
         datatype: "Json",
         success: function (data) {
+   
             $("#TiposervicioId").empty();
-            $.each(data, function (index, value) {
-                console.log(value.idTipoServicio);
+            $('#solicitud').append('<option selected disabled value="-1">Seleccione Servicio </option>');
+            $.each(data.resultado, function (index, value) {
                 $('#TiposervicioId').append('<option value="' + value.idTipoServicio + '">' + value.nombre + '</option>');
             });
         }
