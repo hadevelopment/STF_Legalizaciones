@@ -24,6 +24,6 @@ namespace Legalizaciones.Erp.Models
     public class ListCostCenters
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListCostCenters> Resultado { get; set; }
+        public List<CostCenters> Resultado { get; set; }
     }
 }

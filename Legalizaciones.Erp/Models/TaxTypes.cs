@@ -27,6 +27,6 @@ namespace Legalizaciones.Erp.Models
     public class ListTaxTypes
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListTaxTypes> Resultado { get; set; }
+        public List<TaxTypes> Resultado { get; set; }
     }
 }

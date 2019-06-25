@@ -338,17 +338,18 @@ function CargarCiudad(valor) {
 function CargarListas() {
     $.ajax({
         type: "GET",
-        url: "/UNOEE/Servicios",
+        url: "/UNOEE/GetServicios",
         datatype: "Json",
         success: function (data) {
             $("#TiposervicioId").empty();
-            $('#TiposervicioId').append('<option selected value="">Seleccione...</option>');
             $.each(data, function (index, value) {
-                $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                console.log(value.idTipoServicio);
+                $('#TiposervicioId').append('<option value="' + value.idTipoServicio + '">' + value.nombre + '</option>');
             });
         }
     });
 
+ 
     $.ajax({
         type: "GET",
         url: "/Localidad/Paises",
