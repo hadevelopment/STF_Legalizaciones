@@ -391,6 +391,19 @@ function CargarListas() {
 
     $.ajax({
         type: "GET",
+        url: "/UNOEE/GetUnidadNegocios",
+        datatype: "Json",
+        success: function (data) {
+            $("#UnidadNegocio").empty();
+            $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#UnidadNegocio').append('<option value="' + value.idUnidadNegocio + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    $.ajax({
+        type: "GET",
         url: "/UNOEE/GetCentroOperaciones",
         datatype: "Json",
         success: function (data) {
@@ -398,6 +411,20 @@ function CargarListas() {
             $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
             $.each(data.resultado, function (index, value) {
                 $('#CentroOperacion').append('<option value="' + value.idCentroOperacion + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetCentroCostos",
+        datatype: "Json",
+        success: function (data) {
+            $("#CentroCosto").empty();
+            $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#CentroCosto').append('<option value="' + value.idCentroCosto + '">' + value.nombre + '</option>');
             });
         }
     });
