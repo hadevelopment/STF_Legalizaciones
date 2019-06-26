@@ -364,7 +364,7 @@ function CargarListas() {
 
     $.ajax({
         type: "GET",
-        url: "/UNOEE/GetProveedores",
+        url: "/UNOEE/GetUnoeeProveedores",
         datatype: "Json",
         success: function (data) {
             $("#ProveedorId").empty();
