@@ -29,7 +29,7 @@ namespace Legalizaciones.Erp.Models
         public string Sucursal { get; set; }
 
         [XmlElement(ElementName = "des_sucursal")]
-        public string Des_Sucuursal { get; set; }
+        public string Des_Sucursal { get; set; }
 
         [XmlElement(ElementName = "pais")]
         public string Pais { get; set; }

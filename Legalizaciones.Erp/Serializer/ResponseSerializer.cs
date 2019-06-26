@@ -164,6 +164,17 @@ namespace Legalizaciones.Erp
             return d;
         }
 
+        public async Task<List<Suppliers>> ListSuppliersAsync2<ListSuppliers>()
+        {
+            BaseSerializer.BuildRequest("WS_PROVEEDORES");
+            var a = BaseSerializer.xmlRequest;
+            var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
+            var s = r.Nodes[1].FirstNode.ToString();
+            var d = ReadXmlString<List<Suppliers>>(s);
+
+            return d;
+        }
+
         public async Task<IEnumerable<XElement>> ListSuppliersXMLAsync<Suppliers>()
         {
             BaseSerializer.BuildRequest("WS_PROVEEDORES");

@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using Legalizaciones.Erp.Models;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
@@ -429,6 +430,15 @@ namespace Legalizaciones.Web.Engine
             EngineDb Metodo = new EngineDb();
             Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", KactusEmpleado);
             return KactusEmpleado;
+        }
+
+        public async Task<List<Suppliers>> UnoeeProveedoresAsync()
+        {
+            ErpMethod FuncionErp = new ErpMethod();
+            List<Suppliers> Proveedores = await FuncionErp.ListSuppliersAsync2<ListSuppliers>();
+            EngineDb Metodo = new EngineDb();
+            Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
+            return Proveedores;
         }
 
         private XmlDocument XmlCreate(string cadena)

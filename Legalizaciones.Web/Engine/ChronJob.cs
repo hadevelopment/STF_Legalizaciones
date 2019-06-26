@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Legalizaciones.Erp.Models;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ namespace Legalizaciones.Web.Engine
         public ChronJob(ILogger<ChronJob> logger)
         {
             _logger = logger;
-            GetKactusEmpleadoAsync();
+            ProcedimientosJobsAsync();
         }
 
         public Task Execute(IJobExecutionContext context)
@@ -21,12 +22,26 @@ namespace Legalizaciones.Web.Engine
             return Task.CompletedTask;
         }
 
+        private async Task ProcedimientosJobsAsync()
+        {
+            await GetKactusEmpleadoAsync();
+            await ProveedoresCollectionAsync();
+        }
+
         private async Task<List<KactusIntegration.Empleado>> GetKactusEmpleadoAsync()
         {
             EngineStf Funcion = new EngineStf();
             List<KactusIntegration.Empleado> empleado = new List<KactusIntegration.Empleado>();
             empleado = await Funcion.EmpleadoKactusAsync();
             return empleado;
+        }
+
+        private async Task<List<Suppliers>> ProveedoresCollectionAsync()
+        {
+            EngineStf Funcion = new EngineStf();
+            List<Suppliers> Proveedores = new List<Suppliers>();
+            Proveedores = await Funcion.UnoeeProveedoresAsync();
+            return Proveedores;
         }
 
     }
