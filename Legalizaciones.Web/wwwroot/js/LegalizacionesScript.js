@@ -229,8 +229,14 @@ function GetImpuesto(idServicio,i) {
         data: { id: idServicio },
         datatype: "Json",
         success: function (data) {
-            var obj = 'tax' + i;
-            document.getElementById(obj).innerHTML = data.valor;
+            var obj = '#tax' + i;
+            if (data.Valor != 0 && data.valor != null) {
+                var value = data.valor.replace('.', ',');
+                $(obj).text(value);
+            }
+            else {
+                $(obj).text('0,00');
+            }
         }
     });
 }
@@ -258,7 +264,7 @@ function ValidarGastos() {
     var Origen = $('#Origen').val();
     var Destino = $('#Destino').val();
 
-    if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "") {
+    if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "" & Valor > 0) {
         //Validacion de Transporte
         if (Servicio === "Transporte" || Servicio === "Movilidad") {
             if (Origen === "" || Destino === "") {
@@ -362,9 +368,9 @@ function CargarListas() {
         success: function (data) {
    
             $("#TiposervicioId").empty();
-            $('#solicitud').append('<option selected disabled value="-1">Seleccione Servicio </option>');
+            $('#TiposervicioId').append('<option selected disabled value="-1">Seleccione...</option>');
             $.each(data.resultado, function (index, value) {
-                $('#TiposervicioId').append('<option value="' + value.idTipoServicio + '">' + value.nombre + '</option>');
+                $('#TiposervicioId').append('<option value="' + value.idTipoServicio.trim() + '">' + value.nombre + '</option>');
             });
         }
     });
