@@ -122,7 +122,6 @@ function getDescCiudad(wID) {
 
 }
 
-function Retardando() { }
 
 var rowIndex = 0;
 function AgregarFilaDatagrid() {
@@ -360,21 +359,48 @@ function CargarCiudad(valor) {
     });
 }
 
+
 function CargarListas() {
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetProveedores",
+        datatype: "Json",
+        success: function (data) {
+            $("#ProveedorId").empty();
+            $('#ProveedorId').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#ProveedorId').append('<option value="' + value.idProveedor + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
     $.ajax({
         type: "GET",
         url: "/UNOEE/GetServicios",
         datatype: "Json",
-        success: function (data) {
-   
+        success: function (data) {  
             $("#TiposervicioId").empty();
-            $('#TiposervicioId').append('<option selected disabled value="-1">Seleccione...</option>');
+            $('#TiposervicioId').append('<option selected value="">Seleccione...</option>');
             $.each(data.resultado, function (index, value) {
                 $('#TiposervicioId').append('<option value="' + value.idTipoServicio.trim() + '">' + value.nombre + '</option>');
             });
         }
     });
 
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetCentroOperaciones",
+        datatype: "Json",
+        success: function (data) {
+            $("#CentroOperacion").empty();
+            $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#CentroOperacion').append('<option value="' + value.idCentroOperacion + '">' + value.nombre + '</option>');
+            });
+        }
+    });
  
     $.ajax({
         type: "GET",
@@ -401,7 +427,8 @@ function CargarListas() {
         }
     });
 
-    CargarProveedor();
+ 
+
     CargarMotivos ();
 }
 
@@ -409,13 +436,6 @@ function CargarListas() {
 function CargarMotivos() {
  $('#MotivoId').append('<option value="1">Motivo Uno</option>');
     $('#MotivoId').append('<option value="2">Motivo Dos</option>');
-
-}
-
-
-function CargarProveedor() {
-    $('#ProveedorId').append('<option value="1">Proveedor Uno</option>');
-    $('#ProveedorId').append('<option value="2">Proveedor Dos</option>');
 
 }
 

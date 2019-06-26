@@ -17,9 +17,9 @@ namespace Legalizaciones.Web.Controllers
         {
             
 
-            //ErpMethod Servicio = new ErpMethod();
+            ErpMethod Servicio = new ErpMethod();
             EngineStf Funcion = new EngineStf();
-            var resultado = Funcion.EmpleadoKactusAsync();
+            //var resultado = Funcion.EmpleadoKactusAsync();
             //var UnidadNegocio = Servicio.UnidadNegocioSingleAsync("01");
             // var UnidadesNegocios = Servicio.UnidadNegocioCollectionAsync();
             // var centroOperacion = Servicio.CentroOperacionesSingleAsync("27");
@@ -27,7 +27,7 @@ namespace Legalizaciones.Web.Controllers
             //var tipoImpuesto = Servicio.TipoImpuestosSingleAsync("01");
            // var tipoImpuesto = Servicio.TipoImpuestosSingleAsync("CS098");
             //var proveedor = Servicio.ProveedoresSingleAsync("1130609205");
-            //var proveedor = Servicio.ProveedoresCollectionAsync();
+            var proveedor = Servicio.ProveedoresCollectionAsync();
             //var tipoServicio = Servicio.TipoServiciosSingleAsync("AF001");
             //var tipoServicio = Servicio.TiposServiciosCollectionAsync();
            // var centroCosto = Servicio.CentroCostosCollectionAsync();
