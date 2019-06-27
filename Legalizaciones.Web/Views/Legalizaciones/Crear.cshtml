@@ -402,7 +402,7 @@
                                     <td>Servicio</td>
                                     <td>Proveedor</td>
                                     <td>Concepto Gasto</td>
-                                    <td>Impuesto</td>
+                                    <td>% Impuesto</td>
                                     <td class="maskMoney">Valor</td>
                                     <td>Acciones</td>
                                 </tr>
@@ -431,6 +431,7 @@
                                     <div class="row">
                                         <div class="col-md-7">
                                             <h4>Gastos Reportados:</h4>
+                                            <h4>Impuestos:</h4>
                                             <h4>Saldo:</h4>
                                         </div>
                                         <div class="col-md-5 text-right" style="padding-right:22px;">
@@ -438,9 +439,13 @@
                                                 @Html.EditorFor(model => model.MontoGastosReportados, new { htmlAttributes = new { @class = "txtLabel maskMoney", @id = "txMontoFaltante", @readonly = "readonly", @style = "font-size:18px; padding-top:5px;" } })
                                             </h4>
                                             <h4>
+                                                <input type="text" class="txtLabel maskMoney" readonly="readonly" id="txtMontoImpuesto" value="0.00" />
+                                                @*<label id="txtMontoImpuesto" class="txtLabel" maskMoney style="font-size:18px; padding-top:5px;">0,00</label>*@
+                                            </h4>
+                                            <h4>
                                                 @Html.EditorFor(model => model.MontoSaldo, new { htmlAttributes = new { @class = "txtLabel maskMoney", @id = "txSaldo", @readonly = "readonly", @style = "font-size:18px; padding-top:5px;" } })
                                                 <small class="help">
-                                                    <p id="mensajeSaldo">
+                                                    <p id="mensajeSaldo" >
 
                                                     </p>
                                                 </small>

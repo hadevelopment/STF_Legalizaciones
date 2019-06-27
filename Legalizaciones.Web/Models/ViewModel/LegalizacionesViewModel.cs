@@ -167,6 +167,6 @@ namespace Legalizaciones.Web.Models.ViewModel
 
         [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }
 
-
+        public decimal MontoImpuesto { get; set; }
     }
 }

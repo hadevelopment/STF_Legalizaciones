@@ -5,7 +5,7 @@ $(document).ready(function () {
         var nombreServicio = $('#TiposervicioId  option:selected').text();
 
         console.log(nombreServicio);
-        if (nombreServicio === "Comida") {
+        if (nombreServicio === "Comida") {AñadirGastos
             $('#divFechaGasto').addClass('display-none');
             $('#divOrigenDestino').addClass('display-none');
             $('#FechaGasto').val('N/A');
@@ -177,7 +177,8 @@ function AgregarFilaDatagrid() {
     //    Monto = CalcularGastoComidaLegalizacion();
     //}
     rowIndex = rowIndex + 1;
-    GetImpuesto(ServicioId, rowIndex);
+    var Monto2 = Monto.toString().replace(',', '');
+    GetImpuesto(ServicioId, rowIndex,Monto2);
 
     //las primeras son para el mapeo
     //las demas son para mostrar
@@ -221,7 +222,8 @@ function AgregarFilaDatagrid() {
 
 
 
-function GetImpuesto(idServicio,i) {
+//************************************************************
+function GetImpuesto(idServicio, i, monto) {
     return $.ajax({
         type: "GET",
         url: "/UNOEE/GetTipoImpuesto",
@@ -229,17 +231,44 @@ function GetImpuesto(idServicio,i) {
         datatype: "Json",
         success: function (data) {
             var obj = '#tax' + i;
-            if (data.Valor != 0 && data.valor != null) {
-                var value = data.valor.replace('.', ',');
-                $(obj).text(value);
+            var sum = 0;
+            var porcentTax = '';
+            var montoImpuesto = 0;
+            if (data.length > 1) {
+                $.each(data, function (index, value) {
+                    sum = sum + Number.parseFloat(data[index].valor).toFixed(2);
+                });
             }
             else {
-                $(obj).text('0,00');
+                if (data.valor != 0 && data.valor != null && data.valor != '')
+                    sum = Number.parseFloat(data.valor);
+                else
+                    sum = 0;
             }
+            porcentTax = sum.toString();
+            porcentTax = porcentTax.replace('.', ',');
+            if (porcentTax != 0 && porcentTax != null && porcentTax != '')
+                $(obj).text(porcentTax);
+            else
+                $(obj).text('0,00');
+
+            montoImpuesto = monto * sum / 100;
+            var stringImpuesto = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+            if (stringImpuesto == '') {
+                stringImpuesto = 0;
+            }
+            else {
+                stringImpuesto = Number.parseFloat(stringImpuesto);
+            }
+            montoImpuesto = montoImpuesto + Number.parseFloat(stringImpuesto);
+            console.log(montoImpuesto);
+            $('#txtMontoImpuesto').maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $('#txtMontoImpuesto').val(montoImpuesto);
+            $('#txtMontoImpuesto').focus();
         }
     });
 }
-
+//*******************************************************************
 
 function GuardarGastos() {
     if (ValidarGastos()) {
@@ -362,7 +391,7 @@ function CargarCiudad(valor) {
 
 function CargarListas() {
 
-    $.ajax({
+    /*$.ajax({
         type: "GET",
         url: "/UNOEE/GetUnoeeProveedores",
         datatype: "Json",
@@ -373,7 +402,11 @@ function CargarListas() {
                 $('#ProveedorId').append('<option value="' + value.idProveedor + '">' + value.nombre + '</option>');
             });
         }
-    });
+    });*/
+
+    $('#ProveedorId').append('<option value="1">Proveedor Uno</option>');
+    $('#ProveedorId').append('<option value="2">Proveedor Dos</option>');
+
 
     $.ajax({
         type: "GET",
@@ -535,22 +568,25 @@ function CalcularMontos() {
     $('#txMontoFaltante').focus();
 
     var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
+    var montoImpuestos = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+    var montoTotal = montoGastos + montoImpuestos;
+    console.log(montoTotal);
 
-    if (montoGastos > montoAnticipo) {
+    if (montoTotal > montoAnticipo) {
         $('#txSaldo').removeClass('fontGreen');
         $('#txSaldo').addClass('fontRed');
         $('#mensajeSaldo').text('Saldo a Favor del Empleado');
-    } else if (montoGastos < montoAnticipo && montoGastos > 0) {
+    } else if (montoTotal < montoAnticipo && montoGastos > 0) {
         $('#txSaldo').removeClass('fontRed');
         $('#txSaldo').addClass('fontGreen');
         $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
-    } else if (montoGastos === 0){
+    } else if (montoTotal === 0){
         $('#txSaldo').removeClass('fontRed');
         $('#txSaldo').removeClass('fontGreen');
         $('#mensajeSaldo').text('');
     }
 
-    var saldo = montoAnticipo - montoGastos;
+    var saldo = montoAnticipo - montoTotal;
 
     $('#txSaldo').val(saldo);
     $('#txSaldo').focus();

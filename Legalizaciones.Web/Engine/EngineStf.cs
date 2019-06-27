@@ -432,12 +432,12 @@ namespace Legalizaciones.Web.Engine
             return KactusEmpleado;
         }
 
-        public async Task<List<Suppliers>> UnoeeProveedoresAsync()
+        public async Task<ListSuppliers> UnoeeProveedoresAsync()
         {
             ErpMethod FuncionErp = new ErpMethod();
-            List<Suppliers> Proveedores = await FuncionErp.ListSuppliersAsync2<ListSuppliers>();
+            ListSuppliers Proveedores = await FuncionErp.ListSuppliersAsync<ListSuppliers>();
             EngineDb Metodo = new EngineDb();
-            Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
+            //Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
             return Proveedores;
         }
 

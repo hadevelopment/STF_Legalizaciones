@@ -36,10 +36,10 @@ namespace Legalizaciones.Web.Engine
             return empleado;
         }
 
-        private async Task<List<Suppliers>> ProveedoresCollectionAsync()
+        private async Task<ListSuppliers> ProveedoresCollectionAsync()
         {
             EngineStf Funcion = new EngineStf();
-            List<Suppliers> Proveedores = new List<Suppliers>();
+            ListSuppliers Proveedores = new ListSuppliers();
             Proveedores = await Funcion.UnoeeProveedoresAsync();
             return Proveedores;
         }
