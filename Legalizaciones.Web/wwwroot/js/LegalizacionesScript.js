@@ -567,12 +567,12 @@ function CalcularMontos() {
     $('#txMontoFaltante').val(montoGastos);
     $('#txMontoFaltante').focus();
 
-    var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
+    var montoAnticipo = $('#txMontoFaltante').maskMoney('unmasked')[0];
     var montoImpuestos = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
-    var montoTotal = montoGastos + montoImpuestos;
+    var montoTotal = montoAnticipo + montoImpuestos;
     console.log(montoTotal);
 
-    if (montoTotal > montoAnticipo) {
+   /* if (montoTotal > montoAnticipo) {
         $('#txSaldo').removeClass('fontGreen');
         $('#txSaldo').addClass('fontRed');
         $('#mensajeSaldo').text('Saldo a Favor del Empleado');
@@ -586,8 +586,9 @@ function CalcularMontos() {
         $('#mensajeSaldo').text('');
     }
 
-    var saldo = montoAnticipo - montoTotal;
+    var saldo = montoAnticipo - montoTotal;*/
 
-    $('#txSaldo').val(saldo);
+    //$('#txSaldo').val(saldo);
+    $('#txSaldo').val(montoTotal);
     $('#txSaldo').focus();
 }
