@@ -98,7 +98,7 @@ namespace Legalizaciones
             // Add our job
             services.AddSingleton<ChronJob>();
             //services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob),cronExpression: "0 20 04 ? * *"));
-            services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob), cronExpression: "0 05 20 ? * *"));
+            services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob), cronExpression: "0 04 22 ? * *"));
             services.AddHostedService<QuartzHostedService>();
         }
 
