@@ -373,7 +373,7 @@
                     </div>
 
                     @*para el boton file upload , colocar el json de los gastos y mensaje de validacion*@
-                    <div class="row margin-bottom">
+                    <div class="row margin-bottom display-none">
                         <div class="col-sm-12">
                             @Html.TextBoxFor(m => m.Soporte, new { type = "file" })
                             @Html.ValidationMessageFor(m => m.Soporte)

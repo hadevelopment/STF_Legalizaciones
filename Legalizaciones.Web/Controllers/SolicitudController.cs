@@ -163,13 +163,6 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-                //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
-                if (!getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
-                {
-                    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
-                    return View("Crear", solicitud);
-                }
-
                 solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                 solicitud.EmpleadoCedula = solicitud.Empleado.NumeroDeIdentificacion;
@@ -180,6 +173,13 @@ namespace Legalizaciones.Web.Controllers
                 solicitud.TipoSolicitudID = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo").Select(m => m.Id).FirstOrDefault(); //Anticipo
                 solicitud.FechaSolicitud = DateTime.Now;
                 solicitud.Area = solicitud.Empleado.CodigoArea;
+
+                //Se valida que exista un flujo para la solicitud y se obtiene el paso inicial del flujo configurado
+                if (!getPasoInicialFlujo(solicitud, solicitud.DestinoID, (float)solicitud.Monto))
+                {
+                    TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta solicitud. Comuníquese con el administrador de sistema.";
+                    return View("Crear", solicitud);
+                }
 
                 //Calculo Fecha de Vencimiento de la Solicitud
                 var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;

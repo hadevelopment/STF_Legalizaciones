@@ -12,6 +12,14 @@ $(document).ready(function () {
         }
     });
 
+    $('.btnActualizar').on('click', function () {
+        if (confirm('¿Esta Seguro(a) de guardar los cambios?')) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
     //Propiedades del dropdown Zona
     $("#Zona").select2({
         multiple: false
@@ -53,11 +61,7 @@ $(document).ready(function () {
             $('#FechaGasto').val('');
         }
 
-        if (!nombreServicio.indexOf("TRANSPORTE") >= 0 || !nombreServicio.indexOf("TRASLADO") >= 0) {
-            $('#divGastosDescripcion').removeClass('col-md-4');
-            $('#divGastosDescripcion').addClass('col-md-12');
-            $('#divZonas').addClass('display-none');
-        } else {
+        if (nombreServicio.indexOf("TRANSPORTE") >= 0 || nombreServicio.indexOf("TRASLADO") >= 0) {
             $('#Monto').val("");
 
             $('#AvisoMontoServicio').addClass('display-none');
@@ -66,6 +70,10 @@ $(document).ready(function () {
             $('#divGastosDescripcion').removeClass('col-md-12');
             $('#divGastosDescripcion').addClass('col-md-4');
             $('#divZonas').removeClass('display-none');
+        } else {
+            $('#divGastosDescripcion').removeClass('col-md-4');
+            $('#divGastosDescripcion').addClass('col-md-12');
+            $('#divZonas').addClass('display-none');
         }
 
         consultarLimiteGasto();
@@ -426,8 +434,8 @@ function validarGastos() {
             $('#Items').append(row);
 
             //Se aplica Formato Moneda al monto
-            $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
-            $('#monto-' + rowIndex).focus();
+            $('.rowIndex-' + rowIndex + ' #monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $('.rowIndex-' + rowIndex + ' #monto-' + rowIndex).focus();
 
             //Suma de Montos de Gastos
             CalcularMonto();
@@ -463,8 +471,8 @@ function validarGastos() {
             $('#Items').append(row2);
 
             //Se aplica Formato Moneda al monto
-            $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
-            $('#monto-' + rowIndex).focus();
+            $('.rowIndex-' + rowIndex + ' #monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
+            $('.rowIndex-' + rowIndex + ' #monto-' + rowIndex).focus();
 
             //Suma de Montos de Gastos
             CalcularMonto();
@@ -560,7 +568,7 @@ function ShowModalUpdate(value) {
     var ciudad = $('.' + value + ' .ciudad').text();
     var origen = $('.' + value + ' .origen').text();
     var destino = $('.' + value + ' .destino').text();
-    var monto = $('#monto-' + rowIndex).val();
+    var monto = $('.' + value + ' #monto-' + rowIndex).val();
 
     ciudadActualizar = ciudadId;
 
@@ -600,6 +608,8 @@ function ShowModalUpdate(value) {
 }
 
 function validarViaje(boton) {
+    $('#Monto').val(0);
+    $('#Monto').focus();
     $('#btnAdd').removeClass('display-none');
     $('#btnUpd').addClass('display-none');
     $('#btnUpd').addClass('display-none');
@@ -610,6 +620,7 @@ function validarViaje(boton) {
 
     var dateMin = $('#FechaDesde').val();
     var dateMax = $('#FechaHasta').val();
+
 
     $('#FechaGasto').datepicker('remove');
 
