@@ -59,7 +59,7 @@ namespace Legalizaciones.Web.Controllers
             if (HttpContext.Session.GetString("Usuario_Cargo") == null)
             {
                 KactusEmpleado emp = new KactusEmpleado();
-                
+
 
                 //Busco el empleado logeado del AppSettings
                 string wEmpleadoLogeado = Convert.ToString(_config["AppSettings:EmpLog"]);
@@ -82,7 +82,7 @@ namespace Legalizaciones.Web.Controllers
             {
                 ListaEmpleados = new SelectList(ListaEmpleado, "Cedula", "Nombre"),
             };
-
+            
             return View(wHomevista);
         }
 

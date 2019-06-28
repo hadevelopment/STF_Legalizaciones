@@ -1,5 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    string UserRol = HttpContextAccessor.HttpContext.Session.GetString("Usuario_Rol");
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,19 +46,21 @@
                             <span>Home</span>
                         </a>
                     </li>
-
                     <li class="btnMenu">
                         <a href='@Url.Action("Index","Solicitud")'>
                             <i class="fa fa-file-text"></i> <br />
                             <span>Anticipos</span>
                         </a>
                     </li>
-                    <li class="btnMenu">
-                        <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
-                            <i class="glyphicon glyphicon-credit-card"></i> <br />
-                            <span>Anticipos con TDC</span>
-                        </a>
-                    </li>
+                    @if (UserRol == "Tesoreria" || UserRol == "Administrador")
+                    {
+                        <li class="btnMenu">
+                            <a href='@Url.Action("RegistrarSTDC","Solicitud")'>
+                                <i class="glyphicon glyphicon-credit-card"></i> <br />
+                                <span>Anticipos con TDC</span>
+                            </a>
+                        </li>
+                    }
                     <li class="btnMenu">
                         <a href='@Url.Action("Index", "Legalizaciones")'>
                             <i class="fa fa-archive"></i> <br />
@@ -66,40 +73,36 @@
                             <span>Aprobación</span>
                         </a>
                     </li>
-                    <li class="btnMenu">
-                        <a href='@Url.Action("Index", "ConfiguracionGasto")'>
-                            <i class="fa fa-gear"></i> <br />
-                            <span>Conf. Gastos</span>
-                        </a>
-                    </li>
-                    <li class="btnMenu">
-                        <a href='@Url.Action("Index", "Zona")'>
-                            <i class="fa fa-bus"></i> <br />
-                            <span>Zonas</span>
-                        </a>
-                    </li>
-
-                    <li class="btnMenu">
-                        <a href='@Url.Action("Index", "OrigenDestino")'>
-                            <i class="fa fa-plane"></i> <br />
-                            <span>Origenes y Destinos </span>
-                        </a>
-                    </li>
-
-                    <li class="btnMenu">
-                        <a href='@Url.Action("Index", "WorkFlow")'>
-                            <i class="fa fa-gear"></i> <br />
-                            <span>Conf. Flujo Aprobacion</span>
-                        </a>
-                    </li>
-
-                    <li class="btnMenu">
-                           <a href='@Url.Action("Index", "Erp")'>
-                           <i class="fa fa-gear"></i> <br />
-                           <span>Test. Erp</span>
-                          </a>
+                    @if (UserRol == "Administrador")
+                    {
+                        <li class="btnMenu">
+                            <a href='@Url.Action("Index", "ConfiguracionGasto")'>
+                                <i class="fa fa-gear"></i> <br />
+                                <span>Conf. Gastos</span>
+                            </a>
                         </li>
-                   </ul>
+                        <li class="btnMenu">
+                            <a href='@Url.Action("Index", "Zona")'>
+                                <i class="fa fa-bus"></i> <br />
+                                <span>Zonas</span>
+                            </a>
+                        </li>
+
+                        <li class="btnMenu">
+                            <a href='@Url.Action("Index", "OrigenDestino")'>
+                                <i class="fa fa-plane"></i> <br />
+                                <span>Origenes y Destinos </span>
+                            </a>
+                        </li>
+
+                        <li class="btnMenu">
+                            <a href='@Url.Action("Index", "WorkFlow")'>
+                                <i class="fa fa-gear"></i> <br />
+                                <span>Conf. Flujo Aprobacion</span>
+                            </a>
+                        </li>
+                    }
+                </ul>
             </div>
 
             <!-- Navbar Right Menu -->
