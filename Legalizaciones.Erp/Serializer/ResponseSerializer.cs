@@ -107,11 +107,9 @@ namespace Legalizaciones.Erp
         {
             BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS");
             var a = BaseSerializer.xmlRequest;
-
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
             var d = ReadXmlString<Models.ListTaxTypes>(s);
-
             return d;
         }
 
@@ -128,11 +126,21 @@ namespace Legalizaciones.Erp
 
         public async Task<Models.TaxTypes> GetTaxtypesServicesAsync<TaxTypes>(string IdTaxtypesServices)
         {
-            BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS", IdTaxtypesServices);
-            var a = BaseSerializer.xmlRequest;
-            var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
-            var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
-            var d = ReadXmlString<Models.TaxTypes>(s);
+            Models.TaxTypes d = new Models.TaxTypes();
+            try
+            {
+                BaseSerializer.BuildRequest("WS_IMPUESTO_TIPOS_SERVICIOS", IdTaxtypesServices);
+                var a = BaseSerializer.xmlRequest;
+                var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
+                var s = r.Nodes[1].Elements().FirstOrDefault().Descendants().FirstOrDefault().ToString();
+                 d = ReadXmlString<Models.TaxTypes>(s);
+                return d;
+            }
+            catch(Exception x)
+            {
+                string n = x.ToString();
+            }
+
             return d;
         }
 
@@ -152,6 +160,17 @@ namespace Legalizaciones.Erp
             var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
             var s = r.Nodes[1].FirstNode.ToString();
             var d = ReadXmlString<Models.ListSuppliers>(s);
+
+            return d;
+        }
+
+        public async Task<List<Suppliers>> ListSuppliersAsync2<ListSuppliers>()
+        {
+            BaseSerializer.BuildRequest("WS_PROVEEDORES");
+            var a = BaseSerializer.xmlRequest;
+            var r = await WSUNOEE.EjecutarConsultaXMLAsync(BaseSerializer.xmlRequest.ToString());
+            var s = r.Nodes[1].FirstNode.ToString();
+            var d = ReadXmlString<List<Suppliers>>(s);
 
             return d;
         }

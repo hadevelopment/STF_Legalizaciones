@@ -100,7 +100,8 @@ namespace Legalizaciones
             services.AddSingleton<ISchedulerFactory, StdSchedulerFactory>();
             // Add our job
             services.AddSingleton<ChronJob>();
-            services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob),cronExpression: "0 20 04 ? * *"));
+            //services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob),cronExpression: "0 20 04 ? * *"));
+            services.AddSingleton(new JobSchedule(jobType: typeof(ChronJob), cronExpression: "0 54 09 ? * *"));
             services.AddHostedService<QuartzHostedService>();
         }
 

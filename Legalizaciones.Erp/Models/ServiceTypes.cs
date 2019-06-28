@@ -30,6 +30,6 @@ namespace Legalizaciones.Erp.Models
     public class ListServiceTypes
     {
         [XmlElement(ElementName = "Resultado")]
-        public List<ListServiceTypes> Resultado { get; set; }
+        public List<ServiceTypes> Resultado { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿
+$(document).ready(function () {
     $("#TiposervicioId").change(function () {
         var idServicio = $('#TiposervicioId  option:selected').val();
         var nombreServicio = $('#TiposervicioId  option:selected').text();
@@ -155,6 +156,7 @@ function getDescCiudad(wID) {
 
 }
 
+
 var rowIndex = 0;
 function AgregarFilaDatagrid() {
 
@@ -177,6 +179,7 @@ function AgregarFilaDatagrid() {
 
     var ServicioId = $("#TiposervicioId option:selected").val();
     var Servicio = $("#TiposervicioId option:selected").text();
+
 
     var CentroOperacionId = $("#CentroOperacion option:selected").val();
     var CentroOperacion = $("#CentroOperacion option:selected").text();
@@ -208,6 +211,8 @@ function AgregarFilaDatagrid() {
         FechaGasto = "N/A";
     }
     rowIndex = rowIndex + 1;
+    var Monto2 = Monto.toString().replace(',', '');
+    var valorImpuesto = GetImpuesto(ServicioId, rowIndex,Monto2);
 
     //las primeras son para el mapeo
     //las demas son para mostrar
@@ -230,7 +235,8 @@ function AgregarFilaDatagrid() {
                     <td>${Servicio}</td>
                     <td>${Proveedor}</td>
                     <td>${ConceptoGasto}</td>
-                    <td class="monto text-right"><input type="text" class="txtLabel" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
+                    <td class="impuesto text-right" id="tax${rowIndex}">${valorImpuesto}</td>
+                    <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
@@ -244,8 +250,90 @@ function AgregarFilaDatagrid() {
     $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
     $('#monto-' + rowIndex).focus();
 
+
+    var impuestoActual = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+    var impuestoServicio = Monto * valorImpuesto / 100;
+    var totalImpuesto = impuestoActual + impuestoServicio;
+    $('#txtMontoImpuesto').val(totalImpuesto);
+    $('#txtMontoImpuesto').focus();
+
     CalcularMontos();
 }
+
+
+
+//************************************************************
+function GetImpuesto(idServicio, i, monto) {
+    var impuesto = 0;
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetTipoImpuesto",
+        data: { id: idServicio },
+        async: false,
+        datatype: "Json",
+        success: function (data) {
+            var obj = '#tax' + i;
+            var sum = 0;
+            var porcentTax = '';
+            var montoImpuesto = 0;
+            if (data.length > 1) {
+                $.each(data, function (index, value) {
+                    sum = sum + Number.parseFloat(data[index].valor).toFixed(2);
+                });
+            }
+            else {
+                if (data.valor != 0 && data.valor != null && data.valor != '')
+                    sum = Number.parseFloat(data.valor);
+                else
+                    sum = 0;
+            }
+
+            impuesto = sum;
+        }
+    });
+
+    return impuesto;
+}
+
+
+
+
+function CalcularMontos() {
+    //Suma de Montos de Gastos legalizados
+    var montoGastos = 0;
+    $('td.monto input').each(function () {
+        montoGastos += parseFloat($(this).maskMoney('unmasked')[0]);
+    });
+
+    $('#txMontoFaltante').val(montoGastos);
+    $('#txMontoFaltante').focus();
+
+    var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
+    var montoImpuestos = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+    var montoTotal = montoGastos + montoImpuestos;
+    console.log(montoTotal);
+
+    if (montoTotal > montoAnticipo) {
+         $('#txSaldo').removeClass('fontGreen');
+         $('#txSaldo').addClass('fontRed');
+         $('#mensajeSaldo').text('Saldo a Favor del Empleado');
+     } else if (montoTotal < montoAnticipo && montoGastos > 0) {
+         $('#txSaldo').removeClass('fontRed');
+         $('#txSaldo').addClass('fontGreen');
+         $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
+     } else if (montoTotal === 0){
+         $('#txSaldo').removeClass('fontRed');
+         $('#txSaldo').removeClass('fontGreen');
+         $('#mensajeSaldo').text('');
+     }
+ 
+     var saldo = montoAnticipo - montoTotal;
+
+    $('#txSaldo').val(saldo);
+    $('#txSaldo').val(montoTotal);
+    $('#txSaldo').focus();
+}
+
 
 
 function GuardarGastos() {
@@ -270,7 +358,7 @@ function ValidarGastos() {
     var Origen = $('#Origen').val();
     var Destino = $('#Destino').val();
 
-    if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "") {
+    if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "" & Valor > 0) {
         //Validacion de Transporte
         if (Servicio.indexOf("TRANSPORTE") >= 0 || Servicio.indexOf("TRASLADO") >= 0) {
             if (Origen === "" || Destino === "") {
@@ -407,6 +495,7 @@ function CargarCiudad(valor) {
     });
 }
 
+
 function CargarListas() {
     //Obtener DESTINOS
     $.ajax({
@@ -447,17 +536,75 @@ function CargarListas() {
 
     $.ajax({
         type: "GET",
-        url: "/UNOEE/Servicios",
+        url: "/UNOEE/GetUnoeeProveedores",
         datatype: "Json",
         success: function (data) {
+            $("#ProveedorId").empty();
+            $('#ProveedorId').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#ProveedorId').append('<option value="' + value.idProveedor + '">' + value.nombre + '</option>');
+            });
+        }
+    });*/
+
+    $('#ProveedorId').append('<option value="1">Proveedor Uno</option>');
+    $('#ProveedorId').append('<option value="2">Proveedor Dos</option>');
+
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetServicios",
+        datatype: "Json",
+        success: function (data) {  
             $("#TiposervicioId").empty();
             $('#TiposervicioId').append('<option selected value="">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                $('#TiposervicioId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#TiposervicioId').append('<option value="' + value.idTipoServicio.trim() + '">' + value.nombre + '</option>');
             });
         }
     });
 
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetUnidadNegocios",
+        datatype: "Json",
+        success: function (data) {
+            $("#UnidadNegocio").empty();
+            $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#UnidadNegocio').append('<option value="' + value.idUnidadNegocio + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetCentroOperaciones",
+        datatype: "Json",
+        success: function (data) {
+            $("#CentroOperacion").empty();
+            $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#CentroOperacion').append('<option value="' + value.idCentroOperacion + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+
+    $.ajax({
+        type: "GET",
+        url: "/UNOEE/GetCentroCostos",
+        datatype: "Json",
+        success: function (data) {
+            $("#CentroCosto").empty();
+            $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
+            $.each(data.resultado, function (index, value) {
+                $('#CentroCosto').append('<option value="' + value.idCentroCosto + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+ 
     $.ajax({
         type: "GET",
         url: "/Localidad/Paises",
@@ -483,7 +630,8 @@ function CargarListas() {
         }
     });
 
-    CargarProveedor();
+ 
+
     CargarMotivos ();
 }
 
@@ -491,13 +639,6 @@ function CargarListas() {
 function CargarMotivos() {
  $('#MotivoId').append('<option value="1">Motivo Uno</option>');
     $('#MotivoId').append('<option value="2">Motivo Dos</option>');
-
-}
-
-
-function CargarProveedor() {
-    $('#ProveedorId').append('<option value="1">Proveedor Uno</option>');
-    $('#ProveedorId').append('<option value="2">Proveedor Dos</option>');
 
 }
 
@@ -550,34 +691,4 @@ function CalcularGastoComidaLegalizacion() {
 
 }
 
-function CalcularMontos() {
-    //Suma de Montos de Gastos legalizados
-    var montoGastos = 0;
-    $('td.monto input').each(function () {
-        montoGastos += parseFloat($(this).maskMoney('unmasked')[0]);
-    });
 
-    $('#txMontoFaltante').val(montoGastos);
-    $('#txMontoFaltante').focus();
-
-    var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
-
-    if (montoGastos > montoAnticipo) {
-        $('#txSaldo').removeClass('fontGreen');
-        $('#txSaldo').addClass('fontRed');
-        $('#mensajeSaldo').text('Saldo a Favor del Empleado');
-    } else if (montoGastos < montoAnticipo && montoGastos > 0) {
-        $('#txSaldo').removeClass('fontRed');
-        $('#txSaldo').addClass('fontGreen');
-        $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
-    } else if (montoGastos === 0){
-        $('#txSaldo').removeClass('fontRed');
-        $('#txSaldo').removeClass('fontGreen');
-        $('#mensajeSaldo').text('');
-    }
-
-    var saldo = montoAnticipo - montoGastos;
-
-    $('#txSaldo').val(saldo);
-    $('#txSaldo').focus();
-}

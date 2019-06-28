@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using Legalizaciones.Interface;
+using Legalizaciones.Erp.Models;
 using Legalizaciones.Model;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Workflow;
@@ -436,12 +437,21 @@ namespace Legalizaciones.Web.Engine
             KactusIntegration.KWsGhst2Client wsGhst2Client = new KactusIntegration.KWsGhst2Client();
             wsGhst2Client.Endpoint.Binding.SendTimeout = new TimeSpan(0, 5, 0);
             List<KactusIntegration.Empleado> KactusEmpleado = new List<KactusIntegration.Empleado>();
-            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-20), userWcf, passwordWcf);
+            var response = await wsGhst2Client.ConsultarEmpleadosAsync(499, DateTime.Now.AddDays(-40), userWcf, passwordWcf);
             resultado = Newtonsoft.Json.JsonConvert.SerializeObject(response);
             KactusEmpleado = response.ToList();
             EngineDb Metodo = new EngineDb();
             Metodo.InsertKactusEmpleados("Sp_InsertKactusEmpleado", KactusEmpleado);
             return KactusEmpleado;
+        }
+
+        public async Task<ListSuppliers> UnoeeProveedoresAsync()
+        {
+            ErpMethod FuncionErp = new ErpMethod();
+            ListSuppliers Proveedores = await FuncionErp.ListSuppliersAsync<ListSuppliers>();
+            EngineDb Metodo = new EngineDb();
+            //Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
+            return Proveedores;
         }
 
         private XmlDocument XmlCreate(string cadena)

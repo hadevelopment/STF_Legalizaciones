@@ -7,6 +7,8 @@ using System.Data.SqlClient;
 using Legalizaciones.Web.Models;
 using Legalizaciones.Model;
 using Legalizaciones.Model.Workflow;
+using Legalizaciones.Erp.Models;
+
 
 namespace Legalizaciones.Web.Engine
 {
@@ -782,6 +784,7 @@ namespace Legalizaciones.Web.Engine
             return result;
         }
 
+
         public bool TriggerActualizacionLegalizacion(int LegalizacionId)
         {
             bool result = false;
@@ -835,6 +838,75 @@ namespace Legalizaciones.Web.Engine
             }
 
             return FlujoLegalizacion;
+        }
+
+        public bool InsertUnoeeProveedores(string SpName, List<Suppliers> model)
+        {
+            bool resultado = false;
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand(SpName, Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                int nueva = 0;
+                foreach (Suppliers m in model)
+                {
+                    command.Parameters.Clear();
+                    command.Parameters.AddWithValue("@Nueva", nueva);
+                    command.Parameters.AddWithValue("@IdProveedor", m.IdProveedor);
+                    command.Parameters.AddWithValue("@Nombre", m.Nombre);
+                    command.Parameters.AddWithValue("@Telefono", m.Telefono);
+                    command.Parameters.AddWithValue("@Celular", m.Celular);                  
+                    command.Parameters.AddWithValue("@FechaReg", m.FechaReg);
+                    command.Parameters.AddWithValue("@Sucursal", m.Sucursal);
+                    command.Parameters.AddWithValue("@Des_Sucursal", m.Des_Sucursal);
+                    command.Parameters.AddWithValue("@Pais", m.Pais);
+                    command.Parameters.AddWithValue("@Depto", m.Depto);
+                    command.Parameters.AddWithValue("@Ciudad", m.Ciudad);
+                    command.Parameters.AddWithValue("@Direccion", m.Direccion);
+                    command.Parameters.AddWithValue("@Email", m.Email);
+                    command.ExecuteNonQuery();
+                    nueva++;
+                }
+                Conexion.Close();
+                resultado = true;
+            }
+            return resultado;
+        }
+
+        public List<Suppliers> GetUnoeeProveedores()
+        {
+            List<Suppliers> dataList = new List<Suppliers>();
+            using (Conexion)
+            {
+                Conexion.Open();
+                SqlCommand command = new SqlCommand("Sp_GetUnoeeProveedores", Conexion);
+                command.CommandType = CommandType.StoredProcedure;
+                SqlDataReader lector = command.ExecuteReader();
+                int n = 0;
+                while (lector.Read())
+                {
+                    Suppliers data = new Suppliers();
+                    data.IdProveedor = lector.GetString(0);
+                    data.Nombre = lector.GetString(1);
+                    data.Telefono = lector.GetString(2);
+                    data.Celular = lector.GetString(3);
+                    data.FechaReg = lector.GetString(4);
+                    data.Sucursal = lector.GetString(5);
+                    data.Des_Sucursal = lector.GetString(6);
+                    data.Pais = lector.GetString(7);
+                    data.Depto = lector.GetString(8);
+                    data.Ciudad = lector.GetString(9);
+                    data.Direccion = lector.GetString(10);
+                    data.Email = lector.GetString(11);
+                    dataList.Insert(n, data);
+                    n++;
+                }
+                lector.Close();
+                Conexion.Close();
+            }
+            return dataList;
+
         }
 
     }

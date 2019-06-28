@@ -11,7 +11,7 @@ using Legalizaciones.Model.Jerarquia;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Legalizaciones.Erp.Models;
-
+using Legalizaciones.Web.Engine;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -31,6 +31,15 @@ namespace Legalizaciones.Web.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        [HttpGet]
+        public JsonResult GetUnoeeProveedores()
+        {
+            List<Suppliers> Proveedores = new List<Suppliers>();
+            EngineDb Metodo = new EngineDb();
+            Proveedores = Metodo.GetUnoeeProveedores();
+            return Json(Proveedores);
         }
 
         [HttpGet]
