@@ -50,7 +50,7 @@
         if (tipoServicioId !== "") {
             $('#hdfTipoServicio').val(tipoServicio);
             console.log($('#hdfTipoServicio').val());
-            if (tipoServicio !== "Transporte" || tipoServicio !== "Movilidad") {
+            if (!tipoServicio.indexOf("TRANSPORTE") >= 0 || !tipoServicio.indexOf("TRASLADO") >= 0) {
                 $('.zonaPais').empty();
                 $('.zonaPais').append('<option disabled selected value="">Seleccione...</option>');
             }
@@ -58,7 +58,7 @@
             $('#hdfTipoServicio').val('');
         }
 
-        if (tipoServicio === "Transporte" || tipoServicio === "Movilidad") {
+        if (tipoServicio.indexOf("TRANSPORTE") >= 0 || tipoServicio.indexOf("TRASLADO") >= 0) {
             $('.zonaPais').attr("required", "required");
         } else {
             $('.zonaPais').removeAttr("required");
@@ -88,7 +88,7 @@
         var pais = $('#PaisId  option:selected').val();
         var servicio = $('#TipoServicioId  option:selected').text();
 
-        if (pais !== "" && servicio === "Transporte" || pais !== "" && servicio === "Movilidad") {
+        if (pais !== "" && tipoServicio.indexOf("TRANSPORTE") >= 0 || pais !== "" && tipoServicio.indexOf("TRASLADO") >= 0) {
             $('.zonaPais').removeAttr("disabled");
             cargarOrigenDestinos(pais);
         } else {
@@ -145,7 +145,7 @@
         var pais = $('#PaisId  option:selected').val();
         var servicio = $('#TipoServicioId  option:selected').text();
 
-        if (pais !== "" && servicio === "Transporte" || pais !== "" && servicio === "Movilidad") {
+        if (pais !== "" && tipoServicio.indexOf("TRANSPORTE") >= 0 || pais !== "" && tipoServicio.indexOf("TRASLADO") >= 0) {
             $('#hdfOrigen').val('');
             $('#hdfDestino').val('');
             $('.zonaPais').removeAttr("disabled");

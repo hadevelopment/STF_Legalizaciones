@@ -54,8 +54,6 @@ namespace Legalizaciones.Web.Engine
                 if (row[8] != DBNull.Value)
                     item.FechaEntrega = Convert.ToDateTime(row[8].ToString());
                 if (row[9] != DBNull.Value)
-                    //formatFecha = row[9].ToString().Split(" ")[0].Split("/");
-                    //item.FechaVencimiento = formatFecha[1] + "/" + formatFecha[0] + "/" + formatFecha[2];
                     item.FechaVencimiento = Convert.ToDateTime(row[9].ToString());
                 if (row[10] != DBNull.Value)
                     item.DiasTrascurridos = Convert.ToInt32(row[10]);
@@ -71,6 +69,8 @@ namespace Legalizaciones.Web.Engine
                     item.IdDocErp = row[15].ToString();
                 if (row[16] != DBNull.Value)
                     item.ConsecutivoErp = row[16].ToString();
+                if (row[17] != DBNull.Value)
+                    item.EstadoLegalizacion = row[17].ToString();
 
                 list.Insert(n, item);
                 
@@ -91,12 +91,10 @@ namespace Legalizaciones.Web.Engine
                     item.Id = Convert.ToInt32(row["Id"]);
                 if (row["Descripcion"] != DBNull.Value)
                     item.Descripcion = row["Descripcion"].ToString();
-                if (row["CedulaAprobador"] != DBNull.Value)
-                    item.CedulaAprobador = row["CedulaAprobador"].ToString();
-                if (row["NombreAprobador"] != DBNull.Value)
-                    item.NombreAprobador = row["NombreAprobador"].ToString();
-                if (row["EmailAprobador"] != DBNull.Value)
-                    item.EmailAprobador = row["EmailAprobador"].ToString();
+                if (row["NivelAprobador"] != DBNull.Value)
+                    item.NivelAprobador = row["NivelAprobador"].ToString();
+                if (row["DescripcionAprobador"] != DBNull.Value)
+                    item.DescripcionAprobador = row["DescripcionAprobador"].ToString();
                 if (row["Orden"] != DBNull.Value)
                     item.Orden = Convert.ToInt32(row["Orden"]);
                 if (row["TipoSolicitud"] != DBNull.Value)
@@ -221,8 +219,23 @@ namespace Legalizaciones.Web.Engine
                     item.Valor = row["Valor"].ToString();
                 if (row["EmpleadoCedula"] != DBNull.Value)
                     item.EmpleadoCedula = row["EmpleadoCedula"].ToString();
+                if (row["EmpleadoNombre"] != DBNull.Value)
+                    item.EmpleadoNombre = row["EmpleadoNombre"].ToString();
+                if (row["MontoAnticipoEntregado"] != DBNull.Value)
+                    item.MontoAnticipoEntregado = Convert.ToDecimal(row["MontoAnticipoEntregado"]);
+                if (row["MontoGastosReportados"] != DBNull.Value)
+                    item.MontoGastosReportados = Convert.ToDecimal(row["MontoGastosReportados"]);
+                if (row["MontoSaldo"] != DBNull.Value)
+                    item.MontoSaldo = Convert.ToDecimal(row["MontoSaldo"]);
                 if (row["PasoFlujoSolicitudId"] != DBNull.Value)
                     item.PasoFlujoSolicitudId = Convert.ToInt32(row["PasoFlujoSolicitudId"]);
+
+                if (row["EstadoId"] != DBNull.Value)
+                    item.EstadoId = Convert.ToInt32(row["EstadoId"]);
+
+                if (row["EstadoDescripcion"] != DBNull.Value)
+                    item.EstadoLegalizacion = new EstadoLegalizacion { Descripcion = row["EstadoDescripcion"].ToString() };
+
                 if (row["PasoDescripcion"] != DBNull.Value)
                     item.PasoFlujoSolicitud = new PasoFlujoSolicitud { Descripcion = row["PasoDescripcion"].ToString() };
 
@@ -323,9 +336,8 @@ namespace Legalizaciones.Web.Engine
                 Update = update,
                 Estatus = estatus,
                 TipoSolicitud = tipoDocumento,
-                NombreAprobador = addAprobador,
-                CedulaAprobador = empleado,
-                EmailAprobador = mail,
+                DescripcionAprobador = addAprobador,
+                NivelAprobador = empleado,
                 Descripcion = descripcion,
                 Orden = paso,
                 DestinoId = destinoId,
@@ -338,9 +350,9 @@ namespace Legalizaciones.Web.Engine
             return model;
         }
 
-        public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string addAprobador, string empleado,
-                                                  string descripcion, string mail, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo, string aprobadorSuplente1 = "", string cedulaSuplente1 = "",
-                                               string emailSuplente1 = "", string aprobadorSuplente2 = "", string cedulaSuplente2 = "", string emailSuplente2 = "")
+        public List<Legalizaciones.Web.Models.DataAprobacion> SetCreateAprobadorFlujo(List<Legalizaciones.Web.Models.DataAprobacion> model, string tipoDocumento, int idDocumento, string nivelAprobador, string descripcionAprobador,
+                                                  string descripcion, int update, int estatus, int paso, int destinoId, float montoMaximo, float montoMinimo, string descripcionSuplente1 = "",
+                                                  string nivelSuplente1 = "", string descripcionSuplente2 = "", string nivelSuplente2 = "")
         {
             Legalizaciones.Web.Models.DataAprobacion Item = new Legalizaciones.Web.Models.DataAprobacion()
             {
@@ -348,20 +360,17 @@ namespace Legalizaciones.Web.Engine
                 Estatus = estatus,
                 TipoSolicitud = tipoDocumento,
                 Id = idDocumento,
-                NombreAprobador = addAprobador,
-                CedulaAprobador = empleado,
-                EmailAprobador = mail,
+                DescripcionAprobador = descripcionAprobador,
+                NivelAprobador = nivelAprobador,
                 Descripcion = descripcion,
                 Orden = paso,
                 DestinoId = destinoId,
                 MontoMaximo = montoMaximo,
                 MontoMinimo = montoMinimo,
-                NombreSuplenteUno = aprobadorSuplente1,
-                CedulaSuplenteUno = cedulaSuplente1,
-                EmailSuplenteUno = emailSuplente1,
-                NombreSuplenteDos = aprobadorSuplente2,
-                CedulaSuplenteDos = cedulaSuplente2,
-                EmailSuplenteDos = emailSuplente2
+                DescripcionSuplenteUno = descripcionSuplente1,
+                NivelSuplenteUno = nivelSuplente1,
+                DescripcionSuplenteDos = descripcionSuplente2,
+                NivelSuplenteDos = nivelSuplente2,
             };
     
             EngineDb Metodo = new EngineDb();

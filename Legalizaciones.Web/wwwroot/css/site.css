@@ -309,7 +309,7 @@ body {
     margin-top:10px;
 }
 
-.txtLabel.maskMoney {
+.txtLabel {
     background-color: transparent;
     border: none;
     text-align: right;

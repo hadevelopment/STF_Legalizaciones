@@ -27,254 +27,250 @@
         </div>
     </div>
 
-    <form asp-controller="Solicitud" asp-action="Guardar" method="post">
-        <section class="">
-            <div class="box box-default">
+    <section class="">
+        <div class="box box-default">
 
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-exclamation-triangle"></i> Estado de la Solicitud: <i>@Model.ListaFlujo.Where(m=>m.Procesado == 2).Select(m=>m.Descripcion).FirstOrDefault()</i></h3>
-                    <div class="box-tools pull-right">
-                    </div>
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-exclamation-triangle"></i> Estado de la Solicitud: <i>@Model.ListaFlujo.Where(m=>m.Procesado == 2).Select(m=>m.Descripcion).FirstOrDefault()</i></h3>
+                <div class="box-tools pull-right">
+                </div>
 
-                    
-
-                    <div class="box-body">
-                        <div class="divFlujo">
-                            @if (Model.ListaFlujo.Count > 0)
+                <div class="box-body">
+                    <div class="divFlujo">
+                        @if (Model.ListaFlujo.Count > 0)
+                        {
+                            @foreach (var item in Model.ListaFlujo)
                             {
-                                @foreach (var item in Model.ListaFlujo)
+                                if (item.Procesado == 1) //Listo
                                 {
-                                    if (item.Procesado == 1) //Listo
-                                    {
-                                        <div class="col-sm-2 arrow_box">
-                                            <i class="fa fa-check-circle green" aria-hidden="true"></i>
-                                            <br />
-                                            <small>Listo</small>
-                                            <br />
-                                            <span>@item.Descripcion</span>
-                                        </div>
-                                    }
-                                    else if (item.Procesado == 2) //En Espera
-                                    {
-                                        <div class="col-sm-2 arrow_box">
-                                            <i class="fa fa-clock-o orange" aria-hidden="true"></i>
-                                            <br />
-                                            <small>En Espera</small>
-                                            <br />
-                                            <span>@item.Descripcion</span>
-                                        </div>
-                                    }
-                                    else if (item.Procesado == 3) //Rechazado
-                                    {
-                                        rechazado = true;
-                                        motivoRechazo = item.Motivo.Split("con motivo:")[1];
-                                        <div class="col-sm-2 arrow_box">
-                                            <i class="fa fa-close red" aria-hidden="true"></i>
-                                            <br />
-                                            <small>Rechazada</small>
-                                            <br />
-                                            <span>@item.Descripcion</span>
-                                        </div>
-                                    }
-                                    else //No Iniciado
-                                    {
-                                        <div class="col-sm-2 arrow_box">
-                                            <i class="fa fa-clock-o gray" aria-hidden="true"></i>
-                                            <br />
-                                            <small>No Iniciado</small>
-                                            <br />
-                                            <span>@item.Descripcion</span>
-                                        </div>
-                                    }
+                                    <div class="col-sm-2 arrow_box">
+                                        <i class="fa fa-check-circle green" aria-hidden="true"></i>
+                                        <br />
+                                        <small>Listo</small>
+                                        <br />
+                                        <span>@item.Descripcion</span>
+                                    </div>
+                                }
+                                else if (item.Procesado == 2) //En Espera
+                                {
+                                    <div class="col-sm-2 arrow_box">
+                                        <i class="fa fa-clock-o orange" aria-hidden="true"></i>
+                                        <br />
+                                        <small>En Espera</small>
+                                        <br />
+                                        <span>@item.Descripcion</span>
+                                    </div>
+                                }
+                                else if (item.Procesado == 3) //Rechazado
+                                {
+                                    rechazado = true;
+                                    motivoRechazo = item.Motivo.Split("con motivo:")[1];
+                                    <div class="col-sm-2 arrow_box">
+                                        <i class="fa fa-close red" aria-hidden="true"></i>
+                                        <br />
+                                        <small>Rechazada</small>
+                                        <br />
+                                        <span>@item.Descripcion</span>
+                                    </div>
+                                }
+                                else //No Iniciado
+                                {
+                                    <div class="col-sm-2 arrow_box">
+                                        <i class="fa fa-clock-o gray" aria-hidden="true"></i>
+                                        <br />
+                                        <small>No Iniciado</small>
+                                        <br />
+                                        <span>@item.Descripcion</span>
+                                    </div>
                                 }
                             }
-                            else
-                            {
-                                <h2>No se ha encontrado el flujo asignado a esta solicitud.</h2>
-                            }
-                        </div>
-
-                        @if (rechazado)
+                        }
+                        else
                         {
-                            <div class="col-sm-12">
-                                <span><b style="margin-bottom:5px;">Motivo del Rechazo:</b><br /></span>
-                                <span style=" font-size:16px;">@motivoRechazo</span>
-                            </div>
+                            <h2>No se ha encontrado el flujo asignado a esta solicitud.</h2>
                         }
                     </div>
+
+                    @if (rechazado)
+                    {
+                        <div class="col-sm-12">
+                            <span><b style="margin-bottom:5px;">Motivo del Rechazo:</b><br /></span>
+                            <span style=" font-size:16px;">@motivoRechazo</span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
+                <div class="box-tools pull-right">
                 </div>
             </div>
 
+            <div class="box-body">
+                <table class="tableEmpleado">
+                    <thead>
+                        <tr>
+                            <th>Código Área</th>
+                            <th>Nombres</th>
+                            <th>Apellidos</th>
+                            <th>Cédula</th>
+                            <th>Dirección</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
+                                @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
+                            </td>
+                            <td>
+                                @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
+                                @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
+                            </td>
+                            <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del empleado</h3>
-                    <div class="box-tools pull-right">
-                    </div>
-                </div>
-
-                <div class="box-body">
-                    <table class="tableEmpleado">
-                        <thead>
-                            <tr>
-                                <th>Código Área</th>
-                                <th>Nombres</th>
-                                <th>Apellidos</th>
-                                <th>Cédula</th>
-                                <th>Dirección</th>
-                                <th>Teléfono</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
-                                <td>
-                                    @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
-                                    @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
-                                </td>
-                                <td>
-                                    @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
-                                    @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
-                                </td>
-                                <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
+                <div class="box-tools pull-right">
                 </div>
             </div>
 
-            <div class="box box-default">
-                <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-plane"></i> Información del viaje</h3>
-                    <div class="box-tools pull-right">
+            <div class="box-body">
+                <label>Concepto del Anticipo</label>
+                <div class="row">
+                    <div class="col-md-12">
+                        <span> @Model.Concepto </span>
                     </div>
                 </div>
-
-                <div class="box-body">
-                    <label>Concepto del Anticipo</label>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <span> @Model.Concepto </span>
-                        </div>
+            </div>
+            <div class="box-body">
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label>Destino:</label>&nbsp;<span>@Model.Destino.Nombre </span>
                     </div>
-                </div>
-                <div class="box-body">
-                    <div class="row margin-bottom">
-                        <div class="col-md-3">
-                            <label>Destino:</label>&nbsp;<span>@Model.Destino.Nombre </span>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Zona Visitada:</label>&nbsp;
-                            @if (Model.Zona != null)
-                            {
-                                <span>@Model.Zona.Nombre</span>
-                            }
-                            else
-                            {
-                                <span>No disponible</span>
-                            }
-                        </div>
-                        <div class="col-md-3">
-                            <label>Centro de operación:</label>&nbsp;<span>@Model.CentroOperacion</span>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Unidad de negocio:</label>&nbsp;<span>@Model.UnidadNegocio</span>
-                        </div>
-                    </div>
-                    <div class="row margin-bottom">
-                        <div class="col-md-3">
-                            <label asp-for="CentroCosto">Centro de costo:</label> &nbsp;<span> @Model.CentroCosto</span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label asp-for="FechaDesde">Fecha desde:</label> &nbsp;<span>@Model.FechaDesde.ToString("dd/MM/yyyy")</span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label asp-for="FechaHasta">Fecha hasta:</label> &nbsp;<span> @Model.FechaHasta.ToString("dd/MM/yyyy")</span>
-                        </div>
-
-                        <div class="col-md-3">
-                            <label asp-for="Moneda">Moneda:</label> &nbsp;<span>@Model.Moneda.Nombre</span>
-                        </div>
-                    </div>
-                    <div class="row margin-bottom">
-                        <div class="col-md-3">
-                            <label>Monto:</label> &nbsp;<span> <input type="text" value="@Model.Monto" readonly="readonly" class="txtLabel maskMoney" /> </span>
-                        </div>
-                        @if (!string.IsNullOrEmpty(Model.RutaArchivo))
+                    <div class="col-md-3">
+                        <label>Zona Visitada:</label>&nbsp;
+                        @if (Model.Zona != null)
                         {
-                            <div class="col-md-3">
-                                <label>
-                                    Documento:
-                                    <a class="item-btn" onclick="showCartaModal('@Model.RutaArchivo');"> <span class="fa fa-file-pdf-o"></span> </a>
-                                </label>
-                            </div>
+                            <span>@Model.Zona.Nombre</span>
+                        }
+                        else
+                        {
+                            <span>No disponible</span>
                         }
                     </div>
+                    <div class="col-md-3">
+                        <label>Centro de operación:</label>&nbsp;<span>@Model.CentroOperacion</span>
+                    </div>
+                    <div class="col-md-3">
+                        <label>Unidad de negocio:</label>&nbsp;<span>@Model.UnidadNegocio</span>
+                    </div>
                 </div>
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="CentroCosto">Centro de costo:</label> &nbsp;<span> @Model.CentroCosto</span>
+                    </div>
 
-                <div class="box-body">
-                    <div class="row" style="margin-top:40px;">
-                        <div class="col-md-6">
-                            <label>Registro de Gastos</label>
+                    <div class="col-md-3">
+                        <label asp-for="FechaDesde">Fecha desde:</label> &nbsp;<span>@Model.FechaDesde.ToString("dd/MM/yyyy")</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="FechaHasta">Fecha hasta:</label> &nbsp;<span> @Model.FechaHasta.ToString("dd/MM/yyyy")</span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label asp-for="Moneda">Moneda:</label> &nbsp;<span>@Model.Moneda.Nombre</span>
+                    </div>
+                </div>
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label>Monto:</label> &nbsp;<span> <input type="text" value="@Model.Monto" readonly="readonly" class="txtLabel maskMoney" /> </span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.RutaArchivo))
+                    {
+                        <div class="col-md-3">
+                            <label>
+                                Documento:
+                                <a class="item-btn" onclick="showCartaModal('@Model.RutaArchivo');"> <span class="fa fa-file-pdf-o"></span> </a>
+                            </label>
                         </div>
-                        <div class="col-md-12">
-                            <table class="tableSolicitud">
-                                <tr>
-                                    <td>Fecha Gasto</td>
-                                    <td>Pais</td>
-                                    <td>Tipo Servicio</td>
-                                    <td>Ciudad</td>
-                                    <td>Origen</td>
-                                    <td>Destino</td>
-                                    <td>Valor Gasto</td>
-                                </tr>
-                                <tbody id="Items">
-                                    @if (Model.SolicitudGastos.Count > 0)
-                                    {
-                                        @Html.Partial("SolicitudGastos", Model.SolicitudGastos)
-                                    }
-                                    else
-                                    {
-                                        <tr>
-                                            <td colspan="7">No hay gastos registrados para esta solicitud...</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                            <br />
+                    }
+                </div>
+            </div>
 
-                            <div class="row" style="margin-top: 10px;">
-                                <div class="col-md-12 text-right">
-                                    <h3>Monto Total:</h3>
-                                    <input type="text" name="txMontoT" id="txMontoT" value="@Model.SolicitudGastos.Sum(m => m.Monto)" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
-                                </div>
+            <div class="box-body">
+                <div class="row" style="margin-top:40px;">
+                    <div class="col-md-6">
+                        <label>Registro de Gastos</label>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="tableSolicitud">
+                            <tr>
+                                <td>Fecha Gasto</td>
+                                <td>Pais</td>
+                                <td>Tipo Servicio</td>
+                                <td>Ciudad</td>
+                                <td>Origen</td>
+                                <td>Destino</td>
+                                <td>Valor Gasto</td>
+                            </tr>
+                            <tbody id="Items">
+                                @if (Model.SolicitudGastos.Count > 0)
+                                {
+                                    @Html.Partial("SolicitudGastos", Model.SolicitudGastos)
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="7">No hay gastos registrados para esta solicitud...</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="col-md-12 text-right">
+                                <h3>Monto Total:</h3>
+                                <input type="text" name="txMontoT" id="txMontoT" value="@Model.SolicitudGastos.Sum(m => m.Monto)" readonly="readonly" class="txtLabel maskMoney" style="height: 51px; width: 100px; font-size: 20px;text-align:center" />
                             </div>
-
-                            @if (ViewBag.rol != "Empleado")
-                            {
-                                <a class="btn btn-primary fa fa-file-pdf-o"
-                                   asp-controller="ExportFilesFormat" asp-action="CreatePDF"
-                                   asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
-                                <div style="float:right"></div>
-                            }
-                            else
-                            {
-                                <button class="btn btn-primary fa fa-file-pdf-o" style="float: right;" disabled>Exportar</button>
-                            }
-
-                            <a class="btn btn-primary" asp-area="" style="float:right;"
-                               asp-controller="Solicitud" asp-action="Index">Volver</a>
-                            <div style="float:right">    </div>
                         </div>
+
+                        @if (ViewBag.rol != "Empleado")
+                        {
+                            <a class="btn btn-primary fa fa-file-pdf-o"
+                                asp-controller="ExportFilesFormat" asp-action="CreatePDF"
+                                asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
+                            <div style="float:right"></div>
+                        }
+                        else
+                        {
+                            <button class="btn btn-primary fa fa-file-pdf-o" style="float: right;" disabled>Exportar</button>
+                        }
+
+                        <a class="btn btn-primary" asp-area="" style="float:right;"
+                            asp-controller="Solicitud" asp-action="Index">Volver</a>
+                        <div style="float:right">    </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </form>
+        </div>
+    </section>
 
     <div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-md">

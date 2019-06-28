@@ -25,8 +25,8 @@ namespace Legalizaciones.Web.Models
         public string Servicio { get; set; }
         public string Proveedor { get; set; }
         public string ConceptoGasto { get; set; }
+        public string Valor { get; set; }
         public string Acciones { get; set; }
-
     }
 
 }

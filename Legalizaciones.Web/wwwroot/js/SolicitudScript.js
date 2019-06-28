@@ -45,7 +45,7 @@ $(document).ready(function () {
         var idServicio = $('#Servicio  option:selected').val();
         var nombreServicio = $('#Servicio  option:selected').text();
 
-        if (nombreServicio === "Comida") {
+        if (nombreServicio === "ALIMENTACION") {
             $('#divGastosFecha').addClass('display-none');
             $('#FechaGasto').val('N/A');
         } else {
@@ -53,7 +53,7 @@ $(document).ready(function () {
             $('#FechaGasto').val('');
         }
 
-        if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
+        if (!nombreServicio.indexOf("TRANSPORTE") >= 0 || !nombreServicio.indexOf("TRASLADO") >= 0) {
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
             $('#divZonas').addClass('display-none');
@@ -395,8 +395,8 @@ function validarGastos() {
         return false;
     }
     
-    if (servicio !== "Movilidad" && servicio !== "Transporte") {
-        if (fechaGasto !== "" && servicio !== "" && monto !== "" || servicio === "Comida" && fechaGasto !== "" && monto !== "") {
+    if (!servicio.indexOf("TRANSPORTE") >= 0 || !servicio.indexOf("TRASLADO") >= 0) {
+        if (fechaGasto !== "" && servicio !== "" && monto !== "" || servicio === "ALIMENTACION" && fechaGasto !== "" && monto !== "") {
             $("#mensajeGastos").text("");
             $('#mensajeValidacionGastos').hide("slow");
 
@@ -491,8 +491,8 @@ function actualizarGastos() {
     var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").maskMoney('unmasked')[0];
 
-    if (servicio !== "Movilidad" && servicio !== "Transporte") {
-        if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" || pais !== "" && ciudad !== "" && servicio === "Comida" && fechaGasto !== "" && monto !== "") {
+    if (!servicio.indexOf("TRANSPORTE") >= 0 || !servicio.indexOf("TRASLADO") >= 0) {
+        if (pais !== "" && ciudad !== "" && fechaGasto !== "" && servicio !== "" && monto !== "" || pais !== "" && ciudad !== "" && servicio === "ALIMENTACION" && fechaGasto !== "" && monto !== "") {
 
             $("#mensajeGastos").text("");
             $('#mensajeValidacionGastos').hide("slow");
@@ -578,14 +578,14 @@ function ShowModalUpdate(value) {
     $('#btnUpd').removeClass('display-none');
     $('#hdfRowIndex').val(value);
 
-    if (servicio === "Comida") {
+    if (servicio === "ALIMENTACION") {
         $('#divGastosFecha').addClass('display-none');
         $('#FechaGasto').val('N/A');
     } else {
         $('#divGastosFecha').removeClass('display-none');
     }
 
-    if (servicio === "Movilidad" || servicio === "Transporte") {
+    if (servicio.indexOf("TRANSPORTE") >= 0 || servicio.indexOf("TRASLADO") >= 0) {
         $('#divGastosDescripcion').removeClass('col-md-12');
         $('#divGastosDescripcion').addClass('col-md-4');
         $('#divZonas').removeClass('display-none');
@@ -648,7 +648,7 @@ function consultarLimiteGasto() {
     var _destinoID = $("#hdfZonaDestino").val();
 
     if (_monedaID !== "" && _paisID !== "" && _tipoServicioID !== "") {
-        if (_tipoServicio === "Transporte" || _tipoServicio === "Movilidad") {
+        if (_tipoServicio.indexOf("TRANSPORTE") >= 0 || _tipoServicio.indexOf("TRASLADO") >= 0) {
             $.ajax({
                 type: "GET",
                 url: "/ConfiguracionGasto/obtenerLimiteGastoRuta",
@@ -1043,7 +1043,7 @@ function CalcularGastoComida() {
     var wServicio = $('#Servicio option:selected').text();
     var wMonto = $('#Monto').maskMoney('unmasked')[0];
 
-    if (wServicio === "Comida") {
+    if (wServicio === "ALIMENTACION") {
         var FechaDesde = $("#FechaDesde").val();
         var FechaHasta = $("#FechaHasta").val();
 

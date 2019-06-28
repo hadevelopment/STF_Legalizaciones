@@ -39,7 +39,7 @@
 <form asp-controller="Legalizaciones" asp-action="Guardar" method="post">
     <section class="">
         <div class="hidden">
-            @Html.TextBoxFor(model => model.ConAnticipo, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.ConAnticipo, new { @class = "form-control", @id="txConAnticipo" })
         </div>
 
 
@@ -55,7 +55,7 @@
                 <table class="tableSolicitud">
                     <thead>
                         <tr>
-                            <th class="col-md-1">
+                            <th class="display-none">
                                 @Html.DisplayNameFor(modelItem => modelItem.AnticipoId)
                             </th>
                             <th class="col-md-2">
@@ -77,7 +77,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
+                            <td class="display-none">
                                 @Html.DisplayFor(modelItem => modelItem.AnticipoId)
                             </td>
                             <td>
@@ -195,6 +195,15 @@
                         <label class="control-label">Fecha Hasta</label>
                         @Html.TextBoxFor(model => model.FechaHasta, Model.FechaHasta.ToString("yyyy-MM-dd"), new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Hasta", @required = "required", @type = "date" })
                     </div>
+                    @if (Model.ConAnticipo == 0)//Sin Anticipo
+                    {
+                        <div class="col-md-3">
+                            <label asp-for="DestinoID" id="lbl_destino">Destino</label>
+                            @Html.HiddenFor(model => model.DestinoID, new { @class = "form-control", id = "hdfDestino" })
+                            @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "DestinoId" })
+                            @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
+                        </div>
+                    }
                     <div class="col-md-3">
                         @if (Model.ConAnticipo == 0)//Sin Anticipo
                         {
@@ -228,6 +237,14 @@
                     </div>
                 </div>
 
+                <div class="row display-none" id="mensajeValidacionForm">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" role="alert">
+                            <span id="mensajeForm"></span>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row margin-bottom">
                     <div class="box-tools pull-right" style="margin-right: 20px;">
                         <a id="btnA" class="btn btn-primary" onclick="AnadirGastos(this);" style="float:right;">
@@ -235,9 +252,6 @@
                         </a>
                     </div>
                 </div>
-
-                
-
 
             </div>
 
@@ -325,6 +339,7 @@
                             }
                         </div>
                     </div>
+
 
                     <div class="row margin-bottom">
                         <div id="divOrigenDestino">
@@ -552,13 +567,11 @@
                                                                 <td class="col-md-1 ">@item.Destino</td>
                                                                 <td class="col-md-1 maskMoney"><small>@item.Monto</small></td>
                                                                 <td class="col-md-1 ">
-                                                                    @*<a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen.ToString().Replace("/",""),@item.Destino.ToString().Replace("/",""),@item.Monto);">*@
                                                                     <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id);">
                                                                         <small>Seleccionar</small>
                                                                     </a>
                                                                 </td>
                                                             </tr>
-
                                                     }
                                                 }
                                                 else {
@@ -725,24 +738,6 @@
     <script>
             $(function () {
                 $('#tableGastos').DataTable();
-
-                function cargarGastos() {
-                    var table = $('.tableGastos').tableToJSON({
-                        ignoreColumns: [16]
-                    });
-
-                    if (table.length > 0) {
-                        $("#mensajeRegistro").text("");
-                        $('#mensajeValidacionRegistro').hide("slow");
-                        $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                        return true;
-                    } else {
-                        $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-                        $('#mensajeValidacionRegistro').show("slow");
-                        return false;
-                    }
-
-                }
             });
 
     </script>

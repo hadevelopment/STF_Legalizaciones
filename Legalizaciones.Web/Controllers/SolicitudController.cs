@@ -24,6 +24,7 @@ namespace Legalizaciones.Web.Controllers
     {
         private readonly ISolicitudRepository solicitudRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
+        private readonly ISolicitudAprobacionRepository solicitudAprobacionRepository;
         private readonly ITipoSolicitudRepository tipoSolicitudRepository;
         private readonly IHistoricoSolicitudRepository historicoSolicitudRepository;
 
@@ -53,6 +54,7 @@ namespace Legalizaciones.Web.Controllers
         public SolicitudController(
             ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository,
+            ISolicitudAprobacionRepository solicitudAprobacionRepository,
             ITipoSolicitudRepository tipoSolicitudRepository,
             IHistoricoSolicitudRepository historicoSolicitudRepository,
             IMonedaRepository monedaRepository,
@@ -68,6 +70,7 @@ namespace Legalizaciones.Web.Controllers
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
+            this.solicitudAprobacionRepository = solicitudAprobacionRepository;
             this.tipoSolicitudRepository = tipoSolicitudRepository;
             this.historicoSolicitudRepository = historicoSolicitudRepository;
             this.monedaRepository = monedaRepository;
@@ -185,15 +188,18 @@ namespace Legalizaciones.Web.Controllers
                 //Se Registra la Solicitud
                 solicitudRepository.Insert(solicitud);
 
+                //Se Registran los gastos de la Solicitud
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
                 solicitud.SolicitudGastos = listaGastos;
-
-                //Se Registran los gastos de la Solicitud
                 foreach (SolicitudGastos item in listaGastos)
                 {
+                    item.Estatus = 1;
                     item.SolicitudId = solicitud.Id;
                     solicitudGastosRepository.Insert(item);
                 }
+
+                //Se Registra el Flujo de Aprobacion de la Solicitud
+                crearFlujoAprobacionSolicitud(solicitud);
 
                 //Se guarda la carta de descuento en el directorio en caso de que exista
                 if (solicitud.Archivo != null)
@@ -750,29 +756,87 @@ namespace Legalizaciones.Web.Controllers
         {
             //Obtengo el Id del flujo
             var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo" ).Select(m => m.Id).FirstOrDefault();
-            var idFlujo = flujoSolicitudRepository.All().Where(m => m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
+            var idFlujo = flujoSolicitudRepository.All().Where(m => m.TipoSolicitudId == tipoSolicitud && m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
             if(idFlujo != null && idFlujo > 0)
             {
-                var obj = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => new { m.Id, m.EmailAprobador}).FirstOrDefault();
+                var idPaso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == idFlujo && m.Estatus == 1).OrderBy(m => m.Orden).Select(m => m.Id).FirstOrDefault();
 
                 if (solicitud.FlujoSolicitudId != null && solicitud.PasoFlujoSolicitudId != null)
                 {
                     //Si el flujo y el paso de la solicitud son distintos a los anteriores se debe ejecutar el trigger de la base da datos
-                    if (solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != obj.Id)
+                    if (solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != idPaso)
                     {
                         DB.TriggerActualizacionSolicitud(solicitud.Id);
                     }
                 }
 
                 solicitud.FlujoSolicitudId = idFlujo;
-                solicitud.PasoFlujoSolicitudId = obj.Id;
-                solicitud.EmailAprobador = obj.EmailAprobador;
+                solicitud.PasoFlujoSolicitudId = idPaso;
+                //solicitud.EmailAprobador = obj.EmailAprobador;
                 return true;
             }
             else
             {
                 return false;
+            }
+        }
+
+        private void crearFlujoAprobacionSolicitud(Solicitud solicitud)
+        {
+            //Obtengo el Id del flujo
+            var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo").Select(m => m.Id).FirstOrDefault();
+            var pasosSolicitud = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == solicitud.FlujoSolicitudId && m.Estatus == 1).OrderBy(m => m.Orden).ToList();
+
+            if (pasosSolicitud.Count > 0)
+            {
+                //Obtengo los pasos asignados a la legalizacion para limpiarlos
+                var pasosAsignados = solicitudAprobacionRepository.All().Where(m => m.SolicitudId == solicitud.Id).ToList();
+                if (pasosAsignados != null && pasosAsignados.Count > 0)
+                {
+                    foreach (var paso in pasosAsignados)
+                    {
+                        solicitudAprobacionRepository.Delete(paso);
+                    }
+                }
+
+                var empleado = kactusEmpleadoRepository.All().Where(m => m.NumeroDeIdentificacion == solicitud.Empleado.NumeroDeIdentificacion).Single();
+                foreach (var paso in pasosSolicitud)
+                {
+                    SolicitudAprobacion solicitudAprobacion = new SolicitudAprobacion();
+                    solicitudAprobacion.SolicitudId = solicitud.Id;
+                    solicitudAprobacion.Orden = paso.Orden;
+                    solicitudAprobacion.PasoFlujoSolicitudId = paso.Id;
+
+                    if (paso.NivelAprobador == "NombreNivel3")
+                        solicitudAprobacion.Aprobador = empleado.NombreNivel3;
+
+                    if (paso.NivelSuplenteUno == "NombreNivel3")
+                        solicitudAprobacion.SuplenteUno = empleado.NombreNivel3;
+
+                    if (paso.NivelSuplenteDos == "NombreNivel3")
+                        solicitudAprobacion.SuplenteDos = empleado.NombreNivel3;
+
+                    if (paso.NivelAprobador == "NombreNivel4")
+                        solicitudAprobacion.Aprobador = empleado.NombreNivel4;
+
+                    if (paso.NivelSuplenteUno == "NombreNivel4")
+                        solicitudAprobacion.SuplenteUno = empleado.NombreNivel4;
+
+                    if (paso.NivelSuplenteDos == "NombreNivel4")
+                        solicitudAprobacion.SuplenteDos = empleado.NombreNivel4;
+
+                    if (paso.NivelAprobador == "NombreNivel5")
+                        solicitudAprobacion.Aprobador = empleado.NombreNivel5;
+
+                    if (paso.NivelSuplenteUno == "NombreNivel5")
+                        solicitudAprobacion.SuplenteUno = empleado.NombreNivel5;
+
+                    if (paso.NivelSuplenteDos == "NombreNivel5")
+                        solicitudAprobacion.SuplenteDos = empleado.NombreNivel5;
+
+                    solicitudAprobacionRepository.Insert(solicitudAprobacion);
+                }
             }
         }
         #endregion

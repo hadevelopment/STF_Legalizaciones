@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Legalizaciones.Model.Workflow;
 using Legalizaciones.Model.ItemSolicitud;
+using System.ComponentModel;
+using System;
+using Legalizaciones.Model.Jerarquia;
 
 namespace Legalizaciones.Model
 {
@@ -21,7 +24,9 @@ namespace Legalizaciones.Model
         [ForeignKey("Solicitud")]
         public int SolicitudID { get; set; }
 
-        [NotMapped] public string EmpleadoCedula { get; set; }
+        public string EmpleadoCedula { get; set; }
+
+        public string EmpleadoNombre { get; set; }
 
         [Required(ErrorMessage = "Recibo de caja es requerido.")]
         public long ReciboCaja { get; set; }
@@ -53,6 +58,21 @@ namespace Legalizaciones.Model
 
         public decimal MontoSaldo { get; set; }
 
+        [Required(ErrorMessage = "Debe indicar Fecha Desde.")]
+        [DisplayName("Fecha Desde")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime FechaDesde { get; set; }
+
+        [Required(ErrorMessage = "Debe indicar Fecha Hasta.")]
+        [DisplayName("Fecha Hasta")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime FechaHasta { get; set; }
+
+        [Required(ErrorMessage = "Destino es requerido.")]
+        [ForeignKey("Destino")]
+        public int? DestinoID { get; set; }
+        public Destino Destino { get; set; }
+
         [NotMapped] public Banco Banco { get; set; }
 
         [NotMapped] public Solicitud Solicitud { get; set; }
@@ -62,6 +82,8 @@ namespace Legalizaciones.Model
         [NotMapped] public List<SolicitudGastos> SolicitudGastos { get; set; }
 
         [NotMapped] public List<LegalizacionGastos> LegalizacionGastos { get; set; }
+
+        [NotMapped] public List<Flujo> ListaFlujo { get; set; }
 
     }
 }

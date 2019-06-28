@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Legalizaciones.Interface
 {
-    public interface ISolicitudAprobadorRepository : IRepository<SolicitudAprobador>
+    public interface ISolicitudAprobacionRepository : IRepository<SolicitudAprobacion>
     {
     }
 }

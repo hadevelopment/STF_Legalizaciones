@@ -12,8 +12,8 @@
 
     GetTiposDocumentos();
     jQuery('#nuevoFlujoModal').css("overflow-y", "scroll");
-    //Aprobadores('#Empleado');
-    //Aprobadores('#Empleado2');
+    //Aprobadores('#Aprobador');
+    //Aprobadores('#Aprobador2');
     //Aprobadores('#suplente1');
     //Aprobadores('#suplente2');
     //Destinos();
@@ -38,7 +38,6 @@ function GetTiposDocumentos() {
 
         },
         success: function (data) {
-            console.log(data);
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
             $("#solicitud").empty();
             $('#solicitud').append('<option selected disabled value="-1">Seleccione...</option>');
@@ -65,7 +64,6 @@ function GetFlujosAprobacion(indice) {
 
         },
         success: function (data) {
-            console.log(data);
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
             $("#flujos").empty();
             $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
@@ -92,7 +90,6 @@ function GetFlujosAprobacion2(indice) {
 
         },
         success: function (data) {
-            console.log(data);
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
             $("#flujos").empty();
             $('#flujos').append('<option selected disabled value="-1">Seleccione...</option>');
@@ -128,7 +125,6 @@ function Destinos() {
 
         },
         success: function (data) {
-            console.log(data);
             data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
             $("#Destino").empty();
             $('#Destino').append('<option selected disabled value="-1">Seleccione...</option>');
@@ -199,62 +195,91 @@ $('#Destino').on('change', function (e) {
     $('#destino').val(destino);
 });
 
-$('#Empleado').on('change', function (e) {
-    var email = $("#Empleado option:selected").data('email');
-    console.log(email);
-    $('#emailAprobador').val(email);
+$('#Aprobador').on('change', function (e) {
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobador').val(nombre);
-    var cedula = $("#Empleado option:selected").val();
-    $('#cedulaAprobador').val(cedula);
+    var nivel = $("#Aprobador option:selected").val();
+
+    if (nivel == "0") {
+        $('#nivelAprobador').val('');
+        $('#aprobador').val('');
+        $('#nombre').val('');
+    } else {
+        $('#nivelAprobador').val(nivel);
+        $('#aprobador').val(nombre);
+        $('#nombre').val(nombre);
+    }
 });
 
-$('#Empleado2').on('change', function (e) {
-    var email = $("#Empleado2 option:selected").data('email');
-    $('#emailAprobador').val(email);
+$('#Aprobador2').on('change', function (e) {
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobador').val(nombre);
-    $('#nombre').val(nombre);
-    var cedula = $("#Empleado2 option:selected").val();
-    $('#cedulaAprobador').val(cedula);
+    var nivel = $("#Aprobador2 option:selected").val();
+
+    if (nivel == "0") {
+        $('#nivelAprobador').val('');
+        $('#aprobador').val('');
+        $('#nombre').val('');
+    } else {
+        $('#nivelAprobador').val(nivel);
+        $('#aprobador').val(nombre);
+        $('#nombre').val(nombre);
+    }
 });
 
 $('#nuevoSuplente1').on('change', function (e) {
-    var email = $("#nuevoSuplente1 option:selected").data('email');
-    $('#emailSuplente1').val(email);
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobadorSuplente1').val(nombre);
-    var cedula = $("#nuevoSuplente1 option:selected").val();
-    $('#cedulaSuplente1').val(cedula);
+    var nivel = $("#nuevoSuplente1 option:selected").val();
+
+    if (nivel == "0") {
+        $('#nivelSuplente1').val('');
+        $('#descripcionSuplente1').val('');
+    } else {
+        $('#nivelSuplente1').val(nivel);
+        $('#descripcionSuplente1').val(nombre);
+    }
 });
 
 $('#nuevoSuplente2').on('change', function (e) {
-    var email = $("#nuevoSuplente2 option:selected").data('email');
-    $('#emailSuplente2').val(email);
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobadorSuplente2').val(nombre);
-    var cedula = $("#nuevoSuplente2 option:selected").val();
-    $('#cedulaSuplente2').val(cedula);
+    var nivel = $("#nuevoSuplente2 option:selected").val();
+
+    if (nivel == "0") {
+        $('#nivelSuplente2').val('');
+        $('#descripcionSuplente2').val('');
+    } else {
+        $('#nivelSuplente2').val(nivel);
+        $('#descripcionSuplente2').val(nombre);
+    }
 });
 
 $('#suplente11').on('change', function (e) {
-    var email = $("#suplente11 option:selected").data('email');
-    $('#emailSuplente1').val(email);
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobadorSuplente1').val(nombre);
-    var cedula = $("#suplente11 option:selected").val();
-    $('#cedulaSuplente1').val(cedula);
-    $('#suplent1').val(nombre);
+    var nivel = $("#suplente11 option:selected").val();
+
+    if (nivel == "0") {
+        $('#descripcionSuplente1').val('');
+        $('#nivelSuplente1').val('');
+        $('#suplent1').val('');
+    } else {
+        $('#descripcionSuplente1').val(nombre);
+        $('#nivelSuplente1').val(nivel);
+        $('#suplent1').val(nombre);
+    }
+    
 });
 
 $('#suplente22').on('change', function (e) {
-    var email = $("#suplente22 option:selected").data('email');
-    $('#emailSuplente2').val(email);
     var nombre = this.options[this.selectedIndex].text;
-    $('#aprobadorSuplente2').val(nombre);
-    var cedula = $("#suplente22 option:selected").val();
-    $('#cedulaSuplente2').val(cedula);
-    $('#suplent2').val(nombre);
+    var nivel = $("#suplente22 option:selected").val();
+
+    if (nivel == "0") {
+        $('#descripcionSuplente2').val('');
+        $('#nivelSuplente2').val('');
+        $('#suplent2').val('');
+    } else {
+        $('#descripcionSuplente2').val(nombre);
+        $('#nivelSuplente2').val(nivel);
+        $('#suplent2').val(nombre);
+    }
 });
 
 
@@ -264,23 +289,23 @@ function SetNuevoFlujo() {
     $('#addPasoFlow').remove();
     $('#paso').val(1);
     var flag = $('#solicitud').val();
-    console.log(flag);
     if (flag == null) {
         alert('Seleccione tipo de documento');
         return false;
     }
-    Aprobadores('#Empleado');
+    Aprobadores('#Aprobador');
     Aprobadores('#nuevoSuplente1');
     Aprobadores('#nuevoSuplente2');
     Destinos();
     $("#Destino").prop("disabled", false);
     var paso = $('#paso').val();
     if (paso == 1) {
-        $("#Empleado").prop("disabled", true);
+        $("#Aprobador").val('NombreNivel3');
+        $("#Aprobador").prop("disabled", true);
         document.getElementById('descripcion').readOnly = true;
     }
     else {
-        $("#Empleado").prop("disabled", false);
+        $("#Aprobador").prop("disabled", false);
         document.getElementById('descripcion').readOnly = false;
     }
     document.getElementById('montoMaximo').readOnly = false;
@@ -303,26 +328,23 @@ function EnviarDataAprobador() {
     var montoMaximo = document.getElementById('montoMaximo').value;
     var destino = document.getElementById('destino').value;
     var destinoId = document.getElementById('destinoId').value;
-    var aprobadorSuplente1 = document.getElementById('aprobadorSuplente1').value;
-    var cedulaSuplente1 = document.getElementById('cedulaSuplente1').value;
-    var emailSuplente1 = document.getElementById('emailSuplente1').value;
-    var aprobadorSuplente2 = document.getElementById('aprobadorSuplente2').value;
-    var cedulaSuplente2 = document.getElementById('cedulaSuplente2').value;
-    var emailSuplente2 = document.getElementById('emailSuplente2').value;
+    var descripcionAprobador = document.getElementById('aprobador').value;
+    var nivelAprobador = document.getElementById('nivelAprobador').value;
+    var descripcionSuplente1 = document.getElementById('descripcionSuplente1').value;
+    var nivelSuplente1 = document.getElementById('nivelSuplente1').value;
+    var descripcionSuplente2 = document.getElementById('descripcionSuplente2').value;
+    var nivelSuplente2 = document.getElementById('nivelSuplente2').value;
     if (paso > 1) {
         var aprobador = document.getElementById('aprobador').value;
-        var cedulaAprobador = document.getElementById('cedulaAprobador').value;
-        var emailAprobador = document.getElementById('emailAprobador').value;
+        nivelAprobador = document.getElementById('nivelAprobador').value;
         var descripcion = document.getElementById('descripcion').value;
         if (aprobador == '' || descripcion == '') {
             alert('Complete todos los campos requeridos.');
             return false;
         }
-
     }
 
     if (paso == 1) {
-
         if (destinoId == 0 || montoMaximo == 0 || montoMinimo == 0) {
             alert('Debe elegir destino y especificar montos mayores a cero.');
             return false;
@@ -334,7 +356,6 @@ function EnviarDataAprobador() {
             type: 'GET',
             cache: false,
             success: function (data) {
-                console.log(data.id);
                 if (data.id > 0) {
                     alert('Ya existe un flujo de aprobacion destino ' + destino + ' con montos entre ' + montoMinimo + ' y ' + montoMaximo + ', debe elegir montos diferentes.');
                     return false;
@@ -344,23 +365,23 @@ function EnviarDataAprobador() {
                     $.ajax({
                         url: "/WorkFlow/CreateFlujoDocumento",
                         data: {
-                            paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: cedulaAprobador,
-                            descripcion: descripcion, mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
-                            aprobadorSuplente1: aprobadorSuplente1, cedulaSuplente1: cedulaSuplente1, emailSuplente1: emailSuplente1, aprobadorSuplente2: aprobadorSuplente2, cedulaSuplente2: cedulaSuplente2, emailSuplente2: emailSuplente2
+                            paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, nivelAprobador: nivelAprobador, descripcionAprobador: aprobador,
+                            descripcion: descripcion, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
+                            descripcionSuplente1: descripcionSuplente1, nivelSuplente1: nivelSuplente1, descripcionSuplente2: descripcionSuplente2, nivelSuplente2: nivelSuplente2
                         },
                         dataType: 'json',
                         type: 'POST',
                         cache: false,
                         success: function (data) {
                             paso = parseInt(paso) + 1;
-                            Aprobadores('#Empleado');
+                            Aprobadores('#Aprobador');
                             Aprobadores('#nuevoSuplente1');
                             Aprobadores('#nuevoSuplente2');
                             document.getElementById('paso').value = paso;
                             document.getElementById('descripcion').value = '';
                             document.getElementById('montoMaximo').readOnly = true;
                             document.getElementById('montoMinimo').readOnly = true;
-                            $("#Empleado").prop("disabled", false);
+                            $("#Aprobador").prop("disabled", false);
                             $("#Destino").prop("disabled", true);
                             document.getElementById('descripcion').readOnly = false;
                             $("#addPasoFlow").remove();
@@ -395,23 +416,22 @@ function EnviarDataAprobador() {
         $.ajax({
             url: "/WorkFlow/CreateFlujoDocumento",
             data: {
-                paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, aprobador: aprobador, empleado: cedulaAprobador, descripcion: descripcion,
-                mail: emailAprobador, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
-                aprobadorSuplente1: aprobadorSuplente1, cedulaSuplente1: cedulaSuplente1, emailSuplente1: emailSuplente1, aprobadorSuplente2: aprobadorSuplente2, cedulaSuplente2: cedulaSuplente2, emailSuplente2: emailSuplente2
+                paso: paso, tipoDocumento: tipoDocumento, idDocumento: idDocumento, nivelAprobador: nivelAprobador, descripcionAprobador: aprobador, descripcion: descripcion, destino: destino, destinoId: destinoId, montoMaximo: montoMaximo, montoMinimo: montoMinimo,
+                descripcionSuplente1: descripcionSuplente1, nivelSuplente1: nivelSuplente1, descripcionSuplente2: descripcionSuplente2, nivelSuplente2: nivelSuplente2
             },
             dataType: 'json',
             type: 'POST',
             cache: false,
             success: function (data) {
                 paso = parseInt(paso) + 1;
-                Aprobadores('#Empleado');
+                Aprobadores('#Aprobador');
                 Aprobadores('#nuevoSuplente1');
                 Aprobadores('#nuevoSuplente2');
                 document.getElementById('paso').value = paso;
                 document.getElementById('descripcion').value = '';
                 document.getElementById('montoMaximo').readOnly = true;
                 document.getElementById('montoMinimo').readOnly = true;
-                $("#Empleado").prop("disabled", false);
+                $("#Aprobador").prop("disabled", false);
                 $("#Destino").prop("disabled", true);
                 document.getElementById('descripcion').readOnly = false;
                 $("#addPasoFlow").remove();
@@ -430,11 +450,11 @@ function EnviarDataAprobador() {
 
 
 function SetAgregarPasoFlujo() {
-    Aprobadores('#Empleado');
+    Aprobadores('#Aprobador');
     Aprobadores('#nuevoSuplente1');
     Aprobadores('#nuevoSuplente2');
     Destinos();
-    $("#Empleado").prop("disabled", false);
+    $("#Aprobador").prop("disabled", false);
     var txtFlujo = $('#flujoDescripcion').val();
     var [min, max, des] = txtFlujo.split("-");
     min = min.trim();
@@ -459,9 +479,9 @@ function SetAgregarPasoFlujo() {
 }
 
 
-function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDocumento, idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId,
-    nombreSuplenteUno, nombreSuplenteDos, cedulaSuplenteUno, cedulaSuplenteDos, emailSuplenteUno, emailSuplenteDos, proceso) {
-    Aprobadores('#Empleado2');
+function GetDataAprobador(id, orden, descripcion, descripcionAprobador, nivelAprobador, tipoDocumento, idTipoDocumento, montoMinimo, montoMaximo, destinoId, flujoSolicitudId,
+    descripcionSuplenteUno, descripcionSuplenteDos, nivelSuplenteUno, nivelSuplenteDos, proceso) {
+    Aprobadores('#Aprobador2');
     Aprobadores('#suplente11');
     Aprobadores('#suplente22');
     document.getElementById("msjPreguntaModal").innerHTML = 'Desea actualizar los siguientes datos?  SI para continuar , No para cancelar';
@@ -470,28 +490,24 @@ function GetDataAprobador(id, orden, descripcion, nombre, email, cedula, tipoDoc
     $('#idx').val(id);
     $('#msjDataUpdate').val('Actualizacion de flujoaprobacion');
     $('#paso').val(orden);
-    $('#nombre').val(nombre);
+    $('#nombre').val(descripcionAprobador);
     $('#descripcionT').val(descripcion);
-    $('#aprobador').val(nombre);
-    $('#suplent1').val(nombreSuplenteUno);
-    $('#suplent2').val(nombreSuplenteDos);
-    $('#aprobadorSuplente1').val(nombreSuplenteUno);
-    $('#aprobadorSuplente2').val(nombreSuplenteDos);
-    $('#cedulaAprobador').val(cedula);
-    $('#cedulaSuplente1').val(cedulaSuplenteUno);
-    $('#cedulaSuplente2').val(cedulaSuplenteDos);
-    $('#emailAprobador').val(email);
-    $('#emailSuplente1').val(emailSuplenteUno);
-    $('#emailSuplente2').val(emailSuplenteDos);
+    $('#aprobador').val(descripcionAprobador);
+    $('#suplent1').val(descripcionSuplenteUno == "undefined" ? "" : descripcionSuplenteUno);
+    $('#suplent2').val(descripcionSuplenteDos == "undefined" ? "" : descripcionSuplenteDos);
+    $('#descripcionSuplente1').val(descripcionSuplenteUno == "undefined" ? "" : descripcionSuplenteUno);
+    $('#descripcionSuplente2').val(descripcionSuplenteDos == "undefined" ? "" : descripcionSuplenteUno);
+    $('#nivelAprobador').val(nivelAprobador);
+    $('#nivelSuplente1').val(nivelSuplenteUno);
+    $('#nivelSuplente2').val(nivelSuplenteDos);
     OpenQuestionModal(proceso);
 }
 
 function Actualizar() {
     var id = $('#idx').val();
     var descripcion = $('#descripcionT').val();
-    var cedula = $('#cedulaAprobador').val();
+    var nivel = $('#nivelAprobador').val();
     var nombre = $('#aprobador').val();
-    var email = $('#emailAprobador').val();
     var idPasoFlujoSolicitud = $('#idx').val();
     var tipoDocumento = document.getElementById('tipoDocumento').value;
     var idDocumento = $('#tipoDocumentoId').val();
@@ -501,16 +517,14 @@ function Actualizar() {
     var montoMaximo = document.getElementById('montoMaximo').value;
     var destino = document.getElementById('destino').value;
     var destinoId = document.getElementById('destinoId').value;
-    var aprobadorSuplente1 = document.getElementById('aprobadorSuplente1').value;
-    var cedulaSuplente1 = document.getElementById('cedulaSuplente1').value;
-    var emailSuplente1 = document.getElementById('emailSuplente1').value;
-    var aprobadorSuplente2 = document.getElementById('aprobadorSuplente2').value;
-    var cedulaSuplente2 = document.getElementById('cedulaSuplente2').value;
-    var emailSuplente2 = document.getElementById('emailSuplente2').value;
+    var descripcionSuplente1 = document.getElementById('descripcionSuplente1').value;
+    var nivelSuplente1 = document.getElementById('nivelSuplente1').value;
+    var descripcionSuplente2 = document.getElementById('descripcionSuplente2').value;
+    var nivelSuplente2 = document.getElementById('nivelSuplente2').value;
 
     if (idFlujo == '') { idFlujo = document.getElementById('flujos').value; }
 
-    if (descripcion == '' || cedula == '' || nombre == '' || email == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
+    if (descripcion == '' || nivel == '' || nombre == '' || idPasoFlujoSolicitud == '' || idDocumento == '' || idFlujo == '' || rango == '') {
         alert('Todos los campos son requeridos.');
         return false;
     }
@@ -518,8 +532,8 @@ function Actualizar() {
     $.ajax({
         url: "/WorkFlow/UpdatePasoFlujo",
         data: {
-            descripcion: descripcion, cedula: cedula, nombre: nombre, email: email, idPasoFlujoSolicitud: idPasoFlujoSolicitud, idDocumento: idDocumento, idFlujo: idFlujo, rango: rango,
-            aprobadorSuplente1: aprobadorSuplente1, cedulaSuplente1: cedulaSuplente1, emailSuplente1: emailSuplente1, aprobadorSuplente2: aprobadorSuplente2, cedulaSuplente2: cedulaSuplente2, emailSuplente2: emailSuplente2
+            descripcion: descripcion, nivelAprobador: nivel, descripcionAprobador: nombre, idPasoFlujoSolicitud: idPasoFlujoSolicitud, idDocumento: idDocumento, idFlujo: idFlujo, rango: rango,
+            descripcionSuplente1: descripcionSuplente1, nivelSuplente1: nivelSuplente1, descripcionSuplente2: descripcionSuplente2, nivelSuplente2: nivelSuplente2
         },
         dataType: 'json',
         type: 'POST',
@@ -541,27 +555,13 @@ function Aprobadores(objeto) {
         multiple: false,
         placeholder: 'Seleccione...'
     });
-    var arrayEmpleadoPermiso = [];
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Empleados?filtroCedula=true",
-        datatype: "Json",
-        beforeSend: function () {
-
-        },
-        success: function (data) {
-            data.length > 0 ? $('#triggerModal').removeAttr('disabled') : $('#triggerModal').attr('disabled', 'disabled');
-            $(objeto).empty();
-            $(objeto).append('<option selected disabled value="-1">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                arrayEmpleadoPermiso.push(value);
-                $(objeto).append('<option data-email="' + value.correo + '" value="' + value.cedula + '">' + value.cargo + '</option>');
-            });
-        },
-        complete: function () {
-
-        }
-    });
+    var arrayAprobadorPermiso = [];
+    $(objeto).empty();
+    $(objeto).append('<option selected disabled value="-1">Seleccione...</option>');
+    $(objeto).append('<option value="0">Ninguno</option>');
+    $(objeto).append('<option value="NombreNivel3">Dirección</option>');
+    $(objeto).append('<option value="NombreNivel4">Gerencia</option>');
+    $(objeto).append('<option value="NombreNivel5">Jefatura</option>');
 }
 
 
@@ -596,7 +596,6 @@ function Eliminar() {
         type: 'GET',
         cache: false,
         success: function (data) {
-            console.log(data.id);
             if (data.id > 0) {
                 alert('Existen documentos asociados a este flujo no se puede eliminar');
                 CloseQuestionModal();
@@ -658,16 +657,15 @@ function CreateTablaAprobadores(infoAprobadores) {
 
         $("#tblAprobadores tbody tr").remove();
         $.each(infoAprobadores, function (index, item) {
-            console.log(item);
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}</td>
-                            <td> ${item.nombreSuplenteUno}</td>
-                            <td> ${item.nombreSuplenteDos}</td>
-                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.nombreAprobador}','${item.emailAprobador}','${item.cedulaAprobador}',
+                            <td> ${item.descripcionAprobador}</td>
+                            <td> ${item.descripcionSuplenteUno}</td>
+                            <td> ${item.descripcionSuplenteDos}</td>
+                            <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador('${item.id}','${item.orden}','${item.descripcion}','${item.descripcionAprobador}','${item.nivelAprobador}',
                                                                                           '${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}','${item.montoMaximo}','${item.destinoId}', '${item.flujoSolicitudId}',
-                                                                                   '${item.nombreSuplenteUno}','${item.nombreSuplenteDos}','${item.cedulaSuplenteUno}', '${item.cedulaSuplenteDos}', '${item.emailSuplenteUno}', '${item.emailSuplenteDos}',
+                                                                                   '${item.descripcionSuplenteUno}','${item.descripcionSuplenteDos}','${item.nivelSuplenteUno}', '${item.nivelSuplenteDos}',
                                                                                   'actualizar');" value="Actualizar"> </td>
 
                             <td> <input type="button" class="btn btn-primary" onclick="GetDataAprobador2('${item.id}','${item.orden}','${item.tipoSolicitud}','${item.idTipoSolicitud}','${item.montoMinimo}',
@@ -699,11 +697,10 @@ function CreateTablaFlujoAprobadores(infoAprobadores) {
 
         $("#tblFlujo tbody tr").remove();
         $.each(infoAprobadores, function (index, item) {
-            console.log(item);
             let tr = `  <tr>
                             <td> ${item.orden}</td>
                             <td> ${item.descripcion}</td>
-                            <td> ${item.nombreAprobador}</td>
+                            <td> ${item.descripcionAprobador}</td>
                                     </tr>`;
             $("#tblFlujo tbody").append(tr);
         });
@@ -777,25 +774,19 @@ function LimpiarOcultos() {
     $('#destinoId').val('');
     $('#paso').val('');
     $('#aprobador').val('');
-    $('#cedulaAprobador').val('');
-    $('#emailAprobador').val('');
-    $('#aprobadorSuplente1').val('');
-    $('#cedulaSuplente1').val('');
-    $('#emailSuplente1').val('');
-    $('#aprobadorSuplente2').val('');
-    $('#cedulaSuplente2').val('');
-    $('#emailSuplente2').val('');
+    $('#nivelAprobador').val('');
+    $('#descripcionSuplente1').val('');
+    $('#nivelSuplente1').val('');
+    $('#descripcionSuplente2').val('');
+    $('#nivelSuplente2').val('');
 }
 
 function LimpiarAprobadores() {
     $('#aprobador').val('');
-    $('#cedulaAprobador').val('');
-    $('#emailAprobador').val('');
-    $('#aprobadorSuplente1').val('');
-    $('#cedulaSuplente1').val('');
-    $('#emailSuplente1').val('');
-    $('#aprobadorSuplente2').val('');
-    $('#cedulaSuplente2').val('');
-    $('#emailSuplente2').val('');
+    $('#nivelAprobador').val('');
+    $('#descripcionSuplente1').val('');
+    $('#nivelSuplente1').val('');
+    $('#descripcionSuplente2').val('');
+    $('#nivelSuplente2').val('');
     $('#idx').val('');
 }

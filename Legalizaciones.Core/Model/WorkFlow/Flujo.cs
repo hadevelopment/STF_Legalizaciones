@@ -14,11 +14,10 @@ namespace Legalizaciones.Model.Workflow
 
         public string Descripcion { get; set; }
 
-        public string CedulaAprobador { get; set; }
+        public string NivelAprobador { get; set; }
 
-        public string NombreAprobador { get; set; }
+        public string DescripcionAprobador { get; set; }
 
-        public string EmailAprobador { get; set; }
         public int Orden{ get; set; }
 
         public string TipoSolicitud { get; set; }

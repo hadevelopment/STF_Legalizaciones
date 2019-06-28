@@ -55,7 +55,7 @@
                         <table id="tblAnticipos" class="table table-bordered table-hover myDataTable">
                             <thead>
                                 <tr>
-                                    <th> Id </th>
+                                    <th class="display-none"> Id </th>
                                     <th> Fecha de registro</th>
                                     <th> Fecha de Vencimiento</th>
                                     <th> Concepto del Anticipo </th>
@@ -74,7 +74,7 @@
 
                                     {
                                         <tr>
-                                            <td>
+                                            <td class="display-none">
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </td>
                                             <td>
@@ -92,7 +92,7 @@
                                                 @Html.DisplayFor(modelItem => item.EmpleadoCedula)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Empleado.PrimerNombre) &nbsp; @Html.DisplayFor(modelItem => item.Empleado.PrimerNombre)
+                                                @Html.DisplayFor(modelItem => item.Empleado.PrimerNombre)&nbsp;@Html.DisplayFor(modelItem => item.Empleado.PrimerApellido)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Monto)
@@ -141,13 +141,6 @@
                             </tbody>
                         </table>
                         <br />
-                        <div class="row">
-                            <div style="float: left;" class="col-md-2">
-                                <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
-                            </div>
-                        </div>
-
-
                     </div>
 
 
@@ -158,12 +151,16 @@
                         <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable">
                             <thead>
                                 <tr>
-                                    <th> Id </th>
+                                    <th class="display-none"> Id </th>
                                     <th> Registro </th>
                                     <th> Cédula Beneficiario </th>
+                                    <th> Nombre Beneficiario </th>
                                     <th> Consignación </th>
                                     <th> Recibo Caja </th>
                                     <th> Valor </th>
+                                    <th> Monto Anticipo Entregado </th>
+                                    <th> Monto Gastos Reportados </th>
+                                    <th> Saldo </th>
                                     <th> Acciones </th>
                                 </tr>
                             </thead>
@@ -173,7 +170,7 @@
                                     @foreach (var item in Model.Legalizaciones)
                                     {
                                         <tr>
-                                            <td>
+                                            <td class="display-none">
                                                 @Html.DisplayFor(modelItem => item.Id)
                                             </td>
                                             <td>
@@ -184,24 +181,48 @@
                                                 @Html.DisplayFor(modelItem => item.EmpleadoCedula)
                                             </td>
                                             <td>
-
+                                                @Html.DisplayFor(modelItem => item.EmpleadoNombre)
+                                            </td>
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.Consignacion)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ReciboCaja)
                                             </td>
                                             <td>
-
                                                 @Html.DisplayFor(modelItem => item.Valor)
                                             </td>
                                             <td>
-                                                <a class="item-btn" asp-controller="Aprobacion" asp-action="AprobarLegalizacion" asp-route-id="@item.Id">
-                                                    <span class="fa fa-check"></span>
-                                                </a>
+                                                @Html.DisplayFor(modelItem => item.MontoAnticipoEntregado)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MontoGastosReportados)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MontoSaldo)
+                                            </td>
+                                            <td>
+                                                @if (item.EstadoLegalizacion.Descripcion != "Aprobada" && item.EstadoLegalizacion.Descripcion != "Rechazada")
+                                                {
+                                                    <a class="item-btn btnAprobarLegalizacion" data-toggle="modal" data-target="#modalAprobarLegalizacion" id="aprobar-@item.Id">
+                                                        <span class="fa fa-check" title="Aprobar"></span>
+                                                    </a>
 
-                                                <a class="item-btn" asp-controller="Aprobacion" asp-action="RechazarLegalizacion" asp-route-id="@item.Id">
-                                                    <span class="fa fa-close"></span>
-                                                </a>
+                                                    <a class="item-btn btnRechazarLegalizacion" data-toggle="modal" data-target="#modalRechazarLegalizacion" id="rechazar-@item.Id">
+                                                        <span class="fa fa-close" title="Rechazar"></span>
+                                                    </a>
+
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                        <span class="fa fa-eye" title="Detalle"></span>
+                                                    </a>
+
+                                                }
+                                                else
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizacion" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                        <span class="fa fa-eye" title="Detalle"></span>
+                                                    </a>
+                                                }
                                             </td>
                                         </tr>
                                     }
@@ -217,13 +238,6 @@
                             </tbody>
                         </table>
                         <br />
-                        <div class="row">
-                            <div style="float: left;" class="col-md-2">
-                                <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
-                            </div>
-                        </div>
-
-
                     </div>
                 </div>
             </div>
@@ -271,13 +285,66 @@
                 </div>
                 <div class="col-sm-12">
                     <label>Motivo</label>
-                    @Html.TextBox("Motivo", null, new {@id="txtMotivo", @class = "form-control", @placeholder = "Especifíque el motivo del rechazo...", @required = "required" })
+                    @Html.TextBox("Motivo", null, new { @id = "txtMotivo", @class = "form-control", @placeholder = "Especifíque el motivo del rechazo...", @required = "required" })
                     <br />
-                    @Html.ValidationMessage("Motivo", "Debe especificar el Motivo del Rechazo.", new { @id="msgMotivo", @class = "text-danger display-none" })
+                    @Html.ValidationMessage("Motivo", "Debe especificar el Motivo del Rechazo.", new { @id = "msgMotivo", @class = "text-danger display-none" })
                 </div>
             </div>
             <div class="modal-footer">
-                @Html.ActionLink("Si", "RechazarAnticipo", "Aprobacion", new { id = "" }, new { @id="btnRechazarAnticipo", @onclick = "return validaRechazo();", @class="btn btn-primary" } )
+                @Html.ActionLink("Si", "RechazarAnticipo", "Aprobacion", new { id = "" }, new { @id = "btnRechazarAnticipo", @onclick = "return validaRechazo();", @class = "btn btn-primary" })
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- The modal -->
+<div class="modal fade" id="modalAprobarLegalizacion" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Aprobación</h4>
+            </div>
+            <div class="modal-body">
+                ¿Realmente desea <b>aprobar</b> esta Legalización?
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "AprobarLegalizacion", "Aprobacion", new { id = "" }, new { @id = "btnAprobarLegalizacion", @class = "btn btn-primary" })
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- The modal -->
+<div class="modal fade" id="modalRechazarLegalizacion" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header red">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Rechazo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    ¿Realmente desea <b>rechazar</b> esta Legalizacion?
+                </div>
+                <div class="col-sm-12">
+                    <label>Motivo</label>
+                    @Html.TextBox("Motivo", null, new { @id = "txtMotivoLegalizacion", @class = "form-control", @placeholder = "Especifíque el motivo del rechazo...", @required = "required" })
+                    <br />
+                    @Html.ValidationMessage("Motivo", "Debe especificar el Motivo del Rechazo.", new { @id = "msgMotivoLegalizacion", @class = "text-danger display-none" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "RechazarLegalizacion", "Aprobacion", new { id = "" }, new { @id = "btnRechazarLegalizacion", @onclick = "return validaRechazoLegalizacion();", @class = "btn btn-primary" })
                 <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
             </div>
         </div>
@@ -357,6 +424,19 @@
                 var id = $(this).attr("id").split("-")[1];
                 $('#btnRechazarAnticipo').attr('href', '/Aprobacion/RechazarAnticipo/' + id);
             });
+
+
+            $('.btnAprobarLegalizacion').click(function () {
+                //Acá seteo el id de la solicitud a aprobar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnAprobarLegalizacion').attr('href', '/Aprobacion/AprobarLegalizacion/' + id);
+            });
+
+            $('.btnRechazarLegalizacion').click(function () {
+                //Acá seteo el id de la solicitud a rechazar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnRechazarLegalizacion').attr('href', '/Aprobacion/RechazarLegalizacion/' + id);
+            });
         });
 
         function validaRechazo() {
@@ -368,6 +448,19 @@
                 return true;
             } else {
                 $('#msgMotivo').removeClass('display-none');
+                return false;
+            }
+        }
+
+        function validaRechazoLegalizacion() {
+            var href = $('#btnRechazarLegalizacion').attr('href');
+            var motivo = $('#txtMotivoLegalizacion').val();
+            if (motivo != null && motivo != '') {
+                $('#btnRechazarLegalizacion').attr('href', href + '/' + motivo)
+                $('#msgMotivoLegalizacion').addClass('display-none');
+                return true;
+            } else {
+                $('#msgMotivoLegalizacion').removeClass('display-none');
                 return false;
             }
         }

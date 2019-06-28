@@ -103,7 +103,7 @@
                 <div class="row margin-bottom">
                     <div class="col-md-3">
                         <label asp-for="DestinoID" id="lbl_destino">Destino</label>
-                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Destino" })
+                        @Html.DropDownListFor(model => model.DestinoID, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "DestinoId" })
                         @Html.ValidationMessageFor(model => model.DestinoID, "", new { @class = "text-danger" })
                         @Html.HiddenFor(model => model.DestinoID, new { @class = "form-control", id = "hdfDestinoId" })
                     </div>
@@ -275,7 +275,7 @@
         <div class="row">
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary" onclick="return cargarGastos();">
-                    <span class="glyphicon glyphicon-plus"></span> Actualizar
+                    <span class="glyphicon glyphicon-plus"></span> Guardar Cambios
                 </button>
             </div>
         </div>

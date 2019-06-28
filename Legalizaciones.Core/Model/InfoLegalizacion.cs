@@ -20,7 +20,8 @@ namespace Legalizaciones.Model
         public string Beneficiario { get; set; }//EMPLEADO
         public string EmpleadoCedula { get; set; }
         public int EstadoId { get; set; }//STATUS SOLICITUD
-        public string Estado { get; set; }//STATUS SOLICITUD NOMBRE
+        public string Estado { get; set; }//STATUS LEGALIZACION NOMBRE
+        public string EstadoLegalizacion { get; set; }
         public string IdDocErp { get; set; }
         public string  ConsecutivoErp { get; set; }
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]

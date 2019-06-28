@@ -8,7 +8,6 @@ using Legalizaciones.Model.Workflow;
 namespace Legalizaciones.Data.AppDbContext
 {
 
-
     public class AppDataContext : DbContext
     {
      
@@ -46,7 +45,8 @@ namespace Legalizaciones.Data.AppDbContext
         public DbSet<EstadoLegalizacion> EstadoLegalizacion{ get; set; }
         public DbSet<OrigenDestino> OrigenDestino { get; set; }
 
-        public DbSet<SolicitudAprobador> SolicitudAprobador { get; set; }
+        public DbSet<SolicitudAprobacion> SolicitudAprobacion { get; set; }
+        public DbSet<LegalizacionAprobacion> LegalizacionAprobacion { get; set; }
         public object Setting { get; private set; }
     }
 }

@@ -55,138 +55,164 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-12">
-                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Legalizar gastos sin anticipo</a>
-                @*@if (ViewBag.rol != "Contabilidad")
-                {
-                    //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+            <div class="row">
+                <div class="col-md-12">
+                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="0">Legalizar gastos sin anticipo</a>
+                    @*@if (ViewBag.rol != "Contabilidad")
+            {
+                //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
 
-                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
-                }*@
-            </div>
+                <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+            }*@
+                </div>
 
-            <div class="box-body">
-                <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Id </th>
-                            <th>Fecha de Registro</th>
-                            <th>Concepto</th>
-                            <th>Cédula</th>
-                            <th>Beneficiario</th>
-                            <th>Estado</th>
-                            <th>Monto</th>
-                            @*<th>Tasa</th>*@
-                            <th class="hidden"> Nro. Anticipo UNOEE</th>
-                            <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
-                            <th> Fecha Entrega </th>
-                            <th>Dias Entregado</th>
-                            <th>Fecha de Vencimiento</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model != null)
-                        {
-                            int ix = 0;
+                <div class="col-md-12">
+                    <div class="box-body">
+                        <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable" width="100%">
+                            <thead>
+                                <tr>
+                                    <th class="display-none">Id </th>
+                                    <th>Concepto</th>
+                                    <th>Cédula</th>
+                                    <th>Beneficiario</th>
+                                    <th>Estado Anticipo</th>
+                                    <th>Estado Legalización</th>
+                                    <th>Monto</th>
+                                    @*<th>Tasa</th>*@
+                                    <th class="hidden"> Nro. Anticipo UNOEE</th>
+                                    <th class="hidden" title="Nro. Legalización UNOEE">Nro. Lega UNOEE</th>
+                                    <th> Fecha Entrega </th>
+                                    <th>Dias Entregado</th>
+                                    <th>Fecha de Vencimiento</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null)
+                                {
+                                    int ix = 0;
 
-                            @foreach (var item in Model)
-                            {
-                                var wFechaseparada = item.FechaVencimiento.ToShortDateString();
+                                    @foreach (var item in Model)
+                                    {
+                                        var wFechaseparada = item.FechaVencimiento.ToShortDateString();
 
-                                var wvenc = false;
+                                        var wvenc = false;
 
-                                <tr style="background-color:@(item.FechaVencimiento < DateTime.Now ? "#f5dbbe" : "transparent")">
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td>
-                                    <td>
+                                        <tr style="background-color:@((item.Id > 0 && item.FechaVencimiento < DateTime.Now) ? "#f5dbbe" : "transparent")">
+                                            <td class="display-none">
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Concepto)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Beneficiario)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Estado)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EstadoLegalizacion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
+                                            </td>
+                                            <td class="hidden">
+                                                @Html.DisplayFor(modelItem => item.IdDocErp)
+                                            </td>
+                                            <td class="hidden">
+                                                @Html.DisplayFor(modelItem => item.ConsecutivoErp)
+                                            </td>
+                                            <td>
+                                                @if (item.Id > 0)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.FechaEntrega)
 
-                                        @Html.DisplayFor(modelItem => item.FechaCreacion)
-                                    </td>
-                                    <td>
+                                                }
+                                                else
+                                                {
+                                                    <span>N/A</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DiasTrascurridos)
+                                            </td>
+                                            <td>
+                                                @if (item.Id > 0)
+                                                {
+                                                    @Html.DisplayFor(modelItem => item.FechaVencimiento)
 
-                                        @Html.DisplayFor(modelItem => item.Concepto)
-                                    </td>
-                                    <td>
+                                                }
+                                                else {
+                                                    <span>N/A</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (item.Id > 0 && item.Estado == "Aprobada")//Sin Legalizar
+                                                {
+                                                    <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-Id="@item.Id">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                    <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
+                                                }
+                                                else if (item.Id > 0 && (item.Estado == "En Proceso" || item.Estado == "Legalizada" || item.Estado == "En Proceso de Legalización") && item.EstadoLegalizacion != "Rechazada")//Legalizadaa
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                }
+                                                else if (item.Id > 0 && item.EstadoLegalizacion == "Rechazada")
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                        <span class="fa fa-pencil"></span>
+                                                    </a>
+                                                }
+                                                else if (item.Id == 0 && item.EstadoLegalizacion == "Creada" || item.Id == 0 && item.EstadoLegalizacion == "Rechazada")
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                        <span class="fa fa-pencil"></span>
+                                                    </a>
+                                                }
+                                                else if (item.Id == 0 && item.EstadoLegalizacion == "En Proceso")
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>}
+                                }
+                                else
+                                {
+                                    <tr class="tableEmpty">
+                                        <td colspan="8">
+                                            No posee anticipos pendientes por Legalizar...
+                                        </td>
+                                    </tr>
+                                }
 
-                                        @Html.DisplayFor(modelItem => item.EmpleadoCedula)
-                                    </td>
-                                    <td>
+                            </tbody>
+                        </table>
 
-                                        @Html.DisplayFor(modelItem => item.Beneficiario)
-                                    </td>
-                                    <td>
+                        <br />
+                        <div class="row">
+                            <div style="float: left;" class="col-md-2">
+                                <a class="btn btn-primary" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel"><i class="fa fa-file-excel-o"></i>Exportar</a>
 
-                                        @Html.DisplayFor(modelItem => item.Estado)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Monto)   @Html.DisplayFor(modelItem => item.Moneda)
-                                    </td>
-                                    @*<td>
-                                        @if (item.Tasa == "1,00") { item.Tasa = "N/A"; }
-                                        @Html.DisplayFor(modelItem => item.Tasa)
-                                    </td>*@
-                                    <td class="hidden">
-                                        @Html.DisplayFor(modelItem => item.IdDocErp)
-                                    </td>
-                                    <td class="hidden">
-                                        @Html.DisplayFor(modelItem => item.ConsecutivoErp)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FechaEntrega)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.DiasTrascurridos)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.FechaVencimiento)
-                                    </td>
-                                    <td>
-                                        @if (item.Estado == "Creada")//Sin Legalizar
-                                        {
-                                            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
-                                        }
-                                        else if (item.Estado == "En Proceso" || item.Estado == "Legalizada")//Legalizadaa
-                                        {
-                                            <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
-                                                <span class="fa fa-eye"></span>
-                                            </a>
-                                        }
-                                        else
-                                        {
-                                            <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
-                                            @*<a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
-                                                <span class="fa fa-pencil"></span>
-                                            </a>*@
-                                            @*<a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Aprobar" asp-route-id="@item.Id">Aprobar</a>*@
-                                        }
-                                    </td>
-                                </tr>}
-                        }
-                        else
-                        {
-                            <tr class="tableEmpty">
-                                <td colspan="8">
-                                    No posee anticipos pendientes por Legalizar...
-                                </td>
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
-
-                <br />
-                <div class="row">
-                    <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosLegalizacionesExcel"><i class="fa fa-file-excel-o"></i>Exportar</a>
-
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-
-
         </div>
     </div>
 </div>

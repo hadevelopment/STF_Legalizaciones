@@ -8,9 +8,9 @@ using System.Text;
 
 namespace Legalizaciones.Data.Repository
 {
-    public class SolicitudAprobadorRepository : BaseRepository<SolicitudAprobador>, ISolicitudAprobadorRepository
+    public class LegalizacionAprobacionRepository : BaseRepository<LegalizacionAprobacion>, ILegalizacionAprobacionRepository
     {
-        public SolicitudAprobadorRepository(AppDataContext context) : base(context)
+        public LegalizacionAprobacionRepository(AppDataContext context) : base(context)
         {
 
         }

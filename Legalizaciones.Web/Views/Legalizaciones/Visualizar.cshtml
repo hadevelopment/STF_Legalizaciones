@@ -1,6 +1,8 @@
 ﻿@model Legalizaciones.Model.Legalizacion;
 @{
     ViewData["Title"] = "Detalle";
+    bool rechazado = false;
+    string motivoRechazo = "";
 }
 
 <div class="row">
@@ -12,88 +14,165 @@
                     >
                     <a href='@Url.Action("Index","Legalizaciones")'> Legalizaciones </a>
                     >
-                    <strong>Registro legalización anticipo @Model.SolicitudID</strong>
+                    <strong>Detalle Legalizacion @Model.Id</strong>
                 </small>
             </div>
         </div>
     </div>
 </div>
 
+
 <div class="box box-default">
+
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
-    </div>
-    <div class="box-body">
-        <table width="100%">
-            <tr class="HeaderTable">
-                <td class="col-md-1">
-                    <label>ID</label>
-                </td>
-                <td class="col-md-2">
-                    <label>ID documentos en ERP</label>
-                </td>
-                <td class="col-md-2">
-                    <label>Concecutivo ERP</label>
-                </td>
-                <td class="col-md-3">
-                    <label>Concepto</label>
-                </td>
-            </tr>
-            <tr class="RowsTable">
-                <td>
-                    @Model.Solicitud.Id
-                </td>
-                <td>
-                    @Model.Solicitud.DocumentoERP
-                </td>
-                <td>
-                    @Model.Solicitud.ConsecutivoERP
-                </td>
-                <td>
-                    @Model.Solicitud.Concepto
-                </td>
-            </tr>
-        </table>
+        <h3 class="box-title"><i class="fa fa-exclamation-triangle"></i> Estado de la Legalizacion: <i>@Model.ListaFlujo.Where(m => m.Procesado == 2).Select(m => m.Descripcion).FirstOrDefault()</i></h3>
+        <div class="box-tools pull-right">
+        </div>
+
+        <div class="box-body">
+            <div class="divFlujo">
+                @if (Model.ListaFlujo.Count > 0)
+                {
+                    @foreach (var item in Model.ListaFlujo)
+                    {
+                        if (item.Procesado == 1) //Listo
+                        {
+                            <div class="col-sm-2 arrow_box">
+                                <i class="fa fa-check-circle green" aria-hidden="true"></i>
+                                <br />
+                                <small>Listo</small>
+                                <br />
+                                <span>@item.Descripcion</span>
+                            </div>
+                        }
+                        else if (item.Procesado == 2) //En Espera
+                        {
+                            <div class="col-sm-2 arrow_box">
+                                <i class="fa fa-clock-o orange" aria-hidden="true"></i>
+                                <br />
+                                <small>En Espera</small>
+                                <br />
+                                <span>@item.Descripcion</span>
+                            </div>
+                        }
+                        else if (item.Procesado == 3) //Rechazado
+                        {
+                            rechazado = true;
+                            motivoRechazo = item.Motivo.Split("con Motivo:")[1];
+                            <div class="col-sm-2 arrow_box">
+                                <i class="fa fa-close red" aria-hidden="true"></i>
+                                <br />
+                                <small>Rechazada</small>
+                                <br />
+                                <span>@item.Descripcion</span>
+                            </div>
+                        }
+                        else //No Iniciado
+                        {
+                            <div class="col-sm-2 arrow_box">
+                                <i class="fa fa-clock-o gray" aria-hidden="true"></i>
+                                <br />
+                                <small>No Iniciado</small>
+                                <br />
+                                <span>@item.Descripcion</span>
+                            </div>
+                        }
+                    }
+                }
+                else
+                {
+                    <h2>No se ha encontrado el flujo asignado a esta solicitud.</h2>
+                }
+            </div>
+
+            @if (rechazado)
+            {
+                <div class="col-sm-12">
+                    <span><b style="margin-bottom:5px;">Motivo del Rechazo:</b><br /></span>
+                    <span style=" font-size:16px;">@motivoRechazo</span>
+                </div>
+            }
+        </div>
     </div>
 </div>
 
-
 <div class="box box-default">
     <div class="box-header with-border">
-        <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del empleado</strong></h3>
+        <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del Anticipo</h3>
         <div class="box-tools pull-right">
         </div>
     </div>
     <div class="box-body">
-        <table width="100%">
-            <tr class="HeaderTable">
-                <td class="col-md-3 sinBorder">
-                    <label>Nombre y Apellido</label>
-                </td>
-                <td class="col-md-3 sinBorder">
-                    <label>Cédula de Ciudadanía</label>
-                </td>
-                <td class="col-md-3 sinBorder">
-                    <label>Area</label>
-                </td>
-                <td class="col-md-3 sinBorder">
-                    <label>Cargo</label>
-                </td>
-            </tr>
-            <tr class="RowsTable">
-                <td>
-                    @Model.Empleado.PrimerNombre &nbsp; @Model.Empleado.PrimerApellido
-                </td>
-                <td>
-                    @Model.Solicitud.EmpleadoCedula
-                </td>
-                <td>
-                    @Model.Empleado.CodigoArea
-                </td>
-                <td>
-                    @Model.Empleado.Cargo
-                </td>
-            </tr>
+        @if (Model.Solicitud != null)
+        {
+            <table width="100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ID Documento ERP</th>
+                        <th>Consecutivo ERP</th>
+                        <th>Concepto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            @Model.Solicitud.Id
+                        </td>
+                        <td>
+                            @Model.Solicitud.DocumentoERP
+                        </td>
+                        <td>
+                            @Model.Solicitud.ConsecutivoERP
+                        </td>
+                        <td>
+                            @Model.Solicitud.Concepto
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        }
+        else {
+            <h5>Esta Legalización no poseé un Anticipo.</h5>
+        }
+
+    </div>
+</div>
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-info-circle"></i> Información del Empleado</h3>
+        <div class="box-tools pull-right">
+        </div>
+    </div>
+    <div class="box-body">
+        <table class="tableEmpleado">
+            <thead>
+                <tr>
+                    <th>Código Área</th>
+                    <th>Nombres</th>
+                    <th>Apellidos</th>
+                    <th>Cédula</th>
+                    <th>Dirección</th>
+                    <th>Teléfono</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>@Html.HiddenFor(model => model.Empleado.CodigoArea, null) @Model.Empleado.CodigoArea</td>
+                    <td>
+                        @Html.HiddenFor(model => model.Empleado.PrimerNombre, null) @Model.Empleado.PrimerNombre
+                        @Html.HiddenFor(model => model.Empleado.SegundoNombre, null) @Model.Empleado.SegundoNombre
+                    </td>
+                    <td>
+                        @Html.HiddenFor(model => model.Empleado.PrimerApellido, null) @Model.Empleado.PrimerApellido
+                        @Html.HiddenFor(model => model.Empleado.SegundoApellido, null) @Model.Empleado.SegundoApellido
+                    </td>
+                    <td>@Html.HiddenFor(model => model.Empleado.NumeroDeIdentificacion, null) @Model.Empleado.NumeroDeIdentificacion</td>
+                    <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                    <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
@@ -110,9 +189,20 @@
                             <label>Fecha de Registro:</label>&nbsp;<span>@Model.FechaCreacion.ToString("dd/MM/yyyy")</span>
                         </div>
                         <div class="col-md-6">
-                            <label>Fecha de Vencimiento:</label>&nbsp;<span>@Model.Solicitud.FechaVencimiento.ToString("dd/MM/yyyy")</span>
+                            <label>Fecha de Vencimiento:</label>&nbsp;
+                            @if (Model.Solicitud != null) {
+                            <span>@Model.Solicitud.FechaVencimiento.ToString("dd/MM/yyyy")</span> 
+                            }
+                            else {
+                                <span>N/A</span>
+                            }
+                            
+
+
                         </div>
-                        <div class="col-md-6">
+
+
+<div class="col-md-6">
                             <label>Recibo Caja:</label>&nbsp;<span>@Model.ReciboCaja</span>
                         </div>
                         <div class="col-md-6">
@@ -148,15 +238,13 @@
                                           <thead>
                                               <tr>
                                                   @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
-                                                  <td>Fecha</td>
-                                                  <td>Centro Oper.</td>
-                                                  <td>Unidad Neg</td>
-                                                  <td>Centro Cost</td>
+                                                  <td>Centro Operación</td>
+                                                  <td>Unidad Negocio</td>
+                                                  <td>Centro Costo</td>
                                                   <td>Fecha Gasto</td>
                                                   <td>Pais</td>
                                                   <td>Ciudad</td>
                                                   <td>Servicio</td>
-                                                  <td>Proveedor</td>
                                                   <td>Concepto</td>
                                                   <td>Valor</td>
                                               </tr>
@@ -168,24 +256,13 @@
                                               {
                                                   // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
                                                   <tr>
-                                                      <td class="col-md-1 ">@item.FechaCreacion.ToString("dd/MM/yyyy")</td>
                                                       <td class="col-md-2 ">@item.CentroOperacion</td>
                                                       <td class="col-md-2 ">@item.UnidadNegocio</td>
                                                       <td class="col-md-2 ">@item.CentroCosto</td>
                                                       <td class="col-md-2 ">@String.Format("{0:dd/MM/yyy}", item.FechaGasto)</td>
                                                       <td class="col-md-1 ">@item.Pais</td>
                                                       <td class="col-md-1 ">@item.Ciudad</td>
-                                                      <td class="col-md-1 ">
-                                                          @if (@item.TipoServicioId == 1)
-                                                          {
-                                                              <span>Comida</span>
-                                                          }
-                                                          else
-                                                          {
-                                                              <span>Transporte</span>
-                                                          }
-                                                      </td>
-                                                      <td class="col-md-1 ">@item.ProveedorId</td>
+                                                      <td class="col-md-1 ">@item.Servicio</td>
                                                       <td class="col-md-1 ">@item.Concepto</td>
                                                       <td class="col-md-1 ">@item.Valor</td>
                                                     

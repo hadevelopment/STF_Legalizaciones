@@ -124,95 +124,21 @@ namespace Legalizaciones.Web.Controllers
 
         public JsonResult Empleados(Boolean filtroCedula)
         {
-            List<Empleado> Empleados = new List<Empleado>();
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Eliezer Vargas",
-                Cedula = "Nivel3",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "e.vargas@innova4j.com",
-                Cargo = "Direccion"
-            }) ;
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Tesoreria",
-                Nombre = "Angelica Betancourt",
-                Cedula = "Nivel4",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100-2",
-                CargoId = 2, // ROL Administracion Tesoreria
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "a.betancourt@innova4j.com",
-                Cargo = "Gerencia"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Contraloria",
-                Nombre = "Daniel Sanchez",
-                Cedula = "Nivel5",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100-3",
-                CargoId = 3, // ROL Administracion Contraloria
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "d.sanchez@innova4j.com",
-                Cargo = "Jefatura"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Administracion Contabilidad",
-                Nombre = "Luz Marina",
-                Cedula = "N/A",
-                Direccion = "Calle 29 No. 13A - 15. Piso 10",
-                Ciudad = "Cucuta",
-                Telefono = "(1) 560 00100-3",
-                CargoId = 4, // ROL Administracion Contabilidad
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "l.marina@innova4j.com",
-                Cargo = "Presidencia"
-            });
-
-            Empleados.Add(new Empleado
-            {
-                Area = "Empleado",
-                Nombre = "Efrain Mejias",
-                Cedula = "N/A",
-                Direccion = "Calle 28 No. 13A - 15. Piso 10",
-                Ciudad = "Bogota",
-                Telefono = "(1) 560 00100",
-                CargoId = 1, // ROL Empleado
-                CentroOperaciones = "1",
-                CentroCostos = "1",
-                UnidadNegocio = "1",
-                Correo = "e.mejias@innova4j.com",
-                Cargo = "VicePresidencia"
-            });
+            List<KactusEmpleado> Empleados = new List<KactusEmpleado>();
+            Empleados = kactusEmpleadoRepository.All().ToList();
 
             if (filtroCedula)
             {
                 var cedula = HttpContext.Session.GetString("Usuario_Cedula");
                 var empleadoPermisos = empleadoPermisoRepository.All().Where(m => m.EmpleadoCedula == cedula).ToList();
-                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.Cedula) && m.Cedula != cedula);
+                var list = Empleados.Where(m => !empleadoPermisos.Any(p => p.EmpleadoPermisoCedula == m.NumeroDeIdentificacion) && m.NumeroDeIdentificacion != cedula);
                 return Json(list);
             }
+            else
+            {
+                return Json(Empleados);
+            }
+        }
 
         public JsonResult OrigenDestinosPais(string paisID)
         {
@@ -257,22 +183,27 @@ namespace Legalizaciones.Web.Controllers
         public JsonResult Servicios(int? proveedorId)
         {
 
-            Servicio[] lstServicios = new Servicio[3];
+            Servicio[] lstServicios = new Servicio[4];
 
             lstServicios[0] = new Servicio
             {
                 Id = 1,
-                Nombre = "Comida"
+                Nombre = "ALIMENTACION"
             };
             lstServicios[1] = new Servicio
             {
                 Id = 2,
-                Nombre = "Transporte"
+                Nombre = "SERVICIO DE TRANSPORTE"
             };
             lstServicios[2] = new Servicio
             {
                 Id = 3,
-                Nombre = "Hospedaje"
+                Nombre = "SERVICIO DE TRASLADO"
+            };
+            lstServicios[3] = new Servicio
+            {
+                Id = 4,
+                Nombre = "HOSPEDAJE"
             };
 
             return Json(lstServicios);

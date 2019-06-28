@@ -60,9 +60,11 @@ namespace Legalizaciones
             services.AddTransient<IEmpleadoPermisoRepository, EmpleadoPermisoRepository>();
             services.AddTransient<ISolicitudRepository, SolicitudRepository>();
             services.AddTransient<ISolicitudGastosRepository, SolicitudGastosRepository>();
+            services.AddTransient<ISolicitudAprobacionRepository, SolicitudAprobacionRepository>();
             services.AddTransient<IHistoricoSolicitudRepository, HistoricoSolicitudRepository>();
             services.AddTransient<ILegalizacionRepository, LegalizacionRepository>();
             services.AddTransient<ILegalizacionGastosRepository, LegalizacionGastosRepository>();
+            services.AddTransient<ILegalizacionAprobacionRepository, LegalizacionAprobacionRepository>();
             services.AddTransient<ITipoSolicitudRepository, TipoSolicitudRepository>();
             services.AddTransient<IConceptoRepository, ConceptoRepository>();
             services.AddTransient<IDestinoRepository, DestinoRepository>();
@@ -70,6 +72,7 @@ namespace Legalizaciones
             services.AddTransient<IZonaRepository, ZonaRepository>();
             services.AddTransient<IOrigenDestinoRepository, OrigenDestinoRepository>();
             services.AddTransient<IEstadoSolicitudRepository, EstadoSolicitudRepository>();
+            services.AddTransient<IEstadoLegalizacionRepository, EstadoLegalizacionRepository>();
             services.AddTransient<IKactusEmpleadoRepository, KactusEmpleadoRepository>();
             services.AddTransient<ITasaRepository, TasaRepository>();
             services.AddTransient<IFlujoSolicitudRepository, FlujoSolicitudRepository>();

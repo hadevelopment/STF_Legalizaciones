@@ -37,10 +37,10 @@ namespace Legalizaciones.Web.Controllers
             Aprobacion aprobacion = new Aprobacion();
             EngineDb DB = new EngineDb();
 
-            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
-            if (!string.IsNullOrEmpty(usuarioCedula))
+            string usuarioCargo = HttpContext.Session.GetString("Usuario_Cargo");
+            if (!string.IsNullOrEmpty(usuarioCargo))
             {
-                aprobacion = DB.ObtenerSolicitudesPorAprobar(usuarioCedula);
+                aprobacion = DB.ObtenerSolicitudesPorAprobar(usuarioCargo);
                 foreach(var item in aprobacion.Anticipos)
                 {
                     item.Empleado = kactusEmpleadoRepository.getEmpleadoCedula(item.EmpleadoCedula);
@@ -103,7 +103,69 @@ namespace Legalizaciones.Web.Controllers
                 }
                 else
                 {
-                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de aprobar el anticipo.";
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de rechazar el anticipo.";
+                }
+            }
+
+            return RedirectToAction("Index", "Aprobacion");
+        }
+
+
+
+        /// <summary>
+        /// Metodo para aprobar una solicitud de Anticipo
+        /// </summary>
+        /// <param name="Id">identificador de la Legalizacion</param>
+        /// <returns></returns>
+        public IActionResult AprobarLegalizacion(int Id)
+        {
+            EngineDb DB = new EngineDb();
+
+            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
+            string usuarioNombre = HttpContext.Session.GetString("Usuario_Nombre");
+            if (!string.IsNullOrEmpty(usuarioCedula) && !string.IsNullOrEmpty(usuarioNombre))
+            {
+                string aprobador = usuarioCedula + " - " + usuarioNombre;
+                bool result = DB.GestionLegalizacion(Id, (int)TipoAccion.Aprobar, aprobador, "Aprobación de Legalizacion");
+
+                if (result)
+                {
+                    TempData["Alerta"] = "success - La Legalización ha sido aprobada exitosamente.";
+                }
+                else
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de aprobar la Legalización.";
+                }
+            }
+
+            return RedirectToAction("Index", "Aprobacion");
+        }
+
+
+        /// <summary>
+        /// Metodo para Rechazar una solicitud de Anticipo
+        /// </summary>
+        /// <param name="Id">identificador del anticipo</param>
+        /// <returns></returns>
+        [Route("/Aprobacion/RechazarLegalizacion/{Id}/{Motivo}")]
+        public IActionResult RechazarLegalizacion(int Id, string Motivo)
+        {
+            EngineDb DB = new EngineDb();
+
+            string usuarioCedula = HttpContext.Session.GetString("Usuario_Cedula");
+            string usuarioNombre = HttpContext.Session.GetString("Usuario_Nombre");
+            if (!string.IsNullOrEmpty(usuarioCedula) && !string.IsNullOrEmpty(usuarioNombre))
+            {
+                string aprobador = usuarioCedula + " - " + usuarioNombre;
+                bool result = DB.GestionLegalizacion(Id, (int)TipoAccion.Rechazar, aprobador, Motivo);
+
+                if (result)
+                {
+                    TempData["Alerta"] = "success - La Legalización ha sido rechazada exitosamente.";
+                }
+                else
+                {
+                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de rechazar la Legalización.";
                 }
             }
 

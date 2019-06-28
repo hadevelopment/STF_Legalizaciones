@@ -4,10 +4,11 @@
         var nombreServicio = $('#TiposervicioId  option:selected').text();
 
         console.log(nombreServicio);
-        if (nombreServicio === "Comida") {
+
+        if (nombreServicio === "ALIMENTACION") {
             $('#divFechaGasto').addClass('display-none');
             $('#divOrigenDestino').addClass('display-none');
-            $('#FechaGasto').val('N/A');
+            $('#FechaGasto').val('');
             $('#Origen').val('N/A');
             $('#Destino').val('N/A');
             $('#mensajeComida').removeClass('display-none');
@@ -18,7 +19,7 @@
             $('#Origen').val('');
             $('#Destino').val('');
 
-            if (nombreServicio === "Transporte" || nombreServicio === "Movilidad") {
+            if (nombreServicio.indexOf("TRANSPORTE") >= 0 || nombreServicio.indexOf("TRASLADO") >= 0) {
                 $('#divOrigenDestino').removeClass('display-none');
             } else {
                 $('#Origen').val('N/A');
@@ -28,10 +29,24 @@
         }
     });
 
-    $('.maskMoney').focus();
+    $('#Items').on('click', '.btnDelete', function () {
+        console.log('hello world');
+        if (confirm('¿Esta Seguro(a) de eliminar el gasto?')) {
+            $(this).parents('tr').remove();
+            //Suma de Montos de Gastos
+            CalcularMontos();
+        } else {
+            return false;
+        }
+    });
 
-
-    
+    $('.btnActualizar').on('click', function () {
+        if (confirm('¿Esta Seguro(a) de guardar los cambios?')) {
+            return true;
+        } else {
+            return false;
+        }
+    });
 });
 
 
@@ -51,8 +66,10 @@ function ImprimirReporte(boton) {
     alert("Imprimir reporte");
 }
 
+var IdGasto = 0;
 //Funcion cuando selecciona un item del listado pantalla modal
 function Seleccionar(Id) {
+    IdGasto = Id;
     $.ajax({
         type: "GET",
         url: "/Localidad/SolicitudGastos",
@@ -62,7 +79,7 @@ function Seleccionar(Id) {
             console.log(data);
             if (data !== null) {
 
-                if (data.servicio === "Comida") {
+                if (data.servicio === "ALIMENTACION") {
                     $('#divFechaGasto').addClass('display-none');
                     $('#divOrigenDestino').addClass('display-none');
                     $('#mensajeComida').removeClass('display-none');
@@ -111,6 +128,21 @@ function AddNuevoGasto() {
     $('#Origen').val('');
     $('#Destino').val('');
 
+    var dateMin = $('#FechaDesde').val();
+    var dateMax = $('#FechaHasta').val();
+
+    $('#FechaGasto').datepicker('remove');
+
+    $('#FechaGasto').datepicker({
+        language: 'es',
+        format: 'yyyy-mm-dd',
+        todayHighlight: true,
+        autoclose: true,
+        orientation: 'bottom auto',
+        startDate: dateMin,
+        endDate: dateMax,
+    });
+
     $('#gastosModal').modal('hide');
     funcion_Visible($('#RegistroDatos'));
 }
@@ -128,7 +160,7 @@ function AgregarFilaDatagrid() {
 
     $('#tbGastos tbody tr').each(function () {
         $projectName = $(this).find('td:eq(0)').text();
-        if ($projectName === Id) {
+        if ($projectName === IdGasto) {
             alert('Este gasto ya esta agregado');
             return;
         }
@@ -172,9 +204,9 @@ function AgregarFilaDatagrid() {
         Proveedor = "Proveedor Dos";
     }
 
-    //if (Servicio === "Comida") {
-    //    Monto = CalcularGastoComidaLegalizacion();
-    //}
+    if (Servicio === "ALIMENTACION") {
+        FechaGasto = "N/A";
+    }
     rowIndex = rowIndex + 1;
 
     //las primeras son para el mapeo
@@ -198,9 +230,9 @@ function AgregarFilaDatagrid() {
                     <td>${Servicio}</td>
                     <td>${Proveedor}</td>
                     <td>${ConceptoGasto}</td>
-                    <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
+                    <td class="monto text-right"><input type="text" class="txtLabel" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
                     <td>
-                        <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
+                        <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
                     </td>
@@ -211,7 +243,6 @@ function AgregarFilaDatagrid() {
     //Se aplica Formato Moneda al monto
     $('#monto-' + rowIndex).maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
     $('#monto-' + rowIndex).focus();
-
 
     CalcularMontos();
 }
@@ -241,9 +272,9 @@ function ValidarGastos() {
 
     if (CentroOperacion !== "" && UnidadNegocio !== "" && CentroCosto !== "" && Pais !== "" && Ciudad !== "" && Servicio !== "" && Concepto !== "" && Valor !== "") {
         //Validacion de Transporte
-        if (Servicio === "Transporte" || Servicio === "Movilidad") {
+        if (Servicio.indexOf("TRANSPORTE") >= 0 || Servicio.indexOf("TRASLADO") >= 0) {
             if (Origen === "" || Destino === "") {
-                $("#mensajeGastos").text("Debe específicar la ruta del transporte.");
+                $("#mensajeGastos").text("Debe específicar la ruta del transporte o traslado.");
                 $('#mensajeValidacionGastos').show("slow");
                 return false;
             } else if (FechaGasto === "") {
@@ -277,23 +308,64 @@ function funcion_InVisible(obj) {
 }
 
 
-//Funcion para cargar los datos
-function cargarGastos() {
-    var table = $('.tableGastos').tableToJSON({
-        ignoreColumns: [16]
-    });
+function ValidarForm() {
+    var result = true;
+    var reciboCaja = $("#ReciboCaja").val();
+    var consignacion = $("#Consignacion").val();
+    var valor = $("#Valor").val();
+    var banco = $("#BancoId option:selected").val();
+    
+    var fechaDesde = $('#FechaDesde').val();
+    var fechaHasta = $('#FechaHasta').val();
 
-    if (table.length > 0) {
-        $("#mensajeRegistro").text("");
-        $('#mensajeValidacionRegistro').hide("slow");
-        $('#hdfGastosLegalizacion').val(JSON.stringify(table));
-        return true;
+    var destino = $("#DestinoId option:selected").val();
+    var moneda = $("#MonedaId option:selected").val();
+    var cantidadGastos = $('.tableGastos tr').length;
+
+    if (reciboCaja == "" || reciboCaja == "0" || consignacion == "" || consignacion == "0" || valor == "0.00" || valor == 0 || banco == ""
+        || fechaDesde == "" || fechaHasta== "" || destino == "" || moneda == "") {
+
+        $("#mensajeForm").html("Faltan datos por específicar.");
+        $('#mensajeValidacionForm').show("slow");
+        result = false;
     } else {
-        $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-        $('#mensajeValidacionRegistro').show("slow");
-        return false;
+        $("#mensajeForm").html("");
+        $('#mensajeValidacionForm').hide("slow");
     }
 
+    if (cantidadGastos == 1) {
+        $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+        $('#mensajeValidacionRegistro').show("slow");
+        result = false;
+    } else {
+        $("#mensajeRegistro").text("");
+        $('#mensajeValidacionRegistro').hide("slow");
+    }
+
+    return result;
+}
+
+//Funcion para cargar los datos
+function cargarGastos() {
+    if (ValidarForm()) {
+        var table = $('.tableGastos').tableToJSON({
+            textExtractor: function (cellIndex, $cell) {
+                // get text from an input or select inside table cells;
+                // if empty or non-existent, get the cell text
+                return $cell.find('input, select').val() || $cell.text();
+            },
+            ignoreColumns: [19]
+        });
+
+        if (table.length > 0) {
+            $('#hdfGastosLegalizacion').val(JSON.stringify(table));
+        }
+
+        return true;
+    } else {
+        return false;
+    }
+    
 }
 
 $("#PaisId").change(function () {
@@ -336,6 +408,43 @@ function CargarCiudad(valor) {
 }
 
 function CargarListas() {
+    //Obtener DESTINOS
+    $.ajax({
+        type: "GET",
+        url: "/Localidad/Destinos",
+        datatype: "Json",
+        success: function (data) {
+            $("#DestinoId").empty();
+            $('#DestinoId').append('<option value="">Seleccione...</option>');
+            $.each(data, function (index, value) {
+                //$("#Destino").select2();
+                $('#DestinoId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+            });
+        }
+    });
+
+    //EVENTO CHANGE DE DESTINOS   
+    $("#DestinoId").change(function () {
+        var valor = $("#DestinoId option:selected").val();
+        $('#hdfDestino').val(valor);
+
+        //busco la moneda
+        $.ajax({
+            type: "GET",
+            url: "/Localidad/MonedasPorDestino",
+            datatype: "Json",
+            data: { wIdDestino: valor },
+            success: function (data) {
+                $("#MonedaId").empty();
+                $('#MonedaId').append('<option selected value="">Seleccione...</option>');
+                $.each(data, function (index, value) {
+                    $('#MonedaId').append('<option value="' + value.id + '">' + value.nombre + '</option>');
+                });
+            }
+        });
+    });
+
+
     $.ajax({
         type: "GET",
         url: "/UNOEE/Servicios",
@@ -396,14 +505,17 @@ function CargarProveedor() {
 
 //Cuando carga la pantalla
 window.onload = function () {
-
     CargarListas();
     //CargarMotivos();
     //CargarPais();
 
     var w = $('#txSaldo').val();
-    $('#txSaldo').val(w); 
-}
+    $('#txSaldo').val(w);
+
+    if ($("#txConAnticipo").val() == "0") {
+        $(".datepicker").datepicker("update", new Date());
+    }
+};
 
 //$(".datepicker").datepicker("update", new Date());
 
@@ -418,7 +530,7 @@ function CalcularGastoComidaLegalizacion() {
     var wServicio = $('#TiposervicioId option:selected').text();
     var wMonto = $('#MontoGasto').maskMoney('unmasked')[0];
 
-    if (wServicio === "Comida") {
+    if (wServicio === "ALIMENTACION") {
         var FechaDesde = $("#FechaDesde").val();
         var FechaHasta = $("#FechaHasta").val();
 

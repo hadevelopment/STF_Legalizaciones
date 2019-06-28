@@ -141,6 +141,8 @@ namespace Legalizaciones.Web.Models.ViewModel
 
         public string GastosJSON { get; set; }
 
+        public int DestinoID{ get; set; }
+
 
         //campos para el formulario de envio
         [DisplayName("Zonas visitadas")]
