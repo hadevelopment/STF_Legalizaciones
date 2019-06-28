@@ -450,7 +450,7 @@ namespace Legalizaciones.Web.Engine
             ErpMethod FuncionErp = new ErpMethod();
             ListSuppliers Proveedores = await FuncionErp.ListSuppliersAsync<ListSuppliers>();
             EngineDb Metodo = new EngineDb();
-            //Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
+            Metodo.InsertUnoeeProveedores("Sp_InsertUnoeeProveedores", Proveedores);
             return Proveedores;
         }
 
