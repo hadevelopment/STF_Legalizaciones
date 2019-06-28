@@ -533,7 +533,6 @@ function CargarListas() {
         });
     });
 
-
     $.ajax({
         type: "GET",
         url: "/UNOEE/GetUnoeeProveedores",
@@ -541,14 +540,11 @@ function CargarListas() {
         success: function (data) {
             $("#ProveedorId").empty();
             $('#ProveedorId').append('<option selected value="">Seleccione...</option>');
-            $.each(data.resultado, function (index, value) {
+            $.each(data, function (index, value) {
                 $('#ProveedorId').append('<option value="' + value.idProveedor + '">' + value.nombre + '</option>');
             });
         }
-    });*/
-
-    $('#ProveedorId').append('<option value="1">Proveedor Uno</option>');
-    $('#ProveedorId').append('<option value="2">Proveedor Dos</option>');
+    });
 
 
     $.ajax({
