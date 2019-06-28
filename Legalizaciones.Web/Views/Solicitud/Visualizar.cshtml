@@ -254,8 +254,8 @@
                         @if (ViewBag.rol != "Empleado")
                         {
                             <a class="btn btn-primary fa fa-file-pdf-o"
-                                asp-controller="ExportFilesFormat" asp-action="CreatePDF"
-                                asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
+                               asp-controller="ExportFilesFormat" asp-action="CreatePDF"
+                               asp-route-id="@Model.Id" style="float:right; height: 30px; vert-align: middle;">Exportar</a>
                             <div style="float:right"></div>
                         }
                         else
@@ -263,8 +263,10 @@
                             <button class="btn btn-primary fa fa-file-pdf-o" style="float: right;" disabled>Exportar</button>
                         }
 
-                        <a class="btn btn-primary" asp-area="" style="float:right;"
-                            asp-controller="Solicitud" asp-action="Index">Volver</a>
+
+                        <a class="btn btn-primary" href='javascript:history.go(-1)' style="float: right;">
+                            <span class="fa fa-arrow-left"></span> Volver
+                        </a>
                         <div style="float:right">    </div>
                     </div>
                 </div>

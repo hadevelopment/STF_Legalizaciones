@@ -298,18 +298,18 @@
 
             <br /><br />
 
-            <div class="row">
-                <br /><br />
-               
-                <a class="btn btn-primary" asp-area="" style="float: right;" asp-route-id="@Model.Id"
-                   asp-controller="ExportFilesFormat" asp-action="CreateLegalizacionesPDF">Exportar</a>
-                <div style="float: right"> </div>
+                  <div class="row">
+                      <br /><br />
 
-                <a class="btn btn-primary" asp-area="" style="float: right;"
-                   asp-controller="Solicitud" asp-action="Index">Volver</a>
-                <div style="float: right"> </div>
+                      <a class="btn btn-primary" asp-area="" style="float: right;" asp-route-id="@Model.Id"
+                         asp-controller="ExportFilesFormat" asp-action="CreateLegalizacionesPDF">Exportar</a>
+                      <div style="float: right"> </div>
 
-            </div>
+                      <a class="btn btn-primary" href='javascript:history.go(-1)' style="float: right;">
+                          <span class="glyphicon glyphicon-off"></span> Volver
+                      </a>
+
+                  </div>
 
         </div>
     </div>
