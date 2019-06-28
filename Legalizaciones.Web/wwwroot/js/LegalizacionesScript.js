@@ -178,7 +178,7 @@ function AgregarFilaDatagrid() {
     //}
     rowIndex = rowIndex + 1;
     var Monto2 = Monto.toString().replace(',', '');
-    GetImpuesto(ServicioId, rowIndex,Monto2);
+    var valorImpuesto = GetImpuesto(ServicioId, rowIndex,Monto2);
 
     //las primeras son para el mapeo
     //las demas son para mostrar
@@ -201,7 +201,7 @@ function AgregarFilaDatagrid() {
                     <td>${Servicio}</td>
                     <td>${Proveedor}</td>
                     <td>${ConceptoGasto}</td>
-                    <td id="tax${rowIndex}"></td>
+                    <td class="impuesto text-right" id="tax${rowIndex}">${valorImpuesto}</td>
                     <td class="monto text-right"><input type="text" class="txtLabel maskMoney" readonly="readonly" id="monto-${rowIndex}" value="${Monto}"/></td>
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete" onclick='remove(this)'>
@@ -217,6 +217,12 @@ function AgregarFilaDatagrid() {
     $('#monto-' + rowIndex).focus();
 
 
+    var impuestoActual = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+    var impuestoServicio = Monto * valorImpuesto / 100;
+    var totalImpuesto = impuestoActual + impuestoServicio;
+    $('#txtMontoImpuesto').val(totalImpuesto);
+    $('#txtMontoImpuesto').focus();
+
     CalcularMontos();
 }
 
@@ -224,10 +230,12 @@ function AgregarFilaDatagrid() {
 
 //************************************************************
 function GetImpuesto(idServicio, i, monto) {
-    return $.ajax({
+    var impuesto = 0;
+    $.ajax({
         type: "GET",
         url: "/UNOEE/GetTipoImpuesto",
         data: { id: idServicio },
+        async: false,
         datatype: "Json",
         success: function (data) {
             var obj = '#tax' + i;
@@ -245,30 +253,54 @@ function GetImpuesto(idServicio, i, monto) {
                 else
                     sum = 0;
             }
-            porcentTax = sum.toString();
-            porcentTax = porcentTax.replace('.', ',');
-            if (porcentTax != 0 && porcentTax != null && porcentTax != '')
-                $(obj).text(porcentTax);
-            else
-                $(obj).text('0,00');
 
-            montoImpuesto = monto * sum / 100;
-            var stringImpuesto = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
-            if (stringImpuesto == '') {
-                stringImpuesto = 0;
-            }
-            else {
-                stringImpuesto = Number.parseFloat(stringImpuesto);
-            }
-            montoImpuesto = montoImpuesto + Number.parseFloat(stringImpuesto);
-            console.log(montoImpuesto);
-            $('#txtMontoImpuesto').maskMoney({ thousands: ',', decimal: '.', allowZero: true, suffix: '' });
-            $('#txtMontoImpuesto').val(montoImpuesto);
-            $('#txtMontoImpuesto').focus();
+            impuesto = sum;
         }
     });
+
+    return impuesto;
 }
-//*******************************************************************
+
+
+
+
+function CalcularMontos() {
+    //Suma de Montos de Gastos legalizados
+    var montoGastos = 0;
+    $('td.monto input').each(function () {
+        montoGastos += parseFloat($(this).maskMoney('unmasked')[0]);
+    });
+
+    $('#txMontoFaltante').val(montoGastos);
+    $('#txMontoFaltante').focus();
+
+    var montoAnticipo = $('#txMontoAnticipo').maskMoney('unmasked')[0];
+    var montoImpuestos = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
+    var montoTotal = montoGastos + montoImpuestos;
+    console.log(montoTotal);
+
+    if (montoTotal > montoAnticipo) {
+         $('#txSaldo').removeClass('fontGreen');
+         $('#txSaldo').addClass('fontRed');
+         $('#mensajeSaldo').text('Saldo a Favor del Empleado');
+     } else if (montoTotal < montoAnticipo && montoGastos > 0) {
+         $('#txSaldo').removeClass('fontRed');
+         $('#txSaldo').addClass('fontGreen');
+         $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
+     } else if (montoTotal === 0){
+         $('#txSaldo').removeClass('fontRed');
+         $('#txSaldo').removeClass('fontGreen');
+         $('#mensajeSaldo').text('');
+     }
+ 
+     var saldo = montoAnticipo - montoTotal;
+
+    $('#txSaldo').val(saldo);
+    $('#txSaldo').val(montoTotal);
+    $('#txSaldo').focus();
+}
+
+
 
 function GuardarGastos() {
     if (ValidarGastos()) {
@@ -557,38 +589,4 @@ function CalcularGastoComidaLegalizacion() {
 
 }
 
-function CalcularMontos() {
-    //Suma de Montos de Gastos legalizados
-    var montoGastos = 0;
-    $('td.monto input').each(function () {
-        montoGastos += parseFloat($(this).maskMoney('unmasked')[0]);
-    });
 
-    $('#txMontoFaltante').val(montoGastos);
-    $('#txMontoFaltante').focus();
-
-    var montoAnticipo = $('#txMontoFaltante').maskMoney('unmasked')[0];
-    var montoImpuestos = $('#txtMontoImpuesto').maskMoney('unmasked')[0];
-    var montoTotal = montoAnticipo + montoImpuestos;
-    console.log(montoTotal);
-
-   /* if (montoTotal > montoAnticipo) {
-        $('#txSaldo').removeClass('fontGreen');
-        $('#txSaldo').addClass('fontRed');
-        $('#mensajeSaldo').text('Saldo a Favor del Empleado');
-    } else if (montoTotal < montoAnticipo && montoGastos > 0) {
-        $('#txSaldo').removeClass('fontRed');
-        $('#txSaldo').addClass('fontGreen');
-        $('#mensajeSaldo').text('Saldo a Favor de la Empresa');
-    } else if (montoTotal === 0){
-        $('#txSaldo').removeClass('fontRed');
-        $('#txSaldo').removeClass('fontGreen');
-        $('#mensajeSaldo').text('');
-    }
-
-    var saldo = montoAnticipo - montoTotal;*/
-
-    //$('#txSaldo').val(saldo);
-    $('#txSaldo').val(montoTotal);
-    $('#txSaldo').focus();
-}
