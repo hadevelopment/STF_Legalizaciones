@@ -840,7 +840,7 @@ namespace Legalizaciones.Web.Engine
             return FlujoLegalizacion;
         }
 
-        public bool InsertUnoeeProveedores(string SpName, List<Suppliers> model)
+        public bool InsertUnoeeProveedores(string SpName, ListSuppliers model)
         {
             bool resultado = false;
             using (Conexion)
@@ -849,7 +849,7 @@ namespace Legalizaciones.Web.Engine
                 SqlCommand command = new SqlCommand(SpName, Conexion);
                 command.CommandType = CommandType.StoredProcedure;
                 int nueva = 0;
-                foreach (Suppliers m in model)
+                foreach (var m in model.Resultado)
                 {
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@Nueva", nueva);
