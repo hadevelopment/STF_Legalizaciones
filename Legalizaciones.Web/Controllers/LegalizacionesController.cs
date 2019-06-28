@@ -354,52 +354,55 @@ namespace Legalizaciones.Web.Controllers
 
         [HttpPost]
         [Route("Actualizar")]
-        public ActionResult Actualizar(LegalizacionesViewModel legalizacion, IFormFile file)
+        public ActionResult Actualizar(LegalizacionesViewModel legalizacionView, IFormFile file)
         {
             try
             {
                 //creo mi objeto de legalizaciones del header
-                var OLegalizacionHeader = new Legalizacion
+                var legalizacion = new Legalizacion
                 {
-                    Id = legalizacion.legalizacionesId,
+                    Id = legalizacionView.legalizacionId,
                     Estatus = 1,
                     FechaCreacion = DateTime.Now,
-                    SolicitudID = legalizacion.AnticipoId,
-                    ReciboCaja = legalizacion.ReciboCaja,
-                    Consignacion = legalizacion.Consignacion,
-                    Valor = legalizacion.Valor,
-                    BancoId = legalizacion.BancoId,
-                    Empleado = legalizacion.Empleado,
-                    EmpleadoNombre = legalizacion.Empleado.PrimerNombre + " " + legalizacion.Empleado.PrimerApellido,
-                    EmpleadoCedula = legalizacion.Empleado.NumeroDeIdentificacion != null ? legalizacion.Empleado.NumeroDeIdentificacion : null,
-                    MontoAnticipoEntregado = legalizacion.MontoAnticipoEntregado,
-                    MontoGastosReportados = legalizacion.MontoGastosReportados,
-                    MontoSaldo = legalizacion.MontoSaldo,
-                    EstadoId = estadoLegalizacionRepository.All().Where(m => m.Descripcion.Contains("Creada")).Select(m => m.Id).FirstOrDefault(), //Estado Inicial
-                    FechaDesde = legalizacion.FechaDesde,
-                    FechaHasta = legalizacion.FechaHasta,
-                    DestinoID = legalizacion.DestinoID
+                    SolicitudID = legalizacionView.AnticipoId,
+                    ReciboCaja = legalizacionView.ReciboCaja,
+                    Consignacion = legalizacionView.Consignacion,
+                    Valor = legalizacionView.Valor,
+                    BancoId = legalizacionView.BancoId,
+                    Empleado = legalizacionView.Empleado,
+                    EmpleadoNombre = legalizacionView.Empleado.PrimerNombre + " " + legalizacionView.Empleado.PrimerApellido,
+                    EmpleadoCedula = legalizacionView.Empleado.NumeroDeIdentificacion != null ? legalizacionView.Empleado.NumeroDeIdentificacion : null,
+                    MontoAnticipoEntregado = legalizacionView.MontoAnticipoEntregado,
+                    MontoGastosReportados = legalizacionView.MontoGastosReportados,
+                    MontoSaldo = legalizacionView.MontoSaldo,
+                    EstadoId = legalizacionView.legalizacionEstadoId,
+                    FechaDesde = legalizacionView.FechaDesde,
+                    FechaHasta = legalizacionView.FechaHasta,
+                    DestinoID = legalizacionView.DestinoID,
+                    FlujoSolicitudId = legalizacionView.legalizacionFlujoSolicitudId,
+                    PasoFlujoSolicitudId = legalizacionView.legalizacionPasoFlujoSolicitudId
                 };
 
+
                 //Si viene con anticipo se toma el destino del anticipo
-                if (legalizacion.AnticipoId > 0)
+                if (legalizacionView.AnticipoId > 0)
                 {
-                    var solicitud = solicitudRepository.Find(legalizacion.AnticipoId);
+                    var solicitud = solicitudRepository.Find(legalizacionView.AnticipoId);
 
                     //Se valida que exista un flujo para la legalizacion y se obtiene el paso inicial del flujo configurado
-                    if (!getPasoInicialFlujo(OLegalizacionHeader, solicitud.DestinoID, (float)OLegalizacionHeader.MontoGastosReportados))
+                    if (!getPasoInicialFlujo(legalizacion, solicitud.DestinoID, (float)legalizacion.MontoGastosReportados))
                     {
                         TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta legalización. Comuníquese con el administrador de sistema.";
-                        return RedirectToAction("Crear", routeValues: new { id = OLegalizacionHeader.SolicitudID });
+                        return RedirectToAction("Crear", routeValues: new { id = legalizacion.SolicitudID });
                     }
 
                     //Se Registra La Legalizacion
-                    legalizacionRepository.Update(OLegalizacionHeader);
+                    legalizacionRepository.Update(legalizacion);
 
                     //Se actualiza el estado de la solicitud a Legalizada
-                    if (OLegalizacionHeader.Id > 0)
+                    if (legalizacion.Id > 0)
                     {
-                        if (legalizacion.AnticipoId > 0)
+                        if (legalizacionView.AnticipoId > 0)
                         {
                             var estadoId = estadoSolicitudRepository.All().Where(m => m.Descripcion == "En Proceso de Legalización" && m.Estatus == 1).Select(z => z.Id).FirstOrDefault();
                             solicitud.EstadoId = estadoId; //Legalizada
@@ -411,27 +414,27 @@ namespace Legalizaciones.Web.Controllers
                 else
                 {
                     //Se valida que exista un flujo para la legalizacion y se obtiene el paso inicial del flujo configurado
-                    if (!getPasoInicialFlujo(OLegalizacionHeader, OLegalizacionHeader.DestinoID, (float)OLegalizacionHeader.MontoGastosReportados))
+                    if (!getPasoInicialFlujo(legalizacion, legalizacion.DestinoID, (float)legalizacion.MontoGastosReportados))
                     {
                         TempData["Alerta"] = "warning - No hay un flujo de aprobación creado para esta legalización. Comuníquese con el administrador de sistema.";
-                        return RedirectToAction("Crear", routeValues: new { id = OLegalizacionHeader.SolicitudID });
+                        return RedirectToAction("Crear", routeValues: new { id = legalizacion.SolicitudID });
                     }
 
                     //Se Registra La Legalizacion
-                    legalizacionRepository.Update(OLegalizacionHeader);
+                    legalizacionRepository.Update(legalizacion);
                 }
 
                 //Limpio los gastos previos registrados
-                var gastosLegalizacionDatosBD = legalizacionGastosRepository.All().Where(m => m.LegalizacionId == OLegalizacionHeader.Id).ToList();
+                var gastosLegalizacionDatosBD = legalizacionGastosRepository.All().Where(m => m.LegalizacionId == legalizacion.Id).ToList();
                 foreach (var item in gastosLegalizacionDatosBD)
                 {
                     legalizacionGastosRepository.Delete(item);
                 }
 
                 //Aplico Formato JSON a los thead que vienen de la tabla
-                legalizacion.GastosJSON = TableToJSON(legalizacion.GastosJSON);
+                legalizacionView.GastosJSON = TableToJSON(legalizacionView.GastosJSON);
                 //creo la lista de los detalles que vienen del json recorro la lista y guardo el detalle en la bd
-                var LegalizacionGastos = JsonConvert.DeserializeObject<List<DecerializeLegalizacionGasto>>(legalizacion.GastosJSON);
+                var LegalizacionGastos = JsonConvert.DeserializeObject<List<DecerializeLegalizacionGasto>>(legalizacionView.GastosJSON);
                 foreach (var item in LegalizacionGastos)
                 {
                     var wOLegalizacionGasto = new LegalizacionGastos
@@ -439,7 +442,7 @@ namespace Legalizaciones.Web.Controllers
                         Concepto = item.ConceptoGasto,
                         FechaCreacion = DateTime.Now,
                         FechaGasto = item.FechaGasto,
-                        LegalizacionId = OLegalizacionHeader.Id,
+                        LegalizacionId = legalizacion.Id,
                         CentroOperacionId = item.CentroOperacionId,
                         UnidadNegocioId = item.UnidadNegocioId,
                         CentroCostoId = item.CentroCostoId,
@@ -461,7 +464,7 @@ namespace Legalizaciones.Web.Controllers
                 }
 
                 //Se Registra el Flujo de Aprobacion de la Legalizacion
-                crearFlujoAprobacionLegalizacion(OLegalizacionHeader);
+                crearFlujoAprobacionLegalizacion(legalizacion);
 
                 TempData["Alerta"] = "success - La Legalización se ha actualizado correctamente.";
                 return RedirectToAction("Index", "Legalizaciones");
@@ -530,7 +533,10 @@ namespace Legalizaciones.Web.Controllers
 
                     var OLegalizaciones = new LegalizacionesViewModel
                     {
-                        legalizacionesId = legalizacion.Id,
+                        legalizacionId = legalizacion.Id,
+                        legalizacionEstadoId = legalizacion.EstadoId,
+                        legalizacionFlujoSolicitudId = legalizacion.FlujoSolicitudId,
+                        legalizacionPasoFlujoSolicitudId = legalizacion.PasoFlujoSolicitudId,
                         AnticipoId = solicitud.Id,
                         DocumentoERPID = solicitud.DocumentoERP,
                         FechaRegistro = solicitud.FechaSolicitud,
@@ -557,7 +563,8 @@ namespace Legalizaciones.Web.Controllers
                         ListaCentroCosto = new SelectList(ListaCentroCosto, "Id", "Nombre"),
                         ListaCentroOperacion = new SelectList(ListaCentroOperaciones, "Id", "Nombre"),
                         ListaUnidadNegocio = new SelectList(ListaUnidadNegocio, "Id", "Nombre"),
-                        Moneda = moneda.Abreviatura
+                        Moneda = moneda.Abreviatura,
+                        DestinoID = solicitud.DestinoID
                     };
 
                     return View(OLegalizaciones);
@@ -566,7 +573,10 @@ namespace Legalizaciones.Web.Controllers
                 {
                     var OLegalizaciones = new LegalizacionesViewModel
                     {
-                        legalizacionesId = legalizacion.Id,
+                        legalizacionId = legalizacion.Id,
+                        legalizacionEstadoId = legalizacion.EstadoId,
+                        legalizacionFlujoSolicitudId = legalizacion.FlujoSolicitudId,
+                        legalizacionPasoFlujoSolicitudId = legalizacion.PasoFlujoSolicitudId,
                         AnticipoId = 0,
                         FechaDesde = legalizacion.FechaDesde,
                         FechaHasta = legalizacion.FechaHasta,
@@ -679,10 +689,10 @@ namespace Legalizaciones.Web.Controllers
             return View(legalizacion);
         }
 
-
         private bool getPasoInicialFlujo(Legalizacion legalizacion, int? destino, float monto)
         {
             //Obtengo el Id del flujo
+            var estadoLegalizacion = estadoLegalizacionRepository.All().Where(m => m.Id == legalizacion.EstadoId).Single();
             var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Legalizacion" ).Select(m => m.Id).FirstOrDefault();
             var idFlujo = flujoSolicitudRepository.All().Where(m => m.TipoSolicitudId == tipoSolicitud && m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
@@ -693,9 +703,14 @@ namespace Legalizaciones.Web.Controllers
                 if (legalizacion.FlujoSolicitudId != null && legalizacion.PasoFlujoSolicitudId != null)
                 {
                     //Si el flujo y el paso de la legalizacion son distintos a los anteriores se debe ejecutar el trigger de la base da datos
-                    if (legalizacion.FlujoSolicitudId != idFlujo && legalizacion.PasoFlujoSolicitudId != idPaso)
+                    //Si el estado es rechazada
+                    if ((legalizacion.FlujoSolicitudId != idFlujo && legalizacion.PasoFlujoSolicitudId != idPaso) || estadoLegalizacion.Descripcion == "Rechazada")
                     {
+                        var EstadoInicial = estadoLegalizacionRepository.All().Where(m => m.Descripcion.Contains("Creada")).Select(m => m.Id).FirstOrDefault(); //Estado Inicial
                         DB.TriggerActualizacionLegalizacion(legalizacion.Id);
+
+                        //Devuelvo la Legalización a su estado inicial
+                        legalizacion.EstadoId = EstadoInicial;
                     }
                 }
 

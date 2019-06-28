@@ -19,11 +19,21 @@ namespace Legalizaciones.Web.Models.ViewModel
     {
 
         //Legalizaciones ID
-        [DisplayName("legalizacionesId")]
-        public int legalizacionesId { get; set; }
+        [DisplayName("legalizacionId")]
+        public int legalizacionId { get; set; }
+
+        //Legalizaciones ID
+        [DisplayName("legalizacionEstadoId")]
+        public int? legalizacionEstadoId { get; set; }
+
+        [DisplayName("FlujoSolicitudId")]
+        public int? legalizacionFlujoSolicitudId { get; set; }
+
+        [DisplayName("PasoFlujoSolicitudId")]
+        public int legalizacionPasoFlujoSolicitudId { get; set; }
 
         //Area de Solicitud de Anticipo
-        [DisplayName("ID")]
+        [DisplayName("Id")]
         public int AnticipoId { get; set; }
 
         [DisplayName("ID Documento en ERP")]
@@ -141,7 +151,7 @@ namespace Legalizaciones.Web.Models.ViewModel
 
         public string GastosJSON { get; set; }
 
-        public int DestinoID{ get; set; }
+        public int? DestinoID{ get; set; }
 
 
         //campos para el formulario de envio

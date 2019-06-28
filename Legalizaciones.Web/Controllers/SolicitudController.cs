@@ -755,6 +755,7 @@ namespace Legalizaciones.Web.Controllers
         private bool getPasoInicialFlujo(Solicitud solicitud, int? destino, float monto)
         {
             //Obtengo el Id del flujo
+            var estadoSolicitud = estatusRepository.All().Where(m => m.Id == solicitud.EstadoId).Single();
             var tipoSolicitud = tipoSolicitudRepository.All().Where(m => m.Descripcion == "Solicitud de Anticipo" ).Select(m => m.Id).FirstOrDefault();
             var idFlujo = flujoSolicitudRepository.All().Where(m => m.TipoSolicitudId == tipoSolicitud && m.DestinoId == destino && monto >= m.MontoMinimo && monto <= m.MontoMaximo).Select(m => m.Id).LastOrDefault();
 
@@ -765,9 +766,13 @@ namespace Legalizaciones.Web.Controllers
                 if (solicitud.FlujoSolicitudId != null && solicitud.PasoFlujoSolicitudId != null)
                 {
                     //Si el flujo y el paso de la solicitud son distintos a los anteriores se debe ejecutar el trigger de la base da datos
-                    if (solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != idPaso)
+                    if ((solicitud.FlujoSolicitudId != idFlujo && solicitud.PasoFlujoSolicitudId != idPaso) || estadoSolicitud.Descripcion == "Rechazada")
                     {
+                        var EstadoInicial = estatusRepository.All().Where(m => m.Descripcion.Contains("Creada")).Select(m => m.Id).FirstOrDefault(); //Estado Inicial
                         DB.TriggerActualizacionSolicitud(solicitud.Id);
+
+                        //Devuelvo la Solicitud a su estado inicial
+                        solicitud.EstadoId = EstadoInicial;
                     }
                 }
 

@@ -39,7 +39,11 @@
     <section class="">
         <div class="hidden">
             @Html.TextBoxFor(model => model.ConAnticipo, new { @class = "form-control", @id = "txConAnticipo" })
-            @Html.TextBoxFor(model => model.legalizacionesId, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.DestinoID, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.legalizacionId, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.legalizacionEstadoId, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.legalizacionFlujoSolicitudId, new { @class = "form-control" })
+            @Html.TextBoxFor(model => model.legalizacionPasoFlujoSolicitudId, new { @class = "form-control" })
         </div>
 
         @if (Model.ConAnticipo == 1)
@@ -299,7 +303,7 @@
                     <div class="row margin-bottom">
                         <div class="col-md-4" id="divFechaGasto">
                             <label class="control-label">Fecha Gasto</label>
-                            @Html.TextBoxFor(model => model.FechaGasto, Model.FechaGasto.ToString("yyyy-MM-dd"), new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Gasto", @required = "required", @type = "date", @autocomplete = "off" })
+                            @Html.TextBoxFor(model => model.FechaGasto, Model.FechaGasto.ToString("yyyy-MM-dd"), new { @class = "form-control datepicker", @placeholder = "Selecciona Fecha Gasto", @type = "date", @autocomplete = "off" })
                             @Html.ValidationMessageFor(model => model.FechaGasto, "", new { @class = "text-danger" })
                         </div>
                         <div class="col-md-4">

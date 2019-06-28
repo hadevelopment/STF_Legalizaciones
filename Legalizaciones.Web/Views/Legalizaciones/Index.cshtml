@@ -151,17 +151,26 @@
                                                 }
                                             </td>
                                             <td>
-                                                @if (item.Id > 0 && item.Estado == "Aprobada")//Sin Legalizar
+                                                @if (item.Id > 0 && item.Estado == "Aprobada")//Anticipo Sin Legalizar
                                                 {
                                                     <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-Id="@item.Id">
                                                         <span class="fa fa-eye"></span>
                                                     </a>
                                                     <a class="btn btn-primary" asp-area="" asp-controller="Legalizaciones" asp-action="Crear" asp-route-id="@item.Id" method="get">Legalizar</a>
                                                 }
-                                                else if (item.Id > 0 && (item.Estado == "En Proceso" || item.Estado == "Legalizada" || item.Estado == "En Proceso de Legalización") && item.EstadoLegalizacion != "Rechazada")//Legalizadaa
+                                                else if (item.Id > 0 && (item.Estado == "En Proceso" || item.Estado == "Legalizada" || item.Estado == "En Proceso de Legalización") && item.EstadoLegalizacion != "Rechazada" && item.EstadoLegalizacion != "Creada")//Legalizadaa
                                                 {
                                                     <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
                                                         <span class="fa fa-eye"></span>
+                                                    </a>
+                                                }
+                                                else if (item.Id > 0 && item.EstadoLegalizacion == "Creada")
+                                                {
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Visualizar" asp-route-Id="@item.legalizacionID">
+                                                        <span class="fa fa-eye"></span>
+                                                    </a>
+                                                    <a class="item-btn" asp-controller="Legalizaciones" asp-action="Editar" asp-route-legaId="@item.legalizacionID" asp-route-id="@item.Id">
+                                                        <span class="fa fa-pencil"></span>
                                                     </a>
                                                 }
                                                 else if (item.Id > 0 && item.EstadoLegalizacion == "Rechazada")
