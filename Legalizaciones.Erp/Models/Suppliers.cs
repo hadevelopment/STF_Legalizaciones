@@ -48,6 +48,8 @@ namespace Legalizaciones.Erp.Models
 
         [XmlAttribute(AttributeName = "id", Namespace = "urn:schemas-microsoft-com:xml-diffgram-v1")]
         public string Id { get; set; }
+
+        public Int32 IdTable { get; set; }
     }
 
 

@@ -853,17 +853,29 @@ namespace Legalizaciones.Web.Engine
                 {
                     command.Parameters.Clear();
                     command.Parameters.AddWithValue("@Nueva", nueva);
+                    if (m.IdProveedor == null) m.IdProveedor = string.Empty;
                     command.Parameters.AddWithValue("@IdProveedor", m.IdProveedor);
+                    if (m.Nombre == null) m.Nombre = string.Empty;
                     command.Parameters.AddWithValue("@Nombre", m.Nombre);
+                    if (m.Telefono == null) m.Telefono = string.Empty;
                     command.Parameters.AddWithValue("@Telefono", m.Telefono);
-                    command.Parameters.AddWithValue("@Celular", m.Celular);                  
+                    if (m.Celular == null) m.Celular = string.Empty;
+                    command.Parameters.AddWithValue("@Celular", m.Celular);
+                    if (m.FechaReg == null) m.FechaReg = string.Empty;
                     command.Parameters.AddWithValue("@FechaReg", m.FechaReg);
+                    if (m.Sucursal == null) m.Sucursal = string.Empty;
                     command.Parameters.AddWithValue("@Sucursal", m.Sucursal);
+                    if (m.Des_Sucursal == null) m.Des_Sucursal = string.Empty;
                     command.Parameters.AddWithValue("@Des_Sucursal", m.Des_Sucursal);
+                    if (m.Pais == null) m.Pais = string.Empty;
                     command.Parameters.AddWithValue("@Pais", m.Pais);
+                    if (m.Depto == null) m.Depto = string.Empty;
                     command.Parameters.AddWithValue("@Depto", m.Depto);
+                    if (m.Ciudad == null) m.Ciudad = string.Empty;
                     command.Parameters.AddWithValue("@Ciudad", m.Ciudad);
+                    if (m.Direccion == null) m.Direccion = string.Empty;
                     command.Parameters.AddWithValue("@Direccion", m.Direccion);
+                    if (m.Email == null) m.Email = string.Empty;
                     command.Parameters.AddWithValue("@Email", m.Email);
                     command.ExecuteNonQuery();
                     nueva++;
@@ -887,18 +899,19 @@ namespace Legalizaciones.Web.Engine
                 while (lector.Read())
                 {
                     Suppliers data = new Suppliers();
-                    data.IdProveedor = lector.GetString(0);
-                    data.Nombre = lector.GetString(1);
-                    data.Telefono = lector.GetString(2);
-                    data.Celular = lector.GetString(3);
-                    data.FechaReg = lector.GetString(4);
-                    data.Sucursal = lector.GetString(5);
-                    data.Des_Sucursal = lector.GetString(6);
-                    data.Pais = lector.GetString(7);
-                    data.Depto = lector.GetString(8);
-                    data.Ciudad = lector.GetString(9);
-                    data.Direccion = lector.GetString(10);
-                    data.Email = lector.GetString(11);
+                    data.IdTable = lector.GetInt32(0);
+                    data.IdProveedor = lector.GetString(1);
+                    data.Nombre = lector.GetString(2);
+                    data.Telefono = lector.GetString(3);
+                    data.Celular = lector.GetString(4);
+                    data.FechaReg = lector.GetString(5);
+                    data.Sucursal = lector.GetString(6);
+                    data.Des_Sucursal = lector.GetString(7);
+                    data.Pais = lector.GetString(8);
+                    data.Depto = lector.GetString(9);
+                    data.Ciudad = lector.GetString(10);
+                    data.Direccion = lector.GetString(11);
+                    data.Email = lector.GetString(12);
                     dataList.Insert(n, data);
                     n++;
                 }
