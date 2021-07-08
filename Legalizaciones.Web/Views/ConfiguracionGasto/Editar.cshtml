@@ -1,0 +1,143 @@
+﻿@model Legalizaciones.Model.ConfiguracionGasto
+@{
+    ViewData["Title"] = "Configurar Gasto";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index","Home")'> Inicio </a>
+                    >
+                    <a href='@Url.Action("Index","ConfiguracionGasto")'> Configuración de Gastos </a>
+                    >
+                    <strong>Editar</strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form asp-controller="ConfiguracionGasto" asp-action="Actualizar" method="post">
+    <div class="hidden">
+        <input class="hide" type="text" id="txProceso" name="txProceso" value="A" />
+        <input class="hide" type="text" id="Id" name="Id" value="@Model.Id" />
+    </div>
+    <section class="">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-gear"></i> Configurar</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+
+            <div class="box-body">
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="Descripcion" id="lbl_descripcion">Descripcion</label>
+                        @Html.TextBoxFor(model => model.Descripcion, new {@class = "form-control", @placeholder = "Indique la descripción", id = "Descripcion"})
+                        <span asp-validation-for="Descripcion" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="CargoId" id="lbl_cargoId">Cargo</label>
+                        @Html.DropDownListFor(model => model.CargoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control", id = "CargoId"})
+                        @Html.ValidationMessageFor(model => model.CargoId, "", new {@class = "text-danger"})
+                        @Html.HiddenFor(model => model.Cargo, new {@class = "form-control", id = "hdfCargo"})
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="PaisId" id="lbl_paisId">Pais</label>
+                        @Html.DropDownListFor(model => model.PaisId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control", id = "PaisId"})
+                        @Html.ValidationMessageFor(model => model.PaisId, "", new {@class = "text-danger"})
+                        @Html.HiddenFor(model => model.PaisNombre, new {@class = "form-control", id = "hdfPais"})
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="TipoServicioId" id="lbl_tipoServicioId">Tipo Servicio</label>
+                        @Html.DropDownListFor(model => model.TipoServicioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control", id = "TipoServicioId"})
+                        @Html.ValidationMessageFor(model => model.TipoServicioId, "", new {@class = "text-danger"})
+                        @Html.HiddenFor(model => model.TipoServicio, new {@class = "form-control", id = "hdfTipoServicio"})
+                    </div>
+                </div>
+
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="ZonaOrigenId" id="lbl_zonaOrigenId">Origen</label>
+                        @Html.DropDownListFor(model => model.ZonaOrigenId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control zonaPais", id = "ZonaOrigenId", @disabled = "disabled"})
+                        @Html.ValidationMessageFor(model => model.ZonaOrigenId, "", new {@class = "text-danger"})
+                        @Html.HiddenFor(model => model.OrigenNombre, new {@class = "form-control", id = "hdfOrigen"})
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="ZonaDestinoId" id="lbl_zonaDestinoId">Destino</label>
+                        @Html.DropDownListFor(model => model.ZonaDestinoId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control zonaPais", id = "ZonaDestinoId", @disabled = "disabled"})
+                        @Html.ValidationMessageFor(model => model.ZonaDestinoId, "", new {@class = "text-danger"})
+                        @Html.HiddenFor(model => model.DestinoNombre, new {@class = "form-control", id = "hdfDestino"})
+                    </div>
+                    <div class="col-md-3">
+                        <label asp-for="Moneda">Moneda</label>
+                        @Html.DropDownListFor(model => model.MonedaId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new {@class = "form-control", id = "MonedaId"})
+                        @Html.HiddenFor(model => model.MonedaNombre, new {@class = "form-control", id = "hdfMoneda"})
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.Moneda, "Seleccione una Moneda.", new {@class = "text-danger"})
+                        }
+                    </div>
+                    <div class="col-md-3">
+                        <div class="checkbox">
+                            @Html.CheckBoxFor(model => model.GastoDiario)
+                            <label>¿Gasto por Día?</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        <label asp-for="Monto" id="lbl_Monto">Monto</label>
+                        @Html.TextBoxFor(model => model.Monto, new {@class = "form-control", @type = "number", @placeholder = "Indique el monto", id = "Monto"})
+                        <span asp-validation-for="Monto" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            
+          
+        </div>
+
+
+        @*<div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span> Registrar
+                </button>
+            </div>
+        </div>*@
+        
+        <div class="modal-footer box">
+        
+            <button id="btnAdd type="submit" class="btn btn-primary">
+                <span class="glyphicon glyphicon-save"></span> Guardar
+            </button>
+        
+
+            
+            <a id="btnReset" class="btn btn-warning" asp-controller="ConfiguracionGasto" asp-action="Editar" asp-route-id="@Model.Id">
+                <span class="glyphicon glyphicon-ban-circle"></span> Cancelar
+            </a>
+
+            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal" asp-controller="ConfiguracionGasto" asp-action="Index">
+                <span class="glyphicon glyphicon-off"></span> Volver
+            </a>
+        </div>
+
+    </section>
+</form>
+
+@section scripts {
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/ConfiguracionGastoScript.js"></script>
+
+    <script>
+        $(function () {
+        });
+
+    </script>
+}

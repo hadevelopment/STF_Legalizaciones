@@ -2,6 +2,7 @@
 using Legalizaciones.Model.Empresa;
 using Legalizaciones.Model.ItemSolicitud;
 using Legalizaciones.Model.Jerarquia;
+using Legalizaciones.Model.Workflow;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -24,6 +25,7 @@ namespace Legalizaciones.Model
 
         [ForeignKey("TipoSolicitud")]
         public int TipoSolicitudID { get; set; }
+        public TipoSolicitud TipoSolicitud { get; set; }
 
         [Required(ErrorMessage = "Concepto es requerido.")]
         public string Concepto { get; set; }
@@ -31,10 +33,12 @@ namespace Legalizaciones.Model
         [Required(ErrorMessage = "Destino es requerido.")]
         [ForeignKey("Destino")]
         public int? DestinoID { get; set; }
+        public Destino Destino { get; set; }
 
         [Required(ErrorMessage = "Ciudad es requerido.")]
         [ForeignKey("Zona")]
         public int? ZonaID { get; set; }
+        public Zona Zona { get; set; }
 
         [Required(ErrorMessage = "Seleccione un Centro de Operaciones.")]
         public int CentroOperacionId { get; set; }
@@ -68,19 +72,18 @@ namespace Legalizaciones.Model
         [DisplayName("Moneda")]
         [ForeignKey("Moneda")]
         public int? MonedaId { get; set; }
-
-        [Required(ErrorMessage = "Estado de la Solicitud.")]
-        [ForeignKey("EstadoSolicitud")]
-        public int EstadoId { get; set; }
-
-        [NotMapped]
         public Moneda Moneda { get; set; }
+
+        [ForeignKey("EstadoSolicitud")]
+        public int? EstadoId { get; set; }
+        public EstadoSolicitud EstadoSolicitud { get; set; }
+
+        [ForeignKey("PasoFlujoSolicitud")]
+        public int? PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud { get; set; }
 
         [NotMapped]
         public string GastosJSON { get; set; }
-
-        [NotMapped]
-        public EstadoSolicitud EstadoSolicitud { get; set; }
 
         public string EmpleadoCedula { get; set; }
 
@@ -88,7 +91,7 @@ namespace Legalizaciones.Model
         public Empleado Empleado { get; set; }
 
         [DisplayName("Monto")]
-        public float Monto { get; set; }
+        public decimal Monto { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime FechaSolicitud { get; set; }
@@ -102,14 +105,10 @@ namespace Legalizaciones.Model
         public ICollection<SolicitudGastos> SolicitudGastos { get; set; }
 
         [NotMapped]
-        public Destino Destino { get; set; }
-        [NotMapped]
-        public Zona Zona { get; set; }
-        [NotMapped]
-        public TipoSolicitud TipoSolicitud { get; set; }
+        public IFormFile Carta { get; set; }
 
         [NotMapped]
-        public IFormFile Carta { get; set; }
+        public List<Flujo> ListaFlujo { get; set; }
 
         public string Extracto { get; set; }
 

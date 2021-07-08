@@ -13,7 +13,7 @@ namespace Legalizaciones.Web.Models.ViewModel
 
         public string Banco { get; set; }
 
-        public float Monto { get; set; }
+        public decimal Monto { get; set; }
 
         public int id { get; set; }
         

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
 using Legalizaciones.Interface;
 using Legalizaciones.Interface.ISolicitud;
 using Legalizaciones.Model;
@@ -12,12 +11,9 @@ using Legalizaciones.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using Legalizaciones.Data.AppDbContext;
-using System.Configuration;
-using Legalizaciones.Web.Models;
 using Legalizaciones.Web.Models.ViewModel;
+using Legalizaciones.Web.Engine;
+using Legalizaciones.Model.Workflow;
 
 namespace Legalizaciones.Web.Controllers
 {
@@ -27,32 +23,40 @@ namespace Legalizaciones.Web.Controllers
         private readonly ISolicitudRepository solicitudRepository;
         private readonly ISolicitudGastosRepository solicitudGastosRepository;
         private readonly ITipoSolicitudRepository tipoSolicitudRepository;
+        private readonly IHistoricoSolicitudRepository historicoSolicitudRepository;
+        private readonly IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository;
         public Solicitud sol;
         public List<SolicitudGastos> lstSolicitudGastos = new List<SolicitudGastos>();
         public UNOEE objUNOEE = new UNOEE();
 
+        public readonly IEmpleadoRepository empleadoRepository;
         public readonly IMonedaRepository monedaRepository;
         public readonly IDestinoRepository destinoRepository;
         public readonly IZonaRepository zonaRepository;
         public readonly IEstadoSolicitudRepository estatusRepository;
+        EngineDb DB = new EngineDb();
 
         public SolicitudController(
             ISolicitudRepository solicitudRepository,
             ISolicitudGastosRepository solicitudGastosRepository,
             ITipoSolicitudRepository tipoSolicitudRepository,
+            IHistoricoSolicitudRepository historicoSolicitudRepository,
             IMonedaRepository monedaRepository,
             IDestinoRepository destinoRepository,
             IZonaRepository zonaRepository,
-            IEstadoSolicitudRepository estatusRepository
+            IEstadoSolicitudRepository estatusRepository,
+            IPasoFlujoSolicitudRepository pasoFlujoSolicitudRepository
             )
         {
             this.solicitudRepository = solicitudRepository;
             this.solicitudGastosRepository = solicitudGastosRepository;
             this.tipoSolicitudRepository = tipoSolicitudRepository;
+            this.historicoSolicitudRepository = historicoSolicitudRepository;
             this.monedaRepository = monedaRepository;
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
             this.estatusRepository = estatusRepository;
+            this.pasoFlujoSolicitudRepository = pasoFlujoSolicitudRepository;
         }
 
         public IActionResult Index()
@@ -67,7 +71,7 @@ namespace Legalizaciones.Web.Controllers
              * HAY 3 empleados (del 1 al 3)
              * EMPLEADO = 1 Tiene ROL EMPLEADO ROL = 1
              * EMPLEADO = 2 Tiene ROL Adm. Tesoreria ROL = 2
-             * EMPLEADO = 3 Tiene ROL Adm. Contabilidad ROL = 3
+             * EMPLEADO = 3 Tiene ROL Adm. Contraloria ROL = 3
             */
 
             // Obtenemos datos del empleado en Session
@@ -79,9 +83,9 @@ namespace Legalizaciones.Web.Controllers
 
             ViewBag.cargo = cargo;
 
+            //Si es administrador puede ver todas las solicitudes
             if (cargo == "3")
             {
-
                  solicitudes = solicitudRepository.All().ToList();
                 //var q = from sol in dbContext.Solicitud
                 //        join es in dbContext.EstadoSolicitud on sol.Estatus  equals es.Id 
@@ -98,14 +102,16 @@ namespace Legalizaciones.Web.Controllers
                 //    };
 
 
+
                 foreach (var item in solicitudes)
                 {
-                    item.Empleado = objUNOEE.getEmpleadoCedula("6.845.256.666");
+                    item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
                     item.EstadoSolicitud = estatusRepository.Find(long.Parse(item.EstadoId.ToString()));
                 }
 
                 return View(solicitudes);
             }
+            //Si no es administrador solo puede ver las solicitudes creadas por el
             else
             {
                 solicitudes = solicitudRepository.All().Where(e => e.EmpleadoCedula == cedula).ToList();
@@ -133,13 +139,10 @@ namespace Legalizaciones.Web.Controllers
             {
                 cedula = HttpContext.Session.GetString("Usuario_Cedula");
                 cargo = HttpContext.Session.GetString("Usuario_Cargo");
-             
             }
 
-            if(cargo != "3")
-            {
-                empleado = objUNOEE.getEmpleadoCedula(cedula);
-            }
+            //Se obtiene el objeto empleado
+            empleado = objUNOEE.getEmpleadoCedula(cedula);
 
             Solicitud solicitud = new Solicitud();
             solicitud.Empleado = empleado;
@@ -151,32 +154,43 @@ namespace Legalizaciones.Web.Controllers
         [Route("Crear")]
         public ActionResult Guardar(Solicitud solicitud, IFormFile file)
         {
-            if (!ModelState.IsValid)
-            {
 
-            }
-            else
+            try
             {
-                try
-                {
-                    solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
-                    List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
-                    solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
-                    solicitud.FechaCreacion = DateTime.Now;
-                    solicitud.Estatus = 1;
-                    solicitud.TipoSolicitudID = 1;
+                solicitud.NumeroSolicitud = String.Format("{0:yyyMMddHHmmmss}", DateTime.Now);
+                List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
+                solicitud.EmpleadoCedula = solicitud.Empleado.Cedula;
+                solicitud.FechaCreacion = DateTime.Now;
+                solicitud.Estatus = 1;//Activa
+                solicitud.EstadoId = 1;//Estado Sin Legalizar
+                solicitud.TipoSolicitudID = 1;//Anticipo
+                solicitud.FechaDesde = DateTime.Now;
+                solicitud.FechaHasta = DateTime.Now;
+                solicitud.FechaSolicitud = DateTime.Now;
 
-                    //Calculo Fecha de Vencimiento de la Solicitud
-                    var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
-                    solicitud.FechaVencimiento = solicitud.FechaDesde.AddDays(DiasHabiles);
+                //Calculo Fecha de Vencimiento de la Solicitud
+                var DiasHabiles = tipoSolicitudRepository.All().Where(a => a.Id == 1).FirstOrDefault().DiasHabiles;
+                solicitud.FechaVencimiento = solicitud.FechaHasta.AddDays(DiasHabiles);
+
+                    //Se obtiene el paso inicial del flujo configurado
+                    solicitud.PasoFlujoSolicitudId = getPasoInicialFlujo();
 
                     //Se Registra la Solicitud
                     solicitudRepository.Insert(solicitud);
 
-                    listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
-                    solicitud.SolicitudGastos = listaGastos;
+                listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(solicitud.GastosJSON.Replace("Fecha Gasto", "FechaGasto"));
+                solicitud.SolicitudGastos = listaGastos;
 
-                    //Se guarda la carta de descuento en el directorio
+                //Se Registran los gastos de la Solicitud
+                foreach (SolicitudGastos item in listaGastos)
+                {
+                    item.SolicitudId = solicitud.Id;
+                    solicitudGastosRepository.Insert(item);
+                }
+
+                //Se guarda la carta de descuento en el directorio en caso de que exista
+                if (solicitud.Carta != null)
+                {
                     if (solicitud.Carta.FileName != "")
                     {
                         //Se sube al directorio
@@ -186,25 +200,20 @@ namespace Legalizaciones.Web.Controllers
                         solicitud.RutaArchivo = getRuta(solicitud.Carta, "files/carta/", solicitud.Empleado.Cedula, solicitud.Id.ToString());
                         solicitudRepository.Update(solicitud);
                     }
-
-                    //Se Registran los gastos de la Solicitud
-                    foreach (SolicitudGastos item in listaGastos)
-                    {
-                        item.SolicitudId = solicitud.Id;
-                        solicitudGastosRepository.Insert(item);
-                    }
-
-                    TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
-                    return RedirectToAction("Index", "Solicitud");
-                }
-                catch (System.Exception e)
-                {
-                    TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
                 }
 
+                TempData["Alerta"] = "success - La Solicitud se registro correctamente.";
+                return RedirectToAction("Index", "Solicitud");
+            }
+            catch (System.Exception e)
+            {
+                TempData["Alerta"] = "error - Ocurrieron inconvenientes al momento de registrar la solicitud";
+
+                return View("Crear", solicitud);
             }
 
-            return View("Crear", solicitud);
+
+
         }
 
         [HttpGet]
@@ -246,8 +255,8 @@ namespace Legalizaciones.Web.Controllers
         {
             try
             {
-                if (!ModelState.IsValid || data.Id == 0)
-                    return View(data);
+                //if (!ModelState.IsValid || data.Id == 0)
+                //    return View(data);
 
                 List<SolicitudGastos> listaGastos = new List<SolicitudGastos>();
                 listaGastos = JsonConvert.DeserializeObject<List<SolicitudGastos>>(data.GastosJSON);
@@ -351,6 +360,13 @@ namespace Legalizaciones.Web.Controllers
             Lista = solicitudGastosRepository.All().Where(x => x.SolicitudId == id).ToList();
 
             res.SolicitudGastos = Lista;
+
+            List<Flujo> lstFlujo = new List<Flujo>();
+            lstFlujo = DB.ObtenerFlujoSolicitud(id);
+
+            if (lstFlujo.Count > 0)
+                res.ListaFlujo = lstFlujo.OrderBy(m => m.Orden).ToList();
+
             return View(res);
         }
 
@@ -362,7 +378,6 @@ namespace Legalizaciones.Web.Controllers
         public ActionResult RegistrarSTDC()
         {
             var wSolcitudTDC = new SolicitudTDCViewModel();
-
             return View(wSolcitudTDC);
         }
 
@@ -392,7 +407,8 @@ namespace Legalizaciones.Web.Controllers
                     FechaSolicitud = DateTime.Now,
                     Banco = solicitudTDC.Banco,
                     Extracto = solicitudTDC.Extracto,
-                    Monto = solicitudTDC.Monto
+                    Monto = solicitudTDC.Monto,
+                    EstadoId = 1,
 
                 };
 
@@ -463,6 +479,32 @@ namespace Legalizaciones.Web.Controllers
 
         }
 
+
+        /* ****************************************************************************
+*     Descripcion: VISTA para exortar datos al Excel
+*     Creada: 09-05-2019 
+*     Autor: Javier Rodriguez    
+      **************************************************************************** */
+        [HttpPost]
+        [Route("Filtrar")]
+        public ActionResult Filtrar(DateTime fechaDesde, DateTime fechaHasta)
+        {
+            if (fechaDesde > fechaHasta)
+            {
+                TempData["Alerta"] = "error - El rango de fechas no es valido";
+                return RedirectToAction("Index", "Solicitud");
+            }
+
+            UNOEE erp = new UNOEE();
+            List<Solicitud> solicitudes = solicitudRepository.All()
+                .Where(a => a.FechaSolicitud >= fechaDesde && a.FechaSolicitud <= fechaHasta).OrderByDescending(x => x.FechaCreacion).ToList();
+            foreach (var item in solicitudes)
+            {
+                item.EstadoSolicitud = estatusRepository.All().FirstOrDefault(x => x.Id == item.EstadoId);
+                item.Empleado = erp.getEmpleadoCedula(item.EmpleadoCedula);
+            }
+            return View("Index", solicitudes);
+        }
 
 
         #region Metodos sin acciones
@@ -574,6 +616,28 @@ namespace Legalizaciones.Web.Controllers
                 {".gif", "image/gif"},
                 {".csv", "text/csv"}
             };
+        }
+
+        private DateTime AddBusinessDays(DateTime dt, int nDays)
+        {
+            int weeks = nDays / 6;
+            nDays %= 6;
+            while (dt.DayOfWeek == DayOfWeek.Sunday)
+                dt = dt.AddDays(1);
+
+            while (nDays-- > 0)
+            {
+                dt = dt.AddDays(1);
+                if (dt.DayOfWeek == DayOfWeek.Sunday)
+                    dt = dt.AddDays(1);
+            }
+            return dt.AddDays(weeks * 7);
+        }
+
+        private int getPasoInicialFlujo()
+        {
+            var paso = pasoFlujoSolicitudRepository.All().Where(m => m.FlujoSolicitudId == 1 && m.Estatus == 1).OrderBy(m=>m.Orden).Select(m => m.Id).FirstOrDefault();
+            return paso;
         }
         #endregion
     }

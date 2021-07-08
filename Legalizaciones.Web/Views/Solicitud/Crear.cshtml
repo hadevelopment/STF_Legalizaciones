@@ -1,26 +1,24 @@
 ﻿@model Legalizaciones.Model.Solicitud
 @{
     ViewData["Title"] = "Solicitud";
-    double wMontoTotal = 0;
+    decimal wMontoTotal = 0;
 }
 
 <div class="row">
     <div class="col-sm-12">
         <div class="box">
             <div class="box-body">
-                <small>
-                    <a href='@Url.Action("Index","Home")'> Inicio </a>
-                    >
-                    <a href='@Url.Action("Index","Solicitud")'> Anticipos </a>
-                    >
-                    <strong>Crear</strong>
-                </small>
+                <a href='@Url.Action("Index","Home")'> Inicio </a>
+                >
+                <a href='@Url.Action("Index","Solicitud")'> Anticipos </a>
+                >
+                <strong>Crear</strong>
             </div>
         </div>
     </div>
 </div>
 
-<form asp-controller="Solicitud" asp-action="Guardar" method="post">
+<form asp-controller="Solicitud" asp-action="Guardar" method="post" enctype="multipart/form-data">
     <section class="">
         <div class="box box-default">
             <div class="box-header with-border">
@@ -32,38 +30,33 @@
 
             <div class="box-body">
 
-                @if (Model.Empleado != null)
-                {
-                    <table class="tableSolicitud">
-                        <thead>
-                            <tr>
-                                <th>Área</th>
-                                <th>Nombre completo</th>
-                                <th>Cédula</th>
-                                <th>Dirección</th>
-                                <th>Ciudad</th>
-                                <th>Teléfono</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
-                                <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <div class="col-md-3">
+                <table class="tableSolicitud">
+                    <thead>
+                        <tr>
+                            <th>Área</th>
+                            <th>Nombre completo</th>
+                            <th>Cédula</th>
+                            <th>Dirección</th>
+                            <th>Ciudad</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Html.HiddenFor(model => model.Empleado.Area, null) @Model.Empleado.Area</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Nombre, null) @Model.Empleado.Nombre</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Cedula, null) @Model.Empleado.Cedula</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Direccion, null) @Model.Empleado.Direccion</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Ciudad, null) @Model.Empleado.Ciudad</td>
+                            <td>@Html.HiddenFor(model => model.Empleado.Telefono, null) @Model.Empleado.Telefono</td>
+                        </tr>
+                    </tbody>
+                </table>
+                @*Lista con los empleados del ERP
+                        <div class="col-md-3">
                         <label class="control-label">Empleado</label>
                         @Html.DropDownListFor(model => model.Empleado.Cedula, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "Empleado" })
-                    </div>
-                }
+                    </div>*@
 
             </div>
         </div>
@@ -136,21 +129,21 @@
 
                     <div class="col-md-3">
                         <label asp-for="FechaDesde">Fecha Desde</label>
-                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", qplaceholder = "Selecciona Fecha Desde", id = "FechaDesde" })
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde"})
                         @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
                     </div>
 
                     <div class="col-md-3">
                         <label asp-for="FechaHasta">Fecha Hasta</label>
-                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta" })
                         @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
                     </div>
                 </div>
                 <div class="row margin-bottom">
                     <div class="col-sm-12">
                         <label asp-for="Carta">Carta Descuento</label>
-                        @Html.TextBoxFor(m => m.Carta, new { type = "file" })
-                        @Html.ValidationMessageFor(m => m.Carta)
+                        @Html.TextBoxFor(model => model.Carta, new { type = "file" })
+                        @Html.ValidationMessageFor(model => model.Carta)
                     </div>
                 </div>
                 <div class="row margin-bottom">
@@ -249,6 +242,7 @@
                         <div class="box-tools pull-right">
                         </div>
                     </div>
+                    @Html.Hidden("hdfRowIndex", new { @id = "hdfRowIndex" })
                     <form asp-controller="SolicitudGastos" asp-action="Asignar" method="post" id="frmAsignarGastos" enctype="multipart/form-data">
                         <div class="modal-body">
                             <div class="form-horizontal">
@@ -281,30 +275,23 @@
                                 <br />
                                 <div class="row">
                                     <div class="display-none" id="divZonas">
-                                        @*<div class="col-md-4">
-                                                <label class="control-label">Origen</label>
-                                                @Html.DropDownList("ZonaOrigen", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaOrigen" })
-                                            </div>
-
-                                            <div class="col-md-4">
-                                                <label class="control-label">Destino</label>
-                                                @Html.DropDownList("ZonaDestino", new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control", id = "ZonaDestino" })
-                                            </div>*@
-
                                         <div class="col-md-4">
                                             <label class="control-label">Origen</label>
                                             @Html.TextBox("ZonaOrigen", "", new { @class = "form-control zonaAutocomplete", @placeholder = "Indique Origen", id = "ZonaOrigen" })
+                                            @Html.Hidden("hdfZonaOrigen", null, new { @id = "hdfZonaOrigen", @value = "" })
                                         </div>
                                         <div class="col-md-4">
                                             <label class="control-label">Destino</label>
                                             @Html.TextBox("ZonaDestino", "", new { @class = "form-control zonaAutocomplete", @placeholder = "Indique Destino", id = "ZonaDestino" })
+                                            @Html.Hidden("hdfZonaDestino", null, new { @id = "hdfZonaDestino", @value = "" })
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="float:right;">
                                         <label class="control-label">Monto</label>
-                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto", @type = "number" } })<br />
+                                        @Html.Editor("Monto", new { htmlAttributes = new { @class = "form-control", id = "Monto", @type = "number" } })
+                                        <label style="color:silver;font-size:12px">ej: 1985,89</label>
                                         <div class="display-none" id="AvisoMontoServicio">
-                                            <label class="text-danger" id="MensajeAviso"></label>
+                                            <label class="" id="MensajeAviso"></label>
                                         </div>
                                     </div>
                                 </div>
@@ -318,11 +305,14 @@
                             </div>
                         </div>
                         <div class="modal-footer">
+                            <a id="btnUpd" class="btn btn-primary display-none" onclick="actualizarGastos();">
+                                <span id="addX" class="glyphicon glyphicon-plus"></span>Actualizar
+                            </a>
                             <a id="btnAdd" class="btn btn-primary" onclick="validarGastos();">
-                                <span class="glyphicon glyphicon-plus"></span> Agregar
+                                <span id="addX" class="glyphicon glyphicon-plus"></span>Agregar
                             </a>
                             <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
+                                <span class="glyphicon glyphicon-off"></span>Cerrar
                             </a>
                         </div>
                     </form>
@@ -332,19 +322,41 @@
     </div>
 </div>
 
+
+
+
 @section scripts {
-    <script src="https://code.jquery.com/ui/1.8.2/jquery-ui.js"></script>
+    <script src="~/js/jquery-ui-1.8.2.js"></script>
     <script src="~/js/select2.min.js"></script>
     <link href="~/css/select2.min.css" rel="stylesheet" />
     <script src="~/js/bootstrap-datepicker.js"></script>
     <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/moment.min.js"></script>
     <script src="~/js/SolicitudScript.js"></script>
-    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
     <script src="~/js/table.js"></script>
     <script src="~/js/tableToJSON.js"></script>
 
-
     <script>
+    //COMA (,) COMO SEPARADOR DECIMAL...
+    $("$monto").on({
+        "focus": function (event) {
+            this.value = (isNaN(number)) ? '' :
+        $(event.target).select();
+    },
+        "keyup": function (event) {
+            debugger;
+            $(event.target).val(function (index, value) {
+            return value.replace(/\D/g, "")
+                        .replace(/([0-9])([0-9]{2})$/, '$1,$2')
+                        .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+    }
+    });
+
+
+
+
         $(function () {
             $('#tableGastos').DataTable();
 
@@ -361,54 +373,26 @@
                     });
                 }
             });
+        });
 
-
-            var dataZona = [];
-
-            $.ajax({
-                type: "GET",
-                url: "/Localidad/ZonasDestinos",
-                dataType: "json",
-                success: function (data) {
-                    if (data.length > 0) {
-                        $.map(data, function (item) {
-                            var data1 = { label: item.nombre, value: item.nombre, id: item.id };
-                            dataZona.push(data1);
-                            //return { label: item.nombre, value: item.id };
-                        });
-                    }
-
-                    $(".zonaAutocomplete").autocomplete({
-                        source: dataZona,
-                        minLength: 0,
-                        focus: function (event, ui) {
-                            console.log(ui.item.label);
-                        },
-                        select: function (e, ui) {
-                            console.log(ui.item.id);
-                        }
-                    });
-                }
+        function cargarGastos() {
+            debugger;
+            var table = $('.tableGastos').tableToJSON({
+                ignoreColumns: [10]
             });
 
-            function cargarGastos() {
-                var table = $('.tableGastos').tableToJSON({
-                    ignoreColumns: [16]
-                });
-
-                if (table.length > 0) {
-                    $("#mensajeRegistro").text("");
-                    $('#mensajeValidacionRegistro').hide("slow");
-                    $('#hdfGastosSolicitud').val(JSON.stringify(table));
-                    return true;
-                } else {
-                    $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
-                    $('#mensajeValidacionRegistro').show("slow");
-                    return false;
-                }
-
+            if (table.length > 0) {
+                $("#mensajeRegistro").text("");
+                $('#mensajeValidacionRegistro').hide("slow");
+                $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                return true;
+            } else {
+                $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                $('#mensajeValidacionRegistro').show("slow");
+                return false;
             }
-        });
+
+        }
 
     </script>
 }

@@ -2,9 +2,6 @@
 
     var date = new Date();
     var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    var montoServicio = 0;
-
-
 
     $("#btnSubmit").click(function () {
 
@@ -43,7 +40,7 @@
                 CentroOperacion: ($("#CentroOperacion").val()),
                 EmpleadoId: parseInt($("#Empleado").val()),
                 UnidadNegocio: ($("#UnidadNegocio").val()),
-                CentroCosto: ($("#CentroCosto").val()),
+                CentroCostos: ($("#CentroCosto").val()),
                 Moneda: ($("#Moneda").val()),
                 TotalAmount: parseFloat($("#TotalAmount").val()),
                 GivenAmount: parseFloat($("#GivenAmount").val()),
@@ -72,85 +69,20 @@
         $('#hdfMontoSolicitud').val($("#txMontoT").val());
     });
 
-
-
-    //Obtener zonas
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Home/Zonas",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $.each(data, function (index, value) {
-    //            $("#Zona").select2();
-    //            $('#Zona').append('<option value="' + value.nombre + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    //Propiedades del dropdown concepto
-    $("#Zona").select2({
+    //Propiedades del dropdown unidades de negocio
+    $("#CentroCosto").select2({
         multiple: false
     });
-
-    //Obtener centro de operaciones
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroOperaciones",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroOperacion').empty();
-    //        $('#CentroOperacion').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroOperacion").select2();
-    //            $('#CentroOperacion').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
 
     //Propiedades del dropdown de centros de operaciones
     $("#CentroOperacion").select2({
         multiple: false
     });
 
-    //Obtener unidades de negocio
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/UnidadNegocios",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#UnidadNegocio').empty();
-    //        $('#UnidadNegocio').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#UnidadNegocio").select2();
-    //            $('#UnidadNegocio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
     //Propiedades del dropdown unidades de negocio
     $("#UnidadNegocio").select2({
         multiple: false
     });
-
-    //Obtener centros de costo
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/UNOEE/CentroCostos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $('#CentroCosto').empty();
-    //        $('#CentroCosto').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            $("#CentroCosto").select2();
-    //            $('#CentroCosto').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
-
-    //Propiedades del dropdown unidades de negocio
-    $("#CentroCosto").select2({
-        multiple: false
-    });
-
 
     //Propiedades del dropdown monedas
     $("#Moneda").select2({
@@ -162,76 +94,21 @@
         multiple: false
     });
 
-    //Proveedores
-    $.ajax({
-        type: "GET",
-        url: "/UNOEE/Proveedores",
-        datatype: "Json",
-        success: function (data) {
-            $('#Proveedor').empty();
-            $('#Proveedor').append('<option selected value="">Seleccione...</option>');
-            $.each(data, function (index, value) {
-                $('#Proveedor').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-            });
-        }
-    });
-
-    ////Servicios por Proveedor
-    $('#Proveedor').change(function () {
-
-        $.ajax({
-            type: "GET",
-            url: "/UNOEE/Servicios",
-            datatype: "Json",
-            data: { proveedorId: $('#Proveedor').val() },
-            success: function (data) {
-                $('#Servicio').empty();
-                $('#Servicio').append('<option selected value="">Seleccione...</option>');
-                $.each(data, function (index, value) {
-                    $('#Servicio').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                });
-                //cargar precio del servicio
-                //LoadProductsData($("#Servicio option:selected").val());
-            }
-        });
-    });
-
     $("#Servicio").change(function () {
         var idServicio = $('#Servicio  option:selected').val();
         var nombreServicio = $('#Servicio  option:selected').text();
+        console.log(nombreServicio);
+
+        if (nombreServicio === "Comida") {
+            $('#divGastosFecha').addClass('display-none');
+        }else {
+            $('#divGastosFecha').removeClass('display-none');
+        }
 
         if (nombreServicio !== "Transporte" && nombreServicio !== "Movilidad") {
             $('#divGastosDescripcion').removeClass('col-md-4');
             $('#divGastosDescripcion').addClass('col-md-12');
             $('#divZonas').addClass('display-none');
-
-            $.ajax({
-                type: "GET",
-                url: "/UNOEE/MontoServicio",
-                datatype: "Json",
-                data: { servicioId: idServicio },
-                success: function (data) {
-                    debugger;
-                    //aca debe ir la validacion que limite el campo del monto a la tarifa configurada del servicio
-                    //$('#Monto').val(data.monto);
-
-
-                    if (data.monto > 0 && data.monto !== '') {
-                        montoServicio = data.monto;
-                        $('#Monto').on('input', function () {
-                            var value = $(this).val();
-                            if ((value !== '') && (value.indexOf('.') === -1)) {
-                                $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
-                                //$('#AvisoMontoServicio').removeClass('display-none');
-                                //$('#MensajeAviso').text('El Monto Limite es de ' + data.monto);
-                            } else {
-                                //$('#AvisoMontoServicio').addClass('display-none');
-                                //$('#MensajeAviso').text('');
-                            }
-                        });
-                    }
-                }
-            });
         } else {
             $('#Monto').val("");
 
@@ -242,6 +119,8 @@
             $('#divGastosDescripcion').addClass('col-md-4');
             $('#divZonas').removeClass('display-none');
         }
+
+        consultarLimiteGasto();
 
         //LoadProductsData($("#Servicio option:selected").val());
     });
@@ -298,9 +177,25 @@
     });
 
     $('#gastosModal').on("hidden.bs.modal", function () {
+        limpiarFormGastos();
         $('#mensajeValidacionGastos').hide("slow");
     });
 
+
+    function limpiarFormGastos() {
+        $('#FechaGasto').val('');
+        $("#Servicio").val('');
+        $('#ZonaOrigen').val('');
+        $('#ZonaDestino').val('');
+        $('#Monto').val('');
+
+        $('#AvisoMontoServicio').addClass('display-none');
+        $('#MensajeAviso').text('');
+
+        $('#divGastosDescripcion').removeClass('col-md-4');
+        $('#divGastosDescripcion').addClass('col-md-12');
+        $('#divZonas').addClass('display-none');
+    }
 
     //************************************   I N I C I O  ************************************
     /* Validaciones para los cambios de Destino - Pais. Se refrescan los combos de
@@ -327,21 +222,6 @@
     $("#Empleado").select2({
         multiple: false
     });
-
-    //Obtener DESTINOS
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Localidad/Destinos",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $("#Destino").empty();
-    //        $('#Destino').append('<option selected value="">Seleccione...</option>');
-    //        $.each(data, function (index, value) {
-    //            //$("#Destino").select2();
-    //            $('#Destino').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
 
 
     //*****************************************************************************************
@@ -410,6 +290,10 @@
                     else
                         $('#Zona').append('<option value="' + value.id + '">' + value.nombre + '</option>');
                 });
+
+                $("#Zona").select2({
+                    multiple: false
+                });
             }
         });
 
@@ -453,42 +337,57 @@
                 });
             }
         });
-    });
 
-    ////Obtener MONEDAS
-    //$.ajax({
-    //    type: "GET",
-    //    url: "/Localidad/Monedas",
-    //    datatype: "Json",
-    //    success: function (data) {
-    //        $.each(data, function (index, value) {
-    //            $('#Moneda').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-    //        });
-    //    }
-    //});
+
+        var dataZona = [];
+
+        $.ajax({
+            type: "GET",
+            url: "/UNOEE/OrigenDestinosPais",
+            dataType: "json",
+            data: { paisID: valor },
+            success: function (data) {
+                if (data.length > 0) {
+                    $.map(data, function (item) {
+                        var data1 = { label: item.nombre, value: item.nombre, id: item.id };
+                        dataZona.push(data1);
+                        //return { label: item.nombre, value: item.id };
+                    });
+                }
+
+                $("#ZonaOrigen").autocomplete({
+                    source: dataZona,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        console.log(ui.item.label);
+                    },
+                    select: function (e, ui) {
+                        $('#hdfZonaOrigen').val(ui.item.id);
+                        consultarLimiteGasto();
+                    }
+                });
+
+                $("#ZonaDestino").autocomplete({
+                    source: dataZona,
+                    minLength: 0,
+                    focus: function (event, ui) {
+                        console.log(ui.item.label);
+                    },
+                    select: function (e, ui) {
+                        $('#hdfZonaDestino').val(ui.item.id);
+                        consultarLimiteGasto();
+                    }
+                });
+            }
+        });
+
+        consultarLimiteGasto();
+
+    });
 
     //Propiedades del dropdown destinos
     $("#Destino").select2({
         multiple: false
-    });
-
-
-    $("#Pais").change(function () {
-        valorPais = $("#Pais").val();
-        $.ajax({
-            type: "GET",
-            url: "/Localidad/CiudadesPais",
-            datatype: "Json",
-            data: { paisID: valorPais },
-
-            success: function (data) {
-                $("#Ciudad").empty();
-                $('#Ciudad').append('<option selected value="">Seleccione...</option>');
-                $.each(data, function (index, value) {
-                    $('#Ciudad').append('<option value="' + value.id + '">' + value.nombre + '</option>');
-                });
-            }
-        });
     });
 
     //*****************************************   F I N ******************************************
@@ -520,8 +419,10 @@ function LoadProductsData(id) {
     });
 }
 
+var rowIndex = 0;
+
 function validarGastos() {
-    debugger;
+
     //var zona = $("#Zona option:selected").text();
     var fechaGasto = $("#FechaGasto").val();
     var paisId = $("#Pais option:selected").val();
@@ -530,17 +431,19 @@ function validarGastos() {
     var servicio = $("#Servicio option:selected").text();
     var ciudadId = $("#Ciudad option:selected").val();
     var ciudad = $("#Ciudad option:selected").text();
-    var origen = $("#ZonaOrigen option:selected").text();
-    var destino = $("#ZonaDestino option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
     var monto = $("#Monto").val();
+    $('#monto').val('');
 
     if (servicio !== "Movilidad" && servicio !== "Transporte") {
         if (fechaGasto !== "" && servicio !== "" && monto !== "") {
-
-            var row = `<tr>
+            monto = CalcularGastoComida();
+            rowIndex = rowIndex + 1;
+            var row = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
-                    <td class="PaisId display-none">${paisId}</td>
-                    <td class="Pais">${pais}</td>
+                    <td class="paisId display-none">${paisId}</td>
+                    <td class="pais">${pais}</td>
                     <td class="servicioId display-none">${servicioId}</td>
                     <td class="servicio">${servicio}</td>
                     <td class="ciudadId display-none">${ciudadId}</td>
@@ -552,6 +455,9 @@ function validarGastos() {
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
                         </a>
+                        <a class="btn btn-danger btn-sm btnEdit">
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex${rowIndex}');" ></span>
+                        </a>
                     </td>
                 </tr>`;
 
@@ -562,7 +468,9 @@ function validarGastos() {
             $('td.monto').each(function () {
                 sum += parseFloat(this.innerHTML);
             });
-            $("#txMontoT").val(sum);
+            var v = String(sum);
+            v = v.replace('.', ',');
+            $("#txMontoT").val(v);
             $('#hdfMontoSolicitud').val($("#txMontoT").val());
 
         } else {
@@ -573,11 +481,11 @@ function validarGastos() {
 
     } else {
         if (fechaGasto !== "" && servicio !== "" && monto !== "" && origen !== "" && destino !== "") {
-
-            var row2 = `<tr>
+            rowIndex = rowIndex + 1;
+            var row2 = `<tr class="rowIndex${rowIndex}">
                     <td class="fechaGasto">${fechaGasto}</td>
-                    <td class="PaisId display-none">${paisId}</td>
-                    <td class="Pais">${pais}</td>
+                    <td class="paisId display-none">${paisId}</td>
+                    <td class="pais">${pais}</td>
                     <td class="servicioId display-none">${servicioId}</td>
                     <td class="servicio">${servicio}</td>
                     <td class="ciudadId display-none">${ciudadId}</td>
@@ -588,6 +496,9 @@ function validarGastos() {
                     <td>
                         <a class="btn btn-danger btn-sm btnDelete">
                             <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                         <a class="btn btn-danger btn-sm btnEdit">
+                            <span class="glyphicon glyphicon-edit" onClick = "ShowModalUpdate('rowIndex${rowIndex}');" ></span>
                         </a>
                     </td>
                 </tr>`;
@@ -612,25 +523,215 @@ function validarGastos() {
 
 }
 
+function actualizarGastos() {
+    var value = $('#hdfRowIndex').val();
+
+    var fechaGasto = $("#FechaGasto").val();
+    var paisId = $("#Pais option:selected").val();
+    var pais = $("#Pais option:selected").text();
+    var servicioId = $("#Servicio option:selected").val();
+    var servicio = $("#Servicio option:selected").text();
+    var ciudadId = $("#Ciudad option:selected").val();
+    var ciudad = $("#Ciudad option:selected").text();
+    var origen = $("#ZonaOrigen").val();
+    var destino = $("#ZonaDestino").val();
+    var monto = $("#Monto").val();
+
+
+    $('.' + value + ' .fechaGasto').text(fechaGasto);
+    $('.' + value + ' .paisId').text(paisId);
+    $('.' + value + ' .pais').text(pais);
+    $('.' + value + ' .servicioId').text(servicioId);
+    $('.' + value + ' .servicio').text(servicio);
+    $('.' + value + ' .ciudadId').text(ciudadId);
+    $('.' + value + ' .ciudad').text(ciudad);
+    $('.' + value + ' .origen').text(origen);
+    $('.' + value + ' .destino').text(destino);
+    $('.' + value + ' .monto').text(monto);
+
+    $('#gastosModal').modal('hide');
+
+    var sum = 0;
+    $('td.monto').each(function () {
+        sum += parseFloat(this.innerHTML);
+    });
+    var v = String(sum);
+    v = v.replace('.', ',');
+    $("#txMontoT").val(v);
+    $('#hdfMontoSolicitud').val($("#txMontoT").val());
+}
+
+
+
+function ShowModalUpdate(value) {
+
+    var fechaGasto = $('.' + value + ' .fechaGasto').text();
+    var paisId = $('.' + value + ' .paisId').text();
+    var pais = $('.' + value + ' .pais').text();
+    var servicioId = $('.' + value + ' .servicioId').text();
+    var servicio = $('.' + value + ' .servicio').text();
+    var ciudadId = $('.' + value + ' .ciudadId').text();
+    var ciudad = $('.' + value + ' .ciudad').text();
+    var origen = $('.' + value + ' .origen').text();
+    var destino = $('.' + value + ' .destino').text();
+    var monto = $('.' + value + ' .monto').text();
+
+    console.log(fechaGasto + ', ' + paisId + ', ' + pais + ', ' + servicioId + ', ' + servicio + ', ' + ciudadId + ', ' + ciudad + ', ' + origen + ', ' + destino + ', ' + monto);
+
+    $('#FechaGasto').val(fechaGasto);
+    $("#Pais").val(paisId);
+    $("#Servicio").val(servicioId);
+    $("#Ciudad").val(ciudadId);
+    $('#ZonaOrigen').val(origen);
+    $('#ZonaDestino').val(destino);
+    $('#Monto').val(monto);
+
+    $('#btnAdd').addClass('display-none');
+    $('#btnUpd').removeClass('display-none');
+    $('#hdfRowIndex').val(value);
+
+    if (servicio === "Movilidad" || servicio === "Transporte") {
+        $('#divGastosDescripcion').removeClass('col-md-12');
+        $('#divGastosDescripcion').addClass('col-md-4');
+        $('#divZonas').removeClass('display-none');
+    } else {
+        $('#divGastosDescripcion').removeClass('col-md-4');
+        $('#divGastosDescripcion').addClass('col-md-12');
+        $('#divZonas').addClass('display-none');
+    }
+
+    $('#gastosModal').modal('show');
+}
+
 function validarViaje(boton) {
+    $('#btnAdd').removeClass('display-none');
+    $('#btnUpd').addClass('display-none');
+    $('#btnUpd').addClass('display-none');
+
     var destino = $("#Destino option:selected").val();
     var zona = $("#Zona option:selected").val();
+    var moneda = $("#Moneda option:selected").val();
 
-    if (destino !== "" && zona !== "") {
+    if (destino !== "" && zona !== "" && moneda !== "") {
 
         $('#mensajeValidacionViaje').hide("slow");
         $('#gastosModal').modal('show');
 
-        
         return true;
 
     } else {
-        $("#mensajeViaje").html("Seleccione <strong>Destino y Zona Visitada</strong> para añadir gastos.");
+        $("#mensajeViaje").html("Seleccione <strong>Destino, Zona Visitada y Moneda</strong> para añadir gastos.");
         $('#mensajeValidacionViaje').show("slow");
         return false;
     }
 }
 
+
+function consultarLimiteGasto() {
+    var _monedaID = $("#Moneda option:selected").val();
+    var _paisID = $("#Pais option:selected").val();
+    var _tipoServicio = $("#Servicio option:selected").text();
+    var _tipoServicioID = $("#Servicio option:selected").val();
+    var _origenID = $("#hdfZonaOrigen").val();
+    var _destinoID = $("#hdfZonaDestino").val();
+    //console.log(monedaID + ', ' + paisID + ', ' + tipoServicioID + ', ' + origenID + ', ' + destinoID);
+
+    if (_monedaID !== "" && _paisID !== "" && _tipoServicioID !== "") {
+        if (_tipoServicio === "Transporte" || _tipoServicio === "Movilidad") {
+            $.ajax({
+                type: "GET",
+                url: "/ConfiguracionGasto/obtenerLimiteGastoRuta",
+                datatype: "Json",
+                data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID, origenID: _origenID, destinoID: _destinoID },
+                success: function (data) {
+                    if (data !== null) {
+                        if (data.monto > 0 && data.monto !== '') {
+                            $('#AvisoMontoServicio').removeClass('display-none');
+                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                                }
+                            });
+
+                            $('#Monto').val(data.monto);
+                        } else {
+                            $('#AvisoMontoServicio').addClass('display-none');
+                            $('#MensajeAviso').text('');
+                            $('#Monto').val('');
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                                }
+                            });
+                        }
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+                        $('#Monto').val('');
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        else {
+            $.ajax({
+                type: "GET",
+                url: "/ConfiguracionGasto/obtenerLimiteGasto",
+                datatype: "Json",
+                data: { paisID: _paisID, tipoServicioID: _tipoServicioID, monedaID: _monedaID },
+                success: function (data) {
+                    if (data !== null) {
+                        if (data.monto > 0 && data.monto !== '') {
+                            $('#AvisoMontoServicio').removeClass('display-none');
+                            $('#MensajeAviso').text('Monto Limite: ' + data.monto);
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, data.monto), -data.monto));
+                                }
+                            });
+                            $('#Monto').val(data.monto);
+                        } else {
+                            $('#AvisoMontoServicio').addClass('display-none');
+                            $('#MensajeAviso').text('');
+
+                            $('#Monto').on('input', function () {
+                                var value = $(this).val();
+                                if ((value !== '') && (value.indexOf('.') === -1)) {
+                                    $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                                }
+                            });
+                            $('#Monto').val('');
+                        }
+                    } else {
+                        $('#AvisoMontoServicio').addClass('display-none');
+                        $('#MensajeAviso').text('');
+
+                        $('#Monto').on('input', function () {
+                            var value = $(this).val();
+                            if ((value !== '') && (value.indexOf('.') === -1)) {
+                                $(this).val(Math.max(Math.min(value, 99999999999), -99999999999));
+                            }
+                        });
+                        $('#Monto').val('');
+                    }
+                }
+            });
+        }
+    }
+}
 
 //*****************************************************************************//
 
@@ -639,7 +740,7 @@ function validarViaje(boton) {
 //*****************************************************************************//
 
 window.onload = function () {
-    if ($("#txProceso").val() != "A") {
+    if ($("#txProceso").val() !== "A") {
         CargarComboAlcrear();
     } else {
         CargarCombosAlEditar();
@@ -657,7 +758,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#Destino').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {
@@ -677,7 +778,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#Zona').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {
@@ -697,7 +798,7 @@ function CargarCombosAlEditar() {
             $.each(resultado, function (i, value) {
                 var wN = value.nombre;
                 var wSel = wN.substr(wN.length - 2, 2);
-                if (wSel == "XX") {
+                if (wSel === "XX") {
                     wN = wN.substr(0, wN.length - 2);
                     $('#MonedaId').append('<option selected value="' + value.id + '">' + wN + '</option>');
                 } else {
@@ -747,6 +848,10 @@ function CargarCombosAlEditar() {
                 $('#CentroCosto').append('<option selected value="' + value.id + '">' + value.nombre + '</option>');
             });
         }
+    });
+
+    $("#CentroCosto").select2({
+        multiple: false
     });
 
 }
@@ -837,5 +942,41 @@ function CargarComboAlcrear() {
             });
         }
     });
+
+
+
+}
+
+
+function CalcularGastoComida() {
+    var wServicio = $('#Servicio option:selected').text();
+    var wMonto = $('#Monto').val();
+
+    if (wServicio == "Comida") {
+        var FechaDesde = $("#FechaDesde").val();
+        var FDdia = FechaDesde.substr(0,2);
+        var FDMes = FechaDesde.substr(3, 2);
+        var FDAnno = FechaDesde.substr(6, 4);
+        var wFDFormato = FDAnno + "-" + FDMes + "-" + FDdia;
+
+        var FechaHasta = $("#FechaHasta").val();
+        var FHdia = FechaHasta.substr(0, 2);
+        var FHMes = FechaHasta.substr(3, 2);
+        var FHAnno = FechaHasta.substr(6, 4);
+        var wFHFormato = FHAnno + "-" + FHMes + "-" + FHdia;
+
+        var fecha1 = moment(wFDFormato);
+        var fecha2 = moment(wFHFormato);
+     
+        var wDias = fecha2.diff(fecha1, 'days');
+
+        var wMontoTotal = wMonto * parseInt(wDias);
+
+        return wMontoTotal;
+        
+
+    }
+
+    return wMonto;
 
 }

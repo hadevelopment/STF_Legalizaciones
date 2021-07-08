@@ -6,18 +6,21 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
-namespace Legalizaciones.Model
+namespace Legalizaciones.Model.Workflow
 {
     public class HistoricoSolicitud : BaseModel
     {
         [ForeignKey("Solicitud")]
         public int SolicitudId { get; set; }
+        public Solicitud Solicitud { get; set; }
 
         [ForeignKey("FlujoSolicitud")]
         public int FlujoSolicitudId { get; set; }
+        public FlujoSolicitud FlujoSolicitud { get; set; }
 
         [ForeignKey("PasoFlujoSolicitud")]
         public int PasoFlujoSolicitudId { get; set; }
+        public PasoFlujoSolicitud PasoFlujoSolicitud{ get; set; }
 
         public string Descripcion { get; set; }
     }

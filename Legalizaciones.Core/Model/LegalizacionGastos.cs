@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
+using Legalizaciones.Model.Jerarquia;
 
 namespace Legalizaciones.Model
 {
@@ -51,7 +52,20 @@ namespace Legalizaciones.Model
         [Required(ErrorMessage = "Seleccione un Proveedor.")]
         public int ProveedorId { get; set; }
 
+        [NotMapped]
+        public Pais Pais { get; set; }
+
+        [NotMapped]
+        public Ciudad Ciudad { get; set; }
+
+        //Para que me carge los Motivo
+        [NotMapped]
+        public Motivo Motivo { get; set; }
+
         public string Concepto{ get; set; }
-        public string Valor { get; set; }
+
+        public string  Valor { get; set; }
+
+
     }
 }

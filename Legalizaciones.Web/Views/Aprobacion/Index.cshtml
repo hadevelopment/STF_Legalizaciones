@@ -1,0 +1,377 @@
+﻿@model Legalizaciones.Model.Workflow.Aprobacion
+@{
+    ViewData["Title"] = "Mis Solicitudes";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <a href='@Url.Action("Index","Home")'> Inicio </a>
+                > <strong>Aprobación</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+
+            <div class="box-header with-border">
+                <span class="fa fa-info-circle"></span>
+                <h1 class="box-title">Mis  Solicitudes pendientes de Aprobación </h1>
+            </div>
+
+            <br />
+
+            <div class="box-body">
+
+                <ul class="nav nav-tabs">
+                    <li role="presentation" class="active"><a href="#tabAnticipo" data-toggle="tab">Anticipos</a></li>
+                    <li role="presentation"><a href="#tabLegalizacion" data-toggle="tab">Legalizaciones</a></li>
+                </ul>
+
+                <div class="tab-content clearfix">
+                    @* ANTICIPOS *@
+                    <div class="tab-pane active" id="tabAnticipo">
+
+                        @*@if (Model.PasosAsignadosAnticipo.Count() > 0)
+                            {
+                                <div class="row">
+                                    <span>Pasos asignados para Aprobación de Anticipo</span><br />
+                                    @foreach (var item in Model.PasosAsignadosAnticipo)
+                                    {
+                                        <div class="col-sm-2">
+                                            @item.Orden
+                                            <span>&nbsp;-&nbsp;</span>
+                                            @item.Descripcion
+                                        </div>
+                                    }
+                                </div>
+                            }*@
+
+                        @* Solicitudes de Anticipos *@
+                        <table id="tblAnticipos" class="table table-bordered table-hover myDataTable">
+                            <thead>
+                                <tr>
+                                    <th> Id </th>
+                                    <th> Fecha de registro</th>
+                                    <th> Fecha de Vencimiento</th>
+                                    <th> Concepto del Anticipo </th>
+                                    <th> Cédula del Beneficiario</th>
+                                    <th> Nombre del Beneficiario</th>
+                                    <th> Monto </th>
+                                    <th> Estatus</th>
+                                    <th> Estado de la Solicitud</th>
+                                    <th> Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Anticipos.Count() > 0)
+                                {
+                                    @foreach (var item in Model.Anticipos)
+
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Concepto)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Monto)
+                                            </td>
+                                            <td class='@(item.EstadoSolicitud.Descripcion.Contains("Aproba") ? "fontGreen" : (item.EstadoSolicitud.Descripcion.Contains("Rechaza") ? "fontRed" : "" ) )'>
+                                                @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.PasoFlujoSolicitud.Descripcion)
+                                            </td>
+                                            <td class="text-center">
+                                                @if (item.EstadoSolicitud.Descripcion != "Aprobada" && item.EstadoSolicitud.Descripcion != "Rechazada")
+                                                {
+                                                    <a class="item-btn btnAprobar" data-toggle="modal" data-target="#modalAprobar" id="aprobar-@item.Id">
+                                                        <span class="fa fa-check" title="Aprobar"></span>
+                                                    </a>
+
+                                                    <a class="item-btn btnRechazar" data-toggle="modal" data-target="#modalRechazar" id="rechazar-@item.Id">
+                                                        <span class="fa fa-close" title="Rechazar"></span>
+                                                    </a>
+
+                                                    <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                        <span class="fa fa-eye" title="Detalle"></span>
+                                                    </a>
+
+                                                }
+                                                else
+                                                {
+                                                    <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                        <span class="fa fa-eye" title="Detalle"></span>
+                                                    </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+
+                                }
+                                else
+                                {
+                                    <tr class="tableEmpty">
+                                        <td colspan="9">
+                                            Actualmente no posee anticipos pendientes por aprobar...
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+                        <div class="row">
+                            <div style="float: left;" class="col-md-2">
+                                <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+
+                    @* LEGALIZACIONES *@
+                    <div class="tab-pane" id="tabLegalizacion">
+
+                        @* Solicitudes de Legalizacion *@
+                        <table id="tblLegalizaciones" class="table table-bordered table-hover myDataTable">
+                            <thead>
+                                <tr>
+                                    <th> Id </th>
+                                    <th> Registro </th>
+                                    <th> Cédula Beneficiario </th>
+                                    <th> Consignación </th>
+                                    <th> Recibo Caja </th>
+                                    <th> Valor </th>
+                                    <th> Acciones </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.Legalizaciones.Count() > 0)
+                                {
+                                    @foreach (var item in Model.Legalizaciones)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Id)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.Consignacion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ReciboCaja)
+                                            </td>
+                                            <td>
+
+                                                @Html.DisplayFor(modelItem => item.Valor)
+                                            </td>
+                                            <td>
+                                                <a class="item-btn" asp-controller="Aprobacion" asp-action="AprobarLegalizacion" asp-route-id="@item.Id">
+                                                    <span class="fa fa-check"></span>
+                                                </a>
+
+                                                <a class="item-btn" asp-controller="Aprobacion" asp-action="RechazarLegalizacion" asp-route-id="@item.Id">
+                                                    <span class="fa fa-close"></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="tableEmpty">
+                                        <td colspan="8">
+                                            Actualmente no posee legalizaciones pendientes por aprobar...
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        <br />
+                        <div class="row">
+                            <div style="float: left;" class="col-md-2">
+                                <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar solicitudes</a>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<!-- The modal -->
+<div class="modal fade" id="modalAprobar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header green">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Aprobación</h4>
+            </div>
+            <div class="modal-body">
+                ¿Realmente desea <b>aprobar</b> este Anticipo?
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "AprobarAnticipo", "Aprobacion", new { id = "" }, new { @id = "btnAprobarAnticipo", @class = "btn btn-primary" })
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- The modal -->
+<div class="modal fade" id="modalRechazar" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header red">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="modalLabel"><span class="fa fa-info-circle"></span>&nbsp;Rechazo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-sm-12">
+                    ¿Realmente desea <b>rechazar</b> este Anticipo?
+                </div>
+                <div class="col-sm-12">
+                    <label>Motivo</label>
+                    @Html.TextBox("Motivo", null, new {@id="txtMotivo", @class = "form-control", @placeholder = "Especifíque el motivo del rechazo...", @required = "required" })
+                    <br />
+                    @Html.ValidationMessage("Motivo", "Debe especificar el Motivo del Rechazo.", new { @id="msgMotivo", @class = "text-danger display-none" })
+                </div>
+            </div>
+            <div class="modal-footer">
+                @Html.ActionLink("Si", "RechazarAnticipo", "Aprobacion", new { id = "" }, new { @id="btnRechazarAnticipo", @onclick = "return validaRechazo();", @class="btn btn-primary" } )
+                <button type="button" class="btn btn-primary" data-dismiss="modal">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/jquery-ui-1.8.2.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            if (!$('#tblAnticipos tbody tr.tableEmpty').length > 0) {
+                $('#tblAnticipos').DataTable({
+                    "processing": true,
+                    language: {
+                        "decimal": "",
+                        "emptyTable": "No hay información",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrar _MENU_ Entradas",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "Sin resultados encontrados",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        }
+                    },
+                    pageLength: 10
+                });
+            }
+
+            if (!$('#tblLegalizaciones tbody tr.tableEmpty').length > 0) {
+                $('#tblLegalizaciones').DataTable({
+                    "processing": true,
+                    language: {
+                        "decimal": "",
+                        "emptyTable": "No hay información",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrar _MENU_ Entradas",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "Sin resultados encontrados",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        }
+                    },
+                    pageLength: 10
+                });
+            }
+
+            $('.loading').hide();
+
+            $('.btnAprobar').click(function () {
+                //Acá seteo el id de la solicitud a aprobar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnAprobarAnticipo').attr('href', '/Aprobacion/AprobarAnticipo/' + id);
+            });
+
+            $('.btnRechazar').click(function () {
+                //Acá seteo el id de la solicitud a rechazar dentro del form action
+                var id = $(this).attr("id").split("-")[1];
+                $('#btnRechazarAnticipo').attr('href', '/Aprobacion/RechazarAnticipo/' + id);
+            });
+        });
+
+        function validaRechazo() {
+            var href = $('#btnRechazarAnticipo').attr('href');
+            var motivo = $('#txtMotivo').val();
+            if (motivo != null && motivo != '') {
+                $('#btnRechazarAnticipo').attr('href', href + '/' + motivo)
+                $('#msgMotivo').addClass('display-none');
+                return true;
+            } else {
+                $('#msgMotivo').removeClass('display-none');
+                return false;
+            }
+        }
+    </script>
+}
+
+<!-- DataTables -->

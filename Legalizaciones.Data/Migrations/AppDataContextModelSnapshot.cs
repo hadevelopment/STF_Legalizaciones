@@ -34,44 +34,151 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Banco");
                 });
 
-            modelBuilder.Entity("Legalizaciones.Model.FlujoSolicitud", b =>
+            modelBuilder.Entity("Legalizaciones.Model.ConfiguracionGasto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Cargo");
+
+                    b.Property<string>("CargoId")
+                        .IsRequired();
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
+
+                    b.Property<int?>("DestinoId");
+
+                    b.Property<string>("DestinoNombre");
 
                     b.Property<int>("Estatus");
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<int>("PasoFlujoSolicitudId");
+                    b.Property<bool>("GastoDiario");
 
-                    b.Property<int>("TipoSolicitudId");
+                    b.Property<int>("MonedaId");
+
+                    b.Property<string>("MonedaNombre");
+
+                    b.Property<float>("Monto");
+
+                    b.Property<int?>("OrigenId");
+
+                    b.Property<string>("OrigenNombre");
+
+                    b.Property<int>("PaisId");
+
+                    b.Property<string>("PaisNombre");
+
+                    b.Property<string>("TipoServicio");
+
+                    b.Property<string>("TipoServicioId")
+                        .IsRequired();
+
+                    b.Property<int>("ZonaDestinoId");
+
+                    b.Property<int>("ZonaOrigenId");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FlujoSolicitud");
+                    b.HasIndex("DestinoId");
+
+                    b.HasIndex("MonedaId");
+
+                    b.HasIndex("OrigenId");
+
+                    b.HasIndex("PaisId");
+
+                    b.ToTable("ConfiguracionGasto");
                 });
 
-            modelBuilder.Entity("Legalizaciones.Model.HistoricoSolicitud", b =>
+            modelBuilder.Entity("Legalizaciones.Model.Empleado", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Descripcion");
+                    b.Property<string>("Apellido");
+
+                    b.Property<string>("Area");
+
+                    b.Property<int?>("CargoId");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired();
+
+                    b.Property<string>("CentroCostos");
+
+                    b.Property<string>("CentroOperacion");
+
+                    b.Property<string>("CentroOperaciones");
+
+                    b.Property<string>("Ciudad");
+
+                    b.Property<string>("Correo");
+
+                    b.Property<string>("Direccion");
 
                     b.Property<int>("Estatus");
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<int>("FlujoSolicitudId");
+                    b.Property<string>("Nombre");
 
-                    b.Property<int>("PasoFlujoSolicitudId");
+                    b.Property<string>("NombreSupervisor");
 
-                    b.Property<int>("SolicitudId");
+                    b.Property<int>("SupervisorId");
+
+                    b.Property<string>("Telefono");
+
+                    b.Property<string>("UnidadNegocio");
+
+                    b.Property<string>("UnidadNegocios");
 
                     b.HasKey("Id");
 
-                    b.ToTable("HistoricoSolicitud");
+                    b.ToTable("Empleado");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("EmpleadoCedula");
+
+                    b.Property<string>("EmpleadoPermisoCedula");
+
+                    b.Property<string>("EmpleadoPermisoNombre");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("TipoPermisoId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoPermisoId");
+
+                    b.ToTable("EmpleadoPermiso");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.ItemSolicitud.EstadoLegalizacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadoLegalizacion");
                 });
 
             modelBuilder.Entity("Legalizaciones.Model.ItemSolicitud.EstadoSolicitud", b =>
@@ -112,6 +219,27 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("Moneda");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.ItemSolicitud.Tasa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("MonedaId");
+
+                    b.Property<string>("Valor")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MonedaId");
+
+                    b.ToTable("Tasa");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.Jerarquia.Ciudad", b =>
                 {
                     b.Property<int>("Id")
@@ -148,6 +276,26 @@ namespace Legalizaciones.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Destino");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Jerarquia.OrigenDestino", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<string>("Nombre");
+
+                    b.Property<int>("PaisId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaisId");
+
+                    b.ToTable("OrigenDestino");
                 });
 
             modelBuilder.Entity("Legalizaciones.Model.Jerarquia.Pais", b =>
@@ -201,9 +349,15 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<long>("Consignacion");
 
+                    b.Property<string>("EmpleadoCedula");
+
+                    b.Property<int?>("EstadoId");
+
                     b.Property<int>("Estatus");
 
                     b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("PasoFlujoSolicitudId");
 
                     b.Property<long>("ReciboCaja");
 
@@ -213,6 +367,10 @@ namespace Legalizaciones.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EstadoId");
+
+                    b.HasIndex("PasoFlujoSolicitudId");
 
                     b.ToTable("Legalizacion");
                 });
@@ -255,26 +413,6 @@ namespace Legalizaciones.Data.Migrations
                     b.HasIndex("LegalizacionId");
 
                     b.ToTable("LegalizacionGastos");
-                });
-
-            modelBuilder.Entity("Legalizaciones.Model.PasoFlujoSolicitud", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("CedulaAprobador");
-
-                    b.Property<string>("Descripcion");
-
-                    b.Property<int>("Estatus");
-
-                    b.Property<DateTime>("FechaCreacion");
-
-                    b.Property<string>("NombreAprobador");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PasoFlujoSolicitud");
                 });
 
             modelBuilder.Entity("Legalizaciones.Model.ServicioDetalle", b =>
@@ -341,7 +479,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("EmpleadoCedula");
 
-                    b.Property<int>("EstadoId");
+                    b.Property<int?>("EstadoId");
 
                     b.Property<int>("Estatus");
 
@@ -360,9 +498,11 @@ namespace Legalizaciones.Data.Migrations
                     b.Property<int?>("MonedaId")
                         .IsRequired();
 
-                    b.Property<float>("Monto");
+                    b.Property<decimal>("Monto");
 
                     b.Property<string>("NumeroSolicitud");
+
+                    b.Property<int>("PasoFlujoSolicitudId");
 
                     b.Property<string>("RutaArchivo");
 
@@ -374,6 +514,18 @@ namespace Legalizaciones.Data.Migrations
                         .IsRequired();
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DestinoID");
+
+                    b.HasIndex("EstadoId");
+
+                    b.HasIndex("MonedaId");
+
+                    b.HasIndex("PasoFlujoSolicitudId");
+
+                    b.HasIndex("TipoSolicitudID");
+
+                    b.HasIndex("ZonaID");
 
                     b.ToTable("Solicitud");
                 });
@@ -393,7 +545,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<DateTime>("FechaCreacion");
 
-                    b.Property<DateTime>("FechaGasto");
+                    b.Property<string>("FechaGasto");
 
                     b.Property<string>("ICA");
 
@@ -401,7 +553,7 @@ namespace Legalizaciones.Data.Migrations
 
                     b.Property<string>("IVATeorico");
 
-                    b.Property<float>("Monto");
+                    b.Property<decimal>("Monto");
 
                     b.Property<string>("Neto");
 
@@ -428,6 +580,23 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("SolicitudGastos");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.TipoPermiso", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TipoPermiso");
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.TipoSolicitud", b =>
                 {
                     b.Property<int>("Id")
@@ -451,6 +620,145 @@ namespace Legalizaciones.Data.Migrations
                     b.ToTable("TipoSolicitud");
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.FlujoSolicitud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("TipoSolicitudId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TipoSolicitudId");
+
+                    b.ToTable("FlujoSolicitud");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.HistoricoLegalizacion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("FlujoSolicitudId");
+
+                    b.Property<int>("LegalizacionId");
+
+                    b.Property<int?>("PasoFlujoSolicitudId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlujoSolicitudId");
+
+                    b.HasIndex("LegalizacionId");
+
+                    b.HasIndex("PasoFlujoSolicitudId");
+
+                    b.ToTable("HistoricoLegalizacion");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.HistoricoSolicitud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("FlujoSolicitudId");
+
+                    b.Property<int>("PasoFlujoSolicitudId");
+
+                    b.Property<int>("SolicitudId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlujoSolicitudId");
+
+                    b.HasIndex("PasoFlujoSolicitudId");
+
+                    b.HasIndex("SolicitudId");
+
+                    b.ToTable("HistoricoSolicitud");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CedulaAprobador");
+
+                    b.Property<string>("Descripcion");
+
+                    b.Property<string>("EmailAprobador");
+
+                    b.Property<int>("Estatus");
+
+                    b.Property<DateTime>("FechaCreacion");
+
+                    b.Property<int>("FlujoSolicitudId");
+
+                    b.Property<string>("NombreAprobador");
+
+                    b.Property<int>("Orden");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FlujoSolicitudId");
+
+                    b.ToTable("PasoFlujoSolicitud");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.ConfiguracionGasto", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Destino")
+                        .WithMany()
+                        .HasForeignKey("DestinoId");
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
+                        .WithMany()
+                        .HasForeignKey("MonedaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Origen")
+                        .WithMany()
+                        .HasForeignKey("OrigenId");
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
+                        .WithMany()
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.EmpleadoPermiso", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.TipoPermiso", "TipoPermiso")
+                        .WithMany()
+                        .HasForeignKey("TipoPermisoId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.ItemSolicitud.Tasa", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
+                        .WithMany()
+                        .HasForeignKey("MonedaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.Jerarquia.Ciudad", b =>
                 {
                     b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
@@ -459,11 +767,31 @@ namespace Legalizaciones.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Jerarquia.OrigenDestino", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Pais", "Pais")
+                        .WithMany()
+                        .HasForeignKey("PaisId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.Jerarquia.Zona", b =>
                 {
                     b.HasOne("Legalizaciones.Model.Jerarquia.Destino", "Destino")
                         .WithMany("Ciudad")
                         .HasForeignKey("DestinoID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Legalizacion", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoLegalizacion", "EstadoLegalizacion")
+                        .WithMany()
+                        .HasForeignKey("EstadoId");
+
+                    b.HasOne("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", "PasoFlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("PasoFlujoSolicitudId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -490,11 +818,94 @@ namespace Legalizaciones.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("Legalizaciones.Model.Solicitud", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Destino", "Destino")
+                        .WithMany()
+                        .HasForeignKey("DestinoID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.EstadoSolicitud", "EstadoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("EstadoId");
+
+                    b.HasOne("Legalizaciones.Model.ItemSolicitud.Moneda", "Moneda")
+                        .WithMany()
+                        .HasForeignKey("MonedaId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", "PasoFlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("PasoFlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.TipoSolicitud", "TipoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("TipoSolicitudID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Jerarquia.Zona", "Zona")
+                        .WithMany()
+                        .HasForeignKey("ZonaID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("Legalizaciones.Model.SolicitudGastos", b =>
                 {
                     b.HasOne("Legalizaciones.Model.Solicitud", "Solicitud")
                         .WithMany()
                         .HasForeignKey("SolicitudId");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.FlujoSolicitud", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.TipoSolicitud", "TipoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("TipoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.HistoricoLegalizacion", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("FlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Legalizacion", "Legalizacion")
+                        .WithMany()
+                        .HasForeignKey("LegalizacionId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", "PasoFlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("PasoFlujoSolicitudId");
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.HistoricoSolicitud", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("FlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", "PasoFlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("PasoFlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Legalizaciones.Model.Solicitud", "Solicitud")
+                        .WithMany()
+                        .HasForeignKey("SolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Legalizaciones.Model.Workflow.PasoFlujoSolicitud", b =>
+                {
+                    b.HasOne("Legalizaciones.Model.Workflow.FlujoSolicitud", "FlujoSolicitud")
+                        .WithMany()
+                        .HasForeignKey("FlujoSolicitudId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

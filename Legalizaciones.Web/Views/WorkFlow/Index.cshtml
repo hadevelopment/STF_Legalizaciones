@@ -1,0 +1,277 @@
+﻿<style>
+    .inside {
+        padding-right: 2%;
+        padding-left: 2%;
+        padding-top: 2%;
+        padding-bottom: 2%;
+    }
+</style>
+
+@model Legalizaciones.Web.Models.AprobacionDocumento
+
+@{
+    ViewData["Title"] = "Configuracion de Flujo para Aprobacion de Documentos";
+}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <small>
+                    <a href='@Url.Action("Index", "Home")'> Inicio </a>
+                    <strong>Aprobacion:  Anticipos - Legalizaciones </strong>
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+            <div class="box-header with-border">
+                <div class="col-md-12">
+
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Tipo Solicitud </strong></label>
+                        <select id="solicitud" name="solicitud" style="width:40%;height:30px; font-size:16px;"></select>
+                    </div>
+                    <div style="height:15px;"></div>
+                    <div class="col-md-12 pb-2">
+                        <label class="control-label"> <strong> Rangos / Montos</strong></label>
+                        <select id="flujos" name="flujos" style="width:40%;height:30px; font-size:16px;"></select>
+                        <br /><br />
+                    </div>
+                    <div>
+                        <input type="hidden" id="indiceSolicitud" name="indiceSolicitud" />
+                        <input type="hidden" id="tipoSolicitud" name="tipoSolicitud" />
+                        <input type="hidden" id="rango" name="rango" />
+
+                        <button type="button" class="btn btn-primary" style="float:right;" id="verFlujo" name="verFlujo" onclick="VerFlujo();">Ver Flujo de Aprobacion</button>
+                    </div>
+                    <button type="button" class="btn btn-primary" style="float:right;" onclick="SetNuevoFlujo();" id="flow" name="flow">Nuevo Flujo de Aprobacion</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<table id="tblAprobadores" class="table table-bordered table-hover">
+    <thead></thead>
+    <tbody></tbody>
+</table>
+
+<div id="btnAddPaso"></div>
+
+
+<!-- Trigger the modal with a button -->
+<!-- MODAL NUEVO FLUJO -->
+
+<div id="nuevoFlujoModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="xx" name="xx" onclick="ClearAll();">&times;</button>
+                <label class="modal-title text-center" id="msjNuevoFlujo" name="msjNuevoFlujo"> </label>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label id=" lblDestino">Destino</label>
+                        <select id="Destino" name="Destino"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label id="Currency" Name="Currency">Moneda</label>
+                        <select id="Moneda" name="Moneda"></select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Monto Minimo</label>
+                        <input type="number" id="montoMinimo" name="montoMinimo" class="form-control" maxlength="12" value=""  placeholder="0,00" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Monto Maximo</label>
+                        <input type="number" id="montoMaximo" name="montoMaximo" class="form-control" maxlength="12" value="" placeholder="0,00" readonly />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Empleado</label>
+                        <select id="Empleado" name="Empleado" onchange="AddAprobador();"> </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 pb-2">
+                        <label>Descripcion</label>
+                        <input type="text" id="descripcion" name="descripcion" class="form-control" maxlength="250" readonly />
+                    </div>
+                </div>
+
+                <table id="tblFlujo" class="table table-bordered table-hover">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+                <div class="row">
+                    <div class="modal-footer">
+                        <input type="hidden" id="destinoId" name="destinoId" />
+                        <input type="hidden" id="destino" name="destino" />
+                        <input type="hidden" id="paso" name="paso" value="1" />
+                        <input type="hidden" id="tipoDocumento" name="tipoDocumento" />
+                        <input type="hidden" id="idDocument" name="idDocument" />
+                        <input type="hidden" id="addAprobador" name="addAprobador" />
+                        <input type="hidden" id="addMail" name="addMail" />
+                        <input type="submit" id="addFlujo" class="btn btn-primary" value="Agregar" onclick="EnviarDataAprobador();" />
+                        <input type="button" id="cancelFlujo" class="btn btn-primary" value="Hecho" onclick="ClearAll();" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--MODAL ACTUALIZACION DE FLUJO -->
+
+    <div id="dataModal" name="dataModal" class="modal fade" role="application">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <label class="modal-title text-center" id="msjDataUpdate" name="msjDataUpdate"> </label>
+                </div>
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <label id="empleo" name="empleo">Empleado</label>
+                        <select id="Empleado2" name="Empleado2" style="display:block"> </select>
+                    </div>
+                </div>
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <label>Nombre Aprobador</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <label>Cedula Aprobador</label>
+                        <input type="text" id="cedula" name="cedula" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <label>Email Aprobador</label>
+                        <input type="text" id="email" name="email" class="form-control" readonly />
+                    </div>
+                </div>
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <label>Descripcion</label>
+                        <input type="text" id="descripcionT" name="descripcionT" class="form-control" />
+                    </div>
+                </div>
+                <input type="hidden" id="idPasoFlujoSolicitud" name="idPasoFlujoSolicitud" />
+                <input type="hidden" id="idFlujoSolicitude" name="idFlujoSolicitude" />
+                <input type="hidden" id="destinoe" name="destinoe" />
+                <input type="hidden" id="pasoe" name="pasoe" value="" />
+                <input type="hidden" id="range" name="range" value="" />
+                <input type="hidden" id="rangeId" name="rangeId" />
+                <input type="hidden" id="tipoDocumentoe" name="tipoDocumentoe" />
+                <input type="hidden" id="idTipoDocumente" name="idTipoDocumente" />
+                <input type="hidden" id="addAprobadore" name="addAprobadore" />
+                <input type="hidden" id="addMaile" name="addMaile" />
+                <div class="row">
+                    <div class="col-md-12 pb-2"> </div>
+                </div>
+                <br />
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <input type="button" class="btn btn-primary" style="float:right;" id="modificar" name="modificar" onclick="Actualizar();" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="cancelado" name="cancelado" value="Cancelar" onclick="CloseDataModal();" />
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+    </div>
+
+
+<!-- MODAL ELIMINAR PASO FLUJO-->
+
+    <div id="dataModal2" name="dataModal2" class="modal fade" role="application">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <label class="modal-title text-center" id="msjDataEliminar" name="msjDataEliminar"> </label>
+                </div>
+                <input type="hidden" id="orden" name="orden" />
+                <input type="hidden" id="ide" name="ide" />
+                <input type="hidden" id="typee" name="typee" />
+                <input type="hidden" id="idTypee" name="idTypee" />
+                <input type="hidden" id="desRange" name="desRange" />
+                <div class="row">
+                    <div class="col-md-12 pb-2"> </div>
+                </div>
+
+                <div class="row inside">
+                    <div class="col-md-12 pb-2">
+                        <input type="button" class="btn btn-primary" style="float:right;" id="delete" name="delete" value="SI" onclick="Eliminar();" />
+                        <input type="button" class="btn btn-primary" style="float:right;" id="dont" name="dont" value="NO" onclick="CloseDataModal2();" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!--MODAL PREGUNTA -->
+<div id="preguntaModal" name="preguntaModal" class="modal fade inside" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content inside">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjPreguntaModal" name="msjPreguntaModal"> </label>
+            </div>
+            <div class="row inside">
+                <div class="col-md-12 pb-2">
+                    <input type="button" class="btn btn-primary" style="float:right;" id="si" name="si" value="SI" onclick="OpenDataModal();" />
+                    <input type="button" class="btn btn-primary" style="float:right;" id="no" name="no" value="NO" onclick="CloseQuestionModal();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL MENSAJES  -->
+<div id="msjClienteModal" name="msjClienteModal" class="modal fade" role="application">
+    <div class="modal-dialog">
+        <div class="modal-content inside">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <label class="modal-title text-center" id="msjClient" name="msjClient"> </label>
+            </div>
+            <div class="row">
+                <div class="col-md-12 pb-2">
+                    <input type="button" class="btn btn-primary" style="float:right;" id="cerrar" name="cerrar" value="Aceptar" onclick="CloseMensajeClienteModal();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/js/WorkflowScript.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+
+}
+

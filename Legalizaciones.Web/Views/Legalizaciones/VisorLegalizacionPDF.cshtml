@@ -1,0 +1,292 @@
+﻿@model Legalizaciones.Model.Legalizacion
+@{
+    ViewData["Title"] = "VisorLegalizacion";
+    Layout = "~/Views/Shared/_VistaBaseImpresion.cshtml";
+}
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
+    </div>
+
+    <div class="box-body">
+        <table width="100%">
+
+            <tr class="HeaderTable">
+                <td class="col-md-1 sinBorder">
+                    <label>ID</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>ID documentos en ERP</label>
+                </td>
+                <td class="col-md-2 sinBorder">
+                    <label>Concecutivo ERP</label>
+                </td>
+                <td class="col-md-3 sinBorder">
+                    <label>Concepto</label>
+                </td>
+            </tr>
+
+
+            <tr class="RowsTable">
+                <td class="sinBorder RowsTable">
+                    <label>@Model.SolicitudID</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>84526</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>8652</label>
+                </td>
+                <td class="sinBorder RowsTable">
+                    <label>@Model.Solicitud.Concepto</label>
+                </td>
+
+            </tr>
+
+        </table>
+
+
+    </div>
+</div>
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del empleado</strong></h3>
+        <div class="box-tools pull-right">
+        </div>
+
+        <div class="box-body">
+            <table width="100%">
+
+                <tr class="HeaderTable">
+                    <td class="col-md-3 sinBorder">
+                        <label>Beneficiario del anticipo</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cedula de ciudadania</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Area</label>
+                    </td>
+                    <td class="col-md-3 sinBorder">
+                        <label>Cargo</label>
+                    </td>
+                </tr>
+
+
+                <tr class="RowsTable">
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Nombre @Model.Empleado.Apellido</label>
+                    </td>
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Solicitud.EmpleadoCedula</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>@Model.Empleado.Area</label>
+                    </td>
+
+                    <td class="sinBorder RowsTable">
+                        <label>Vendedor</label>
+                    </td>
+
+                </tr>
+
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+<div class="box box-default">
+    <div class="box-header with-border">
+        <h3 class="box-title"><i class="fa fa-random"></i><strong>Detalles de legalizacion</strong></h3>
+
+        <div class="box-body">
+
+            <br /><br />
+
+            <div class="form-horizontal">
+                @if (Model.LegalizacionGastos != null)
+                {
+                    if (Model.LegalizacionGastos.Count > 0)
+                    {
+                        <div class="row ListadoGastos">
+                            <div class="col-md-12">
+                                <table class="tableGastos" id="tbGastos">
+                                    <thead>
+                                        <tr>
+                                            @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
+                                            <td>Item</td>
+                                            <td>Fecha</td>
+                                            <td>Centro Oper.</td>
+                                            <td>Unidad Neg</td>
+                                            <td>Centro Cost</td>
+                                            <td>Fecha Gasto</td>
+                                            <td>Pais</td>
+                                            <td>Ciudad</td>
+                                            <td>Servicio</td>
+                                            <td>Proveedor</td>
+                                            <td>Concepto</td>
+                                            <td>Valor</td>
+                                        </tr>
+                                    </thead>
+
+                                    @if (Model.LegalizacionGastos.Count > 0)
+                                    {
+                                        @foreach (var item in Model.LegalizacionGastos)
+                                        {
+                                            // string total = (item.Monto + Convert.ToDecimal(item.IVA)).ToString("N2");
+                                            <tr>
+                                                <td class="col-md-1 ">@item.Id</td>
+                                                <td class="col-md-1 ">@String.Format("{0:dd-MM-yyy}", item.FechaCreacion)</td>
+                                                <td class="col-md-2 ">@item.CentroOperacion.Nombre</td>
+                                                <td class="col-md-2 ">@item.UnidadNegocio.Nombre</td>
+                                                <td class="col-md-2 ">@item.CentroCosto.Nombre</td>
+                                                <td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>
+                                                <td class="col-md-1 ">@item.Pais.Nombre</td>
+                                                <td class="col-md-1 ">@item.Ciudad.Nombre</td>
+                                                <td class="col-md-1 ">
+
+                                                    @if (@item.TipoServicioId == 1)
+                                                    {
+                                                        <span>Comida</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Transporte</span>
+                                                    }
+                                                </td>
+                                                <td class="col-md-1 ">@item.ProveedorId</td>
+                                                <td class="col-md-1 ">@item.Concepto</td>
+                                                <td class="col-md-1 ">@item.Valor</td>
+
+                                            </tr>
+                                        }
+                                    }
+                                    <tbody id="Items"></tbody>
+
+
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <div class="row ListadoGastos">
+                        <div class="col-md-12">
+                            Añada un nuevo gasto a Legalizar...
+                        </div>
+                    </div>
+                }
+
+                <div class="row display-none" id="mensajeValidacionGastos">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" role="alert">
+                            <span id="mensajeGastos"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br /><br />
+
+
+            <table width="100%">
+                <tr height="20px">
+
+                    <td style="width: 60%" class="sinBorder">
+
+                        <table width="100%">
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder">Fecha de Registro:</td>
+                                <td width="15%" class="sinBorder"><span class="letras10">@Model.FechaCreacion<span></td>
+                                <td width="7%" class="neg sinBorder" align="right">Fecha de Vencimiento</td>
+                                <td width="15%" class="sinBorder"><span class="letras10">@Model.Solicitud.FechaHasta<span></td>
+                            </tr>
+                            <tr class="sinBorder">
+                                <td width="10%" class="neg sinBorder RowsTable">Comprobante egreso</td>
+                                <td width="15%" class="sinBorder RowsTable"><span class="letras10">@Model.ReciboCaja</span></td>
+                                <td width="7%" class="neg sinBorder RowsTable" align="right">Valor consignacion</td>
+                                <td width="15%" class="sinBorder RowsTable"><span class="letras10">@Model.Consignacion</span></td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <td style="width: 80%" height="20px" class="sinBorder">
+
+                        <div class="row" style="margin-top: 0px;">
+                            <div class="col-md-12 Curva">
+
+                                <table width="80%" border="0">
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Legalizacion:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumLega COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Valor Total Anticipo:</strong></td>
+                                        <td class="RowsTable sinBorder">@ViewBag.SumSol COP</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td class="RowsTable sinBorder"><strong>Saldo:</strong></td>
+                                        <td class="RowsTable sinBorder">0.00 COP</td>
+
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            </table>
+
+            <br /><br />  <br /><br />
+
+
+            <footer>
+
+                <table style="width:100%">
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+                        <td class="fondoblanco centrarDiv">_________________________</td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma del beneficiario</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Director Area</span></td>
+                        <td class="fondoblanco centrarDiv"><span class="neg">Firma Dpto Contabilidad</span></td>
+
+                    </tr>
+
+                    <tr class="fondoblanco">
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+                        <td class="fondoblanco centrarDiv"><span style="margin-right:28%">Fecha:</span></td>
+
+                    </tr>
+
+                </table>
+
+            </footer>
+
+        </div>
+    </div>
+</div>

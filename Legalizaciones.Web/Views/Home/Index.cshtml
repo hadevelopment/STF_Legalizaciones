@@ -1,3 +1,70 @@
-﻿
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+@model Legalizaciones.Web.Models.ViewModel.HomeViewModel
 
-<h2>Bienvenidos al Sistema STF</h2>
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                <strong>Home</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box">
+
+            <div class="box-header with-border">
+                <span class="fa fa-info-circle" id="CapaTitulo"></span>
+                <h1 class="box-title">Bienvenido(a) al Sistema de Legalizaciones: @HttpContextAccessor.HttpContext.Session.GetString("Usuario_Nombre") @HttpContextAccessor.HttpContext.Session.GetString("Usuario_Area") </h1>
+
+            </div>
+
+            <br />
+
+            <div class="content-header">
+                <div class="row">
+
+                    <div class="col-md-2">
+                        <strong>Cambiar de Usuario:</strong>
+                    </div>
+
+                    <div class="col-md-2">
+                        @Html.DropDownListFor(model => model.Cedula, Model.ListaEmpleados, "Seleccione...", new { @class = "form-control" })
+                    </div>
+
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" onclick="Cambiar()">Cambiar</button>
+                    </div>
+
+
+                </div>
+                <br />
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+        function Cambiar() {
+
+            var wCedula = $("#Cedula option:selected").val();
+            var wtargetUrl = "/Home/Cambiar?wCedula=" + wCedula;
+
+            window.location.href = wtargetUrl;
+
+        }
+
+</script>

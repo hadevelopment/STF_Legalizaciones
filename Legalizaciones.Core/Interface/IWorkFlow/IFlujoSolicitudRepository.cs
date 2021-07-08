@@ -1,5 +1,5 @@
 ﻿using Legalizaciones.Interface.BaseRepository;
-using Legalizaciones.Model;
+using Legalizaciones.Model.Workflow;
 using System;
 using System.Collections.Generic;
 using System.Text;

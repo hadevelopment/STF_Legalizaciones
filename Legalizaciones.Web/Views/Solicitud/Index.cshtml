@@ -7,10 +7,8 @@
     <div class="col-sm-12">
         <div class="box">
             <div class="box-body">
-                <small>
                     <a href='@Url.Action("Index","Home")'> Inicio </a>
                     > <strong>Anticipos</strong>
-                </small>
             </div>
         </div>
     </div>
@@ -23,127 +21,167 @@
             <div class="box-header with-border">
                 <span class="fa fa-info-circle"></span>
                 <h1 class="box-title">Mis  Solicitudes de Anticipo </h1>
+                
+            </div>
+            
+            <br />
 
-                @if (ViewBag.cargo != "3")
-                { //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+            <div class="row">
 
-                    <a class="btn btn-primary" asp-area="" style="float:right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
-                }
+                <div style="float: left; margin-left: 20px" class="col-md-3">
+                    <strong>Consultar por historico de fechas:</strong>
+                </div>
+
+                <form asp-controller="Solicitud" asp-action="Filtrar" method="Post">
+
+                    <div style="float: left;" class="col-md-2">
+                        <label>Desde</label>
+                        <input type="date" id="fechaDesde" name="fechaDesde" class="form- control"/>
+                    </div>
+                    <div style="float: left;" class="col-md-2">
+                        <label>Hasta</label>
+                        <input type="date" id="fechaHasta" name="fechaHasta" class="form- control"/>
+
+                    </div>
+
+                    <div style="float: left;" class="col-md-1">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="fa fa-search"></span> Filtrar
+                        </button>
+                    </div>
+
+                </form>
+
+                <div style="float: left;" class="col-md-4">
+                    <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+                    @*@if (ViewBag.cargo != "3")
+        {
+            //chequea que el cargo no sea Contabilidad para habilitar Añadir solicitud
+
+            <a class="btn btn-primary" asp-area="" style="float: right;" asp-controller="Solicitud" asp-action="Crear">Añadir Solicitud</a>
+        }*@
+                </div>
             </div>
 
 
             <div class="box-body">
-                <table id="tblSolicitudes" class="table table-bordered table-hover myDataTable">
-                    <thead>
-                        <tr>
-                            <th> Id </th>
-                            <th> Fecha de registro</th>
-                            <th> Fecha de Vencimiento</th>
-                            <th> Concepto del Anticipo </th>
-                            <th> Cédula del Beneficiario</th>
-                            <th> Nombre del Beneficiario</th>
-                            <th> Monto </th>
-                            <th> Estado de la Solicitud</th>
-                            <th> Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @if (Model.Count() > 0)
-                        {
-                            @foreach (var item in Model)
-
+                    <table id="tblSolicitudes" class="table table-bordered table-hover myDataTable">
+                        <thead>
+                            <tr>
+                                <th> Id </th>
+                                <th> Fecha de registro</th>
+                                <th> Fecha de Vencimiento</th>
+                                <th> Concepto del Anticipo </th>
+                                <th> Cédula del Beneficiario</th>
+                                <th> Nombre del Beneficiario</th>
+                                <th> Monto </th>
+                                <th> Estado de la Solicitud</th>
+                                <th> Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Count() > 0)
                             {
-                                <tr>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Id)
-                                    </td>
-                                    <td>
+                                @foreach (var item in Model)
 
-                                        @Html.DisplayFor(modelItem => item.FechaCreacion)
-                                    </td>
-                                    <td>
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Id)
+                                        </td>
+                                        <td>
 
-                                        @Html.DisplayFor(modelItem => item.FechaVencimiento)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Concepto)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.EmpleadoCedula)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Empleado.Nombre)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Monto)
-                                    </td>
-                                    <td>
-                                        @Html.DisplayFor(modelItem => item.Estatus)
-                                    </td>
-                                    <td>
-                                        <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
-                                            <span class="fa fa-eye"></span>
-                                        </a>
+                                            @Html.DisplayFor(modelItem => item.FechaCreacion)
+                                        </td>
+                                        <td>
 
-                                        <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
-                                            <span class="fa fa-pencil"></span>
-                                        </a>
-
-                                        @if (!string.IsNullOrEmpty(item.RutaArchivo))
-                                        {
-                                            <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
-                                                <span class="fa fa-file-pdf-o"></span>
+                                            @Html.DisplayFor(modelItem => item.FechaVencimiento)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Concepto)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EmpleadoCedula)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Empleado.Nombre)
+                                        </td>
+                                        <td>
+                                            @item.Monto.ToString("N2")
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.EstadoSolicitud.Descripcion)
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="item-btn" asp-controller="Solicitud" asp-action="Visualizar" asp-route-id="@item.Id">
+                                                <span class="fa fa-eye" title="Detalle"></span>
                                             </a>
-                                        }
+
+                                            @if (!item.EstadoSolicitud.Descripcion.Contains("En Proc") && !item.EstadoSolicitud.Descripcion.Contains("Aproba"))
+                                            {
+                                                <a class="item-btn" asp-action="Editar" asp-route-id="@item.Id">
+                                                    <span class="fa fa-pencil" title="Editar"></span>
+                                                </a>
+                                            }
+
+
+                                            @if (!string.IsNullOrEmpty(item.RutaArchivo))
+                                            {
+                                                <a class="item-btn" onclick="showCartaModal('@item.RutaArchivo');">
+                                                    <span class="fa fa-file-pdf-o" title="Ver Carta"></span>
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                            else
+                            {
+                                <tr class="tableEmpty">
+                                    <td colspan="8">
+                                        No se encontraron resultados...
                                     </td>
                                 </tr>
                             }
-
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="8">
-                                    No se encontraron resultados...
-                                </td>
-                            </tr>
-                        }
-
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
                 <br />
                 <div class="row">
                     <div style="float: left;" class="col-md-2">
-                        <a class="btn btn-primary fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
+                        <a class="btn btn-primary fa fa-file-excel-o" asp-area="" style="float:left;" asp-controller="ExportFilesFormat" asp-action="ExportDatosSolicitudExcel">Exportar Excel</a>
+
                     </div>
                 </div>
             </div>
 
 
-            <div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-md">
-                    <div class="modal-content">
-                        <div class="box-header with-border">
-                            <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
-                            <div class="box-tools pull-right">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-horizontal">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
-                                <span class="glyphicon glyphicon-off"></span> Cerrar
-                            </a>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="pdfModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-list-alt"></i>Carta - Vista Previa</h3>
+                <div class="box-tools pull-right">
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <iframe id="iframePDF" src="" width="100%" height="600px"></iframe>
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <a id="BtnClose" class="btn btn-danger" data-dismiss="modal">
+                    <span class="glyphicon glyphicon-off"></span> Cerrar
+                </a>
             </div>
         </div>
     </div>
@@ -151,10 +189,11 @@
 
 <script type="text/javascript">
     function showCartaModal(ruta) {
-        debugger;
-        ruta = ruta.replace("~", "");
-        $('#iframePDF').attr('src', ruta);
-        $('#pdfModal').modal('show');
-    }
+            debugger;
+            ruta = ruta.replace("~", "");
+            $('#iframePDF').attr('src', ruta);
+            $('#pdfModal').modal('show');
+            console.log(ruta);
+        }
 </script>
 <!-- DataTables -->

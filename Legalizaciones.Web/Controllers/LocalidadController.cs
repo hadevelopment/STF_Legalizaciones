@@ -18,8 +18,9 @@ namespace Legalizaciones.Web.Controllers
         private readonly ICiudadRepository ciudadRepository;
         private readonly IMonedaRepository monedaRepository;
         private readonly ISolicitudRepository SolicitudRepository;
+        private readonly ISolicitudGastosRepository solicitudGastosRepository;
 
-        public LocalidadController(IDestinoRepository destinoRepository, IZonaRepository zonaRepository, ICiudadRepository estadoRepository, IPaisRepository paisRepository, ICiudadRepository ciudadRepository, IMonedaRepository monedaRepository, ISolicitudRepository SolicitudRepository) {
+        public LocalidadController(IDestinoRepository destinoRepository, IZonaRepository zonaRepository, ICiudadRepository estadoRepository, IPaisRepository paisRepository, ICiudadRepository ciudadRepository, IMonedaRepository monedaRepository, ISolicitudRepository SolicitudRepository, ISolicitudGastosRepository solicitudGastosRepository) {
             this.destinoRepository = destinoRepository;
             this.zonaRepository = zonaRepository;
             this.estadoRepository = estadoRepository;
@@ -27,9 +28,10 @@ namespace Legalizaciones.Web.Controllers
             this.ciudadRepository= ciudadRepository;
             this.monedaRepository = monedaRepository;
             this.SolicitudRepository = SolicitudRepository;
+            this.solicitudGastosRepository = solicitudGastosRepository;
         }
 
-     
+
         public IActionResult Index()
         {
             return View();
@@ -63,10 +65,7 @@ namespace Legalizaciones.Web.Controllers
         }
         public JsonResult CiudadesPais(int paisID)
         {
-
             return Json(ciudadRepository.All().Where(x => x.PaisID == paisID));
-
-
         }
 
 
@@ -85,6 +84,31 @@ namespace Legalizaciones.Web.Controllers
 
             return Json(ListDestinos);
         }
+
+        public JsonResult PaisMaeEdit(int Id)
+        {
+            var ListPaises = paisRepository.All().ToList();
+            foreach (var item in ListPaises)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(ListPaises);
+        }
+
+        public JsonResult ZonasDestinosMaeEdit(int Id)
+        {
+            var ListZonaDestino = destinoRepository.All().ToList();
+            foreach (var item in ListZonaDestino)
+            {
+                if (item.Id == Id)
+                    item.Nombre = item.Nombre + "XX";
+
+            }
+            return Json(ListZonaDestino);
+        }
+
         public JsonResult ZonasDestinosEdit(int Id)
         {
             var OSolicitud = SolicitudRepository.Find(Id);
@@ -108,6 +132,22 @@ namespace Legalizaciones.Web.Controllers
 
             }
             return Json(ListMoneda);
+        }
+
+        public JsonResult SolicitudGastos(int wId)
+        {
+            var wG = solicitudGastosRepository.Find(wId);
+
+            string wFD = wG.FechaGasto.Substring(0, 4);
+            string wFM = wG.FechaGasto.Substring(5, 2);
+            string wFA = wG.FechaGasto.Substring(8, 2);
+
+            wG.FechaGasto = wFD + "-" + wFM + "-" + wFA;
+
+            var wResult = Json(wG);
+
+            return wResult;
+
         }
 
     }

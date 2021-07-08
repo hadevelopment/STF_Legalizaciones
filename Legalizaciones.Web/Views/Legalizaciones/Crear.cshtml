@@ -1,0 +1,834 @@
+﻿@model Legalizaciones.Web.Models.ViewModel.LegalizacionesViewModel;
+
+@{
+    ViewData["Title"] = "Legalizaciones";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="box">
+            <div class="box-body">
+                @if (Model.ConAnticipo == 1)
+                {
+                    <small>
+                        <a href='@Url.Action("Index","Home")'> Inicio </a>
+                        >
+                        <a href='@Url.Action("Index","Legalizaciones")'> Legalizaciones </a>
+                        >
+                        <strong>Registro legalización anticipo @Model.AnticipoId</strong>
+                    </small>
+
+                }
+                else
+                {
+                    <small>
+                        <a href='@Url.Action("Index","Home")'> Inicio </a>
+                        >
+                        <a href='@Url.Action("Index","Legalizaciones")'> Registro Legalizacion sin anticipo </a>
+                        >
+                        <strong>Nueva</strong>
+                    </small>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<form asp-controller="Legalizaciones" asp-action="Guardar" method="post">
+    <section class="">
+        <div class="hidden">
+            @Html.TextBoxFor(model => model.ConAnticipo, new { @class = "form-control" })
+        </div>
+
+
+        @if (Model.ConAnticipo == 1)
+        {
+            @*informacion de la solicitud anticipo*@
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="glyphicon glyphicon-credit-card"></i><strong> Información del Anticipo</strong></h3>
+                </div>
+                @Html.HiddenFor(model => model.AnticipoId, null)
+                <div class="box-body">
+                    <table class="tableSolicitud">
+                        <thead>
+                            <tr>
+                                <th class="col-md-1">
+                                    @Html.DisplayNameFor(modelItem => modelItem.AnticipoId)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.DocumentoERPID)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.FechaRegistro)
+                                </th>
+                                <th class="col-md-3">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Concepto)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.FechaVencimiento)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Monto)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.AnticipoId)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.DocumentoERPID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.FechaRegistro)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Concepto)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.FechaVencimiento)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Monto)
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+        }
+
+        @if (Model.ConAnticipo == 0)
+        {
+            @*informacion del empleado*@
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del Empleado</strong> </h3>
+                </div>
+
+                <div class="box-body">
+                    @Html.LabelFor(model => model.CedulaId, htmlAttributes: new { @class = "control-label col-md-12" })
+                    @Html.DropDownListFor(model => model.CedulaId, Model.ListaEmpleado, new { @class = "form-control" })
+                    @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                    {
+                        @Html.ValidationMessageFor(model => model.CedulaId, "Seleccione un Empleado.", new { @class = "text-danger" })
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            @*informacion del empleado*@
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-info-circle"></i><strong>Información del Empleado</strong> </h3>
+                </div>
+
+                <div class="box-body">
+
+                    <table class="tableSolicitud" id="TablaEmpleado">
+                        <thead>
+                            <tr>
+                                <th class="col-md-4">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Nombre)
+                                </th>
+                                <th class="col-md-3">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Cedula)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Area)
+                                </th>
+                                <th class="col-md-2">
+                                    @Html.DisplayNameFor(modelItem => modelItem.Cargo)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Nombre)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Cedula)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Area)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => modelItem.Cargo)
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        }
+
+
+
+        @*Esta es la parte de legalizaciones*@
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"><i class="fa fa-archive"></i><strong> Formulario de Legalización</strong> </h3>
+            </div>
+
+            @*formulario de legalizacion header*@
+            <div class="box-body">
+
+                <div class="row margin-bottom">
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.ReciboCaja, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.ReciboCaja, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.ReciboCaja, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Consignacion, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.Consignacion, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.Consignacion, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.Valor, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.Valor, new { @class = "form-control", @required = "required" })
+                        @Html.ValidationMessageFor(model => model.Valor, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.BancoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.DropDownListFor(model => model.BancoId, Model.ListaBanco, new { @class = "form-control" })
+                        @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                        {
+                            @Html.ValidationMessageFor(model => model.BancoId, "Seleccione un Banco.", new { @class = "text-danger" })
+                        }
+                    </div>
+
+                </div>
+
+                <div class="row margin-bottom">
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.CentroCostoDescripcion, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.CentroCostoDescripcion, new { @class = "form-control", @Readonly = "Readonly" })
+                    </div>
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.FechaDesde, new { @class = "form-control datepicker fechaDesde", @placeholder = "Selecciona Fecha Desde", id = "FechaDesde" })
+                        @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-12" })
+                        @Html.TextBoxFor(model => model.FechaHasta, new { @class = "form-control datepicker fechaHasta", @placeholder = "Selecciona Fecha Hasta", id = "FechaHasta" })
+                        @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="col-md-3">
+                        @if (Model.ConAnticipo == 0)
+                        {
+                            @Html.DropDownListFor(model => model.MonedaId, Model.ListaMoneda, new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un tipo de Moneda.", new { @class = "text-danger" })
+                            }
+                        }else //sin anticipo
+                        {
+                            @if (ViewBag.MostrarTasa = true)
+                            {
+                                <div class="col-md-12">
+                                    @Html.LabelFor(model => model.MonedaId, htmlAttributes: new { @class = "control-label col-md-12" })
+
+                                </div>
+
+                                <div class="col-md-8">
+                                    @Html.TextBoxFor(model => model.Moneda, new { @class = "form-control", @Readonly = "Readonly" })
+
+                                </div>
+                                <div class="col-md-4">
+                                    @Html.TextBoxFor(model => model.ValorTasa, new { @class = "form-control", @Readonly = "Readonly" })
+
+                                </div>
+
+                            }
+                            else
+                            {
+                                @Html.LabelFor(model => model.Moneda, htmlAttributes: new { @class = "control-label col-md-12" })
+                                @Html.TextBoxFor(model => model.MonedaId, new { @class = "form-control", @Readonly = "Readonly" })
+
+                            }
+
+
+                        }
+
+                    </div>
+                </div>
+
+                <div class="row margin-bottom">
+                    <div class="box-tools pull-right" style="margin-right: 20px;">
+                        <a id="btnA" class="btn btn-primary" onclick="AnadirGastos(this);" style="float:right;">
+                            <span class="glyphicon glyphicon-plus"></span> Añadir Gasto
+                        </a>
+                    </div>
+                </div>
+
+                <div class="row display-none" id="mensajeValidacionRegistro">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning" role="alert">
+                            <span id="mensajeRegistro"></span>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            @*formulario de legalizacion de gastos*@
+            <div class="hide" id="RegistroDatos">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class=""></i><strong> Registro de Datos</strong> </h3>
+                </div>
+
+                <div class="box-body">
+
+                    <div class="row margin-bottom">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.GastosId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.EditorFor(model => model.GastosId, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.GastosId, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.FechaGasto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.TextBoxFor(model => model.FechaGasto, new { @class = "form-control datepicker FechaGasto", @placeholder = "Selecciona Fecha Gasto", id = "FechaGasto" })
+                            @Html.ValidationMessageFor(model => model.FechaGasto, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-3">
+    
+                            @Html.LabelFor(model => model.CentroOperacion, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.CentroOperacion, Model.ListaCentroOperacion, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroOperacion, "Seleccione un centro de operacion.", new { @class = "text-danger" })
+                            }
+                        </div>
+                        <div class="col-md-3">
+        
+                            @Html.LabelFor(model => model.UnidadNegocio, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.UnidadNegocio, Model.ListaUnidadNegocio, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.UnidadNegocio, "Seleccione una unidad de negocio.", new { @class = "text-danger" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom">
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.CentroCosto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.CentroCosto, Model.ListaCentroCosto, "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
+                            }
+                        </div>
+
+
+                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
+                            @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @if (Model.ConAnticipo == 0)
+                            {
+                                @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
+
+                            }
+                            else
+                            { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
+                        }
+
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CentroCosto, "Seleccione un Centro de costo.", new { @class = "text-danger" })
+                            }
+                        </div>*@
+
+
+                        @*<div class="col-md-3">   lo comento xq ahora el motivo no va ya que este va amarrado a un centro de costo
+                                @Html.LabelFor(model => model.MotivoId, htmlAttributes: new { @class = "control-label col-md-12" })
+                                @if (Model.ConAnticipo == 0)
+                                {
+                                    @Html.DropDownListFor(model => model.MotivoId, new SelectList(string.Empty, "Value", "Text"), new { @class = "form-control" })
+
+                                }
+                                else
+                                { @Html.DropDownListFor(model => model.MotivoId, Model.ListaMotivo, new { @class = "form-control" })
+                            }
+                                @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                                {
+                                    @Html.ValidationMessageFor(model => model.MonedaId, "Seleccione un Motivo.", new { @class = "text-danger" })
+                                }
+                            </div>*@
+
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.PaisId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.PaisId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.PaisId, "Seleccione un Pais.", new { @class = "text-danger" })
+                            }
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.CiudadId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.CiudadId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.CiudadId, "Seleccione una Ciudad.", new { @class = "text-danger" })
+                            }
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom">
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.TiposervicioId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.TiposervicioId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.TiposervicioId, "Seleccione un tipo de servicio.", new { @class = "text-danger" })
+                            }
+                        </div>
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.ProveedorId, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.DropDownListFor(model => model.ProveedorId, new SelectList(string.Empty, "Value", "Text"), "Seleccione...", new { @class = "form-control" })
+                            @if (ViewBag.IsValid != null && ViewBag.IsValid == "false")
+                            {
+                                @Html.ValidationMessageFor(model => model.ProveedorId, "Seleccione un Proveedor.", new { @class = "text-danger" })
+                            }
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.ConceptoGasto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.EditorFor(model => model.ConceptoGasto, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ConceptoGasto, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.MontoGasto, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.EditorFor(model => model.MontoGasto, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.MontoGasto, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="row margin-bottom">
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Origen, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.EditorFor(model => model.Origen, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Origen, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="col-md-3">
+                            @Html.LabelFor(model => model.Destino, htmlAttributes: new { @class = "control-label col-md-12" })
+                            @Html.EditorFor(model => model.Destino, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Destino, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+                    @*para el boton file upload , colocar el json de los gastos y mensaje de validacion*@
+                    <div class="row margin-bottom">
+                        <div class="col-sm-12">
+                            @Html.TextBoxFor(m => m.Soporte, new { type = "file" })
+                            @Html.ValidationMessageFor(m => m.Soporte)
+                        </div>
+                    </div>
+                    <div class="row margin-bottom">
+                        @Html.HiddenFor(model => model.GastosJSON, new { @class = "form-control", id = "hdfGastosSolicitud" })
+                    </div>
+                    <div class="row display-none" id="mensajeValidacionViaje">
+                        <div class="col-sm-12">
+                            <div class="alert alert-warning" role="alert">
+                                <span id="mensajeViaje"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    @*para el boton guardar legalizacion de gastos*@
+                    <div class="row margin-bottom">
+                        <div class="box-tools pull-right" style="margin-right: 20px;">
+                            <a id="btnA" class="btn btn-primary" onclick="GuardarGastos(this);" style="float:right;">
+                                <span class="glyphicon glyphicon-plus"></span> Grabar Gasto
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+
+
+            </div>
+
+        </div>
+
+        @*seccion de los gastos ya legalizados*@
+        <div class="box box-default">
+            <div class="box-header with-border">
+            </div>
+
+            <div class="box-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="tableGastos">
+                            <thead>
+                                <tr>
+                                    @*primero voy a colocar todos los campos que necesito para deserealizar los gastos*@
+                                    <td class="display-none">FechaGasto</td>
+                                    <td class="display-none">PaisId</td>
+                                    <td class="display-none">CiudadId</td>
+                                    <td class="display-none">TipoServicioId</td>
+                                    <td class="display-none">ProveedorId</td>
+                                    <td class="display-none">Concepto</td>
+                                    <td class="display-none">Concepto</td>
+                                    <td>Item</td>
+                                    <td>Fecha</td>
+                                    <td>Centro Oper.</td>
+                                    <td>Unidad Neg</td>
+                                    <td>Centro Cost</td>
+                                    <td>Pais</td>
+                                    <td>Ciudad</td>
+                                    <td>Servicio</td>
+                                    <td>Proveedor</td>
+                                    <td>Concepto Gasto</td>
+                                    <td>Valor</td>
+                                    <td>Acciones</td>
+                                </tr>
+                            </thead>
+                            <tbody id="Items"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 10px;">
+                    <div class=" row" style="margin-right: 0px">
+                        <div class="col-md-7"></div>
+                        <div class="col-md-5">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <div class="col-md-7">
+                                        <h4>Gastos Reportados:</h4>
+                                        <h4>Anticipo Entregado:</h4>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <h4 class="" style="color: #fc2525 " id="txMontoFaltante"> 0</h4>
+                                        <h4 class="hide" style="color: #0be52c " id="txMontoSobrante"> 0</h4>
+                                        <h4 class=""> @Model.Monto</h4>
+                                        <input class="hide" type="text" name="txSaldo" id="txSaldo" value="@Model.Monto" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-default" style="float:right;"><span class="glyphicon glyphicon-plus"></span>Cancelar</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary" onclick="return cargarGastos();">
+                            <span class="glyphicon glyphicon-plus"></span> Guardar Reporte
+                        </button>
+
+                        @*<button type="submit" class="btn btn-primary" style="float:right;"><span class="glyphicon glyphicon-plus"></span>Guardar Reporte</button>*@
+                    </div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary" onclick="EnviarReporte(this);" style="float:right;"><span class="glyphicon glyphicon-plus"></span>Enviar Reporte</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </section>
+</form>
+
+@*Aqui viene el formulario modal del listado de gastos*@
+<!--modal form-->
+<div class="row">
+    <div class="col-md-9">
+        <div class="modal fade bs-example-modal-sm" id="gastosModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
+                    <div class="box-header with-border">
+                        <h3 class="box-title"><i class="fa fa-list-alt"></i>Seleccionar Gasto</h3>
+                        <div class="box-tools pull-right">
+                            <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="AddNuevoGasto();">
+                                <span class="glyphicon glyphicon-plus"></span> Añadir Nuevo Gasto
+                            </a>
+
+                        </div>
+                    </div>
+
+
+
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            @if (Model.SolicitudGastos != null)
+                            {
+                                if (Model.SolicitudGastos.Count > 0)
+                                {
+                                    <div class="row ListadoGastos">
+                                        <div class="col-md-12">
+                                            <table class="col-md-12">
+                                                <thead>
+                                                    <tr>
+                                                        <td>ID</td>
+                                                        <td>Fecha</td>
+                                                        <td>Pais</td>
+                                                        <td>servicio</td>
+                                                        <td>Ciudad</td>
+                                                        <td>Origen</td>
+                                                        <td>Destino</td>
+                                                        <td>Valor</td>
+                                                        <td>Acciones</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.SolicitudGastos)
+                                                    {
+
+                                                        <tr>
+                                                            <td class="col-md-1 ">@item.Id</td>
+                                                            @*<td class="col-md-2 ">@String.Format("{0:dd-MM-yyy}", item.FechaGasto)</td>*@
+                                                            <td class="col-md-2 ">@item.FechaGasto.Substring(0, 10)</td>
+                                                            <td class="col-md-1 ">@item.Pais</td>
+                                                            <td class="col-md-1 ">@item.Servicio</td>
+                                                            <td class="col-md-1 ">@item.Ciudad</td>
+                                                            <td class="col-md-1 ">@item.Origen</td>
+                                                            <td class="col-md-1 ">@item.Destino</td>
+                                                            <td class="col-md-1 "><small><small>@item.Monto</small></small></td>
+                                                            <td class="col-md-1 ">
+                                                                @*<a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id,@String.Format("{0:ddMMyyy}", item.FechaGasto),@item.PaisId,@item.ServicioId,@item.CiudadId,@item.Origen.ToString().Replace("/",""),@item.Destino.ToString().Replace("/",""),@item.Monto);">*@
+                                                                <a id="btnAddNuevoGasto" data-dismiss="modal" class="btn btn-primary" onclick="Seleccionar(@item.Id);">
+                                                                    <small><small><small>Seleccionar</small></small></small>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                  
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                }
+
+                            }
+                            else
+                            {
+                                <div class="row ListadoGastos">
+                                    <div class="col-md-12">
+                                        Añada un nuevo gasto a Legalizar...
+                                    </div>
+                                </div>
+                            }
+
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*Formulario modal de envio de reporte*@
+<div class="row">
+    <div class="col-md-9">
+        <div class="modal fade bs-example-modal-sm" id="EnviarReporteModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
+                    <div class="box-header with-border">
+                        <h3 class="text-center ">Para Completar la Legalización debe</h3>
+                        <h3 class="text-center">Registrar su informe de viaje</h3>
+                    </div>
+
+
+
+                    <div class="class=" row margin-bottom"">
+                        <p>
+                            <br />
+                        </p>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+
+                            <div class="row">
+
+                                <div class="row margin-bottom ">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ZonasVisitadas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.ZonasVisitadas, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Objetivo, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextBoxFor(model => model.Objetivo, new { @class = "col-md-12 lbl100", @placeholder = "Ingrese", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ActividadesDesarrolladas, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ActividadesDesarrolladas, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                        <div class="col-md-1"></div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.ResultadosObtenidos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.ResultadosObtenidos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom">
+                                    <div class="col-md-12">
+                                        <div class="col-md-12">
+                                            @Html.LabelFor(model => model.Compromisos, htmlAttributes: new { @class = "text-left col-md-12" })
+                                        </div>
+                                        <div class="col-md-12">
+                                            @Html.TextAreaFor(model => model.Compromisos, 4, 140, new { @placeholder = "Ingrese", @style = "width:100%;", @required = "required" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row margin-bottom col-md-12">
+                                    <div class="box-tools pull-right">
+                                        <a id="btnAddNuevoGasto" class="btn btn-primary" onclick="ImprimirReporte();">
+                                            <span class="glyphicon glyphicon-plus"></span> EnviarReporte
+                                        </a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="row display-none" id="mensajeValidacionGastos">
+                                <div class="col-sm-12">
+                                    <div class="alert alert-warning" role="alert">
+                                        <span id="mensajeGastos"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script src="~/js/jquery-ui-1.8.2.js"></script>
+    <script src="~/js/select2.min.js"></script>
+    <link href="~/css/select2.min.css" rel="stylesheet" />
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <link href="~/css/bootstrap-datepicker3.css" rel="stylesheet" />
+    <script src="~/js/moment.min.js"></script>
+    <script src="~/js/LegalizacionesScript.js"></script>
+    <script src="~/lib/legalizaciones/lib/datatables.net/js/jquery.dataTables.js"></script>
+    <script src="~/js/table.js"></script>
+    <script src="~/js/tableToJSON.js"></script>
+
+
+    <script>
+                                    //$(function () {
+                                    //    $('#tableGastos').DataTable();
+
+
+                                    //    function cargarGastos() {
+                                    //        var table = $('.tableGastos').tableToJSON({
+                                    //            ignoreColumns: [16]
+                                    //        });
+
+                                    //        if (table.length > 0) {
+                                    //            $("#mensajeRegistro").text("");
+                                    //            $('#mensajeValidacionRegistro').hide("slow");
+                                    //            $('#hdfGastosSolicitud').val(JSON.stringify(table));
+                                    //            return true;
+                                    //        } else {
+                                    //            $("#mensajeRegistro").text("Debe añadir al menos un Gasto.");
+                                    //            $('#mensajeValidacionRegistro').show("slow");
+                                    //            return false;
+                                    //        }
+
+                                    //    }
+                                    //});
+
+    </script>
+}

@@ -11,7 +11,7 @@ namespace Legalizaciones.Model
     [Table("SolicitudGastos")]
     public class SolicitudGastos : BaseModel
     {
-        public DateTime FechaGasto { get; set; }
+        public string FechaGasto { get; set; }
         public int PaisId{ get; set; }
         public string Pais { get; set; }
         public int? ServicioId { get; set; }
@@ -20,7 +20,7 @@ namespace Legalizaciones.Model
         public string Ciudad { get; set; }
         public string Origen { get; set; }
         public string Destino { get; set; }
-        public float Monto { get; set; }
+        public Decimal Monto { get; set; }
         public string IVA { get; set; }
         public string ReteIVA { get; set; }
         public string ReteServicio { get; set; }
